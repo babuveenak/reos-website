@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EcosystemOrbit } from "../components/Experience";
-import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
-import { ecosystemById, stakeholders } from "../data/reos";
-
-export const metadata: Metadata = { title: "Stakeholder Ecosystem | REOS", description: "Explore the eight UAE real-estate ecosystems and representative stakeholder journeys connected through REOS." };
-
-export default function StakeholdersPage() {
-  return <Page className="inner-page"><section className="inner-hero ecosystem-hero"><span className="eyebrow">STAKEHOLDER ECOSYSTEM</span><h1>Eight worlds.<br /><em>One connected property.</em></h1><p>Executive categories keep the ecosystem legible. The structured model beneath them can grow to hundreds of roles and organisations.</p></section><section className="section-pad"><EcosystemOrbit compact /></section><section className="section-pad role-directory"><SectionIntro label="REPRESENTATIVE JOURNEYS" title={<>Choose a role.<br /><em>See its dependencies.</em></>} /><div className="directory-grid">{stakeholders.map((item, index) => <Link href={`/stakeholders/${item.id}`} key={item.id} className="directory-card"><span>{String(index + 1).padStart(2, "0")}</span><small>{ecosystemById[item.ecosystemId].name}</small><h3>{item.name}</h3><p>{item.identity}</p><StatusTag status={item.status} /><i>Open journey →</i></Link>)}</div></section></Page>;
-}
-
+import { Page, SectionIntro } from "../components/SiteShell";
+import { journeys, roles } from "../data/phase1";
+export const metadata:Metadata={title:"Who REOS Is For | REOS",description:"Phase 1 Dubai journeys for investors, buyers and property owners."};
+const later=["Developer and sub-developer","Landowner / master developer","Broker and agent","Bank and mortgage provider","Consultant and contractor","Property, community and facilities manager","Government and utility authority"];
+export default function PageRoles(){return <Page className="inner-page"><section className="inner-hero"><span className="eyebrow">PHASE 1 AUDIENCE</span><h1>Customer journeys now.<br/><em>Professional depth later.</em></h1><p>REOS begins with the people trying to buy, complete, own and operate Dubai property. Connected organisations appear inside each journey without pretending their full workspaces are already built.</p></section><section className="section-pad"><SectionIntro label="BUILD NOW" title={<>Three roles.<br/><em>Goal-led guidance.</em></>}/><div className="role-cards">{roles.map(r=><article key={r.id}><span>{r.name}</span><p>{r.copy}</p><div className="touchpoints">{journeys.filter(j=>j.roles.includes(r.id)).map(j=><Link key={j.slug} href={`/journeys/${j.slug}`}>{j.title}</Link>)}</div></article>)}</div></section><section className="section-pad"><SectionIntro label="ARCHITECT FOR LATER" title={<>Connected today.<br/><em>Standalone journeys later.</em></>} copy="These participants are visible as dependencies in Phase 1. Their deep operational journeys belong to Stage 2."/><div className="goal-links">{later.map(x=><div className="future-role" key={x}><span>{x}</span><i>Stage 2</i></div>)}</div></section></Page>}

@@ -1,72 +1,12 @@
 import Link from "next/link";
-import { DualEntry, EcosystemOrbit, JourneyStarter, LifecycleExplorer } from "./components/Experience";
+import { Phase1Starter } from "./components/Phase1Starter";
 import { Page, SectionIntro } from "./components/SiteShell";
+import { journeys, roles } from "./data/phase1";
 
-export default function Home() {
-  return (
-    <Page className="home">
-      <section className="hero">
-        <div className="hero-image" aria-hidden="true" />
-        <div className="hero-grid" aria-hidden="true" />
-        <div className="hero-content">
-          <span className="eyebrow">REOS × KETURAH · UAE</span>
-          <h1>One connected journey<br /><em>for UAE property.</em></h1>
-          <p>Tell REOS who you are and what you need to accomplish. REOS maps the parties, requirements, dependencies and next action—without asking you to understand the whole ecosystem.</p>
-          <div className="hero-actions"><Link className="button gold" href="/#start">Start my journey <span>↗</span></Link><Link className="button ghost" href="/#problem">See the problem</Link></div>
-        </div>
-        <div className="hero-arch" aria-hidden="true"><div className="arch-light" /><div className="arch-copy"><span>01</span><b>INTEGRATE</b><i>ORCHESTRATE</i><small>REMEMBER</small></div></div>
-        <div className="scroll-cue"><i /> SCROLL TO EXPLORE</div>
-      </section>
-
-      <section className="journey-start section-pad" id="start">
-        <SectionIntro label="START WITH YOU" title={<>Who are you?<br /><em>What are you trying to do?</em></>} copy="Choose your role, goal and emirate. This prototype will open the closest researched journey; future REOS will resolve exact jurisdiction, property facts, blockers and official actions." />
-        <JourneyStarter />
-      </section>
-
-      <section className="problem-section section-pad" id="problem">
-        <SectionIntro label="THE PROPERTY TODAY" title={<>One physical life.<br /><em>Dozens of digital fragments.</em></>} copy="A property passes through organisations, authorities, portals, contracts and data stores. Each participant sees a piece. The property remembers none of it." />
-        <div className="fragment-grid">
-          {["Authorities", "Developer systems", "Banks & escrow", "Consultants", "Sales channels", "Owner apps"].map((item, index) => <div className={`fragment fragment-${index + 1}`} key={item}><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b><i /></div>)}
-          <div className="fragment-void"><span>ZERO SHARED STATE</span><b>Nothing travels.</b></div>
-        </div>
-      </section>
-
-      <section className="ecosystem-section section-pad" id="ecosystem">
-        <SectionIntro label="THE ECOSYSTEM" title={<>Eight ecosystems.<br /><em>One connected journey.</em></>} copy="You do not need to learn the whole ecosystem. REOS uses it behind the scenes to show only the parties and dependencies relevant to your goal." />
-        <EcosystemOrbit />
-      </section>
-
-      <section className="passport-break">
-        <div className="passport-image" aria-hidden="true" />
-        <div className="passport-copy"><span className="eyebrow">THE PROPERTY PASSPORT</span><h2>The property becomes<br /><em>the persistent object.</em></h2><p>Not another portal. A permissioned memory of identity, lifecycle state, documents, decisions and handoffs—connected to the systems that remain authoritative.</p><Link className="text-link light" href="/reos">See the REOS architecture <span>→</span></Link></div>
-      </section>
-
-      <section className="lifecycle-section section-pad" id="lifecycle">
-        <SectionIntro label="FOLLOW THE PROPERTY" title={<>Twenty-four stages.<br /><em>One continuous state.</em></>} copy="Explore the scalable lifecycle model. Validated research is separated from illustrative sequencing and items that still require jurisdiction-level verification." />
-        <LifecycleExplorer />
-      </section>
-
-      <section className="role-section section-pad">
-        <SectionIntro label="DUAL EXPLORATION" title={<>Enter by role.<br /><em>Or enter by moment.</em></>} copy="See the journey from your position—or start with the stage the property is in now." />
-        <DualEntry />
-      </section>
-
-      <section className="handoff-section section-pad">
-        <SectionIntro label="SEE EVERY DEPENDENCY" title={<>Work does not stop at<br /><em>organisational boundaries.</em></>} />
-        <div className="handoff-chain">
-          <div><span>01</span><b>Stakeholder A</b><small>Produces information</small></div><i>→</i>
-          <div><span>02</span><b>Authority decision</b><small>Changes lifecycle state</small></div><i>→</i>
-          <div><span>03</span><b>Prerequisite satisfied</b><small>Unlocks the next party</small></div><i>→</i>
-          <div className="highlight"><span>04</span><b>Stakeholder B</b><small>Continues the journey</small></div>
-        </div>
-        <p className="handoff-note">REOS keeps the dependency, document and decision connected to the property—without replacing the systems that issue or receive them.</p>
-      </section>
-
-      <section className="future-section section-pad">
-        <div className="future-image" aria-hidden="true" />
-        <div className="future-copy"><span className="eyebrow">FRAGMENTED → ORCHESTRATED</span><h2>Shared lifecycle<br /><em>intelligence.</em></h2><p>REOS gives each participant the right view of the same property journey: where it is, what comes next, who is responsible and what evidence moves forward.</p><Link className="button gold" href="/reos">Understand REOS <span>↗</span></Link></div>
-        <div className="pillar-list"><div><b>01</b><span>Property Passport</span></div><div><b>02</b><span>Lifecycle State Engine</span></div><div><b>03</b><span>Integration Fabric</span></div><div><b>04</b><span>AI Journey Copilot</span></div></div>
-      </section>
-    </Page>
-  );
-}
+export default function Home(){return <Page className="home">
+  <section className="hero"><div className="hero-image" aria-hidden="true"/><div className="hero-grid" aria-hidden="true"/><div className="hero-content"><span className="eyebrow">REOS COPILOT · DUBAI PHASE 1</span><h1>Know your next move<br/><em>in Dubai property.</em></h1><p>Tell REOS where the property is, who you are and what you want to accomplish. Get the journey, parties, evidence, dependencies and next action.</p><div className="hero-actions"><Link className="button gold" href="/#start">Start my journey <span>↗</span></Link><Link className="button ghost" href="/#how">How it works</Link></div></div><div className="hero-arch" aria-hidden="true"><div className="arch-light"/><div className="arch-copy"><span>01</span><b>WHERE</b><i>WHO</i><small>WHAT</small></div></div></section>
+  <section className="journey-start section-pad" id="start"><SectionIntro label="START WITH YOUR GOAL" title={<>Where? Who are you?<br/><em>What do you want to do?</em></>} copy="Dubai is built now. Other emirates and professional stakeholder journeys are deliberately held for later stages rather than presented as finished guidance."/><Phase1Starter/></section>
+  <section className="problem-section section-pad" id="how"><SectionIntro label="ONE GUIDED ROUTE" title={<>From fragmented portals<br/><em>to a clear next action.</em></>} copy="REOS does not replace an authority, bank, broker or adviser. It makes the customer journey understandable, connects the dependencies and points back to authoritative action."/><div className="promise-flow">{["Your goal","Journey stages","Parties & authorities","Evidence & dependencies","Next action"].map((x,i)=><div key={x}><span>{String(i+1).padStart(2,"0")}</span><b>{x}</b></div>)}</div></section>
+  <section className="section-pad"><SectionIntro label="BUILT NOW" title={<>Three customer roles.<br/><em>Twelve practical journeys.</em></>} copy="Phase 1 prioritises the people making, completing and managing a Dubai property decision."/><div className="role-cards">{roles.map(r=><article key={r.id}><span>{r.name}</span><p>{r.copy}</p></article>)}</div><div className="goal-links">{journeys.map(j=><Link key={j.slug} href={`/journeys/${j.slug}`}><span>{j.title}</span><i>Open journey →</i></Link>)}</div></section>
+  <section className="future-section section-pad"><div className="future-image" aria-hidden="true"/><div className="future-copy"><span className="eyebrow">CLEAR PRODUCT BOUNDARY</span><h2>Knowledge first.<br/><em>Execution later.</em></h2><p>Phase 1 is the free knowledge and navigation layer. Developer, broker, bank and authority workspaces—and other emirate rule sets—are architecture for later, not active journeys today.</p><Link className="button gold" href="/reos">See the roadmap <span>↗</span></Link></div><div className="pillar-list"><div><b>NOW</b><span>Dubai customer journeys</span></div><div><b>NEXT</b><span>Dubai professional depth</span></div><div><b>LATER</b><span>Other emirates, separately governed</span></div></div></section>
+  </Page>}

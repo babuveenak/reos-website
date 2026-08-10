@@ -3,8 +3,8 @@ import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
 
 const nav = [
-  ["/lifecycle", "Lifecycle"],
-  ["/stakeholders", "Ecosystem"],
+  ["/#start", "Find my journey"],
+  ["/stakeholders", "Who it is for"],
   ["/authorities", "Authorities"],
   ["/reos", "How REOS works"],
 ];
@@ -14,7 +14,7 @@ export function Header() {
     <header className="site-header">
       <Link className="brand" href="/" aria-label="REOS home">
         <span className="brand-mark">R</span>
-        <span><b>REOS</b><small>THE OPERATING SYSTEM FOR PROPERTY</small></span>
+        <span><b>REOS</b><small>DUBAI PROPERTY JOURNEY COPILOT</small></span>
       </Link>
       <nav aria-label="Primary navigation">
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
@@ -34,14 +34,14 @@ export function Header() {
 export function Footer() {
   return (
     <footer className="site-footer">
-      <div><span className="eyebrow">REOS × KETURAH</span><h2>One property.<br /><em>One continuous memory.</em></h2></div>
+      <div><span className="eyebrow">REOS · DUBAI PHASE 1</span><h2>Know where you are.<br /><em>Know what comes next.</em></h2></div>
       <div className="footer-links">
-        <Link href="/lifecycle">Property lifecycle</Link>
+        <Link href="/#start">Find my journey</Link>
         <Link href="/stakeholders">Stakeholder journeys</Link>
         <Link href="/authorities">Authorities & approvals</Link>
         <Link href="/reos">REOS architecture</Link>
       </div>
-      <p className="fineprint">Educational prototype based on REOS research. Exact requirements, fees, timelines, laws, eligibility and system access must be verified with the relevant authority or regulated provider.</p>
+      <p className="fineprint">Independent educational guidance for Dubai property journeys. REOS does not issue approvals, execute transactions or replace legal, financial or regulated advice. Verify current requirements, fees, timelines, laws and eligibility with the relevant authority or regulated provider.</p>
     </footer>
   );
 }
