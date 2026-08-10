@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://reos-website.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://reos-property.sites.openai.com"),
+  metadataBase: new URL(siteUrl),
   title: { default: "REOS — The Operating System for Property", template: "%s" },
   description: "Explore the connected property lifecycle across stakeholders, authorities, processes and systems through REOS.",
   applicationName: "REOS",
