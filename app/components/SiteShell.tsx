@@ -4,9 +4,10 @@ import type { ContentStatus } from "../data/reos";
 import { PreferencesControls } from "./PreferencesControls";
 
 const nav = [
-  ["/#start", "Find my journey"],
-  ["/stakeholders", "Who it is for"],
-  ["/authorities", "Authorities"],
+  ["/#platform", "Platform"],
+  ["/#start", "Property journey"],
+  ["/#solutions", "Who it helps"],
+  ["/authorities", "UAE authorities"],
   ["/reos", "How REOS works"],
 ];
 
@@ -15,7 +16,7 @@ export function Header() {
     <header className="site-header">
       <Link className="brand" href="/" aria-label="REOS home">
         <span className="brand-mark">R</span>
-        <span><b>REOS</b><small>DUBAI PROPERTY JOURNEY COPILOT</small></span>
+        <span><b>REOS</b><small>THE OPERATING SYSTEM FOR THE PROPERTY JOURNEY</small></span>
       </Link>
       <nav aria-label="Primary navigation">
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
