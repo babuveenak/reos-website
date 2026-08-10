@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
+import { PreferencesControls } from "./PreferencesControls";
 
 const nav = [
   ["/#start", "Find my journey"],
@@ -19,6 +20,7 @@ export function Header() {
       <nav aria-label="Primary navigation">
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
       </nav>
+      <PreferencesControls />
       <Link className="header-cta" href="/#start">Start my journey <span aria-hidden="true">↗</span></Link>
       <details className="mobile-menu">
         <summary aria-label="Open navigation"><span /><span /><span /></summary>
