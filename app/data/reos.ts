@@ -46,6 +46,7 @@ export type Authority = {
   role: string;
   stageIds: string[];
   status: ContentStatus;
+  sourceUrl: string;
 };
 
 export const ecosystems: Ecosystem[] = [
@@ -60,17 +61,17 @@ export const ecosystems: Ecosystem[] = [
 ];
 
 export const authorities: Authority[] = [
-  { id: "dld", name: "Dubai Land Department / RERA", jurisdiction: "Dubai", role: "Property registration, regulation and selected lifecycle services.", stageIds: ["developer-dd", "legal-dd", "purchase", "offplan-escrow", "title", "leasing", "service-charges", "resale"], status: "Validated" },
-  { id: "dm", name: "Dubai Municipality", jurisdiction: "Dubai mainland", role: "Planning, building approvals and completion services within its jurisdiction.", stageIds: ["planning-design", "authority-approvals", "build-nocs", "inspection"], status: "Validated" },
-  { id: "dda", name: "Dubai Development Authority", jurisdiction: "Specified Dubai development zones", role: "Planning and permitting authority within applicable zones.", stageIds: ["planning-design", "authority-approvals", "build-nocs"], status: "Validated" },
-  { id: "trakhees", name: "Trakhees / PCFC", jurisdiction: "Specified PCFC jurisdictions", role: "Built-environment approvals within applicable jurisdictions; distinct from Trakheesi.", stageIds: ["planning-design", "authority-approvals", "build-nocs"], status: "Validated" },
-  { id: "dewa", name: "DEWA", jurisdiction: "Dubai", role: "Electricity and water connections, move-in and selected development NOCs.", stageIds: ["build-nocs", "utilities"], status: "Validated" },
-  { id: "dcd", name: "Dubai Civil Defence", jurisdiction: "Dubai", role: "Fire and life-safety approvals within applicable development processes.", stageIds: ["authority-approvals", "build-nocs", "inspection"], status: "Validated" },
-  { id: "rta", name: "Roads & Transport Authority", jurisdiction: "Dubai", role: "Transport and infrastructure NOCs where applicable.", stageIds: ["build-nocs"], status: "Validated" },
-  { id: "fta", name: "Federal Tax Authority", jurisdiction: "UAE", role: "Federal tax requirements; applicability depends on transaction and entity facts.", stageIds: ["finance-escrow", "sales", "ownership-operations"], status: "Validated" },
-  { id: "adrec", name: "ADREC / DARI", jurisdiction: "Abu Dhabi", role: "Abu Dhabi real-estate registration and services.", stageIds: ["developer-dd", "legal-dd", "purchase", "offplan-escrow", "title", "leasing", "resale"], status: "Validated" },
-  { id: "srerd", name: "SRERD", jurisdiction: "Sharjah", role: "Sharjah real-estate registration services.", stageIds: ["legal-dd", "purchase", "title", "resale"], status: "Validated" },
-  { id: "rak", name: "RAK Municipality / RERA-RAK", jurisdiction: "Ras Al Khaimah", role: "Registration and off-plan regulatory services within RAK.", stageIds: ["legal-dd", "purchase", "offplan-escrow", "title", "resale"], status: "Validated" },
+  { id: "dld", name: "Dubai Land Department / RERA", jurisdiction: "Dubai", role: "Property registration, regulation and selected lifecycle services.", stageIds: ["developer-establishment", "land-acquisition", "project-registration", "finance-escrow", "sales", "offplan-escrow", "title", "leasing", "ownership-operations", "resale"], status: "Validated", sourceUrl: "https://dubailand.gov.ae/en/eservices/" },
+  { id: "dm", name: "Dubai Municipality", jurisdiction: "Dubai mainland", role: "Planning, building approvals and completion services within its jurisdiction.", stageIds: ["planning-design", "authority-approvals", "construction", "inspection"], status: "Validated", sourceUrl: "https://www.dm.gov.ae/municipality-business/building-permit-steps/" },
+  { id: "dda", name: "Dubai Development Authority", jurisdiction: "Specified Dubai development zones", role: "Planning and permitting authority within applicable zones.", stageIds: ["planning-design", "authority-approvals", "construction", "inspection"], status: "Validated", sourceUrl: "https://dda.gov.ae/en/planning-development" },
+  { id: "trakhees", name: "Trakhees / PCFC", jurisdiction: "Specified PCFC jurisdictions", role: "Built-environment approvals within applicable jurisdictions; distinct from Trakheesi.", stageIds: ["planning-design", "authority-approvals", "construction", "inspection"], status: "Validated", sourceUrl: "https://pcfc.ae/en/Pages/default.aspx" },
+  { id: "dewa", name: "DEWA", jurisdiction: "Dubai", role: "Electricity and water connections, move-in and selected development NOCs.", stageIds: ["authority-approvals", "construction", "utilities"], status: "Validated", sourceUrl: "https://www.dewa.gov.ae/en/about-us/service-guide" },
+  { id: "dcd", name: "Dubai Civil Defence", jurisdiction: "Dubai", role: "Fire and life-safety approvals within applicable development processes.", stageIds: ["authority-approvals", "construction", "inspection"], status: "Validated", sourceUrl: "https://www.dcd.gov.ae/" },
+  { id: "rta", name: "Roads & Transport Authority", jurisdiction: "Dubai", role: "Transport and infrastructure NOCs where applicable.", stageIds: ["planning-design", "authority-approvals", "construction"], status: "Validated", sourceUrl: "https://www.rta.ae/" },
+  { id: "fta", name: "Federal Tax Authority", jurisdiction: "UAE", role: "Federal tax requirements; applicability depends on transaction and entity facts.", stageIds: ["finance-escrow", "sales", "ownership-operations"], status: "Validated", sourceUrl: "https://tax.gov.ae/" },
+  { id: "adrec", name: "ADREC / DARI", jurisdiction: "Abu Dhabi", role: "Abu Dhabi real-estate registration and services.", stageIds: ["developer-establishment", "land-acquisition", "project-registration", "finance-escrow", "offplan-escrow", "title", "leasing", "resale"], status: "Validated", sourceUrl: "https://www.adrec.gov.ae/en" },
+  { id: "srerd", name: "SRERD", jurisdiction: "Sharjah", role: "Sharjah real-estate registration services.", stageIds: ["land-acquisition", "title", "leasing", "resale"], status: "Validated", sourceUrl: "https://shjrerd.gov.ae/" },
+  { id: "rak", name: "RAK Municipality / RERA-RAK", jurisdiction: "Ras Al Khaimah", role: "Registration and off-plan regulatory services within RAK.", stageIds: ["land-acquisition", "project-registration", "offplan-escrow", "title", "resale"], status: "Validated", sourceUrl: "https://mun.rak.ae/" },
 ];
 
 const stages: Omit<LifecycleStage, "number">[] = [
@@ -117,4 +118,3 @@ export const ecosystemById = Object.fromEntries(ecosystems.map((item) => [item.i
 export const stakeholderById = Object.fromEntries(stakeholders.map((item) => [item.id, item]));
 export const stageById = Object.fromEntries(lifecycleStages.map((item) => [item.id, item]));
 export const authorityById = Object.fromEntries(authorities.map((item) => [item.id, item]));
-

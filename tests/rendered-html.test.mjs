@@ -12,9 +12,9 @@ test("renders the REOS homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /The Operating System/);
+  assert.match(html, /One connected journey/);
   assert.match(html, /Eight ecosystems/);
-  assert.match(html, /Follow the property/);
+  assert.match(html, /Start my journey/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
@@ -24,4 +24,3 @@ test("renders core routes", async () => {
     assert.equal(response.status, 200, path);
   }
 });
-

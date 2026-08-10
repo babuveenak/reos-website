@@ -19,7 +19,14 @@ export function Header() {
       <nav aria-label="Primary navigation">
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
       </nav>
-      <Link className="header-cta" href="/lifecycle">Explore the journey <span aria-hidden="true">↗</span></Link>
+      <Link className="header-cta" href="/#start">Start my journey <span aria-hidden="true">↗</span></Link>
+      <details className="mobile-menu">
+        <summary aria-label="Open navigation"><span /><span /><span /></summary>
+        <nav aria-label="Mobile navigation">
+          <Link href="/#start">Start my journey</Link>
+          {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
+        </nav>
+      </details>
     </header>
   );
 }
@@ -51,4 +58,3 @@ export function StatusTag({ status }: { status: ContentStatus }) {
 export function SectionIntro({ label, title, copy }: { label: string; title: ReactNode; copy?: ReactNode }) {
   return <div className="section-intro"><span className="eyebrow">{label}</span><h2>{title}</h2>{copy && <p>{copy}</p>}</div>;
 }
-

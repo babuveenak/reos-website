@@ -5,6 +5,46 @@ import { useMemo, useState } from "react";
 import { ecosystemById, ecosystems, lifecycleStages, stakeholderById, stakeholders } from "../data/reos";
 import { StatusTag } from "./SiteShell";
 
+const starterRoles = [
+  { value: "property-owner", label: "Buyer, owner, landlord or tenant" },
+  { value: "investor", label: "Investor or capital partner" },
+  { value: "developer", label: "Developer, sub-developer or landowner" },
+  { value: "consultant", label: "Consultant or delivery partner" },
+  { value: "broker", label: "Broker or transaction partner" },
+  { value: "bank", label: "Bank or financial institution" },
+  { value: "master-developer", label: "Master developer" },
+  { value: "government-authority", label: "Government or authority" },
+];
+
+const starterGoals: Record<string, string[]> = {
+  "property-owner": ["Buy or evaluate a property", "Complete handover and move in", "Lease, manage or sell a property", "Resolve defects or DLP"],
+  investor: ["Evaluate an investment", "Monitor an off-plan property", "Manage a portfolio", "Plan resale or succession"],
+  developer: ["Assess land and feasibility", "Resolve approvals and jurisdiction", "Register a project and escrow", "Deliver and hand over"],
+  consultant: ["Coordinate design and approvals", "Manage construction evidence", "Complete inspection and handover"],
+  broker: ["Market or sell off-plan", "Complete a ready-property transaction", "Lease a property"],
+  bank: ["Provide project finance or escrow", "Support a customer mortgage", "Complete settlement or discharge"],
+  "master-developer": ["Review a development submission", "Coordinate infrastructure and community requirements"],
+  "government-authority": ["Explore authority touchpoints", "Review the connected lifecycle model"],
+};
+
+export function JourneyStarter() {
+  const [role, setRole] = useState("property-owner");
+  const [goal, setGoal] = useState(starterGoals["property-owner"][0]);
+  const [emirate, setEmirate] = useState("Dubai");
+
+  function changeRole(value: string) {
+    setRole(value);
+    setGoal(starterGoals[value][0]);
+  }
+
+  return <div className="starter-card">
+    <div className="starter-step"><span>01</span><label htmlFor="starter-role">I am a…</label><select id="starter-role" value={role} onChange={(event) => changeRole(event.target.value)}>{starterRoles.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
+    <div className="starter-step"><span>02</span><label htmlFor="starter-goal">I want to…</label><select id="starter-goal" value={goal} onChange={(event) => setGoal(event.target.value)}>{starterGoals[role].map((item) => <option key={item}>{item}</option>)}</select></div>
+    <div className="starter-step"><span>03</span><label htmlFor="starter-emirate">Property location</label><select id="starter-emirate" value={emirate} onChange={(event) => setEmirate(event.target.value)}>{["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Other UAE / not sure"].map((item) => <option key={item}>{item}</option>)}</select></div>
+    <div className="starter-result"><small>YOUR STARTING POINT</small><b>{goal}</b><p>{emirate}. Exact jurisdiction and requirements must be confirmed before action.</p><Link className="button gold" href={`/stakeholders/${role}`}>Open my journey <span>→</span></Link></div>
+  </div>;
+}
+
 export function EcosystemOrbit({ compact = false }: { compact?: boolean }) {
   const [active, setActive] = useState("developers");
   const ecosystem = ecosystemById[active];

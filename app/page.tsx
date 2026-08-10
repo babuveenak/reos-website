@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { DualEntry, EcosystemOrbit, LifecycleExplorer } from "./components/Experience";
+import { DualEntry, EcosystemOrbit, JourneyStarter, LifecycleExplorer } from "./components/Experience";
 import { Page, SectionIntro } from "./components/SiteShell";
 
 export default function Home() {
@@ -10,12 +10,17 @@ export default function Home() {
         <div className="hero-grid" aria-hidden="true" />
         <div className="hero-content">
           <span className="eyebrow">REOS × KETURAH · UAE</span>
-          <h1>The Operating System<br /><em>for Property.</em></h1>
-          <p>A persistent digital journey connecting property, people, processes and platforms—from first intent to long-term ownership.</p>
-          <div className="hero-actions"><Link className="button gold" href="/lifecycle">Follow the property <span>↗</span></Link><Link className="button ghost" href="/stakeholders">Choose your role</Link></div>
+          <h1>One connected journey<br /><em>for UAE property.</em></h1>
+          <p>Tell REOS who you are and what you need to accomplish. REOS maps the parties, requirements, dependencies and next action—without asking you to understand the whole ecosystem.</p>
+          <div className="hero-actions"><Link className="button gold" href="/#start">Start my journey <span>↗</span></Link><Link className="button ghost" href="/#problem">See the problem</Link></div>
         </div>
         <div className="hero-arch" aria-hidden="true"><div className="arch-light" /><div className="arch-copy"><span>01</span><b>INTEGRATE</b><i>ORCHESTRATE</i><small>REMEMBER</small></div></div>
         <div className="scroll-cue"><i /> SCROLL TO EXPLORE</div>
+      </section>
+
+      <section className="journey-start section-pad" id="start">
+        <SectionIntro label="START WITH YOU" title={<>Who are you?<br /><em>What are you trying to do?</em></>} copy="Choose your role, goal and emirate. This prototype will open the closest researched journey; future REOS will resolve exact jurisdiction, property facts, blockers and official actions." />
+        <JourneyStarter />
       </section>
 
       <section className="problem-section section-pad" id="problem">
@@ -27,7 +32,7 @@ export default function Home() {
       </section>
 
       <section className="ecosystem-section section-pad" id="ecosystem">
-        <SectionIntro label="THE ECOSYSTEM" title={<>Eight ecosystems.<br /><em>One property journey.</em></>} copy="The homepage stays simple. Select an ecosystem to reveal the detailed stakeholder model beneath it." />
+        <SectionIntro label="THE ECOSYSTEM" title={<>Eight ecosystems.<br /><em>One connected journey.</em></>} copy="You do not need to learn the whole ecosystem. REOS uses it behind the scenes to show only the parties and dependencies relevant to your goal." />
         <EcosystemOrbit />
       </section>
 
@@ -65,4 +70,3 @@ export default function Home() {
     </Page>
   );
 }
-
