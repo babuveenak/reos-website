@@ -26,7 +26,8 @@ export function DemoForm() {
     const body = [
       `Name: ${get("name")}`,
       `Company: ${get("company")}`,
-      `Role: ${get("role")}`,
+      `I am: ${get("role")}`,
+      `Job title: ${get("title")}`,
       `Emirate / location: ${get("location")}`,
       `Interested in: ${get("interest")}`,
       "",
@@ -54,8 +55,8 @@ export function DemoForm() {
 
       <div className="field-row">
         <label>
-          <span>Your role</span>
-          <input name="role" autoComplete="organization-title" placeholder="e.g. Development Manager" />
+          <span>Job title</span>
+          <input name="title" autoComplete="organization-title" placeholder="e.g. Development Manager" />
         </label>
         <label>
           <span>Where is the property or project?</span>
@@ -64,6 +65,13 @@ export function DemoForm() {
           </select>
         </label>
       </div>
+
+      <label>
+        <span>I am</span>
+        <select name="role" defaultValue="Not sure yet">
+          {["Buyer","Investor","Developer","Bank or financier","Contractor or supplier","Consultant or advisor","Property or facility manager","New to UAE property","Not sure yet","Other"].map((x) => <option key={x}>{x}</option>)}
+        </select>
+      </label>
 
       <label>
         <span>I am interested in</span>

@@ -46,6 +46,7 @@ export function Footer() {
         <Link href="/authorities">Authorities</Link>
         <Link href="/platform">Platform</Link>
         <Link href="/insights">Insights</Link>
+        <Link href="/glossary">Glossary</Link>
         <Link href="/about">About</Link>
         <Link href="/demo">Book a demo</Link>
       </div>

@@ -99,19 +99,61 @@ export function JourneyRibbon() {
  * PERSONA SELECTOR — "start from where you are"
  * ------------------------------------------------------------------ */
 
-export function PersonaSelector({ limit }: { limit?: number }) {
-  const list = limit ? personas.slice(0, limit) : personas;
+/** The four routes most visitors need; the rest are professional roles. */
+const PRIMARY = ["buying", "investing", "developing", "new-to-uae"];
+
+function Tile({ slug, index }: { slug: string; index: number }) {
+  const persona = personas.find((p) => p.slug === slug)!;
   return (
-    <div className="persona-select">
-      {list.map((persona, i) => (
-        <Link key={persona.slug} href={`/roles/${persona.slug}`} className="persona-tile">
-          <span className="tile-num">{String(i + 1).padStart(2, "0")}</span>
-          <b>{persona.card}</b>
-          <p>{persona.promise}</p>
-          <i>{persona.name} journey →</i>
-        </Link>
-      ))}
-    </div>
+    <Link href={`/roles/${persona.slug}`} className="persona-tile">
+      <span className="tile-num">{String(index + 1).padStart(2, "0")}</span>
+      <b>{persona.card}</b>
+      <p>{persona.promise}</p>
+      <i>{persona.name} journey →</i>
+    </Link>
+  );
+}
+
+export function PersonaSelector() {
+  const primary = personas.filter((p) => PRIMARY.includes(p.slug));
+  const secondary = personas.filter((p) => !PRIMARY.includes(p.slug));
+  return (
+    <>
+      <div className="persona-select">
+        {primary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i} />)}
+      </div>
+
+      {/* Desktop shows all eight at once; mobile collapses the professional
+          routes so the first decision is reachable without a long scroll. */}
+      <details className="persona-more" open={false} ref={(el) => {
+        // Open by default on wide viewports, collapsed on narrow ones.
+        if (el && !el.dataset.init) { el.dataset.init = "1"; el.open = window.innerWidth > 720; }
+      }}>
+        <summary>
+          <b>Professional routes</b>
+          <span>{secondary.length} more</span>
+        </summary>
+        <div className="persona-select">
+          {secondary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i + primary.length} />)}
+        </div>
+      </details>
+    </>
+  );
+}
+
+/** Mobile-only quick pick, placed directly under the hero so the first
+ *  personalised decision is one tap away rather than a screen down. */
+export function PersonaQuickPick() {
+  return (
+    <nav className="persona-quick" aria-label="Quick role selection">
+      <b>I am&hellip;</b>
+      <div>
+        {PRIMARY.map((slug) => {
+          const p = personas.find((x) => x.slug === slug)!;
+          return <Link key={slug} href={`/roles/${slug}`}>{p.name}</Link>;
+        })}
+      </div>
+    </nav>
   );
 }
 
@@ -127,6 +169,10 @@ export function JourneyMap({ compact = false }: { compact?: boolean }) {
 
   return (
     <div className={`journey-map ${compact ? "is-compact" : ""}`}>
+      <p className="rail-cue" aria-hidden="true">
+        <span>Swipe to explore all {stages.length} stages</span>
+        <b>{String(active.number).padStart(2, "0")} / {stages.length}</b>
+      </p>
       <ol className="map-rail-stages" aria-label="Twelve stages of the property journey">
         {stages.map((stage) => (
           <li key={stage.id}>

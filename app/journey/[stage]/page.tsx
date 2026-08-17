@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Page, StatusTag } from "../../components/SiteShell";
+import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 import { stageById, stages } from "../../data/journey";
 import { personas } from "../../data/personas";
@@ -62,11 +63,30 @@ export default async function StagePage({ params }: Props) {
       </section>
     )}
 
+    <section className="at-a-glance" aria-label="Stage summary">
+      <div>
+        <small>Participants</small>
+        <div className="chip-row">{stage.groupIds.map((id) => <span key={id}>{groupById[id]?.short}</span>)}</div>
+      </div>
+      <div>
+        <small>Documents</small>
+        <div className="chip-row">{stage.documents.slice(0, 3).map((d) => <span key={d}>{d}</span>)}</div>
+      </div>
+      <div>
+        <small>Most common failure</small>
+        <p>{stage.risks[0]}</p>
+      </div>
+      <div>
+        <small>{next ? "Next gate" : "Ends the journey"}</small>
+        <p>{next ? next.name : "Succession, refinancing or a new cycle."}</p>
+      </div>
+    </section>
+
     <section className="section-pad stage-body">
       <article className="stage-main">
         <h2>What happens</h2>
         <ol className="numbered-list">
-          {stage.whatHappens.map((item) => <li key={item}>{item}</li>)}
+          {stage.whatHappens.map((item) => <li key={item}>{withTerms(item)}</li>)}
         </ol>
 
         <h2>What can go wrong</h2>
@@ -76,7 +96,7 @@ export default async function StagePage({ params }: Props) {
 
         <div className="jurisdiction-note">
           <b>Where you are changes the answer</b>
-          <p>{stage.jurisdiction}</p>
+          <p>{withTerms(stage.jurisdiction)}</p>
         </div>
 
         <div className="next-step">

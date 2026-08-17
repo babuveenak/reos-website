@@ -21,11 +21,15 @@ export default function InsightsPage() {
       <span className="eyebrow">KNOWLEDGE HUB</span>
       <h1>Learn before you buy,<br /><em>build, invest or manage.</em></h1>
       <p>Explanations written for people approaching UAE property without prior local knowledge. Start with the journey stage or the role that matches your situation.</p>
+      <ul className="availability-key">
+        <li><b>Available now</b><span>{personas.length} role guides and {stages.length} stage explainers, written and published.</span></li>
+        <li><b>In development</b><span>Deeper topics being verified against official sources. We publish them when they are sourced, not before.</span></li>
+      </ul>
     </section>
 
     <section className="section-pad">
       <SectionIntro
-        label="START WITH YOUR ROLE"
+        label="AVAILABLE NOW · START WITH YOUR ROLE"
         title={<>Guides by<br /><em>who you are.</em></>}
         copy="Each route explains the full sequence for that role, the documents involved and the mistakes that recur."
       />
@@ -43,7 +47,7 @@ export default function InsightsPage() {
 
     <section className="section-pad">
       <SectionIntro
-        label="EXPLAINERS BY STAGE"
+        label="AVAILABLE NOW · EXPLAINERS BY STAGE"
         title={<>Guides by<br /><em>what happens when.</em></>}
         copy="Every stage of the journey explained: what takes place, who is involved, which documents matter and what changes between emirates."
       />
@@ -60,7 +64,7 @@ export default function InsightsPage() {
 
     <section className="section-pad">
       <SectionIntro
-        label="TOPICS IN DEVELOPMENT"
+        label="IN DEVELOPMENT · BEING SOURCED"
         title={<>Deeper explainers,<br /><em>as they are sourced.</em></>}
         copy="These topics are being written and verified against official sources. We publish them when they are sourced, not before."
       />

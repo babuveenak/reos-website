@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Page, StatusTag } from "../../components/SiteShell";
+import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 import { stageById } from "../../data/journey";
 import { personaBySlug, personas } from "../../data/personas";
@@ -17,6 +18,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const persona = personaBySlug[slug];
   if (!persona) return {};
   return { title: `${persona.headline} | REOS`, description: persona.promise };
+}
+
+/** Rough reading time from the words actually on the page. */
+function readingMinutes(p: { steps: { detail: string; title: string }[]; audience: string; reosHelp: string; risks: string[] }) {
+  const words = [p.audience, p.reosHelp, ...p.risks, ...p.steps.flatMap((s) => [s.title, s.detail])]
+    .join(" ").trim().split(/\s+/).length;
+  return Math.max(2, Math.round(words / 200));
 }
 
 export default async function PersonaPage({ params }: Props) {
@@ -43,7 +51,16 @@ export default async function PersonaPage({ params }: Props) {
       <aside className="persona-meta">
         <small>WHO THIS IS FOR</small>
         <p>{persona.audience}</p>
-        <div className="meta-count"><b>{String(persona.steps.length).padStart(2, "0")}</b><span>steps</span></div>
+        <div className="meta-count">
+          <b>{String(persona.steps.length).padStart(2, "0")}</b><span>steps</span>
+          <em>{readingMinutes(persona)} min read</em>
+        </div>
+        <small>QUESTIONS THIS ANSWERS</small>
+        <ul className="meta-questions">{persona.questions.map((q) => <li key={q}>{q}</li>)}</ul>
+        <div className="meta-action">
+          <small>START HERE</small>
+          <p>{persona.nextAction}</p>
+        </div>
       </aside>
     </section>
 
@@ -51,12 +68,17 @@ export default async function PersonaPage({ params }: Props) {
       <div className="persona-flow">
         {persona.steps.map((step, index) => {
           const stage = stageById[step.stageId];
+          const newPhase = step.phase && step.phase !== persona.steps[index - 1]?.phase;
           return (
-            <article key={step.title} className="flow-step">
+            <div key={step.title}>
+            {newPhase && (
+              <p className="flow-phase"><b>{step.phase}</b><i aria-hidden="true" /></p>
+            )}
+            <article className="flow-step">
               <div className="step-marker"><b>{String(index + 1).padStart(2, "0")}</b></div>
               <div className="step-body">
                 <h2>{step.title}</h2>
-                <p>{step.detail}</p>
+                <p>{withTerms(step.detail)}</p>
                 {stage && (
                   <Link className="step-stage" href={`/journey/${stage.id}`}>
                     <span>STAGE {String(stage.number).padStart(2, "0")}</span>
@@ -66,6 +88,7 @@ export default async function PersonaPage({ params }: Props) {
                 )}
               </div>
             </article>
+            </div>
           );
         })}
       </div>

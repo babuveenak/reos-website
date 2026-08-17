@@ -15,6 +15,17 @@ export default function DemoPage() {
         <h1>Map your property journey<br /><em>with REOS.</em></h1>
         <p>Bring a real project or a real question. We will walk it through the connected model and show where the dependencies, approvals and handoffs actually sit.</p>
 
+        <div className="demo-proof">
+          <small>TYPICAL OUTCOMES FROM A MAPPING SESSION</small>
+          <ul>
+            <li>Identify which authority actually governs your project</li>
+            <li>Map the approvals and dependency gates still outstanding</li>
+            <li>Clarify the escrow, registration and handover checkpoints</li>
+            <li>Show which stakeholders and documents each step involves</li>
+            <li>Separate what is validated from what still needs confirming</li>
+          </ul>
+        </div>
+
         <ul className="demo-points">
           <li><b>Bring anything</b><span>A plot under consideration, a project mid-delivery, or a purchase you are trying to understand.</span></li>
           <li><b>Jurisdiction first</b><span>We start by resolving which emirate, zone and authority govern your case, because everything downstream depends on it.</span></li>

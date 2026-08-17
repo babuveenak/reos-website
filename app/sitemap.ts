@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/ecosystem", 0.9),
     entry("/platform", 0.8),
     entry("/insights", 0.8),
+    entry("/glossary", 0.75),
     entry("/authorities", 0.8),
     entry("/lifecycle", 0.7),
     entry("/stakeholders", 0.7),

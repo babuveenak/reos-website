@@ -48,6 +48,16 @@ export default function PlatformPage() {
       </div>
     </section>
 
+    <section className="section-pad">
+      <SectionIntro label="WHAT THE LABELS MEAN" title={<>Four labels.<br /><em>Used the same way everywhere.</em></>} />
+      <dl className="status-key">
+        <div><dt><span className="status status-validated">Validated</span></dt><dd>Researched, sourced and reflected in the current model.</dd></div>
+        <div><dt><span className="status status-to-be-validated">To Be Validated</span></dt><dd>Designed or partially proven, still requiring verification before it can be treated as complete.</dd></div>
+        <div><dt><span className="status status-future-reos-capability">Future REOS Capability</span></dt><dd>Architected as part of the roadmap, not yet delivered as a live capability.</dd></div>
+        <div><dt><span className="status status-illustrative">Illustrative</span></dt><dd>Used to explain the model or the experience, not a verified operational claim.</dd></div>
+      </dl>
+    </section>
+
     <section className="section-pad principle-band">
       <SectionIntro label="OPERATING PRINCIPLES" title={<>What REOS<br /><em>deliberately does not do.</em></>} />
       <div className="principle-grid">

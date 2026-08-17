@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { EcosystemMap } from "./components/Ecosystem";
-import { JourneyMap, JourneyRibbon, PersonaSelector, TrackLegend } from "./components/Journey";
+import { JourneyMap, JourneyRibbon, PersonaQuickPick, PersonaSelector, TrackLegend } from "./components/Journey";
 import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
 import { fragments, groups, modules, outcomes } from "./data/ecosystem";
 import { layers, stages } from "./data/journey";
@@ -23,6 +23,7 @@ export default function Home() {
         </div>
       </div>
       <div className="hero-visual"><JourneyRibbon /></div>
+      <PersonaQuickPick />
     </section>
 
     {/* 02 — WHERE ARE YOU. Persona entry, high on the page. */}
