@@ -22,8 +22,13 @@ export default function EcosystemPage() {
       <SectionIntro
         label="INTERACTIVE MAP"
         title={<>Four clusters.<br /><em>One regulatory rail.</em></>}
-        copy="Authorities are shown as a rail rather than a cluster because they are not peers of the other groups — they issue the approvals that gate everyone else. Enablers cross-cut because they support many stages at once."
+        copy="Select any group to see what it controls, which participants it covers and where it enters the journey."
       />
+      <p className="rail-callout">
+        Authorities are shown as a rail rather than a cluster because approvals, registrations
+        and permits gate the journey for everyone else. They are compulsory and external, where
+        every other participant is appointed and commercial.
+      </p>
       <EcosystemMap />
     </section>
 

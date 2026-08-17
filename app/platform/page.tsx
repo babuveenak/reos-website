@@ -17,7 +17,7 @@ export default function PlatformPage() {
       <p>Understanding the journey is the first problem. Running it is the second. REOS is built in three layers so each is useful on its own, and each makes the next one possible.</p>
     </section>
 
-    <section className="section-pad">
+    <section className="section-pad atmos atmos-rays">
       <SectionIntro label="THREE LAYERS" title={<>Understand it. Find your part.<br /><em>Then run the work.</em></>} />
       <div className="layer-grid">
         {layers.map((layer, index) => (

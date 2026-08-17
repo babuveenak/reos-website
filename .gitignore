@@ -51,3 +51,7 @@ tsconfig.tsbuildinfo
 # local working documents
 /Research and Documents/
 /docs/
+
+# review handover pack (regenerated, not source)
+/handover/
+REOS-review-pack.zip

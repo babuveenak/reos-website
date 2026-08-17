@@ -24,6 +24,9 @@ export type Persona = {
   /** Card label on the selector — first person, as the visitor would say it. */
   card: string;
   name: string;
+  /** Subject of "<plural> see the whole journey." Never derive this from
+   *  `name` — that yields "Orientations" and "Bank or Financiers". */
+  plural: string;
   headline: string;
   promise: string;
   /** Who this is for, said plainly for a reader outside the UAE. */
@@ -41,6 +44,7 @@ export const personas: Persona[] = [
     slug: "buying",
     card: "I am buying a property",
     name: "Buyer",
+    plural: "Buyers",
     headline: "Buying property in the UAE: know every step before you commit.",
     promise: "From first search to keys in hand — what to verify, what to sign, and what protects your money along the way.",
     audience: "Individuals and families buying a home or first investment property, whether resident in the UAE or buying from abroad.",
@@ -73,6 +77,7 @@ export const personas: Persona[] = [
     slug: "investing",
     card: "I am investing in property",
     name: "Investor",
+    plural: "Investors",
     headline: "Invest with visibility across the property lifecycle.",
     promise: "See where capital enters, what controls protect it, which risks concentrate where, and how an exit actually works.",
     audience: "Private investors, family offices and institutional capital allocating to UAE property or development projects.",
@@ -104,6 +109,7 @@ export const personas: Persona[] = [
     slug: "developing",
     card: "I am developing a project",
     name: "Developer",
+    plural: "Developers",
     headline: "From land to handover: coordinate the full development journey.",
     promise: "Every approval, appointment, dependency and handoff between buying a plot and handing over the last unit.",
     audience: "Developers, master developers, landowners building for themselves, and development managers acting for owners.",
@@ -136,6 +142,7 @@ export const personas: Persona[] = [
     slug: "financing",
     card: "I am financing property",
     name: "Bank or Financier",
+    plural: "Banks and financiers",
     headline: "Connect finance, escrow, payments and project progress.",
     promise: "Where money enters, what controls it, how progress is verified, and what evidence supports each release.",
     audience: "Project finance lenders, mortgage providers, Islamic finance institutions, escrow trustee banks and financial operations teams.",
@@ -165,6 +172,7 @@ export const personas: Persona[] = [
     slug: "building",
     card: "I am building or supplying",
     name: "Contractor or Supplier",
+    plural: "Contractors and suppliers",
     headline: "Understand where delivery partners fit in the property journey.",
     promise: "What must exist before you mobilise, what you must evidence during construction, and what completion actually requires.",
     audience: "Main contractors, subcontractors, specialist trades, suppliers, manufacturers and equipment providers.",
@@ -194,6 +202,7 @@ export const personas: Persona[] = [
     slug: "professional-services",
     card: "I provide professional services",
     name: "Consultant or Advisor",
+    plural: "Consultants and advisors",
     headline: "See where your work sits in the wider property journey.",
     promise: "Your appointment, your submissions, your liability, and the parties whose work depends on yours.",
     audience: "Architects, engineers, project and cost consultants, surveyors, lawyers, valuers, insurers and specialist advisors.",
@@ -223,6 +232,7 @@ export const personas: Persona[] = [
     slug: "managing",
     card: "I manage property",
     name: "Property or Facility Manager",
+    plural: "Property and facility managers",
     headline: "The property journey continues after handover.",
     promise: "Taking the building on, running it well, funding it correctly and keeping the record intact for whoever comes next.",
     audience: "Property managers, facility managers, community managers, owners' association managers and asset managers.",
@@ -252,6 +262,7 @@ export const personas: Persona[] = [
     slug: "new-to-uae",
     card: "I am new to UAE property",
     name: "Orientation",
+    plural: "Newcomers to the UAE",
     headline: "New to UAE property? Start here.",
     promise: "How the market is structured, what the common terms mean, and which route applies to you — before you choose a role.",
     audience: "Anyone approaching UAE real estate for the first time, including international buyers, investors and businesses entering the market.",

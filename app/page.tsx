@@ -16,6 +16,7 @@ export default function Home() {
         <span className="eyebrow">UAE REAL ESTATE</span>
         <h1>Understand the property journey.<br /><em>From land to living.</em></h1>
         <p>Explore how property is planned, financed, designed, developed, built, sold, registered, handed over, managed and invested in across the UAE.</p>
+        <p className="hero-benefit">Understand what happens, who is involved, what comes next, and which decisions affect your outcome.</p>
         <div className="hero-actions">
           <Link className="button gold" href="/#start">Start my journey <span>↗</span></Link>
           <Link className="button ghost" href="/ecosystem">Explore the ecosystem</Link>
@@ -47,6 +48,7 @@ export default function Home() {
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{item.title}</h3>
             <p>{item.detail}</p>
+            <p className="fragment-example">{item.example}</p>
           </article>
         ))}
       </div>
@@ -77,7 +79,7 @@ export default function Home() {
     </section>
 
     {/* 06 — HOW REOS CONNECTS. Three layers. */}
-    <section className="section-pad layer-band">
+    <section className="section-pad layer-band atmos atmos-rays">
       <SectionIntro
         label="HOW REOS CONNECTS IT"
         title={<>Understand it. Find your part in it.<br /><em>Then run the work.</em></>}
@@ -110,6 +112,11 @@ export default function Home() {
             <p>{module.copy}</p>
           </article>
         ))}
+        <article className="module-roadmap">
+          <header><span>&mdash;</span></header>
+          <h3>The roadmap continues</h3>
+          <p>Further capabilities are added only once they are sourced, validated and connected to the lifecycle model — not before.</p>
+        </article>
       </div>
     </section>
 
@@ -137,7 +144,7 @@ export default function Home() {
     </section>
 
     {/* 09 — CTA. */}
-    <section className="demo-band" id="demo">
+    <section className="demo-band atmos atmos-city" id="demo">
       <span className="eyebrow">SEE IT ON YOUR OWN PROJECT</span>
       <h2>Bring a project.<br /><em>We will map it.</em></h2>
       <p>Walk through your emirate, asset type and delivery route against the connected model, and see where the dependencies, approvals and handoffs actually sit.</p>

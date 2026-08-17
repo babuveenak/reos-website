@@ -122,10 +122,10 @@ export const groupsByCluster = (id: ClusterId) => groups.filter((g) => g.cluster
 
 /** The fragmentation the platform exists to resolve. Section 02 of the homepage. */
 export const fragments = [
-  { title: "Siloed systems", detail: "Each participant runs its own platform. None of them share a project state, so the same facts are re-entered at every handoff." },
-  { title: "Manual handoffs", detail: "Responsibility moves between parties through email and attachments. What was agreed, and by whom, becomes unreconstructable." },
-  { title: "Sequencing delays", detail: "Work stops because a prerequisite nobody tracked was never started. The dependency existed; the visibility did not." },
-  { title: "Compliance exposure", detail: "Requirements are jurisdiction-specific and change. Teams act on last year's process without knowing it moved." },
+  { title: "Siloed systems", detail: "Each participant runs its own platform, and none of them share a project state.", example: "A buyer, a bank and a developer can each hold a different view of the same project's progress." },
+  { title: "Manual handoffs", detail: "Responsibility moves between parties through email and attachments.", example: "A permit, a payment or an approval changes hands with no reliable shared record of what was agreed." },
+  { title: "Sequencing delays", detail: "Work stops because a prerequisite nobody tracked was never started.", example: "The dependency existed the whole time; nobody owned it, so nobody saw it coming." },
+  { title: "Compliance exposure", detail: "Requirements are jurisdiction-specific and they change.", example: "A team follows last year's process after the emirate's requirement has already moved." },
 ];
 
 /** Platform architecture. Status stays honest: what is researched and live

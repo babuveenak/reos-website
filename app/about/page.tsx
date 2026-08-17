@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return <Page className="inner-page">
-    <section className="inner-hero">
+    <section className="inner-hero atmos atmos-city">
       <span className="eyebrow">ABOUT REOS</span>
       <h1>Building the digital map<br /><em>of the property ecosystem.</em></h1>
       <p>REOS exists to make the property journey understandable, navigable and connected — for the people buying, the people building, the people funding it and the people who will run it long after handover.</p>

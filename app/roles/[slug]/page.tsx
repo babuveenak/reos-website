@@ -96,7 +96,7 @@ export default async function PersonaPage({ params }: Props) {
 
     <section className="reos-opportunity">
       <span className="eyebrow">HOW REOS HELPS</span>
-      <h2>{persona.name}s see<br /><em>the whole journey.</em></h2>
+      <h2>{persona.plural} see<br /><em>the whole journey.</em></h2>
       <p>{persona.reosHelp}</p>
       <div className="hero-actions">
         <Link className="button gold" href="/demo">Book a demo <span>↗</span></Link>

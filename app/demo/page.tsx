@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function DemoPage() {
   return <Page className="inner-page demo-page">
-    <section className="demo-layout">
+    <section className="demo-layout atmos atmos-city">
       <div className="demo-intro">
         <span className="eyebrow">BOOK A DEMO</span>
         <h1>Map your property journey<br /><em>with REOS.</em></h1>
