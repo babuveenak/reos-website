@@ -4,11 +4,11 @@ import type { ContentStatus } from "../data/reos";
 import { PreferencesControls } from "./PreferencesControls";
 
 const nav = [
-  ["/#platform", "Platform"],
-  ["/#start", "Property journey"],
-  ["/#solutions", "Who it helps"],
-  ["/authorities", "UAE authorities"],
-  ["/reos", "How REOS works"],
+  ["/#ecosystem", "Ecosystem"],
+  ["/lifecycle", "Lifecycle"],
+  ["/stakeholders", "Stakeholders"],
+  ["/authorities", "Authorities"],
+  ["/reos", "Platform"],
 ];
 
 export function Header() {
@@ -16,18 +16,18 @@ export function Header() {
     <header className="site-header">
       <Link className="brand" href="/" aria-label="REOS home">
         <span className="brand-mark">R</span>
-        <span><b>REOS</b><small>THE OPERATING SYSTEM FOR THE PROPERTY JOURNEY</small></span>
+        <span><b>REOS</b><small>REAL ESTATE OPERATING SYSTEM</small></span>
       </Link>
       <nav aria-label="Primary navigation">
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
       </nav>
       <PreferencesControls />
-      <Link className="header-cta" href="/#start">Start my journey <span aria-hidden="true">↗</span></Link>
+      <Link className="header-cta" href="/#demo">Book a demo <span aria-hidden="true">↗</span></Link>
       <details className="mobile-menu">
         <summary aria-label="Open navigation"><span /><span /><span /></summary>
         <nav aria-label="Mobile navigation">
-          <Link href="/#start">Start my journey</Link>
           {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
+          <Link href="/#demo">Book a demo</Link>
         </nav>
       </details>
     </header>
@@ -37,14 +37,15 @@ export function Header() {
 export function Footer() {
   return (
     <footer className="site-footer">
-      <div><span className="eyebrow">REOS · DUBAI PHASE 1</span><h2>Know where you are.<br /><em>Know what comes next.</em></h2></div>
+      <div><span className="eyebrow">REOS · UAE PROPERTY DEVELOPMENT</span><h2>Know where you are.<br /><em>Know what comes next.</em></h2></div>
       <div className="footer-links">
-        <Link href="/#start">Find my journey</Link>
+        <Link href="/#ecosystem">Stakeholder ecosystem</Link>
+        <Link href="/lifecycle">24-stage lifecycle</Link>
         <Link href="/stakeholders">Stakeholder journeys</Link>
         <Link href="/authorities">Authorities & approvals</Link>
-        <Link href="/reos">REOS architecture</Link>
+        <Link href="/reos">Platform architecture</Link>
       </div>
-      <p className="fineprint">Independent educational guidance for Dubai property journeys. REOS does not issue approvals, execute transactions or replace legal, financial or regulated advice. Verify current requirements, fees, timelines, laws and eligibility with the relevant authority or regulated provider.</p>
+      <p className="fineprint">Independent knowledge and navigation layer for UAE property development. REOS does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements, fees, timelines, laws and eligibility are jurisdiction-specific and change — verify with the relevant authority or regulated provider before acting.</p>
     </footer>
   );
 }

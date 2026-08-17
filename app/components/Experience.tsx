@@ -2,78 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ecosystemById, ecosystems, lifecycleStages, stakeholderById, stakeholders } from "../data/reos";
+import { ecosystemById, lifecycleStages, stakeholderById } from "../data/reos";
 import { StatusTag } from "./SiteShell";
-
-const starterRoles = [
-  { value: "property-owner", label: "Buyer, owner, landlord or tenant" },
-  { value: "investor", label: "Investor or capital partner" },
-  { value: "developer", label: "Developer, sub-developer or landowner" },
-  { value: "consultant", label: "Consultant or delivery partner" },
-  { value: "broker", label: "Broker or transaction partner" },
-  { value: "bank", label: "Bank or financial institution" },
-  { value: "master-developer", label: "Master developer" },
-  { value: "government-authority", label: "Government or authority" },
-];
-
-const starterGoals: Record<string, string[]> = {
-  "property-owner": ["Buy or evaluate a property", "Complete handover and move in", "Lease, manage or sell a property", "Resolve defects or DLP"],
-  investor: ["Evaluate an investment", "Monitor an off-plan property", "Manage a portfolio", "Plan resale or succession"],
-  developer: ["Assess land and feasibility", "Resolve approvals and jurisdiction", "Register a project and escrow", "Deliver and hand over"],
-  consultant: ["Coordinate design and approvals", "Manage construction evidence", "Complete inspection and handover"],
-  broker: ["Market or sell off-plan", "Complete a ready-property transaction", "Lease a property"],
-  bank: ["Provide project finance or escrow", "Support a customer mortgage", "Complete settlement or discharge"],
-  "master-developer": ["Review a development submission", "Coordinate infrastructure and community requirements"],
-  "government-authority": ["Explore authority touchpoints", "Review the connected lifecycle model"],
-};
-
-export function JourneyStarter() {
-  const [role, setRole] = useState("property-owner");
-  const [goal, setGoal] = useState(starterGoals["property-owner"][0]);
-  const [emirate, setEmirate] = useState("Dubai");
-
-  function changeRole(value: string) {
-    setRole(value);
-    setGoal(starterGoals[value][0]);
-  }
-
-  return <div className="starter-card">
-    <div className="starter-step"><span>01</span><label htmlFor="starter-role">I am a…</label><select id="starter-role" value={role} onChange={(event) => changeRole(event.target.value)}>{starterRoles.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select></div>
-    <div className="starter-step"><span>02</span><label htmlFor="starter-goal">I want to…</label><select id="starter-goal" value={goal} onChange={(event) => setGoal(event.target.value)}>{starterGoals[role].map((item) => <option key={item}>{item}</option>)}</select></div>
-    <div className="starter-step"><span>03</span><label htmlFor="starter-emirate">Property location</label><select id="starter-emirate" value={emirate} onChange={(event) => setEmirate(event.target.value)}>{["Dubai", "Abu Dhabi", "Sharjah", "Ras Al Khaimah", "Other UAE / not sure"].map((item) => <option key={item}>{item}</option>)}</select></div>
-    <div className="starter-result"><small>YOUR STARTING POINT</small><b>{goal}</b><p>{emirate}. Exact jurisdiction and requirements must be confirmed before action.</p><Link className="button gold" href={`/stakeholders/${role}`}>Open my journey <span>→</span></Link></div>
-  </div>;
-}
-
-export function EcosystemOrbit({ compact = false }: { compact?: boolean }) {
-  const [active, setActive] = useState("developers");
-  const ecosystem = ecosystemById[active];
-  const stakeholder = stakeholderById[ecosystem.stakeholderIds[0]];
-
-  return (
-    <div className={`orbit-experience ${compact ? "compact" : ""}`}>
-      <div className="orbit-map" role="group" aria-label="Eight stakeholder ecosystems surrounding REOS">
-        <div className="orbit-rings" aria-hidden="true"><i /><i /></div>
-        <div className="orbit-core"><span>REOS</span><small>CONNECTING FABRIC</small></div>
-        {ecosystems.map((item, index) => (
-          <button key={item.id} className={`orbit-node node-${index + 1} ${active === item.id ? "active" : ""}`} onClick={() => setActive(item.id)} aria-pressed={active === item.id}>
-            <b>{String(index + 1).padStart(2, "0")}</b><span>{item.short}</span>
-          </button>
-        ))}
-      </div>
-      <aside className="orbit-detail" aria-live="polite">
-        <span className="index-label">ECOSYSTEM {String(ecosystems.findIndex((item) => item.id === active) + 1).padStart(2, "0")}</span>
-        <h3>{ecosystem.name}</h3>
-        <p>{ecosystem.description}</p>
-        <div className="detail-rule" />
-        <small>Representative journey</small>
-        <strong>{stakeholder.name}</strong>
-        <p>{stakeholder.identity}</p>
-        <Link className="text-link" href={`/stakeholders/${stakeholder.id}`}>Open stakeholder journey <span>→</span></Link>
-      </aside>
-    </div>
-  );
-}
 
 export function LifecycleExplorer({ initialStage }: { initialStage?: string }) {
   const [phase, setPhase] = useState<string>("All");
@@ -113,21 +43,6 @@ export function LifecycleExplorer({ initialStage }: { initialStage?: string }) {
           {(view === "stage" ? stage.stakeholderIds.map((id) => stakeholderById[id]?.name) : stage.ecosystemIds.map((id) => ecosystemById[id]?.name)).filter(Boolean).map((name) => <b key={name}>{name}</b>)}
           <Link className="text-link" href={`/lifecycle/${stage.id}`}>Explore this stage <span>→</span></Link>
         </div>
-      </div>
-    </div>
-  );
-}
-
-export function DualEntry() {
-  const [mode, setMode] = useState<"role" | "stage">("role");
-  return (
-    <div className="dual-entry">
-      <div className="dual-tabs" role="tablist" aria-label="Choose how to enter the REOS knowledge model">
-        <button role="tab" aria-selected={mode === "role"} className={mode === "role" ? "active" : ""} onClick={() => setMode("role")}>I am a…</button>
-        <button role="tab" aria-selected={mode === "stage"} className={mode === "stage" ? "active" : ""} onClick={() => setMode("stage")}>I am at…</button>
-      </div>
-      <div className="dual-options">
-        {mode === "role" ? stakeholders.map((item) => <Link key={item.id} href={`/stakeholders/${item.id}`}><span>{item.name}</span><i>View journey →</i></Link>) : lifecycleStages.map((item) => <Link key={item.id} href={`/lifecycle/${item.id}`}><b>{String(item.number).padStart(2, "0")}</b><span>{item.name}</span></Link>)}
       </div>
     </div>
   );

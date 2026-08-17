@@ -38,3 +38,9 @@ yarn-error.log*
 /.wrangler/
 /outputs/
 /work/
+
+# typescript incremental build
+tsconfig.tsbuildinfo
+
+# claude code local config
+.claude/

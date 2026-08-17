@@ -4,14 +4,20 @@ Production website for REOS, translating the REOS/KETURAH investor-presentation 
 
 ## Experience
 
-- cinematic, scroll-driven homepage
-- interactive eight-ecosystem REOS map
-- 24-stage Property Development Lifecycle Explorer
-- dual entry by stakeholder role or lifecycle stage
-- dynamic stakeholder journey pages
+- hero that states the proposition in one line, with a twelve-node ecosystem ring
+- interactive stakeholder ecosystem: 12 groups under 4 clusters, over a regulatory rail
+- four-phase lifecycle flow driving all 24 stage pages from the same data
+- platform architecture labelled with honest build status
+- stakeholder lens pages with inputs, outputs, dependencies and bottlenecks
 - authority and jurisdiction touchpoint map
-- REOS Property Passport, Lifecycle State Engine, Integration Fabric and AI Journey Copilot narrative
 - explicit content-integrity labels: Validated, To Be Validated, Illustrative and Future REOS Capability
+
+## Structure
+
+Group 03 (authorities) is modelled as a regulatory **rail** rather than a cluster
+member: authorities issue the approvals that gate every other group, so they are
+compulsory and external where every other participant is appointed and commercial.
+Group 12 is cross-cutting for the same structural reason.
 
 ## Extracted REOS design system
 

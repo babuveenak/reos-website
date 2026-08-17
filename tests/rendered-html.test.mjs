@@ -12,10 +12,18 @@ test("renders the REOS homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /One connected journey/);
-  assert.match(html, /Eight ecosystems/);
-  assert.match(html, /Start my journey/);
+  assert.match(html, /The operating system for/);
+  assert.match(html, /Twelve stakeholder groups/);
+  assert.match(html, /Book a demo/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("homepage reaches the lifecycle and ecosystem content", async () => {
+  const html = await (await render()).text();
+  // The 24-stage model must be reachable from the homepage, not orphaned.
+  assert.match(html, /href="\/lifecycle"/);
+  assert.match(html, /href="\/lifecycle\/land-opportunity"/);
+  assert.match(html, /Regulatory Rail/);
 });
 
 test("renders core routes", async () => {
