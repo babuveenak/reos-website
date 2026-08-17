@@ -17,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/platform", 0.8),
     entry("/insights", 0.8),
     entry("/authorities", 0.8),
+    entry("/lifecycle", 0.7),
+    entry("/stakeholders", 0.7),
     entry("/about", 0.6),
     entry("/demo", 0.6),
     ...stages.map((s) => entry(`/journey/${s.id}`, 0.85)),

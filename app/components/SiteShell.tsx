@@ -28,6 +28,7 @@ export function Header() {
         <nav aria-label="Mobile navigation">
           {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
           <Link href="/demo">Book a demo</Link>
+          <PreferencesControls />
         </nav>
       </details>
     </header>

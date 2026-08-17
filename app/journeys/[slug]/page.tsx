@@ -2,8 +2,15 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Page } from "../../components/SiteShell";
 import { journeyBySlug, journeys } from "../../data/phase1";
+import type { Metadata } from "next";
 
 export function generateStaticParams(){ return journeys.map(({slug})=>({slug})); }
+
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}): Promise<Metadata> {
+  const {slug}=await params; const journey=journeyBySlug[slug];
+  if(!journey) return {};
+  return { title: `${journey.title} in Dubai | REOS`, description: journey.promise };
+}
 export default async function JourneyPage({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params; const journey=journeyBySlug[slug]; if(!journey) notFound();
   return <Page className="inner-page"><section className="journey-hero"><div><span className="eyebrow">DUBAI · PHASE 1 KNOWLEDGE JOURNEY</span><h1>{journey.title}</h1><p>{journey.promise} REOS explains the route; official authorities and regulated providers remain authoritative.</p></div><div className="journey-index"><small>STAGES</small><b>{journey.stages.length}</b><span>guided steps</span></div></section>
