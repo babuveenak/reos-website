@@ -128,20 +128,39 @@ export const fragments = [
   { title: "Compliance exposure", detail: "Requirements are jurisdiction-specific and change. Teams act on last year's process without knowing it moved." },
 ];
 
-/** Platform architecture. Status is honest: what is live, and what is designed. */
+/** Platform architecture. Status stays honest: what is researched and live
+ *  versus what is designed but not yet built. A serious buyer will ask to
+ *  see it, and an unlabelled roadmap read as product costs more than it wins. */
 export const modules = [
-  { id: "identity", name: "Identity & Roles", copy: "One record for each participant, and the roles it plays on each activity — so a bank is a lender here and a trustee there.", status: "To Be Validated" as ContentStatus },
-  { id: "workflow", name: "Lifecycle Workflow", copy: "Activities, phases and typed dependencies. What blocks this, what this unblocks, and what runs alongside it.", status: "Validated" as ContentStatus },
-  { id: "documents", name: "Documents & Approvals", copy: "Every approval modelled with its issuer, prerequisites, inputs and validity — and every document mapped to where it is produced and consumed.", status: "To Be Validated" as ContentStatus },
-  { id: "integrations", name: "Authority & System Map", copy: "Which authority governs which decision, through which portal, under which jurisdiction. Official systems remain the system of record.", status: "Validated" as ContentStatus },
-  { id: "ai", name: "Journey Intelligence", copy: "Constrained assembly across the graph: the model sequences and explains, but may assert nothing the graph does not carry with a source.", status: "Future REOS Capability" as ContentStatus },
-  { id: "analytics", name: "Evidence & Provenance", copy: "Source, issuing authority, jurisdiction, effective date and last-verified date recorded against each operative claim.", status: "Validated" as ContentStatus },
+  { id: "identity", name: "Identity & Access", copy: "One record per participant, and the roles it plays on each activity \u2014 so a bank is a lender in one place and an escrow trustee in another.", status: "To Be Validated" as ContentStatus },
+  { id: "lifecycle", name: "Lifecycle State Engine", copy: "Where a project or property currently stands across the twelve stages, and what that state makes possible next.", status: "Validated" as ContentStatus },
+  { id: "workflow", name: "Workflow Orchestration", copy: "Activities, owners and typed dependencies \u2014 what blocks this, what this unblocks, and what runs alongside it.", status: "Validated" as ContentStatus },
+  { id: "documents", name: "Document & Evidence Vault", copy: "Every document mapped to where it is produced, where it is consumed, and which approval it supports.", status: "To Be Validated" as ContentStatus },
+  { id: "integration", name: "Integration Fabric", copy: "Connections to the official portals and counterparty systems that remain the system of record. REOS coordinates; it does not replace them.", status: "Future REOS Capability" as ContentStatus },
+  { id: "sla", name: "Notifications & SLA Management", copy: "Who owes what, to whom, by when \u2014 and escalation when a prerequisite is quietly slipping.", status: "Future REOS Capability" as ContentStatus },
+  { id: "analytics", name: "Analytics & Intelligence", copy: "Progress, cost, approval and escrow position read against one another instead of in separate reconciliations.", status: "To Be Validated" as ContentStatus },
+  { id: "ai", name: "AI Guidance & Insights", copy: "Guidance assembled from the connected model, where every claim carries its source. The system may not assert what the model does not hold.", status: "Future REOS Capability" as ContentStatus },
 ];
 
-/** Section 06 — what changes for an organisation that runs on a connected model. */
+/** Outcomes, stated per audience rather than as generic benefits. */
 export const outcomes = [
-  { metric: "Sequencing", claim: "Approvals in dependency order", copy: "Prerequisites surface before they block. The chain that leads to each approval is explicit rather than institutional memory." },
-  { metric: "Handoffs", claim: "Responsibility stays traceable", copy: "Every transfer between stakeholders names what moved, who holds it now, and what the receiving party needs to proceed." },
-  { metric: "Escrow", claim: "Money tied to delivery state", copy: "Payment events, construction progress and registration read against one another instead of three reconciliations." },
-  { metric: "Lifecycle", claim: "One state from land to resale", copy: "The project, and then the property, keeps a continuous record across parties that would otherwise each hold a fragment." },
+  { audience: "For buyers", claim: "Understand the process before committing", copy: "See what to verify, which official channel confirms it, and what should already be in place before money moves." },
+  { audience: "For investors", claim: "See risk and dependency, not just price", copy: "Where capital enters, what controls protect it, and which approvals sit between today and completion." },
+  { audience: "For developers", claim: "Coordinate stakeholders and stages", copy: "Prerequisites surface before they block, and handoffs between parties stay traceable." },
+  { audience: "For banks", claim: "Tie finance to delivery state", copy: "Escrow position, verified progress and the official register read against one another." },
+  { audience: "For authorities", claim: "Better-prepared submissions", copy: "Applicants who arrive understanding the sequence, the prerequisites and the evidence required." },
+  { audience: "For service providers", claim: "See where your work fits", copy: "Which approval your output serves, who is waiting on it, and what becomes possible once it is issued." },
+];
+
+/** Knowledge Hub categories. Each becomes a section of the Insights index. */
+export const insightCategories = [
+  { id: "buyer-guides", name: "Buyer guides", copy: "Step-by-step explanations for people buying a home or first property in the UAE." },
+  { id: "investor-guides", name: "Investor guides", copy: "Decision points, risk checklists and exit planning across the asset lifecycle." },
+  { id: "developer-guides", name: "Developer guides", copy: "Entity setup, approvals, escrow, procurement and handover readiness." },
+  { id: "regulation", name: "Regulation explainers", copy: "What the rules require, written in plain language and linked to the official source." },
+  { id: "authority-processes", name: "Authority processes", copy: "Who governs what, which portal handles it, and what each submission needs." },
+  { id: "handover", name: "Handover & snagging", copy: "Completion, inspection, defects and the liability period after you receive keys." },
+  { id: "escrow-finance", name: "Escrow & finance", copy: "How project money is controlled, released and audited across a development." },
+  { id: "community", name: "Community living", copy: "Service charges, owners' associations, cooling and how communities are run." },
+  { id: "management", name: "Property management", copy: "Maintenance, reserve funds, compliance and long-term asset performance." },
 ];

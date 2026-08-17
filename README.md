@@ -4,20 +4,34 @@ Production website for REOS, translating the REOS/KETURAH investor-presentation 
 
 ## Experience
 
-- hero that states the proposition in one line, with a twelve-node ecosystem ring
-- interactive stakeholder ecosystem: 12 groups under 4 clusters, over a regulatory rail
-- four-phase lifecycle flow driving all 24 stage pages from the same data
-- platform architecture labelled with honest build status
-- stakeholder lens pages with inputs, outputs, dependencies and bottlenecks
-- authority and jurisdiction touchpoint map
-- explicit content-integrity labels: Validated, To Be Validated, Illustrative and Future REOS Capability
+Journey-first: the site explains the property journey, then helps you find
+your place in it, then reveals the ecosystem behind it, and only then
+introduces the platform.
 
-## Structure
+- hero built around the twelve-stage journey from land to living
+- eight persona routes (`/roles`) — each a filtered view of the same journey
+- twelve canonical stages (`/journey`) with full stage pages
+- ecosystem map: 12 stakeholder groups, 4 clusters, one regulatory rail
+- knowledge hub, platform, about and demo pages
+- explicit content-integrity labels: Validated, To Be Validated, Illustrative, Future REOS Capability
 
-Group 03 (authorities) is modelled as a regulatory **rail** rather than a cluster
-member: authorities issue the approvals that gate every other group, so they are
-compulsory and external where every other participant is appointed and commercial.
-Group 12 is cross-cutting for the same structural reason.
+## One canonical lifecycle
+
+`app/data/journey.ts` holds the single spine: twelve stages. Everything else
+is a projection of it — the hero ribbon, the persona flows, and the 24
+detailed stages in `reos.ts` which hang beneath the twelve via
+`detailStageIds`. Do not introduce a second stage list.
+
+Stages carry `runsWith` because order is not sequence. In UAE off-plan
+development, marketing and sales run *during* construction — escrow exists
+precisely because buyers pay while the building goes up. A test asserts this
+is stated on the construction stage page.
+
+## Written for a global reader
+
+Local terms (escrow, off-plan, snagging, service charge, owners' association)
+are explained where they first appear rather than assumed. Every stage carries
+a `jurisdiction` note because requirements differ per emirate and zone.
 
 ## Extracted REOS design system
 

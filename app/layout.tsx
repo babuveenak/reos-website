@@ -5,8 +5,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://reos-website.vercel
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "REOS — The Operating System for Real Estate Development", template: "%s" },
-  description: "REOS connects developers, investors, regulators, consultants, contractors, brokers and property operations across the UAE property-development lifecycle.",
+  title: { default: "REOS — Understand the UAE Property Journey", template: "%s" },
+  description: "Explore how property is planned, financed, designed, developed, built, sold, registered, handed over, managed and invested in across the UAE.",
   applicationName: "REOS",
   keywords: ["REOS", "UAE property development", "real estate operating system", "development lifecycle", "property approvals", "PropTech"],
   alternates: { canonical: "/" },
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0A0A0F", colorScheme: "dark" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#F8F5EE", colorScheme: "light" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body>{children}</body></html>;
+  return <html lang="en" data-theme="light"><body>{children}</body></html>;
 }

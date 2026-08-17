@@ -2,9 +2,9 @@
 import { useEffect, useState } from "react";
 type Theme="dark"|"light"; type Scale="normal"|"large"|"xlarge"; type Language="en"|"ar";
 export function PreferencesControls(){
- const [theme,setTheme]=useState<Theme>("dark"),[scale,setScale]=useState<Scale>("normal"),[language,setLanguage]=useState<Language>("en");
+ const [theme,setTheme]=useState<Theme>("light"),[scale,setScale]=useState<Scale>("normal"),[language,setLanguage]=useState<Language>("en");
  function apply(t:Theme,s:Scale,l:Language){const root=document.documentElement;root.dataset.theme=t;root.dataset.fontScale=s;root.lang=l;root.dir=l==="ar"?"rtl":"ltr"}
- useEffect(()=>{const t=(localStorage.getItem("reos-theme") as Theme)||"dark",s=(localStorage.getItem("reos-scale") as Scale)||"normal",l=(localStorage.getItem("reos-language") as Language)||"en";
+ useEffect(()=>{const t=(localStorage.getItem("reos-theme") as Theme)||"light",s=(localStorage.getItem("reos-scale") as Scale)||"normal",l=(localStorage.getItem("reos-language") as Language)||"en";
   // Restore client-only preferences after hydration.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   setTheme(t);setScale(s);setLanguage(l);apply(t,s,l)},[]);

@@ -44,3 +44,10 @@ tsconfig.tsbuildinfo
 
 # claude code local config
 .claude/
+
+# office lock files
+~$*
+
+# local working documents
+/Research and Documents/
+/docs/
