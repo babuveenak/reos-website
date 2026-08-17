@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { personas } from "../data/personas";
-import { CONTACT_EMAIL } from "../data/site";
+import { BOOKING_URL, CONTACT_EMAIL, CONTACT_PHONE, ENQUIRY_SUBJECT } from "../data/site";
 
 const interests = [
   ...personas.map((p) => `${p.name} journey`),
@@ -36,7 +36,7 @@ export function DemoForm() {
     ].join("\n");
 
     window.location.href =
-      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`REOS demo request — ${get("name") || "enquiry"}`)}&body=${encodeURIComponent(body)}`;
+      `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(`${ENQUIRY_SUBJECT} — ${get("name") || "enquiry"}`)}&body=${encodeURIComponent(body)}`;
     setSent(true);
   }
 
@@ -89,9 +89,16 @@ export function DemoForm() {
         {sent ? "Opening your mail app…" : "Send request"} <span aria-hidden="true">↗</span>
       </button>
 
+      {BOOKING_URL && (
+        <a className="button ghost booking-link" href={BOOKING_URL} target="_blank" rel="noreferrer">
+          Or pick a time directly <span aria-hidden="true">↗</span>
+        </a>
+      )}
+
       <p className="form-note">
         This opens your email application with the details filled in, so nothing is submitted or stored by this website.
-        You can also write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> directly.
+        You can also write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        {CONTACT_PHONE && <> or call <a href={`tel:${CONTACT_PHONE.replace(/\s/g, "")}`}>{CONTACT_PHONE}</a></>} directly.
       </p>
     </form>
   );

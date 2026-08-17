@@ -62,6 +62,29 @@ The visual vocabulary preserves architectural arches, thin gold threads, restrai
 
 The current data model is intentionally file-backed and CMS-ready. A future content service can replace the module without redesigning the visual components.
 
+## Configuration
+
+Contact details and the canonical URL are environment variables, so they can be
+changed without editing code.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `NEXT_PUBLIC_CONTACT_EMAIL` | `aiworkingforme@gmail.com` | Where the demo form and every mailto link send enquiries |
+| `NEXT_PUBLIC_SITE_URL` | `https://reos-website.vercel.app` | Canonical origin for metadata, Open Graph and the sitemap |
+| `NEXT_PUBLIC_CONTACT_PHONE` | _(unset)_ | Shown next to the email on the demo page when set |
+| `NEXT_PUBLIC_BOOKING_URL` | _(unset)_ | Adds a "pick a time" link to the demo form when set |
+| `NEXT_PUBLIC_ENQUIRY_SUBJECT` | `REOS demo request` | Subject-line prefix on enquiry emails |
+
+**To change one in production:** Vercel project → Settings → Environment
+Variables → add or edit → then **Redeploy**. No commit needed.
+
+**Locally:** copy `.env.example` to `.env.local` and edit.
+
+The site is statically exported, so these are inlined at build time rather than
+read at runtime — a change takes effect on the next deploy, not immediately.
+All values are optional and fall back to the defaults above. Defaults and
+fallbacks live in `app/data/site.ts`.
+
 ## Local development
 
 Requires Node.js `>=22.13.0`.
