@@ -39,7 +39,7 @@ export default function AboutPage() {
       <h2>From understanding<br /><em>to execution.</em></h2>
       <p>The knowledge layer makes the journey legible. The discovery layer narrows it to your case. The execution layer runs the work. Each is useful alone, and each makes the next one possible.</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/demo">Talk to us <span>↗</span></Link>
+        <Link className="button gold" href="/journey">Explore the journey <span>↗</span></Link>
         <Link className="button ghost" href="/platform">See the platform</Link>
       </div>
     </section>

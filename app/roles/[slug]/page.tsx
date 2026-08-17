@@ -122,8 +122,8 @@ export default async function PersonaPage({ params }: Props) {
       <h2>{persona.plural} see<br /><em>the whole journey.</em></h2>
       <p>{persona.reosHelp}</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/demo">Book a demo <span>↗</span></Link>
-        <Link className="button ghost" href="/journey">See the full journey</Link>
+        <Link className="button gold" href="/journey">See the full journey <span>↗</span></Link>
+        <Link className="button ghost" href="/roles">Try another route</Link>
       </div>
     </section>
 

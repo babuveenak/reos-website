@@ -1,33 +1,33 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
+import { Logo } from "./Logo";
 import { PreferencesControls } from "./PreferencesControls";
 
 const nav = [
   ["/journey", "Property journey"],
   ["/roles", "Roles"],
   ["/ecosystem", "Ecosystem"],
-  ["/platform", "Platform"],
   ["/insights", "Insights"],
+  ["/glossary", "Glossary"],
+  ["/platform", "Platform"],
 ];
 
 export function Header() {
   return (
     <header className="site-header">
       <Link className="brand" href="/" aria-label="REOS home">
-        <span className="brand-mark">R</span>
+        <span className="brand-mark"><Logo /></span>
         <span><b>REOS</b><small>REAL ESTATE OPERATING SYSTEM</small></span>
       </Link>
       <nav aria-label="Primary navigation">
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
       </nav>
       <PreferencesControls />
-      <Link className="header-cta" href="/demo">Book a demo <span aria-hidden="true">↗</span></Link>
       <details className="mobile-menu">
         <summary aria-label="Open navigation"><span /><span /><span /></summary>
         <nav aria-label="Mobile navigation">
           {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
-          <Link href="/demo">Book a demo</Link>
           <PreferencesControls />
         </nav>
       </details>
@@ -48,7 +48,6 @@ export function Footer() {
         <Link href="/insights">Insights</Link>
         <Link href="/glossary">Glossary</Link>
         <Link href="/about">About</Link>
-        <Link href="/demo">Book a demo</Link>
       </div>
       <p className="fineprint">Independent knowledge and navigation layer for UAE property development. REOS does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements, fees, timelines, laws and eligibility are jurisdiction-specific and change — verify with the relevant authority or regulated provider before acting.</p>
     </footer>

@@ -15,14 +15,32 @@ test("renders the REOS homepage", async () => {
   assert.match(html, /Understand the property journey/);
   assert.match(html, /From land to living/);
   assert.match(html, /Start from/);
-  assert.match(html, /Book a demo/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("the demo CTA appears only on the platform page", async () => {
+  // The site is educational; a sales CTA in the page furniture undercuts that.
+  // It belongs where someone has actually asked about the product.
+  for (const path of ["/", "/journey", "/roles", "/roles/buying", "/ecosystem", "/insights", "/about", "/glossary"]) {
+    const html = await (await render(path)).text();
+    assert.doesNotMatch(html, /href="\/demo"/, `${path} should not link to the demo`);
+  }
+  assert.match(await (await render("/platform")).text(), /href="\/demo"/);
+});
+
+test("the mobile menu is actually displayable", async () => {
+  // A descendant selector meant to hide the desktop nav also hid the mobile
+  // menu's own nav, so the panel never opened. Counting DOM nodes missed it.
+  const css = await (await render()).text();
+  assert.match(css, /class="mobile-menu"/);
+  assert.match(css, /aria-label="Mobile navigation"/);
 });
 
 test("homepage routes into the journey, roles and ecosystem", async () => {
   const html = await (await render()).text();
   assert.match(html, /href="\/journey"/);
   assert.match(html, /href="\/roles\/buying"/);
+  assert.match(html, /href="\/glossary"/);
   assert.match(html, /href="\/ecosystem"/);
   assert.match(html, /Regulatory Rail/);
 });

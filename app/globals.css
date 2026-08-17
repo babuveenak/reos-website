@@ -1127,3 +1127,101 @@ html[data-theme="dark"] .detail-phases span{color:#9A96A3; border-color:rgba(228
   .flow-phase b{font-size:.56rem; letter-spacing:.14em}
   .term-wrap{display:inline}
 }
+
+/* ============================================================
+   BRAND MARK — a skyline that builds itself
+   Each tower rises from the ground in sequence, finishing with the
+   spire topping out. Construction, not a zoom.
+   ============================================================ */
+.brand-mark{
+  width:auto; height:40px; border:none; border-radius:0; background:none;
+  display:grid; place-items:center; padding:0;
+}
+.logo-mark{height:40px; width:auto; color:var(--gold); overflow:visible; display:block}
+.logo-tower{
+  transform-box:fill-box; transform-origin:bottom center;
+  animation:towerRise .62s cubic-bezier(.16,.84,.44,1) both;
+  animation-delay:calc(var(--i) * 90ms);
+}
+.logo-burj{animation-duration:.8s}
+@keyframes towerRise{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.logo-ground{
+  transform-box:fill-box; transform-origin:left center;
+  animation:groundDraw .5s ease-out both;
+}
+@keyframes groundDraw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.logo-glint{
+  opacity:0; transform-box:fill-box; transform-origin:center;
+  animation:toppingOut 2.6s ease-out .95s infinite;
+}
+@keyframes toppingOut{
+  0%{opacity:0; transform:scale(.2)}
+  8%{opacity:.95; transform:scale(1)}
+  26%{opacity:0; transform:scale(1.9)}
+  100%{opacity:0; transform:scale(1.9)}
+}
+/* Replay the build on hover so the idea is discoverable. */
+.brand:hover .logo-tower{animation:towerRise .5s cubic-bezier(.16,.84,.44,1) both; animation-delay:calc(var(--i) * 60ms)}
+.brand:hover .logo-mark{color:var(--gold-soft)}
+
+@media(prefers-reduced-motion:reduce){
+  .logo-tower,.logo-ground,.brand:hover .logo-tower{animation:none; transform:none}
+  .logo-glint{animation:none; opacity:.9}
+}
+
+/* ============================================================
+   THEME TOGGLE — one control, two states
+   ============================================================ */
+.theme-toggle{
+  appearance:none; background:none; border:none; padding:0; cursor:pointer;
+  display:inline-flex; align-items:flex-end; height:100%;
+}
+.toggle-track{
+  position:relative; display:inline-flex; align-items:center; justify-content:space-between;
+  width:56px; height:28px; padding:0 6px; border-radius:999px;
+  border:1px solid var(--line); background:var(--deep); transition:border-color .25s, background .25s;
+}
+.toggle-track svg{width:13px; height:13px; position:relative; z-index:2; transition:opacity .25s, color .25s}
+.icon-sun{color:var(--gold)}
+.icon-moon{color:var(--muted)}
+.toggle-knob{
+  position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%;
+  background:var(--gold); z-index:1; transition:transform .3s cubic-bezier(.4,0,.2,1), background .25s;
+}
+[aria-pressed="true"] .toggle-knob{transform:translateX(28px); background:var(--gold-soft)}
+[aria-pressed="true"] .icon-sun{color:var(--muted)}
+[aria-pressed="true"] .icon-moon{color:var(--void)}
+[aria-pressed="false"] .icon-sun{color:var(--void)}
+.theme-toggle:hover .toggle-track{border-color:var(--gold-dim); background:var(--panel)}
+.theme-toggle:focus-visible{outline:none}
+.theme-toggle:focus-visible .toggle-track{outline:2px solid var(--cyan); outline-offset:3px}
+
+/* Controls sit on one baseline; the toggle has no label of its own. */
+.preference-controls{align-items:flex-end; gap:.7rem}
+.preference-controls select{min-width:0}
+
+/* The mark is now artwork, not a lettered badge — drop the old chip styling
+   that the light theme still applied behind it. */
+html[data-theme="light"] .brand-mark,
+html[data-theme="dark"] .brand-mark{background:none; border:none; box-shadow:none}
+html[data-theme="light"] .logo-mark{color:#8A6526}
+html[data-theme="light"] .brand:hover .logo-mark{color:#5C3E12}
+
+/* The rule that hides the desktop nav on small screens is a descendant
+   selector (`.site-header nav`), so it also hid the mobile menu's own nav —
+   the panel never opened. Restore it with higher specificity. */
+.site-header .mobile-menu nav{display:flex}
+.site-header .mobile-menu[open] nav{display:flex}
+@media(max-width:720px){
+  .site-header .mobile-menu nav{
+    max-height:calc(100dvh - 72px); overflow-y:auto; gap:0;
+  }
+  .site-header .mobile-menu nav .preference-controls{
+    display:flex; align-items:flex-end; gap:.8rem; padding:1.1rem 0 .4rem;
+  }
+  .site-header .mobile-menu nav .theme-toggle{height:auto; align-items:center}
+}
+/* Panel must be fully opaque — page text was reading through it. */
+.site-header .mobile-menu nav{background:var(--void); box-shadow:0 24px 48px rgba(0,0,0,.28)}
+html[data-theme="light"] .site-header .mobile-menu nav{background:#FFFDF8}
+html[data-theme="dark"] .site-header .mobile-menu nav{background:#0A0A0F}

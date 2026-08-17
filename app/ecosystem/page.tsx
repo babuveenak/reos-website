@@ -79,7 +79,7 @@ export default function EcosystemPage() {
       <h2>Twelve groups.<br /><em>One shared picture.</em></h2>
       <p>Each group holds part of the truth about a project — an approval, a payment, a certificate, a defect, a contract. REOS connects those parts so the state of a project can be read as a whole, while every official system remains the record of its own decisions.</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/platform">See the platform <span>↗</span></Link>
+        <Link className="button gold" href="/journey">See where they enter the journey <span>↗</span></Link>
         <Link className="button ghost" href="/stakeholders">Detailed stakeholder lenses</Link>
       </div>
     </section>

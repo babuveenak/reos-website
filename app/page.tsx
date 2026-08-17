@@ -144,14 +144,14 @@ export default function Home() {
       </div>
     </section>
 
-    {/* 09 — CTA. */}
-    <section className="demo-band atmos atmos-city" id="demo">
-      <span className="eyebrow">SEE IT ON YOUR OWN PROJECT</span>
-      <h2>Bring a project.<br /><em>We will map it.</em></h2>
-      <p>Walk through your emirate, asset type and delivery route against the connected model, and see where the dependencies, approvals and handoffs actually sit.</p>
+    {/* 09 — WHERE TO GO NEXT. Educational, not a sales close. */}
+    <section className="demo-band atmos atmos-city" id="start-reading">
+      <span className="eyebrow">START ANYWHERE</span>
+      <h2>Know where you are.<br /><em>Know what comes next.</em></h2>
+      <p>Follow the journey from land to living, pick the route that matches your situation, or look up a term you have run into. Nothing here asks you to commit to anything.</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/demo">Book a demo <span>↗</span></Link>
-        <Link className="button ghost" href="/journey">Explore the journey first</Link>
+        <Link className="button gold" href="/journey">Explore the journey <span>↗</span></Link>
+        <Link className="button ghost" href="/glossary">Look up a term</Link>
       </div>
       <p className="demo-note">REOS is an independent knowledge and navigation layer. It does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements differ by emirate and change over time — verify with the relevant authority before acting.</p>
     </section>
