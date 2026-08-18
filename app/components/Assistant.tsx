@@ -179,6 +179,14 @@ export function Assistant({ snapshot, locale = DEFAULT_LOCALE, variant = "compac
     const el = inputRef.current;
     if (!el) return;
     el.style.height = "auto";
+    /* A `display:none` subtree — the dock panel while it is closed — reports
+       scrollHeight 0. Writing that pins the field at 0px, and since this effect
+       only re-runs on draft/partial nothing remeasures when the dock opens: the
+       field arrives 16px tall with 39px of content, permanently overflowing, and
+       `overflow-y:auto` draws a scrollbar thumb inside the composer until the
+       first keystroke. Leave the rows={1} height alone until there is something
+       real to measure — unstyled, it is already the correct single-row height. */
+    if (el.scrollHeight === 0) { el.style.height = ""; return; }
     el.style.height = `${Math.min(el.scrollHeight, 168)}px`;
   }, [draft, partial]);
 
