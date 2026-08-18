@@ -250,26 +250,21 @@ test("the REOS dock is on every visitor-facing page", async () => {
 
 test("the dock is absent where it would be redundant", async () => {
   // Its own page already IS the assistant; /admin is an internal tool.
-  for (const path of ["/assistant", "/ar/assistant", "/admin", "/admin/gaps"]) {
+  for (const path of ["/admin", "/admin/gaps"]) {
     assert.doesNotMatch(await text(path), /class="dock-button"/, `${path} should not carry the dock`);
   }
 });
 
-test("the floating mark still appears on the assistant page, as a way back", async () => {
-  // Withholding the panel is right — it would be a second transcript on a page
-  // that already holds one. Withholding the BUTTON was not: the mark vanished
-  // on navigation and nothing led back to the composer once it scrolled away.
+test("the assistant page carries the dock, so the mark opens a chat window", async () => {
+  // It was withheld here on the reasoning that the page already is the
+  // assistant. In use that was wrong: the mark vanished on navigation, and the
+  // version that only scrolled to the composer looked like a dead control when
+  // the composer was already in view. A visitor clicking a chat mark expects a
+  // window.
   for (const path of ["/assistant", "/ar/assistant"]) {
     const html = await text(path);
-    assert.match(html, /class="dock-jump"/, `${path} lost the way back to the assistant`);
-    assert.doesNotMatch(html, /class="dock-panel"/, `${path} must not open a second conversation`);
-  }
-  // It is a labelled control, not a bare icon, in both languages.
-  assert.match(await text("/assistant"), /aria-label="Back to the assistant"/);
-  assert.match(await text("/ar/assistant"), /aria-label="العودة إلى المساعد"/);
-  // And it belongs only there — other pages get the real dock instead.
-  for (const path of ["/", "/journey", "/admin"]) {
-    assert.doesNotMatch(await text(path), /class="dock-jump"/, `${path} should use the dock, not the jump`);
+    assert.match(html, /class="dock-button"/, `${path} is missing the dock`);
+    assert.match(html, /class="dock-panel"[^>]*hidden/, `${path}: the panel must start closed`);
   }
 });
 

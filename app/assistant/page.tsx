@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Assistant } from "../components/Assistant";
 import { AnswerCard, VisitorTurn } from "../components/Knowledge";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
-import { AssistantReturn } from "../components/AssistantDock";
 import { AssistantIntelligence } from "../components/AssistantHero";
 import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
@@ -38,7 +37,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   }));
 
   return (
-    <Page className="assistant-page" locale={locale} dock={false}>
+    <Page className="assistant-page" locale={locale}>
       {/* Hero and interaction are ONE section, not two. Separating them put a
           6rem band of nothing between the headline and the composer, which
           pushed the product interaction of the page below the fold. */}
@@ -87,9 +86,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         </p>
         <p className="fineprint">{d.footer.fineprint}</p>
       </section>
-      {/* The dock is withheld here — see AssistantReturn — but the mark
-          stays, and leads back to the conversation on this page. */}
-      <AssistantReturn locale={locale} />
     </Page>
   );
 }

@@ -31,18 +31,18 @@ const CORE = { x: 63, y: 40 };
  * `g` selects the glyph; nothing here renders as text.
  */
 const NODES: { x: number; y: number; g: Glyph; r: number }[] = [
-  { x: 34, y: 20, g: "parcel",    r: 3.4 },
-  { x: 47, y: 11, g: "masterplan", r: 3.1 },
-  { x: 62, y: 8,  g: "tower",     r: 3.6 },
-  { x: 77, y: 12, g: "coin",      r: 3.1 },
-  { x: 88, y: 22, g: "tag",       r: 3.4 },
-  { x: 93, y: 37, g: "deed",      r: 3.1 },
-  { x: 90, y: 53, g: "key",       r: 3.4 },
-  { x: 81, y: 66, g: "community", r: 3.1 },
-  { x: 67, y: 72, g: "growth",    r: 3.6 },
-  { x: 52, y: 69, g: "shield",    r: 3.1 },
-  { x: 39, y: 60, g: "page",      r: 3.4 },
-  { x: 31, y: 45, g: "people",    r: 3.1 },
+  { x: 39, y: 24, g: "parcel",    r: 3.2 },
+  { x: 50, y: 17, g: "masterplan", r: 3.0 },
+  { x: 62, y: 15, g: "tower",     r: 3.3 },
+  { x: 74, y: 18, g: "coin",      r: 3.0 },
+  { x: 80, y: 26, g: "tag",       r: 3.2 },
+  { x: 82, y: 38, g: "deed",      r: 3.0 },
+  { x: 80, y: 50, g: "key",       r: 3.2 },
+  { x: 76, y: 60, g: "community", r: 3.0 },
+  { x: 65, y: 65, g: "growth",    r: 3.3 },
+  { x: 53, y: 63, g: "shield",    r: 3.0 },
+  { x: 43, y: 56, g: "page",      r: 3.2 },
+  { x: 37, y: 44, g: "people",    r: 3.0 },
 ];
 
 type Glyph =
@@ -154,6 +154,31 @@ export function AssistantIntelligence({ locale = DEFAULT_LOCALE }: { locale?: Lo
           ))}
         </g>
       </svg>
+
+      {/* Labels are HTML, not SVG text: the SVG is mirrored wholesale in Arabic,
+          which would reverse any text inside it. Anchored by logical inset and
+          pushed radially outward so each sits clear of its own node. */}
+      <ul className="ai-labels" aria-hidden="true">
+        {NODES.map((n) => {
+          const dx = n.x - CORE.x, dy = n.y - CORE.y;
+          /* A centred label wide enough to matter overlaps its own node on the
+             horizontal axis, so those anchor to the node's edge and grow
+             outward instead. Vertical ones stay centred, where width is free. */
+          const horizontal = Math.abs(dx) >= Math.abs(dy);
+          const side = horizontal ? (dx > 0 ? "e" : "w") : (dy > 0 ? "s" : "n");
+          const lx = horizontal ? n.x + (dx > 0 ? n.r + 1.8 : -(n.r + 1.8)) : n.x;
+          const ly = horizontal ? n.y : n.y + (dy > 0 ? n.r + 3.2 : -(n.r + 3.2));
+          return (
+            <li
+              key={n.g}
+              className={`ai-label-${side}`}
+              style={{ "--lx": `${lx}%`, "--ly": `${(ly / 80) * 100}%` } as React.CSSProperties}
+            >
+              {a.graphLabels[n.g]}
+            </li>
+          );
+        })}
+      </ul>
     </figure>
   );
 }

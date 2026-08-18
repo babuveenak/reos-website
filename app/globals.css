@@ -1862,13 +1862,6 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
    overlap. Only some groups carry one, so these must survive being absent. */
 .detail-boundary,.group-boundary{margin:.9rem 0 1.2rem;padding-inline-start:.85rem;border-inline-start:1px solid var(--gold-dim);font-size:.78rem;line-height:1.6;color:var(--muted)}
 .detail-boundary b,.group-boundary b{display:block;margin-bottom:.25rem;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;font-weight:400;color:var(--gold)}
-/* The return control on /assistant. Visually the dock button, so the mark never
-   disappears on navigation; behaviourally a jump back to the conversation on
-   the page, because a panel here would open a second transcript. */
-.dock-jump{display:inline-flex;align-items:center;justify-content:center;width:62px;height:62px;padding:0;border-radius:50%;background:var(--panel);color:var(--gold-soft);border:1px solid var(--gold-dim);cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.34),0 2px 6px rgba(0,0,0,.2);transition:transform .25s cubic-bezier(.4,0,.2,1),border-color .25s,box-shadow .25s}
-html[data-theme="light"] .dock-jump{background:#FFFDF8;box-shadow:0 10px 30px rgba(57,45,27,.16),0 2px 6px rgba(57,45,27,.1)}
-.dock-jump:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 14px 38px rgba(0,0,0,.4),0 0 0 4px color-mix(in srgb,var(--gold) 12%,transparent)}
-@media(prefers-reduced-motion:reduce){.dock-jump{transition:none}.dock-jump:hover{transform:none}}
 
 /* ==================================================================== *
  * THE ASSISTANT PAGE
@@ -1951,3 +1944,20 @@ html[data-theme="light"] .ai-node-disc{fill:#FFFDF8}
   .ai-spokes path,.ai-flow-line{stroke-dashoffset:0}
   .ai-pulse-in,.ai-pulse-out{display:none}
 }
+
+/* Node labels. Positioned from the same coordinates as the nodes, converted
+   from the 0–80 viewBox height into a percentage of the figure. */
+.ai-labels{position:absolute;inset:0;margin:0;padding:0;list-style:none;pointer-events:none}
+.ai-labels li{position:absolute;inset-inline-start:var(--lx);top:var(--ly);white-space:nowrap;font-size:.46rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);opacity:.9}
+/* In RTL `inset-inline-start` resolves to `right`, so the box is anchored by
+   its trailing edge and already grows away from the core on the east side; only
+   the west side and the centred pair need their transform flipped. */
+.ai-label-n,.ai-label-s{transform:translate(-50%,-50%)}
+.ai-label-e{transform:translate(0,-50%)}
+.ai-label-w{transform:translate(-100%,-50%)}
+[dir="rtl"] .ai-label-n,[dir="rtl"] .ai-label-s{transform:translate(50%,-50%)}
+[dir="rtl"] .ai-label-w{transform:translate(100%,-50%)}
+html[data-theme="light"] .ai-labels li{color:#6b6560}
+/* Below this the figure is too small to carry twelve labels without collisions;
+   the accessible description on the figure still names all twelve. */
+@media(max-width:1180px){.ai-labels{display:none}}
