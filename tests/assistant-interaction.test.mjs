@@ -366,7 +366,8 @@ test("the sticky composer actually covers the text scrolling under it", opts, as
 test("no horizontal overflow on any breakpoint or locale", opts, async () => {
   browser ??= await chromium.launch({ channel: "chrome" });
   for (const [w, h] of [[1280, 900], [768, 1024], [390, 844]]) {
-    for (const path of ["/", "/assistant", "/ar/assistant", "/journey/construction-delivery"]) {
+    for (const path of ["/", "/assistant", "/ar/assistant", "/journey/construction-delivery",
+                        "/journey", "/ar/journey"]) {
       const page = await browser.newPage({ viewport: { width: w, height: h } });
       try {
         await page.goto(BASE + path, { waitUntil: "networkidle" });
