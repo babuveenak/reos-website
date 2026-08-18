@@ -27,23 +27,23 @@ file. The interaction suite needs a dev server and skips loudly without one.
 
 | Requirement | Where | State |
 |---|---|---|
-| Reusable assistant component, text + voice | [Assistant.tsx](app/components/Assistant.tsx) | Done — `compact` and `full` variants |
-| Homepage "Ask about the property journey" band | [page.tsx](app/page.tsx) section 02, `#ask` | Done |
-| **Floating REOS dock** — animated R·E·O·S wordmark, bottom inline-end, text + voice | [AssistantDock.tsx](app/components/AssistantDock.tsx), mounted in `Page` | Done |
-| Conversational UI with sources, journey context, follow-ups | [Knowledge.tsx](app/components/Knowledge.tsx) | Done |
-| Voice UX behind an abstraction, 5 states | [mock-voice.ts](app/assistant/mock-voice.ts) | Done — mock provider |
+| Reusable assistant component, text + voice | [Assistant.tsx](../app/components/Assistant.tsx) | Done — `compact` and `full` variants |
+| Homepage "Ask about the property journey" band | [page.tsx](../app/page.tsx) section 02, `#ask` | Done |
+| **Floating REOS dock** — animated R·E·O·S wordmark, bottom inline-end, text + voice | [AssistantDock.tsx](../app/components/AssistantDock.tsx), mounted in `Page` | Done |
+| Conversational UI with sources, journey context, follow-ups | [Knowledge.tsx](../app/components/Knowledge.tsx) | Done |
+| Voice UX behind an abstraction, 5 states | [mock-voice.ts](../app/assistant/mock-voice.ts) | Done — mock provider |
 | English + Arabic + RTL | dictionary `assistant` block, `/ar/assistant` | Done |
-| Conversation state model | `ConversationState` in [contracts.ts](app/assistant/contracts.ts) | Done — frontend only |
+| Conversation state model | `ConversationState` in [contracts.ts](../app/assistant/contracts.ts) | Done — frontend only |
 | Inferred persona with correction | `.assistant-persona` + `[Change]` | Done |
 | Journey / lifecycle UI components | `JourneyTrail`, `ActivityList`, `ApprovalList`, `ConditionList` | Done |
 | Source / citation components | `SourceList` | Done |
-| Document repository admin UI | [/admin](app/admin/page.tsx) + [AdminBrowser.tsx](app/components/AdminBrowser.tsx) | Skeleton |
-| Knowledge gap dashboard | [/admin/gaps](app/admin/gaps/page.tsx) | Skeleton |
-| Service interfaces | [contracts.ts](app/assistant/contracts.ts) | Done |
+| Document repository admin UI | [/admin](../app/admin/page.tsx) + [AdminBrowser.tsx](../app/components/AdminBrowser.tsx) | Skeleton |
+| Knowledge gap dashboard | [/admin/gaps](../app/admin/gaps/page.tsx) | Skeleton |
+| Service interfaces | [contracts.ts](../app/assistant/contracts.ts) | Done |
 | Structured AI response contract | `AIResponse` | Done |
-| MockAIService, 4 personas, EN + AR | [mock-ai.ts](app/assistant/mock-ai.ts) | Done |
+| MockAIService, 4 personas, EN + AR | [mock-ai.ts](../app/assistant/mock-ai.ts) | Done |
 | Product discovery, conditional only | `ProductActions` | Done — see §6 |
-| Tests | [assistant.test.mjs](tests/assistant.test.mjs), [assistant-interaction.test.mjs](tests/assistant-interaction.test.mjs) | 34 added |
+| Tests | [assistant.test.mjs](../tests/assistant.test.mjs), [assistant-interaction.test.mjs](../tests/assistant-interaction.test.mjs) | 34 added |
 | Responsive + accessibility | globals.css block, ARIA wiring | Done, verified |
 
 ### Three design decisions worth knowing
@@ -57,7 +57,7 @@ testable in the existing rendered-HTML harness. A client-only assistant would
 have been untestable until a browser-driving rig exists.
 
 **2. Knowledge crosses the client boundary as a snapshot, not as imports.**
-[snapshot.ts](app/assistant/snapshot.ts) is the only assistant module that imports the content
+[snapshot.ts](../app/assistant/snapshot.ts) is the only assistant module that imports the content
 files. A server component calls `buildSnapshot(locale)` and passes a few
 kilobytes of ids and names to the client. Importing the data directly would have
 shipped `journey.ts`, `personas.ts`, `ecosystem.ts`, `glossary.ts` and their
@@ -101,14 +101,14 @@ docs/PHASE-1A-IMPLEMENTATION.md   this file
 
 | File | Change |
 |---|---|
-| [app/page.tsx](app/page.tsx) | Added the `#ask` assistant band as section 02; renumbered the following section comments 02→03 … 09→10. No existing section changed. |
-| [app/i18n/dictionary.ts](app/i18n/dictionary.ts) | Added an `assistant` block to `en` and `ar` (~55 keys each), including `phaseName`, `onStageTitle`, `composerHeading` |
-| [app/journey/[stage]/page.tsx](app/journey/[stage]/page.tsx) | Added the stage-seeded assistant section before the adjacent-stage nav. Nothing existing changed |
-| [app/globals.css](app/globals.css) | Appended one commented block: assistant, answers, sources, chips, composer, voice states, worked examples, admin, responsive, reduced-motion, `.visually-hidden` |
-| [app/sitemap.ts](app/sitemap.ts) | Added `/assistant` (both locales come free from the locale map). `/admin` deliberately absent |
-| [app/robots.ts](app/robots.ts) | `Disallow: /admin`, and the sitemap URL now derives from `SITE_URL` — see §7 |
-| [docs/DECISIONS.md](docs/DECISIONS.md) | D‑1 recorded as **Vercel**; added D‑5 (AI provider, open) |
-| [docs/AI-PLATFORM-ARCHITECTURE.md](docs/AI-PLATFORM-ARCHITECTURE.md) | Storage/vector/object-store sections revised for Postgres + `pgvector` + Blob |
+| [app/page.tsx](../app/page.tsx) | Added the `#ask` assistant band as section 02; renumbered the following section comments 02→03 … 09→10. No existing section changed. |
+| [app/i18n/dictionary.ts](../app/i18n/dictionary.ts) | Added an `assistant` block to `en` and `ar` (~55 keys each), including `phaseName`, `onStageTitle`, `composerHeading` |
+| [app/journey/[stage]/page.tsx](../app/journey/[stage]/page.tsx) | Added the stage-seeded assistant section before the adjacent-stage nav. Nothing existing changed |
+| [app/globals.css](../app/globals.css) | Appended one commented block: assistant, answers, sources, chips, composer, voice states, worked examples, admin, responsive, reduced-motion, `.visually-hidden` |
+| [app/sitemap.ts](../app/sitemap.ts) | Added `/assistant` (both locales come free from the locale map). `/admin` deliberately absent |
+| [app/robots.ts](../app/robots.ts) | `Disallow: /admin`, and the sitemap URL now derives from `SITE_URL` — see §7 |
+| [docs/DECISIONS.md](DECISIONS.md) | D‑1 recorded as **Vercel**; added D‑5 (AI provider, open) |
+| [docs/AI-PLATFORM-ARCHITECTURE.md](AI-PLATFORM-ARCHITECTURE.md) | Storage/vector/object-store sections revised for Postgres + `pgvector` + Blob |
 
 Nothing was deleted, and no existing component was rewritten.
 
@@ -116,7 +116,7 @@ Nothing was deleted, and no existing component was rewritten.
 
 ## 3 · Interfaces (all provider-independent)
 
-In [contracts.ts](app/assistant/contracts.ts):
+In [contracts.ts](../app/assistant/contracts.ts):
 
 ```
 AIService            ask(AIRequest): Promise<AIResponse>
@@ -141,7 +141,7 @@ requires: `refusal` (typed), `conditions` (what the answer is narrowed to),
 conversation state).
 
 **Swapping in real implementations** is two lines in
-[Assistant.tsx](app/components/Assistant.tsx):
+[Assistant.tsx](../app/components/Assistant.tsx):
 
 ```ts
 const ai = useMemo(() => new MockAIService(snapshot), [snapshot]);
@@ -171,7 +171,7 @@ Gulf/Khaliji coverage as a selection gate.
 
 ## 5 · Tests
 
-23 new, in [tests/assistant.test.mjs](tests/assistant.test.mjs), same worker-fetch harness as the
+23 new, in [tests/assistant.test.mjs](../tests/assistant.test.mjs), same worker-fetch harness as the
 existing suite. Grouped by what they protect:
 
 | Group | Tests |
@@ -211,7 +211,7 @@ handoff already documents):
 
 A QA/QC pass after the initial implementation found **eight real defects**, six
 of them in client behaviour the rendered-HTML harness cannot reach. Each now has
-a regression test in [tests/assistant-interaction.test.mjs](tests/assistant-interaction.test.mjs).
+a regression test in [tests/assistant-interaction.test.mjs](../tests/assistant-interaction.test.mjs).
 
 | # | Severity | Defect | Cause | Fix |
 |---|---|---|---|---|
@@ -243,8 +243,8 @@ none of them declines is what caught it, and that test now runs in both locales.
 published, 4 pending**. The true figure is **7 published, 5 pending** — I counted
 entries in `personas.ts` (8) rather than routes that resolve to one, and the 8th
 entry serves the orientation helper, which is not one of the twelve. Corrected in
-[DECISIONS.md](docs/DECISIONS.md), [AI-PLATFORM-ARCHITECTURE.md](docs/AI-PLATFORM-ARCHITECTURE.md),
-[V3-MASTER-PROMPT.md](docs/V3-MASTER-PROMPT.md) and two code comments. The test
+[DECISIONS.md](DECISIONS.md), [AI-PLATFORM-ARCHITECTURE.md](AI-PLATFORM-ARCHITECTURE.md),
+[V3-MASTER-PROMPT.md](V3-MASTER-PROMPT.md) and two code comments. The test
 that caught it now asserts the *rule* (a published route is offered, a pending one
 is not) rather than a count that would only record when it was last correct.
 
@@ -327,8 +327,8 @@ which is why the screenshot pass matters as much as the test pass.
    assistant is bilingual on the client. The content files do not, which was the
    larger cost. If it matters later, pass the `assistant` slice as a prop.
 6. **Phase names were untranslated site-wide.** Fixed for the assistant via
-   `dictionary.assistant.phaseName`. [Ecosystem.tsx](app/components/Ecosystem.tsx),
-   [Experience.tsx](app/components/Experience.tsx) and [PhaseFlow.tsx](app/components/PhaseFlow.tsx)
+   `dictionary.assistant.phaseName`. [Ecosystem.tsx](../app/components/Ecosystem.tsx),
+   [Experience.tsx](../app/components/Experience.tsx) and [PhaseFlow.tsx](../app/components/PhaseFlow.tsx)
    still hardcode English phase names — a pre-existing gap those components
    should adopt this map to close. Not changed here: they are working components
    and outside Phase 1A's scope.
@@ -336,7 +336,7 @@ which is why the screenshot pass matters as much as the test pass.
    read `dist/server/index.js` from `npm run build:sites`, which is not the
    artifact Vercel serves. The assertions remain valuable — they are the
    invariant guard — but this inconsistency should be closed deliberately, not
-   by accident. Flagged in [DECISIONS.md](docs/DECISIONS.md) D‑1.
+   by accident. Flagged in [DECISIONS.md](DECISIONS.md) D‑1.
 8. **Voice `speak()` is never called by the UI.** The provider implements it and
    the `responding` state is wired, but nothing reads answers aloud yet: doing so
    well needs the real TTS decision (pronunciation lexicon for DLD/RERA/NOC
@@ -355,14 +355,14 @@ which is why the screenshot pass matters as much as the test pass.
 
 Both small, both flagged rather than slipped in:
 
-1. **[app/robots.ts](app/robots.ts) sitemap URL now derives from `SITE_URL`.** It
+1. **[app/robots.ts](../app/robots.ts) sitemap URL now derives from `SITE_URL`.** It
    hardcoded `https://reos-property.sites.openai.com/sitemap.xml` while
-   [app/sitemap.ts](app/sitemap.ts) emits `SITE_URL` URLs — so crawlers were pointed at a
+   [app/sitemap.ts](../app/sitemap.ts) emits `SITE_URL` URLs — so crawlers were pointed at a
    sitemap on one host listing URLs on another. With D‑1 settled on Vercel that
    is unambiguously wrong, and I was editing the file anyway to add the `/admin`
    disallow. A test now asserts the two agree. Revert freely if the openai.com
    host is still live for a reason I cannot see.
-2. **Section comments in [app/page.tsx](app/page.tsx) renumbered** 02→03 … 09→10 to
+2. **Section comments in [app/page.tsx](../app/page.tsx) renumbered** 02→03 … 09→10 to
    make room for the assistant band. Comments only; no rendered output changed.
 
 ---

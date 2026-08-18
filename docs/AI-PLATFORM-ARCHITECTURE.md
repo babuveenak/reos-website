@@ -1,9 +1,9 @@
 # REOS Property Ecosystem AI Knowledge Platform — Architecture
 
 **Phase A deliverable package.** Produced by executing
-[V3-MASTER-PROMPT.md](docs/V3-MASTER-PROMPT.md) PART 18. No production code has been
+[V3-MASTER-PROMPT.md](V3-MASTER-PROMPT.md) PART 18. No production code has been
 written; PART 0.2 forbids it until the decisions in
-[DECISIONS.md](docs/DECISIONS.md) are signed off.
+[DECISIONS.md](DECISIONS.md) are signed off.
 
 Reviewed against `eeab2a1` on the `main` branch. Every claim about the current
 repository below was verified against the source, not inferred.
@@ -11,7 +11,7 @@ repository below was verified against the source, not inferred.
 | # | Deliverable | Section |
 |---|---|---|
 | 1 | Architecture assessment | §1 |
-| 2 | Decisions | [DECISIONS.md](docs/DECISIONS.md) |
+| 2 | Decisions | [DECISIONS.md](DECISIONS.md) |
 | 3 | Data model, schema and migration | §2–3 |
 | 4 | Knowledge Engine architecture | §4 |
 | 5 | Document repository architecture | §5 |
@@ -49,13 +49,13 @@ strategic assessment described. It has no runtime tier at all.
 
 | File | Holds | Shape quality |
 |---|---|---|
-| [journey.ts](app/data/journey.ts) | **12 canonical stages** — `phase`, `track`, `runsWith`, `whatHappens`, `groupIds`, `documents`, `risks`, `nextStep`, `jurisdiction`, `detailStageIds`, `status` | Excellent. Already models concurrency and jurisdiction |
-| [ecosystem.ts](app/data/ecosystem.ts) | **12 groups**, 4 clusters + rail + cross-cutting, `controls`, `members`, `phases` | Matches the research taxonomy; rail correctly separated |
-| [reos.ts](app/data/reos.ts) | 24 detail stages, 8 stakeholder lenses (`inputs`/`outputs`/`dependencies`/`entryConditions`/`bottlenecks`/`systems`), **11 authorities with `sourceUrl` + `jurisdiction`** | Process-graph shaped, not marketing bios |
-| [routes.ts](app/data/routes.ts) | 12 self-selection routes in 3 tiers, `taxonomyGroup` back-references, aliases | This is the persona surface the assistant should map onto |
-| [personas.ts](app/data/personas.ts) | 8 written journeys, each step keyed to a stage id | **7 of 12 routes published; 5 `pending`.** The 8th entry serves the orientation helper, which is not one of the twelve — counting entries rather than resolved routes is how this was first mis-stated as 8/4 |
-| [glossary.ts](app/data/glossary.ts) | 16 terms with `aka`, `jurisdictional` flag | The seed of the bilingual term map |
-| [phase1.ts](app/data/phase1.ts) | Legacy consumer journeys | **Retirement candidate. Do not index.** |
+| [journey.ts](../app/data/journey.ts) | **12 canonical stages** — `phase`, `track`, `runsWith`, `whatHappens`, `groupIds`, `documents`, `risks`, `nextStep`, `jurisdiction`, `detailStageIds`, `status` | Excellent. Already models concurrency and jurisdiction |
+| [ecosystem.ts](../app/data/ecosystem.ts) | **12 groups**, 4 clusters + rail + cross-cutting, `controls`, `members`, `phases` | Matches the research taxonomy; rail correctly separated |
+| [reos.ts](../app/data/reos.ts) | 24 detail stages, 8 stakeholder lenses (`inputs`/`outputs`/`dependencies`/`entryConditions`/`bottlenecks`/`systems`), **11 authorities with `sourceUrl` + `jurisdiction`** | Process-graph shaped, not marketing bios |
+| [routes.ts](../app/data/routes.ts) | 12 self-selection routes in 3 tiers, `taxonomyGroup` back-references, aliases | This is the persona surface the assistant should map onto |
+| [personas.ts](../app/data/personas.ts) | 8 written journeys, each step keyed to a stage id | **7 of 12 routes published; 5 `pending`.** The 8th entry serves the orientation helper, which is not one of the twelve — counting entries rather than resolved routes is how this was first mis-stated as 8/4 |
+| [glossary.ts](../app/data/glossary.ts) | 16 terms with `aka`, `jurisdictional` flag | The seed of the bilingual term map |
+| [phase1.ts](../app/data/phase1.ts) | Legacy consumer journeys | **Retirement candidate. Do not index.** |
 
 `ContentStatus` = `Validated` / `To Be Validated` / `Illustrative` /
 `Future REOS Capability`, applied per entity. This is genuine knowledge

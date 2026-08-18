@@ -1,7 +1,7 @@
 # REOS AI Platform — Decisions
 
-Deliverable 2 of the Phase A package (see [V3-MASTER-PROMPT.md](docs/V3-MASTER-PROMPT.md) PART 2
-and [AI-PLATFORM-ARCHITECTURE.md](docs/AI-PLATFORM-ARCHITECTURE.md)).
+Deliverable 2 of the Phase A package (see [V3-MASTER-PROMPT.md](V3-MASTER-PROMPT.md) PART 2
+and [AI-PLATFORM-ARCHITECTURE.md](AI-PLATFORM-ARCHITECTURE.md)).
 
 Four decisions govern the build. Each carries a recommendation and the
 consequences of the alternative. **All four are marked `RECOMMENDED — AWAITING
@@ -65,7 +65,7 @@ see D‑5.
 Running on Vercel does **not** mean using Vercel's AI SDK, Vercel's AI Gateway,
 or any provider Vercel resells. Nothing in the architecture depends on it, and
 Phase 1A is built so it cannot: every model, retrieval and speech capability
-sits behind an interface in [app/assistant/contracts.ts](app/assistant/contracts.ts)
+sits behind an interface in [app/assistant/contracts.ts](../app/assistant/contracts.ts)
 (`AIService`, `KnowledgeService`, `VoiceProvider`, …) with a mock implementation
 today.
 
@@ -121,7 +121,7 @@ and the reason the site is credible. Making it a retrieval filter rather than a
 badge is what stops the assistant asserting a worked example as a requirement.
 
 **Consequence — read this one carefully.** 5 of 12 routes in
-[app/data/routes.ts](app/data/routes.ts) are still `pending`, and much of the
+[app/data/routes.ts](../app/data/routes.ts) are still `pending`, and much of the
 corpus is `To Be Validated`. A correctly-built assistant over today's content
 will decline a large share of questions. **The binding constraint on this project
 is editorial, not engineering.** That is why Architecture §10 phase 3 is one
@@ -162,7 +162,7 @@ becomes a persisted document rather than a session object.
 
 ## Decisions already settled — do not relitigate
 
-From [reos-strategic-assessment.html](docs/reos-strategic-assessment.html):
+From [reos-strategic-assessment.html](reos-strategic-assessment.html):
 
 | Decision | Consequence for this build |
 |---|---|

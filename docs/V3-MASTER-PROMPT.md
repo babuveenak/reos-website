@@ -108,9 +108,9 @@ V2 described a project that does not exist. Correct facts:
 | — | `NEXT_PUBLIC_*` env vars are inlined at build time; a change requires a redeploy |
 
 **Three different origins are configured at once** — a real defect, not just
-untidiness: [app/robots.ts](app/robots.ts) hardcodes
+untidiness: [app/robots.ts](../app/robots.ts) hardcodes
 `https://reos-property.sites.openai.com/sitemap.xml`, while
-[app/sitemap.ts](app/sitemap.ts) emits URLs from `SITE_URL`, which defaults to
+[app/sitemap.ts](../app/sitemap.ts) emits URLs from `SITE_URL`, which defaults to
 `https://reos-website.vercel.app`. Crawlers are therefore told to fetch a
 sitemap on one host that lists URLs on another. Fix this before any SEO or
 AI-crawler work (PART 13.3); it is a two-line change.

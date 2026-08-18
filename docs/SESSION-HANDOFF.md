@@ -1,7 +1,7 @@
 # Session handoff — REOS, after Phase 1A
 
 **Read this before touching anything.** It supersedes
-[SESSION-HANDOFF.html](docs/SESSION-HANDOFF.html) as the current-state document;
+[SESSION-HANDOFF.html](SESSION-HANDOFF.html) as the current-state document;
 that file is the earlier, pre-assistant handoff and its "Gotchas" section is
 still worth skimming, but everything load-bearing from it is repeated below.
 
@@ -13,22 +13,24 @@ This bit caused real confusion last session, so it goes first.
 
 | | State |
 |---|---|
-| **Branch** | `phase-1a-assistant` — 2 commits ahead of `main`, working tree clean |
-| **PR** | [#2](https://github.com/babuveenak/reos-website/pull/2), OPEN, MERGEABLE, Vercel check SUCCESS |
-| **`main`** | Untouched. Still at `eeab2a1` |
-| **Production** (`reos-website.vercel.app`) | Serving `main` — **has none of the assistant work** |
-| **Preview** | `https://reos-website-git-phase-1a-assistant-babuveenaks-projects.vercel.app` — has everything, but sits behind Vercel Deployment Protection, so it needs a signed-in browser and cannot be checked with `curl`/`fetch` |
+| **`main`** | `4b4747f` — **has all the assistant work.** Working tree clean, in sync with `origin/main` |
+| **PR** | [#2](https://github.com/babuveenak/reos-website/pull/2) — **MERGED** 2026‑08‑18, rebased, so history stays linear and all three commits survive |
+| **Production** (`reos-website.vercel.app`) | Serving `main` at `4b4747f`, deploy SUCCESS — **the assistant is live**, verified against the real site, not just the build |
+| **`phase-1a-assistant`** | Merged. Still present locally and on the remote; safe to delete whenever |
+| **Preview** | Branch previews sit behind Vercel Deployment Protection — they need a signed-in browser and cannot be checked with `curl`/`fetch` |
 | **Local** | `npm run dev` → everything works, no login |
 
-**Nothing reaches production until PR #2 is merged.** If someone says "I can't
-see it on the website", that is almost certainly why — check the branch and the
-deploy before debugging code.
+**Production is current as of `4b4747f`.** This was the opposite for the whole of
+last session, and the reversal is the one fact in this document most likely to be
+misremembered. If someone says "I can't see it on the website", check *which
+commit the live deploy is on* before debugging code — the failure mode is a stale
+deploy, not a stale branch.
 
 ---
 
 ## 2 · Decisions
 
-Recorded in [DECISIONS.md](docs/DECISIONS.md). Two are settled by the project
+Recorded in [DECISIONS.md](DECISIONS.md). Two are settled by the project
 owner and must not be relitigated.
 
 | # | Decision | Status |
@@ -160,7 +162,7 @@ time:
   run first or you assert against a stale build. This produced a false pass once.
 - **That build is the Cloudflare Workers output**, which is *not* what Vercel
   serves. The assertions are still the invariant guard, but this inconsistency is
-  open and should be closed deliberately (see [DECISIONS.md](docs/DECISIONS.md) D‑1).
+  open and should be closed deliberately (see [DECISIONS.md](DECISIONS.md) D‑1).
 - **The interaction suite needs a dev server** and Chrome via `playwright-core`.
   It skips loudly on stderr without one — but a CI job that forgot to start one
   would still go green on the HTML suite alone. Wire both into one command before
@@ -214,11 +216,12 @@ export). Every one below was a real defect, found and fixed.
 
 The decision tree, in order:
 
-1. **Merge PR #2** (or review the preview first). Nothing is live until then.
+1. ~~**Merge PR #2**~~ — **DONE** (2026‑08‑18). Production serves the assistant
+   work. Start at 2.
 2. **Settle D‑2, D‑3, D‑4** — they are one conversation, not three, and
    everything downstream inherits them.
 3. **Phase 1 — schema** (the highest-leverage week, per
-   [AI-PLATFORM-ARCHITECTURE.md](docs/AI-PLATFORM-ARCHITECTURE.md) §10):
+   [AI-PLATFORM-ARCHITECTURE.md](AI-PLATFORM-ARCHITECTURE.md) §10):
    introduce `Activity`, `Approval`, `Role`, `Actor`, `Condition`, `Claim`,
    `Jurisdiction`; split actor from role; migrate `reos.ts` onto it. No visual
    work. The UI components already accept these types and render nothing without
@@ -236,7 +239,7 @@ D‑5 is not needed before phase 5.
 
 | Item | Note |
 |---|---|
-| **PR #2 unmerged** | Production has none of this |
+| Merged branch `phase-1a-assistant` still on the remote | Harmless. Delete it when you like — GitHub can restore it |
 | Test harness builds for Workers, deploy is Vercel | Inconsistent on purpose rather than by accident; close it deliberately |
 | Interaction tests can silently not run in CI | Two suites, two commands. Unify before gating on them |
 | Dock not seeded with the current stage | Only the inline stage assistant is. Would mean threading the stage through `Page`, which is shared furniture on 173 pages |
