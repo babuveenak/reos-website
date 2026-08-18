@@ -51,7 +51,9 @@ tsconfig.tsbuildinfo
 
 # local working documents
 /Research and Documents/
-/docs/
+# docs/ is tracked: it holds the decision record, the architecture package and
+# the phase implementation notes. A decision the build is measured against
+# should not live outside version control.
 
 # review handover pack (regenerated, not source)
 /handover/

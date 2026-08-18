@@ -5,6 +5,8 @@ import { DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from "../i18n/co
 import { getDict } from "../i18n/dictionary";
 import { Logo } from "./Logo";
 import { PreferencesControls } from "./PreferencesControls";
+import { AssistantDock } from "./AssistantDock";
+import { buildSnapshot } from "../assistant/snapshot";
 
 const NAV_ROUTES = ["/journey", "/roles", "/ecosystem", "/insights", "/glossary", "/platform"] as const;
 const NAV_KEYS = ["journey", "roles", "ecosystem", "insights", "glossary", "platform"] as const;
@@ -55,7 +57,19 @@ export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   );
 }
 
-export function Page({ children, className = "", locale = DEFAULT_LOCALE }: { children: ReactNode; className?: string; locale?: Locale }) {
+export function Page({
+  children,
+  className = "",
+  locale = DEFAULT_LOCALE,
+  dock = true,
+}: {
+  children: ReactNode;
+  className?: string;
+  locale?: Locale;
+  /** Set false where a floating assistant would be redundant or out of place:
+   *  the assistant's own page, and the internal admin screens. */
+  dock?: boolean;
+}) {
   const d = getDict(locale);
   return <>
     <Header locale={locale} />
@@ -64,6 +78,7 @@ export function Page({ children, className = "", locale = DEFAULT_LOCALE }: { ch
     )}
     <main className={className}>{children}</main>
     <Footer locale={locale} />
+    {dock && <AssistantDock snapshot={buildSnapshot(locale)} locale={locale} />}
   </>;
 }
 

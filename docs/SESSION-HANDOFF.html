@@ -1,0 +1,272 @@
+<title>REOS Handoff Notes</title>
+<style>
+:root{
+  --paper:#FBFAF7; --card:#FFFFFF; --sunk:#F1EFEA; --rail:#F6F4F0;
+  --ink:#1A1C20; --ink-2:#43474D; --muted:#71767E;
+  --rule:#DFDCD5; --rule-soft:#EBE8E2;
+  --accent:#1F5F5B; --accent-soft:#E2EDEC;
+  --done:#2F6B41; --done-soft:#E4EFE7;
+  --open:#8A5A12; --open-soft:#F6EBD9;
+  --watch:#9A3423; --watch-soft:#F7E4DF;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#14161A; --card:#1B1E23; --sunk:#1F232A; --rail:#191C21;
+  --ink:#E8EAEC; --ink-2:#B7BCC3; --muted:#8B9199;
+  --rule:#2C3138; --rule-soft:#23272D;
+  --accent:#5EB5AE; --accent-soft:#132A29;
+  --done:#79B98C; --done-soft:#16281C;
+  --open:#D9A24C; --open-soft:#2A2113;
+  --watch:#DE8874; --watch-soft:#2C1A16;
+}}
+:root[data-theme="dark"]{
+  --paper:#14161A; --card:#1B1E23; --sunk:#1F232A; --rail:#191C21;
+  --ink:#E8EAEC; --ink-2:#B7BCC3; --muted:#8B9199;
+  --rule:#2C3138; --rule-soft:#23272D;
+  --accent:#5EB5AE; --accent-soft:#132A29;
+  --done:#79B98C; --done-soft:#16281C;
+  --open:#D9A24C; --open-soft:#2A2113;
+  --watch:#DE8874; --watch-soft:#2C1A16;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;line-height:1.2;letter-spacing:-.015em;text-wrap:balance;font-weight:650}
+p{margin:0}
+a{color:var(--accent);text-underline-offset:3px}
+code,kbd{font-family:var(--mono);font-size:.88em;background:var(--sunk);padding:.12em .38em;border-radius:3px;color:var(--ink-2)}
+pre{margin:0;font-family:var(--mono);font-size:.82rem;line-height:1.65;background:var(--sunk);border:1px solid var(--rule);border-radius:4px;padding:.9rem 1rem;overflow-x:auto}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(1rem,4vw,2.5rem)}
+header.top{border-bottom:1px solid var(--rule);padding:clamp(2.5rem,6vw,4rem) 0 clamp(1.6rem,3vw,2.2rem)}
+.kicker{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-size:clamp(1.9rem,4.4vw,2.9rem)}
+.sub{margin-top:.9rem;font-size:1.05rem;color:var(--ink-2);max-width:62ch}
+.facts{display:flex;flex-wrap:wrap;gap:.4rem .5rem;margin-top:1.6rem}
+.fact{font-family:var(--mono);font-size:.72rem;background:var(--sunk);border:1px solid var(--rule);border-radius:3px;padding:.32rem .55rem;color:var(--ink-2)}
+.fact b{color:var(--ink);font-weight:600}
+
+main{padding:2.4rem 0 5rem}
+section{padding:2.2rem 0;border-top:1px solid var(--rule-soft)}
+section:first-child{border-top:none;padding-top:1rem}
+.snum{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--accent);display:block;margin-bottom:.5rem}
+section>h2{font-size:clamp(1.25rem,2.4vw,1.55rem)}
+section>p,section>ul,section>ol{max-width:72ch}
+section>p{margin-top:.9rem;color:var(--ink-2)}
+h3{font-size:1rem;margin:1.6rem 0 .5rem}
+ul,ol{margin:.8rem 0;padding-left:1.15rem}
+li{margin:.35rem 0;color:var(--ink-2)}
+li::marker{color:var(--muted)}
+strong{color:var(--ink);font-weight:640}
+
+.rule-card{border-left:3px solid var(--watch);background:var(--card);border:1px solid var(--rule);border-left-width:3px;border-radius:0 4px 4px 0;padding:1rem 1.15rem;margin:.7rem 0;max-width:76ch}
+.rule-card b{display:block;font-size:.94rem;margin-bottom:.3rem}
+.rule-card p{font-size:.9rem;color:var(--ink-2)}
+
+.status{display:inline-flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;padding:.24rem .48rem;border-radius:3px;white-space:nowrap}
+.s-done{background:var(--done-soft);color:var(--done)}
+.s-open{background:var(--open-soft);color:var(--open)}
+.s-watch{background:var(--watch-soft);color:var(--watch)}
+
+.tablewrap{overflow-x:auto;margin:1.2rem 0;border:1px solid var(--rule);border-radius:4px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:520px}
+th,td{text-align:left;padding:.62rem .8rem;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+th{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--rail);white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td code{background:none;padding:0}
+
+.tree{font-family:var(--mono);font-size:.8rem;line-height:1.85;background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:1rem 1.1rem;overflow-x:auto;color:var(--ink-2)}
+.tree b{color:var(--ink);font-weight:600}
+.tree i{color:var(--muted);font-style:normal}
+
+.checklist{list-style:none;padding:0;margin:1rem 0;display:flex;flex-direction:column;gap:.5rem}
+.checklist li{display:grid;grid-template-columns:auto 1fr;gap:.8rem;align-items:start;background:var(--card);border:1px solid var(--rule);border-radius:4px;padding:.75rem .9rem;margin:0}
+.checklist .t{font-size:.92rem;color:var(--ink)}
+.checklist .d{display:block;font-size:.84rem;color:var(--muted);margin-top:.15rem}
+
+footer{border-top:1px solid var(--rule);padding:1.6rem 0 3rem;font-family:var(--mono);font-size:.72rem;color:var(--muted);line-height:1.7}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="kicker">Session handoff · REOS website</div>
+  <h1>Where this project stands, and what will bite you</h1>
+  <p class="sub">Everything below is verified against the deployed site, not assumed. Read section 02 before changing anything — those four rules were expensive to learn and are enforced by tests.</p>
+  <div class="facts">
+    <span class="fact"><b>HEAD</b> eeab2a1</span>
+    <span class="fact"><b>Live</b> reos-website.vercel.app</span>
+    <span class="fact"><b>Repo</b> babuveenak/reos-website</span>
+    <span class="fact"><b>Pages</b> 169 static</span>
+    <span class="fact"><b>Sitemap</b> 152 URLs</span>
+    <span class="fact"><b>Tests</b> 10 passing</span>
+    <span class="fact"><b>Locales</b> en · ar</span>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <span class="snum">01</span>
+  <h2>What this is</h2>
+  <p>A <strong>journey-first knowledge platform</strong> for the UAE property ecosystem — not a listing portal, not a developer brochure, not a SaaS marketing site. It explains how property moves from land to living, helps a visitor find where they fit, then reveals the ecosystem behind it, and only then introduces the product.</p>
+  <p>The audience is <strong>global</strong>. Most readers have no prior UAE knowledge, so local terms are explained at first use rather than assumed. The site is currently <strong>education-first</strong>: the demo CTA appears only on <code>/platform</code>.</p>
+</section>
+
+<section>
+  <span class="snum">02</span>
+  <h2>Rules that must not be broken</h2>
+  <p>Each of these was a real defect that got fixed. Three are now guarded by tests — if you break them, the suite fails.</p>
+
+  <div class="rule-card">
+    <b>One canonical lifecycle <span class="status s-done">test-guarded</span></b>
+    <p><code>app/data/journey.ts</code> holds twelve stages. The hero ribbon, persona flows and the 24 detailed stages in <code>reos.ts</code> are all <em>projections</em> of it. The site once shipped four competing stage lists. Do not add a fifth.</p>
+  </div>
+
+  <div class="rule-card">
+    <b>Order is not sequence <span class="status s-done">test-guarded</span></b>
+    <p>Stages carry <code>runsWith</code>. In UAE off-plan development, marketing and sales run <em>during</em> construction — escrow exists precisely because buyers pay while the building goes up. Flattening this into a queue teaches a process that does not exist. A test asserts the construction stage says so.</p>
+  </div>
+
+  <div class="rule-card">
+    <b>Demo CTA lives only on /platform <span class="status s-done">test-guarded</span></b>
+    <p>The site is educational. A sales CTA in the page furniture undercuts that. A test asserts it appears on no other page.</p>
+  </div>
+
+  <div class="rule-card">
+    <b>Authorities are a rail, not a cluster</b>
+    <p>Group 03 is rendered as a separate rail beneath the four clusters because authorities <em>issue the approvals that gate</em> everyone else — compulsory and external, where every other participant is appointed and commercial.</p>
+  </div>
+
+  <div class="rule-card">
+    <b>Honest status labels</b>
+    <p><code>Validated / To Be Validated / Illustrative / Future REOS Capability</code>. Do not remove these to make the product look more finished — they are a credibility and legal-exposure decision, and the same discipline covers the Arabic review notice.</p>
+  </div>
+
+  <div class="rule-card">
+    <b>Jurisdiction discipline</b>
+    <p>Requirements differ per emirate and per zone. Dubai guidance is never presented as UAE guidance. Every stage carries a <code>jurisdiction</code> note.</p>
+  </div>
+</section>
+
+<section>
+  <span class="snum">03</span>
+  <h2>Where things live</h2>
+  <div class="tree">
+<b>app/data/</b>            <i>content, typed, no CMS</i>
+  journey.ts        <i>THE canonical 12 stages — the spine</i>
+  routes.ts         <i>the 12 self-selection routes + orientation</i>
+  personas.ts       <i>written journey content, keyed by slug</i>
+  ecosystem.ts      <i>12 groups, 4 clusters, modules, outcomes</i>
+  glossary.ts       <i>16 terms</i>
+  reos.ts           <i>24 detailed stages, 8 lenses, 11 authorities</i>
+  phase1.ts         <i>LEGACY consumer journeys — retirement candidate</i>
+  site.ts           <i>env-backed config (email, URL, phone)</i>
+
+<b>app/i18n/</b>
+  config.ts         <i>locales, localePath(), stripLocale()</i>
+  dictionary.ts     <i>UI strings, ar typed against en shape</i>
+  content.ts        <i>resolver: getStages(locale) etc.</i>
+  content/*.ar.ts   <i>Arabic overlays per data file</i>
+
+<b>app/components/</b>
+  Journey.tsx       <i>ribbon, persona selector, journey map</i>
+  Routes.tsx        <i>3-tier route grid + journey strips</i>
+  Ecosystem.tsx     <i>cluster map</i>
+  SiteShell.tsx     <i>header, footer, Page, StatusTag</i>
+  Logo.tsx          <i>animated skyline mark</i>
+  Term.tsx          <i>inline glossary + withTerms()</i>
+
+<b>app/ar/</b>            <i>17 thin route files, render View locale="ar"</i>
+<b>app/globals.css</b>    <i>one stylesheet, ~2400 lines</i>
+  </div>
+  <p><strong>Pattern:</strong> every page exports <code>View({locale})</code> plus an English default. <code>app/ar/&lt;route&gt;/page.tsx</code> imports that <code>View</code> and renders it with <code>locale="ar"</code>. Add a page and you must add its Arabic twin.</p>
+</section>
+
+<section>
+  <span class="snum">04</span>
+  <h2>Gotchas that cost time</h2>
+
+  <div class="tablewrap"><table>
+    <thead><tr><th>Trap</th><th>What happens</th><th>Do this</th></tr></thead>
+    <tbody>
+      <tr><td>Descendant selectors in the header</td><td><code>.site-header nav{display:none}</code> also matched the mobile menu's own nav — the panel never opened, and a DOM-node-counting test passed it</td><td>Assert <strong>visibility</strong>, never element presence</td></tr>
+      <tr><td>Grid tracks</td><td><code>1fr</code> is <code>minmax(auto,1fr)</code> and will not shrink below min-content; a long status label blew the row past the viewport</td><td>Use <code>minmax(0,1fr)</code></td></tr>
+      <tr><td>Shared span selectors</td><td><code>.module-grid header span</code> also hit <code>&lt;span class="status"&gt;</code>, rendering status chips at 21px gold on 28% alpha</td><td>Scope with <code>:not(.status)</code></td></tr>
+      <tr><td>Transparent section backgrounds</td><td>The atmospheric bands <em>looked</em> dark but computed to transparent, so light-theme rules won and ivory text composited on ivory</td><td>Set an explicit opaque <code>background-color</code></td></tr>
+      <tr><td>Scroll-reveal animations</td><td>Steps hidden until an observer fires stay invisible forever if it does not</td><td>Visible by default; JS opts in; add a failsafe timeout</td></tr>
+      <tr><td>Physical CSS properties</td><td>158 of them meant RTL reversed text but left borders and offsets on the wrong side</td><td>Logical properties (<code>inset-inline-end</code>, <code>padding-inline-start</code>)</td></tr>
+      <tr><td>Env vars in static export</td><td><code>NEXT_PUBLIC_*</code> is inlined at build; a dynamic lookup silently yields <code>undefined</code></td><td>Full literal <code>process.env.NEXT_PUBLIC_FOO</code>; changes need a redeploy</td></tr>
+      <tr><td>Element boxes vs text</td><td><code>.eyebrow</code> is a full-width flex container, so bounding-box overlap checks give false positives</td><td>Measure ink with <code>Range.getClientRects()</code></td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <span class="snum">05</span>
+  <h2>Verifying work</h2>
+  <p>Screenshots via the in-app browser pane are unreliable on this site — captures ignore scroll and sometimes return blank frames. Use Playwright driving the installed Chrome; <code>playwright-core</code> is already a dev dependency and needs no browser download.</p>
+<pre>npm run lint &amp;&amp; npx tsc --noEmit
+npm run build          # 169 static pages
+npm run build:sites    # worker output — tests read from dist/
+node --test tests/rendered-html.test.mjs   # 10 tests
+
+# tests read dist/, so ALWAYS build:sites first or you test stale output</pre>
+  <p><strong>Watch for:</strong> the tests run against <code>dist/server/index.js</code>. Skipping <code>build:sites</code> means asserting against the previous build — that happened once and produced a false pass.</p>
+</section>
+
+<section>
+  <span class="snum">06</span>
+  <h2>State of the content</h2>
+
+  <h3>Routes</h3>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th>Route</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td>buying <span class="status s-done">tier 1</span></td><td>Full journey</td></tr>
+      <tr><td>02</td><td>developing <span class="status s-done">tier 1</span></td><td>Full journey</td></tr>
+      <tr><td>03</td><td>investing</td><td>Full journey</td></tr>
+      <tr><td>04</td><td>selling</td><td><span class="status s-open">pending</span></td></tr>
+      <tr><td>05</td><td>financing</td><td>Full journey</td></tr>
+      <tr><td>06</td><td>design-engineering <code>← professional-services</code></td><td>Full journey</td></tr>
+      <tr><td>07</td><td>building</td><td>Full journey</td></tr>
+      <tr><td>08</td><td>legal-compliance</td><td><span class="status s-open">pending</span></td></tr>
+      <tr><td>09</td><td>managing</td><td>Full journey</td></tr>
+      <tr><td>10</td><td>utilities</td><td><span class="status s-open">pending</span></td></tr>
+      <tr><td>11</td><td>regulators</td><td><span class="status s-open">pending</span></td></tr>
+      <tr><td>12</td><td>specialist-services</td><td><span class="status s-open">pending</span></td></tr>
+    </tbody>
+  </table></div>
+  <p>Pending routes render a "This journey is being published" state carrying their journey steps. They are deliberately visible — hiding them would misrepresent the ecosystem. To publish one, add a persona entry in <code>personas.ts</code> keyed by the route slug.</p>
+
+  <h3>Arabic</h3>
+  <p>Translated: <code>journey</code>, <code>personas</code>, <code>ecosystem</code>, <code>glossary</code>, <code>routes</code>, full UI dictionary. <strong>Not translated:</strong> <code>reos.ts</code> (24 detailed stages, 8 lenses, 11 authorities) and inner-page section copy still inline in JSX. Coverage runs 59–84% by character; untranslated fields fall back to English per-field rather than emptying a page.</p>
+</section>
+
+<section>
+  <span class="snum">07</span>
+  <h2>Open items</h2>
+  <ul class="checklist">
+    <li><span class="status s-watch">decide</span><span class="t">Arabic needs a native-speaker review<span class="d">All Arabic is machine-produced. Every /ar page carries a notice saying English is authoritative where they differ. That notice should stay until someone signs it off — it is regulatory content.</span></span></li>
+    <li><span class="status s-watch">decide</span><span class="t">Contact email is interim<span class="d"><code>aiworkingforme@gmail.com</code>. Change via <code>NEXT_PUBLIC_CONTACT_EMAIL</code> in Vercel plus a redeploy — no code edit.</span></span></li>
+    <li><span class="status s-open">build</span><span class="t">Five route journeys unwritten<span class="d">selling, legal-compliance, utilities, regulators, specialist-services.</span></span></li>
+    <li><span class="status s-open">build</span><span class="t">Finish Arabic on inner pages<span class="d">Section copy on /journey, /ecosystem, /platform, /insights, /about is inline JSX. Move to the dictionary, as the homepage already is.</span></span></li>
+    <li><span class="status s-open">build</span><span class="t">Insights hub has no articles<span class="d">Nine categories are listed as "in development". The page indexes real role and stage guides only.</span></span></li>
+    <li><span class="status s-open">decide</span><span class="t">Retire <code>phase1.ts</code>?<span class="d">12 legacy consumer journeys at <code>/journeys/*</code>, superseded by <code>/roles</code>. Still linked from <code>/stakeholders</code> and in the sitemap.</span></span></li>
+    <li><span class="status s-open">check</span><span class="t">Lighthouse not run<span class="d">Underlying criteria verified directly (contrast both themes, real anchors, keyboard traversal, focus states, no overflow 320–1920px). The score itself has not been measured.</span></span></li>
+  </ul>
+</section>
+
+<section>
+  <span class="snum">08</span>
+  <h2>If you only read one thing</h2>
+  <p>This project's recurring failure mode is <strong>two models of the same thing drifting apart</strong>. It has happened three times: a consumer funnel versus a development model; four competing lifecycles; a homepage route list versus the <code>/roles</code> route list.</p>
+  <p>Each time, the fix was to collapse to one source and make everything else a projection of it. Before adding any list, stage, route or persona, check whether it already exists somewhere — and if it does, project from it rather than restating it.</p>
+</section>
+
+</main>
+
+<footer>
+  Verified against HEAD eeab2a1 and the deployed site · 169 pages built · 10/10 tests · WCAG AA both themes · no horizontal scroll 320–1920px
+</footer>
+</div>

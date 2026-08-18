@@ -5,12 +5,16 @@ import Link from "next/link";
 import { EcosystemMap } from "./components/Ecosystem";
 import { JourneyMap, JourneyRibbon, PersonaQuickPick, PersonaSelector, TrackLegend } from "./components/Journey";
 import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
+import { Assistant } from "./components/Assistant";
+import { buildSnapshot } from "./assistant/snapshot";
 
 import { authorities } from "./data/reos";
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
   const L = (p: string) => (locale === DEFAULT_LOCALE ? p : `/ar${p === "/" ? "" : p}`);
+  // Narrow, serialisable view of the content model for the client assistant.
+  const snapshot = buildSnapshot(locale);
   return <Page className="home" locale={locale}>
 
     {/* 01 — HERO. The journey, not the ecosystem. */}
@@ -30,7 +34,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <PersonaQuickPick locale={locale} />
     </section>
 
-    {/* 02 — WHERE ARE YOU. Persona entry, high on the page. */}
+    {/* 02 — ASK. The assistant is the front door: a question before the reading. */}
+    <section className="section-pad assistant-band" id="ask">
+      <SectionIntro
+        label={d.assistant.eyebrow}
+        title={<>{d.assistant.title}<br /><em>{d.assistant.titleEm}</em></>}
+        copy={d.assistant.lede}
+      />
+      <Assistant snapshot={snapshot} locale={locale} variant="compact" />
+    </section>
+
+    {/* 03 — WHERE ARE YOU. Persona entry, high on the page. */}
     <section className="section-pad start-band" id="start">
       <SectionIntro
         label={d.home.startLabel}
@@ -40,7 +54,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <PersonaSelector locale={locale} />
     </section>
 
-    {/* 03 — PROBLEM. */}
+    {/* 04 — PROBLEM. */}
     <section className="section-pad problem-band" id="problem">
       <SectionIntro
         label={d.home.problemLabel}
@@ -59,7 +73,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
-    {/* 04 — THE JOURNEY MAP. Concurrency shown, not flattened. */}
+    {/* 05 — THE JOURNEY MAP. Concurrency shown, not flattened. */}
     <section className="section-pad journey-band" id="journey">
       <SectionIntro
         label={d.home.journeyLabel}
@@ -70,7 +84,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <TrackLegend locale={locale} />
     </section>
 
-    {/* 05 — ECOSYSTEM REVEAL. The 12 groups arrive after the journey. */}
+    {/* 06 — ECOSYSTEM REVEAL. The 12 groups arrive after the journey. */}
     <section className="section-pad ecosystem-band" id="ecosystem">
       <SectionIntro
         label={d.home.ecoLabel}
@@ -83,7 +97,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
-    {/* 06 — HOW REOS CONNECTS. Three layers. */}
+    {/* 07 — HOW REOS CONNECTS. Three layers. */}
     <section className="section-pad layer-band atmos atmos-rays">
       <SectionIntro
         label={d.home.layerLabel}
@@ -102,7 +116,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
-    {/* 07 — PLATFORM MODULES, with honest status. */}
+    {/* 08 — PLATFORM MODULES, with honest status. */}
     <section className="section-pad module-band" id="platform">
       <SectionIntro
         label={d.home.moduleLabel}
@@ -125,7 +139,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
-    {/* 08 — OUTCOMES, per audience. */}
+    {/* 09 — OUTCOMES, per audience. */}
     <section className="section-pad outcome-band">
       <SectionIntro
         label={d.home.outcomeLabel}
@@ -148,7 +162,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
-    {/* 09 — WHERE TO GO NEXT. Educational, not a sales close. */}
+    {/* 10 — WHERE TO GO NEXT. Educational, not a sales close. */}
     <section className="demo-band atmos atmos-city" id="start-reading">
       <span className="eyebrow">{d.home.closeLabel}</span>
       <h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2>
