@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Assistant } from "../components/Assistant";
 import { AnswerCard, VisitorTurn } from "../components/Knowledge";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
+import { AssistantReturn } from "../components/AssistantDock";
 import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
 import { newConversation } from "./contracts";
@@ -77,6 +78,9 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         </p>
         <p className="fineprint">{d.footer.fineprint}</p>
       </section>
+      {/* The dock is withheld here — see AssistantReturn — but the mark
+          stays, and leads back to the conversation on this page. */}
+      <AssistantReturn locale={locale} />
     </Page>
   );
 }

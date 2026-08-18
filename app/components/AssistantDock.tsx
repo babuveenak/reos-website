@@ -124,3 +124,42 @@ export function AssistantDock({
     </div>
   );
 }
+
+/**
+ * THE RETURN CONTROL — /assistant only.
+ *
+ * On its own page the assistant is the page, so the dock's panel would open a
+ * SECOND conversation with its own transcript sitting on top of the first.
+ * That is why the dock is withheld there. But withholding the button too meant
+ * the floating REOS mark vanished on navigation and, once a visitor had
+ * scrolled past the composer, nothing led back to it.
+ *
+ * So the mark stays, in the same corner, at the same size — and instead of
+ * opening a duplicate it returns the visitor to the conversation already on
+ * the page and puts the cursor in it. One assistant, one transcript, and the
+ * anchor never disappears.
+ */
+export function AssistantReturn({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale).assistant;
+  return (
+    <div className="reos-dock">
+      <button
+        type="button"
+        className="dock-jump"
+        aria-label={d.dockReturn}
+        title={d.dockReturn}
+        onClick={() => {
+          const field = document.querySelector<HTMLTextAreaElement>(".assistant-full textarea");
+          if (!field) return;
+          /* Scroll the whole control into view rather than the field alone, so
+             the answers above it stay visible. `focus({preventScroll})` then
+             places the cursor without fighting the smooth scroll. */
+          field.closest(".assistant")?.scrollIntoView({ behavior: "smooth", block: "center" });
+          field.focus({ preventScroll: true });
+        }}
+      >
+        <ReosMark />
+      </button>
+    </div>
+  );
+}
