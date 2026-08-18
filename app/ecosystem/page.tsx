@@ -1,5 +1,6 @@
 import { getGroups, getClusters, getStages } from "../i18n/content";
 import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { getDict } from "../i18n/dictionary";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EcosystemMap } from "../components/Ecosystem";
@@ -53,6 +54,9 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
               </header>
 
               <p className="group-controls">{group.controls}</p>
+              {group.boundary && (
+                <p className="group-boundary"><b>{getDict(locale).common.boundary}</b>{group.boundary}</p>
+              )}
 
               <div className="group-cols">
                 <div>

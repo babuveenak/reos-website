@@ -121,6 +121,9 @@ export function EcosystemMap() {
         <span className="index-label">GROUP {String(active.number).padStart(2, "0")}</span>
         <h3>{active.name}</h3>
         <p className="detail-controls">{active.controls}</p>
+        {active.boundary && (
+          <p className="detail-boundary"><b>Where the line sits</b>{active.boundary}</p>
+        )}
 
         <div className="detail-rule" />
 
