@@ -1961,3 +1961,54 @@ html[data-theme="light"] .ai-labels li{color:#6b6560}
 /* Below this the figure is too small to carry twelve labels without collisions;
    the accessible description on the figure still names all twelve. */
 @media(max-width:1180px){.ai-labels{display:none}}
+
+/* ==================================================================== *
+ * /journey INNER-HERO ARCH — drawn skyline replacing the shared photo.
+ * Scoped to this one page: `.inner-hero-no-photo` turns the shared
+ * ::after photo off, `.inner-hero-arch` is a real element occupying the
+ * same box the photo used to fill (504x462, per the comment on the
+ * shared rule this deliberately does not touch).
+ * ==================================================================== */
+.inner-hero-no-photo::after{content:none}
+.inner-hero-arch{
+  position:absolute; inset-inline-end:7vw; top:16%; width:35vw; height:68%;
+  overflow:hidden; border:1px solid var(--line); border-bottom:none;
+  border-radius:999px 999px 0 0; opacity:.85;
+  animation:jaFloat 15s ease-in-out infinite;
+}
+html[data-theme="light"] .inner-hero-arch{opacity:.7}
+.inner-hero-arch svg{width:100%; height:100%; display:block}
+[dir="rtl"] .inner-hero-arch svg{transform:scaleX(-1)}
+
+.ja-tower-body{stroke:var(--gold); stroke-width:.35; stroke-linejoin:round}
+.ja-tower-ridge{stroke:var(--gold-dim); stroke-width:.2}
+.ja-tower-tip{fill:var(--gold-soft)}
+.ja-traces path{
+  fill:none; stroke:var(--gold); stroke-width:.3; opacity:.4;
+  stroke-dasharray:100; stroke-dashoffset:100;
+  animation:jaDraw 1.6s ease-out forwards;
+  animation-delay:calc(.4s + var(--i) * .22s);
+}
+.ja-junction{
+  fill:var(--gold-soft);
+  animation:jaPulse 5s ease-in-out infinite;
+  animation-delay:calc(var(--i) * .8s);
+}
+.ja-glow{animation:jaBreathe 9s ease-in-out infinite}
+
+@keyframes jaDraw{to{stroke-dashoffset:0}}
+@keyframes jaPulse{0%,100%{opacity:.35; r:1.1}50%{opacity:1; r:1.5}}
+@keyframes jaBreathe{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes jaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+@media(max-width:820px){
+  .inner-hero-arch{width:55vw}
+}
+@media(max-width:720px){
+  .inner-hero-arch{width:75vw; inset-inline-end:-20%; opacity:.22}
+  html[data-theme="light"] .inner-hero-arch{opacity:.16}
+}
+@media(prefers-reduced-motion:reduce){
+  .inner-hero-arch,.ja-junction,.ja-glow{animation:none!important}
+  .ja-traces path{stroke-dashoffset:0}
+}

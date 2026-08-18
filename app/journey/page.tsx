@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { JourneyMap, TrackLegend } from "../components/Journey";
 import { Page, SectionIntro } from "../components/SiteShell";
+import { JourneyArchVisual } from "../components/JourneyArch";
 import { groupById } from "../data/ecosystem";
 
 export const metadata: Metadata = {
@@ -13,10 +14,11 @@ export const metadata: Metadata = {
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   return <Page className="inner-page" locale={locale}>
-    <section className="inner-hero">
+    <section className="inner-hero inner-hero-no-photo">
       <span className="eyebrow">THE PROPERTY JOURNEY</span>
       <h1>The UAE property journey,<br /><em>mapped end to end.</em></h1>
       <p>Property does not move through one process. It moves through twelve connected stages, several of which run at the same time, each involving different participants, permissions and evidence. This is the full map.</p>
+      <JourneyArchVisual />
     </section>
 
     <section className="section-pad">
