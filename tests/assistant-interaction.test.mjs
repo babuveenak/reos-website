@@ -50,8 +50,8 @@ test.after(async () => { await browser?.close(); });
 
 const opts = { skip: !serverUp };
 const turns = (page) => page.evaluate(() => ({
-  visitor: document.querySelectorAll(".assistant-log .ai-visitor").length,
-  answers: document.querySelectorAll(".assistant-log .ai-answer").length,
+  visitor: document.querySelectorAll(".assistant-full .assistant-log .ai-visitor").length,
+  answers: document.querySelectorAll(".assistant-full .assistant-log .ai-answer").length,
 }));
 const voiceState = (page) => page.evaluate(() =>
   document.querySelector(".assistant-full,.assistant-compact").dataset.voiceState);
@@ -76,9 +76,9 @@ test("a voice turn appends to the transcript instead of replacing it", opts, asy
     await ask(page, ".assistant-full", "How do I become a property developer?");
     assert.deepEqual(await turns(page), { visitor: 1, answers: 1 });
 
-    await page.locator(".assistant-mic").click();
+    await page.locator(".assistant-full .assistant-mic").click();
     await page.waitForFunction(
-      () => document.querySelectorAll(".assistant-log .ai-answer").length === 2,
+      () => document.querySelectorAll(".assistant-full .assistant-log .ai-answer").length === 2,
       null,
       { timeout: 10000 },
     );
@@ -112,7 +112,7 @@ test("an unrecognised follow-up declines but keeps its place in the journey", op
     await ask(page, ".assistant-full", "And what about the weather tomorrow?");
 
     const last = await page.evaluate(() => {
-      const answers = [...document.querySelectorAll(".assistant-log .ai-answer")];
+      const answers = [...document.querySelectorAll(".assistant-full .assistant-log .ai-answer")];
       const el = answers[answers.length - 1];
       return {
         declines: /don't have enough verified information/.test(el.innerText),
@@ -142,6 +142,10 @@ test("the inferred persona is displayed and correctable", opts, async () => {
   });
 });
 
+/* Selectors in this file are scoped to `.assistant-full`. /assistant renders
+   TWO assistants — the page's own and the dock panel's — so a bare
+   `.assistant-mic` matches both and Playwright's strict mode rejects it. */
+
 /* ── voice state machine ─────────────────────────────────────────────────── */
 
 test("voice runs idle → listening → idle and produces an answer", opts, async () => {
@@ -150,19 +154,19 @@ test("voice runs idle → listening → idle and produces an answer", opts, asyn
   await withPage("/assistant", async (page) => {
     assert.equal(await voiceState(page), "idle");
 
-    await page.locator(".assistant-mic").click();
+    await page.locator(".assistant-full .assistant-mic").click();
     await page.waitForFunction(() =>
       document.querySelector(".assistant-full").dataset.voiceState === "listening");
-    assert.equal(await page.locator(".assistant-mic").getAttribute("aria-pressed"), "true");
+    assert.equal(await page.locator(".assistant-full .assistant-mic").getAttribute("aria-pressed"), "true");
 
     await page.waitForFunction(
-      () => document.querySelectorAll(".assistant-log .ai-answer").length === 1,
+      () => document.querySelectorAll(".assistant-full .assistant-log .ai-answer").length === 1,
       null,
       { timeout: 10000 },
     );
     await page.waitForFunction(() =>
       document.querySelector(".assistant-full").dataset.voiceState === "idle", null, { timeout: 5000 });
-    assert.equal(await page.locator(".assistant-mic").getAttribute("aria-pressed"), "false");
+    assert.equal(await page.locator(".assistant-full .assistant-mic").getAttribute("aria-pressed"), "false");
   });
 });
 
@@ -170,7 +174,7 @@ test("the field is read-only while listening, so keystrokes are never silently l
   // REGRESSION: the textarea displayed the transcript while onChange wrote to a
   // different piece of state, so anything typed during listening vanished.
   await withPage("/assistant", async (page) => {
-    await page.locator(".assistant-mic").click();
+    await page.locator(".assistant-full .assistant-mic").click();
     await page.waitForFunction(() =>
       document.querySelector(".assistant-full").dataset.voiceState === "listening");
     assert.equal(await page.locator(".assistant-full textarea").getAttribute("readonly"), "");
@@ -183,9 +187,9 @@ test("two voice turns in a row both work", opts, async () => {
     for (const expected of [1, 2]) {
       await page.waitForFunction(() =>
         document.querySelector(".assistant-full").dataset.voiceState === "idle");
-      await page.locator(".assistant-mic").click();
+      await page.locator(".assistant-full .assistant-mic").click();
       await page.waitForFunction(
-        (n) => document.querySelectorAll(".assistant-log .ai-answer").length === n,
+        (n) => document.querySelectorAll(".assistant-full .assistant-log .ai-answer").length === n,
         expected,
         { timeout: 10000 },
       );
@@ -310,7 +314,7 @@ test("Enter sends and Shift+Enter makes a newline", opts, async () => {
     assert.match(await field.inputValue(), /first\nsecond/, "Shift+Enter must not send");
     await field.fill("Who are the stakeholders involved?");
     await field.press("Enter");
-    await page.waitForSelector(".assistant-log .ai-answer", { timeout: 8000 });
+    await page.waitForSelector(".assistant-full .assistant-log .ai-answer", { timeout: 8000 });
     assert.equal(await field.inputValue(), "", "sending clears the field");
   });
 });
