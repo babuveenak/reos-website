@@ -55,7 +55,10 @@ test("the assistant has its own route, in both locales", async () => {
 test("the assistant is honestly framed as a preview", async () => {
   // Removing this notice would make mock answers read as real guidance.
   const html = await text("/assistant");
-  assert.match(html, /illustrative examples while its knowledge base is built/i);
+  // Matched on substance, not exact phrasing: the notice must say the answers
+  // are illustrative AND tell the reader to verify with the authority.
+  assert.match(html, /illustrative examples/i, "the notice must say the answers are illustrative");
+  assert.match(html, /verify .*with the relevant authority/i, "the notice must point at the authority");
   assert.match(html, /status-illustrative/, "answers must carry the Illustrative label");
 });
 

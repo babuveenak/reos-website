@@ -89,3 +89,50 @@ export function stageSuggestions(snapshot: KnowledgeSnapshot, stageId: string): 
   }
   return out;
 }
+
+/**
+ * THE ASSISTANT PAGE'S OPENING SET.
+ *
+ * Editorial rather than generated — and that is a deliberate exception to the
+ * rule at the top of this file, taken for one reason: the derived shapes
+ * ("what happens during X") read like a site explaining itself, and this page
+ * has to read like an intelligence tool being interrogated.
+ *
+ * The rule the generated set exists to protect is not "never write a question
+ * down", it is "never offer a question the assistant cannot answer". That is
+ * enforced directly: tests/assistant-interaction.test.mjs walks these chips on
+ * both /assistant and /ar/assistant, clicks each one, and fails if any answer
+ * comes back as not-in-corpus. Two earlier candidates were cut by exactly that
+ * check — questions about approvals and documents at a named stage, which the
+ * corpus holds but the mock has no answer shape for yet.
+ *
+ * Each entry is phrased so the resolver can place it: it names a stage, a role
+ * or a mechanism the content model already knows.
+ */
+const ASSISTANT_OPENERS: Record<Locale, { text: string; path: string }[]> = {
+  en: [
+    { text: "How do I verify an off-plan property before signing?", path: "/journey/marketing-sales" },
+    { text: "Why can't construction start yet?", path: "/journey/design-approvals" },
+    { text: "When is the title deed issued and who is involved?", path: "/journey/registration-compliance" },
+    { text: "Who controls the escrow account and when is it released?", path: "/journey/finance-escrow" },
+    { text: "Which stakeholders are involved in handover?", path: "/journey/handover-snagging" },
+    { text: "What risks should an investor check before committing?", path: "/journey/investment-resale" },
+  ],
+  ar: [
+    { text: "كيف أتحقق من عقار على المخطط قبل التوقيع؟", path: "/journey/marketing-sales" },
+    { text: "لماذا لا أستطيع البدء في الإنشاء؟", path: "/journey/design-approvals" },
+    { text: "متى يُصدر سند الملكية ومن يشارك في ذلك؟", path: "/journey/registration-compliance" },
+    { text: "من يتحكم في حساب الضمان ومتى يُفرج عن الأموال؟", path: "/journey/finance-escrow" },
+    { text: "من هم أصحاب المصلحة المشاركون في التسليم؟", path: "/journey/handover-snagging" },
+    { text: "ما المخاطر التي ينبغي أن يتحقق منها المستثمر قبل الالتزام؟", path: "/journey/investment-resale" },
+  ],
+};
+
+export function assistantSuggestions(snapshot: KnowledgeSnapshot): SuggestedQuestion[] {
+  const locale = snapshot.locale;
+  return (ASSISTANT_OPENERS[locale] ?? ASSISTANT_OPENERS.en).map((q) => ({
+    text: q.text,
+    origin: "stage" as const,
+    path: L(locale, q.path),
+  }));
+}

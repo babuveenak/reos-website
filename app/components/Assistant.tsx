@@ -19,7 +19,7 @@ import Link from "next/link";
 import { AnswerCard, NextQuestions, VisitorTurn } from "./Knowledge";
 import { MockAIService } from "../assistant/mock-ai";
 import { MockVoiceProvider } from "../assistant/mock-voice";
-import { homepageSuggestions } from "../assistant/suggestions";
+import { assistantSuggestions, homepageSuggestions } from "../assistant/suggestions";
 import type { KnowledgeSnapshot } from "../assistant/snapshot";
 import {
   newConversation,
@@ -123,7 +123,13 @@ export function Assistant({ snapshot, locale = DEFAULT_LOCALE, variant = "compac
   const stateRef = useRef(state);
   const pendingRef = useRef(false);
   useEffect(() => { stateRef.current = state; }, [state]);
-  const openingSuggestions = useMemo(() => homepageSuggestions(snapshot), [snapshot]);
+  /* The full variant is the assistant's own page, where the opening set is the
+     product's shop window; the inline variants stay on the derived set, which
+     is tuned to the page they sit on. */
+  const openingSuggestions = useMemo(
+    () => (variant === "full" ? assistantSuggestions(snapshot) : homepageSuggestions(snapshot)),
+    [snapshot, variant],
+  );
 
   /* The session id is generated after mount so the server and client markup
      match — a value baked at render time would differ between the two. */
