@@ -1869,3 +1869,85 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
 html[data-theme="light"] .dock-jump{background:#FFFDF8;box-shadow:0 10px 30px rgba(57,45,27,.16),0 2px 6px rgba(57,45,27,.1)}
 .dock-jump:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 14px 38px rgba(0,0,0,.4),0 0 0 4px color-mix(in srgb,var(--gold) 12%,transparent)}
 @media(prefers-reduced-motion:reduce){.dock-jump{transition:none}.dock-jump:hover{transform:none}}
+
+/* ==================================================================== *
+ * THE ASSISTANT PAGE
+ * Copy and visual share the first row; the composer sits on the second,
+ * spanning both — so the product interaction of the page is in the first
+ * viewport instead of below a band of empty space.
+ * ==================================================================== */
+
+.ai-hero{max-width:var(--max);margin:auto;padding:5.6rem max(5vw,2rem) 0;display:grid;grid-template-columns:minmax(0,47fr) minmax(0,53fr);column-gap:clamp(1.5rem,3vw,3.5rem);row-gap:1.4rem;align-items:center}
+.ai-hero-copy{grid-column:1;animation:aiRise .8s cubic-bezier(.2,.8,.3,1) both}
+/* A third of the old height: the h1 was clamped to 7.8rem on a page whose
+   job is to get someone typing. */
+.ai-hero-copy h1{font-size:clamp(2.3rem,4vw,3.6rem);margin:1.1rem 0 .9rem}
+.ai-hero-sub{font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.32rem);line-height:1.5;color:var(--gold-soft);max-width:30rem;margin-bottom:.9rem}
+.ai-hero-lede{font-size:.87rem;line-height:1.75;color:var(--muted);max-width:33rem;margin:0}
+.ai-hero-ask{grid-column:1/-1;animation:aiRise .8s cubic-bezier(.2,.8,.3,1) .18s both}
+.ai-hero-ask .assistant-full{max-width:none}
+/* The notice is guidance, not a headline: quieter, tighter, and directly
+   above the composer rather than floating in its own band. */
+.ai-hero-ask .assistant-notice{font-size:.74rem;padding:.55rem .8rem;margin-bottom:.9rem;color:var(--muted)}
+.ai-hero-ask .assistant-composer{margin-top:0}
+.ai-hero-ask .composer-bar{padding:.5rem .55rem;border-radius:30px}
+.ai-hero-ask .composer-bar:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)}
+.ai-examples{padding-top:3.5rem}
+
+/* ── the intelligence visual ─────────────────────────────────────── */
+.ai-visual{grid-column:2;position:relative;width:100%;max-width:35rem;aspect-ratio:5/4;margin:0;justify-self:end;animation:aiFloat 16s ease-in-out infinite}
+.ai-visual>svg{width:100%;height:100%;overflow:visible;color:var(--gold-soft)}
+[dir="rtl"] .ai-visual>svg{transform:scaleX(-1)}
+.ai-skyline rect{fill:var(--gold-soft);opacity:.055}
+html[data-theme="light"] .ai-skyline rect{fill:var(--gold);opacity:.05}
+
+.ai-spokes path{fill:none;stroke:var(--gold);stroke-width:.24;opacity:.22;stroke-dasharray:100;stroke-dashoffset:100;animation:aiDraw 1.1s ease-out forwards;animation-delay:calc(.5s + var(--i) * .07s)}
+.ai-flow-line{fill:none;stroke:url(#ai-flow);stroke-width:.45;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:aiDraw 1.3s ease-out .15s forwards}
+.ai-flow-out{animation-delay:1.5s}
+/* Travelling light: a short dash running the same path, which is the
+   ribbonFlow idiom already used elsewhere rather than a second technique. */
+.ai-pulse-in,.ai-pulse-out{fill:none;stroke:var(--gold-soft);stroke-width:1;stroke-linecap:round;stroke-dasharray:2 98;filter:drop-shadow(0 0 2px var(--gold));animation:aiPacket 6.5s linear 2s infinite}
+.ai-pulse-out{animation-duration:5.5s;animation-delay:3.4s;stroke:var(--cyan);opacity:.8}
+
+.ai-core-halo{animation:aiBreathe 7s ease-in-out infinite;opacity:.6}
+.ai-core-ring{fill:none;stroke:var(--gold);stroke-width:.3;opacity:.62;transform-box:fill-box;transform-origin:center}
+.ai-core-ring-1{stroke-dasharray:5 3;animation:aiSpin 44s linear infinite}
+.ai-core-ring-2{stroke-dasharray:2 4;animation:aiSpin 30s linear infinite reverse}
+.ai-core{animation:aiBreathe 7s ease-in-out infinite}
+.ai-core-seed{fill:var(--gold-soft)}
+.ai-core-disc{fill:var(--panel);stroke:var(--gold);stroke-width:.35}
+html[data-theme="light"] .ai-core-disc{fill:#FFFDF8}
+.ai-web path{fill:none;stroke:var(--gold);stroke-width:.16;opacity:.16;stroke-dasharray:100;stroke-dashoffset:100;animation:aiDraw 1.4s ease-out forwards;animation-delay:calc(1.2s + var(--i) * .05s)}
+
+.ai-node{animation:aiNode 7s ease-in-out infinite;animation-delay:calc(var(--i) * .55s)}
+.ai-node-disc{fill:var(--panel);stroke:var(--gold);stroke-width:.24;opacity:.95}
+html[data-theme="light"] .ai-node-disc{fill:#FFFDF8}
+.ai-node-glyph{color:var(--gold)}
+
+@keyframes aiRise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes aiDraw{to{stroke-dashoffset:0}}
+@keyframes aiPacket{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+@keyframes aiBreathe{0%,100%{opacity:.75}50%{opacity:1}}
+@keyframes aiSpin{to{transform:rotate(360deg)}}
+@keyframes aiNode{0%,100%{opacity:.72}50%{opacity:1}}
+@keyframes aiFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+/* ── responsive ──────────────────────────────────────────────────── */
+@media(max-width:1000px){
+  /* Stacked order: headline, supporting copy, visual, then the ask. */
+  .ai-hero{grid-template-columns:minmax(0,1fr);padding-top:5.5rem;row-gap:1.6rem}
+  .ai-hero-copy,.ai-visual,.ai-hero-ask{grid-column:1}
+  .ai-visual{max-width:34rem;justify-self:center;animation:none}
+  .ai-examples{padding-top:2.5rem}
+}
+@media(max-width:620px){
+  .ai-hero{padding-top:5rem}
+  .ai-hero-lede{font-size:.84rem}
+  .ai-visual{max-width:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .ai-hero-copy,.ai-hero-ask,.ai-visual,.ai-core,.ai-core-halo,.ai-core-ring,
+  .ai-node,.ai-spokes path,.ai-flow-line{animation:none!important}
+  .ai-spokes path,.ai-flow-line{stroke-dashoffset:0}
+  .ai-pulse-in,.ai-pulse-out{display:none}
+}

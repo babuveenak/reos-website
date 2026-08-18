@@ -4,6 +4,7 @@ import { Assistant } from "../components/Assistant";
 import { AnswerCard, VisitorTurn } from "../components/Knowledge";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
 import { AssistantReturn } from "../components/AssistantDock";
+import { AssistantIntelligence } from "../components/AssistantHero";
 import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
 import { newConversation } from "./contracts";
@@ -38,20 +39,28 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
 
   return (
     <Page className="assistant-page" locale={locale} dock={false}>
-      <section className="inner-hero">
-        <span className="eyebrow">{a.eyebrow}</span>
-        <h1>{a.title}<br /><em>{a.titleEm}</em></h1>
-        <p>{a.lede}</p>
-      </section>
+      {/* Hero and interaction are ONE section, not two. Separating them put a
+          6rem band of nothing between the headline and the composer, which
+          pushed the product interaction of the page below the fold. */}
+      <section className="ai-hero" aria-labelledby="ask-heading">
+        <div className="ai-hero-copy">
+          <span className="eyebrow">{a.pageEyebrow}</span>
+          <h1>{a.pageTitle}<br /><em>{a.pageTitleEm}</em></h1>
+          <p className="ai-hero-sub">{a.sub}</p>
+          <p className="ai-hero-lede">{a.lede}</p>
+        </div>
 
-      <section className="section-pad" aria-labelledby="ask-heading">
-        {/* Named for assistive technology; the hero h1 above is the visual
-            heading, so repeating it on screen would be noise. */}
+        <AssistantIntelligence locale={locale} />
+
+        {/* Named for assistive technology; the h1 above is the visual heading,
+            so repeating it on screen would be noise. */}
         <h2 id="ask-heading" className="visually-hidden">{a.composerHeading}</h2>
-        <Assistant snapshot={snapshot} locale={locale} variant="full" />
+        <div className="ai-hero-ask">
+          <Assistant snapshot={snapshot} locale={locale} variant="full" />
+        </div>
       </section>
 
-      <section className="section-pad example-band">
+      <section className="section-pad example-band ai-examples">
         <SectionIntro
           label={a.exampleLabel}
           title={<>{a.exampleTitle}<br /><em>{a.exampleTitleEm}</em></>}
