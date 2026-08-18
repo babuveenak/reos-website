@@ -72,6 +72,26 @@ test("the review notice appears on Arabic pages only", async () => {
   assert.doesNotMatch(await (await render("/")).text(), /translation-notice/);
 });
 
+test("the roles page shows twelve routes in frequency order", async () => {
+  const html = await (await render("/roles")).text();
+  for (let n = 1; n <= 12; n++) {
+    assert.match(html, new RegExp(`>${String(n).padStart(2, "0")}<`), `route ${n} missing`);
+  }
+  // The orientation helper is not a stakeholder group and is never numbered.
+  assert.match(html, /Not sure which applies to you\?/);
+  // Taxonomy group numbers are internal and must never reach the UI.
+  assert.doesNotMatch(html, /taxonomyGroup/);
+});
+
+test("every route link resolves, including retired URLs", async () => {
+  const slugs = ["buying","developing","investing","selling","financing","design-engineering",
+    "building","legal-compliance","managing","utilities","regulators","specialist-services",
+    "new-to-uae","professional-services"];
+  for (const slug of slugs) {
+    assert.equal((await render(`/roles/${slug}`)).status, 200, `/roles/${slug}`);
+  }
+});
+
 test("renders core routes", async () => {
   for (const path of [
     "/journey", "/journey/finance-escrow", "/roles", "/roles/developing",

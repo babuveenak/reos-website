@@ -7,6 +7,8 @@ import { stagesAr, trackAr, layersAr } from "./content/journey.ar";
 import { personasAr } from "./content/personas.ar";
 import { clustersAr, groupsAr, fragmentsAr, modulesAr, outcomesAr, insightCategoriesAr } from "./content/ecosystem.ar";
 import { termsAr } from "./content/glossary.ar";
+import { routesAr, orientationAr, routeUiAr, routeUiEn } from "./content/routes.ar";
+import { routes as routesEnData, orientation as orientationEn, type Route } from "../data/routes";
 
 /**
  * Locale-aware content.
@@ -99,4 +101,17 @@ export function translationCoverage() {
     groups: pct(Object.keys(groupsAr).length, groupsEn.length),
     terms: pct(Object.keys(termsAr).length, termsEn.length),
   };
+}
+
+export function getRoutes(locale: Locale): Route[] {
+  if (!isAr(locale)) return routesEnData;
+  return routesEnData.map((r) => ({ ...r, ...(routesAr[r.slug] ?? {}) }));
+}
+
+export function getOrientation(locale: Locale) {
+  return isAr(locale) ? { ...orientationEn, ...orientationAr } : orientationEn;
+}
+
+export function getRouteUi(locale: Locale) {
+  return isAr(locale) ? routeUiAr : routeUiEn;
 }

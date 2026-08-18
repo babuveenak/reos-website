@@ -8,18 +8,24 @@ import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 
 import { personaBySlug, personas } from "../../data/personas";
+import { allRouteSlugs, contentSlug, resolveRoute } from "../../data/routes";
+import { getRouteUi } from "../../i18n/content";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return personas.map((persona) => ({ slug: persona.slug }));
+  // Every route plus every retired alias, so no historical URL 404s.
+  const slugs = new Set([...allRouteSlugs, ...personas.map((p) => p.slug)]);
+  return [...slugs].map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const persona = personaBySlug[slug];
-  if (!persona) return {};
-  return { title: `${persona.headline} | REOS`, description: persona.promise };
+  const route = resolveRoute(slug);
+  if (persona) return { title: `${persona.headline} | REOS`, description: persona.promise };
+  if (route) return { title: `${route.title} | REOS`, description: route.sub };
+  return {};
 }
 
 /** Rough reading time from the words actually on the page. */
@@ -32,8 +38,14 @@ function readingMinutes(p: { steps: { detail: string; title: string }[]; audienc
 export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale?: Locale }) {
   const { slug } = await params;
   const all = getPersonas(locale);
-  const persona = all.find((p) => p.slug === slug);
-  if (!persona) notFound();
+  const route = resolveRoute(slug);
+  // Aliases resolve to the canonical route, so old URLs keep working.
+  const persona = route ? all.find((p) => p.slug === contentSlug(route)) : all.find((p) => p.slug === slug);
+
+  if (!persona) {
+    if (!route) notFound();
+    return <PendingRoute route={route} locale={locale} />;
+  }
 
   const others = all.filter((p) => p.slug !== persona.slug).slice(0, 3);
 
@@ -140,6 +152,42 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
             <i>→</i>
           </Link>
         ))}
+      </div>
+    </section>
+  </Page>;
+}
+
+/** A route that exists in the model but whose content is not published yet.
+ *  Shown rather than hidden: removing it would misrepresent the ecosystem. */
+function PendingRoute({ route, locale }: { route: NonNullable<ReturnType<typeof resolveRoute>>; locale: Locale }) {
+  const ui = getRouteUi(locale);
+  const L = (p: string) => (locale === DEFAULT_LOCALE ? p : `/ar${p}`);
+  return <Page className="inner-page persona-page" locale={locale}>
+    <nav className="crumbs" aria-label="Breadcrumb">
+      <Link href={L("/roles")}>Roles</Link>
+      <span aria-hidden="true">/</span>
+      <b>{route.title}</b>
+    </nav>
+    <section className="persona-hero">
+      <div>
+        <span className="eyebrow">{route.ctaLabel}</span>
+        <h1>{route.title}</h1>
+        <p>{route.sub}</p>
+      </div>
+    </section>
+    <section className="section-pad">
+      <div className="pending-route">
+        <b>{ui.pending}</b>
+        <p>{ui.pendingCopy}</p>
+        <ol className="journey-strip is-shown" aria-label="Journey steps">
+          {route.journey.map((step, i) => (
+            <li key={step} style={{ ["--i" as string]: i }}><span>{step}</span></li>
+          ))}
+        </ol>
+        <div className="hero-actions">
+          <Link className="button gold" href={L("/journey")}>See the full journey <span>↗</span></Link>
+          <Link className="button ghost" href={L("/roles")}>Try another route</Link>
+        </div>
       </div>
     </section>
   </Page>;

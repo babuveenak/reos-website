@@ -1283,3 +1283,114 @@ html[dir="rtl"] .crumbs{flex-direction:row}
 .translation-notice{margin-top:86px}
 .home .translation-notice{margin-bottom:-86px; position:relative; z-index:5}
 @media(max-width:720px){.translation-notice{margin-top:72px}.home .translation-notice{margin-bottom:-72px}}
+
+/* ============================================================
+   ROUTE SELECTION — twelve routes in three tiers
+   Reuses the existing card language: square corners, thin rule,
+   gold-brown accent, serif title, uppercase CTA. Hover raises
+   border contrast only — no shadow, no lift.
+   ============================================================ */
+.route-layout{display:flex; flex-direction:column; gap:2.5rem}
+
+/* Orientation helper — a tinted band, deliberately not a numbered card. */
+.orientation-band{
+  display:flex; align-items:center; justify-content:space-between; gap:2rem;
+  padding:1.3rem 1.5rem; background:var(--deep); border:1px solid var(--gold-dim);
+}
+.orientation-band b{display:block; font-family:var(--serif); font-size:1.28rem; font-weight:400; color:var(--ivory); margin-bottom:.3rem}
+.orientation-band p{margin:0; font-size:.9rem; line-height:1.6; color:var(--muted); max-width:74ch}
+.orientation-band .route-cta{white-space:nowrap}
+
+/* Shared card */
+.route-card{
+  display:flex; flex-direction:column; gap:.55rem; min-width:0;
+  padding:1.5rem 1.4rem; background:var(--void); border:1px solid var(--line);
+  transition:border-color .25s, background .25s;
+}
+.route-card:hover,.route-card:focus-visible{border-color:var(--gold); background:var(--deep)}
+.route-num{font-family:var(--mono, var(--sans)); font-size:.66rem; letter-spacing:.18em; color:var(--gold-dim)}
+.route-card h3{color:var(--ivory); line-height:1.22}
+.route-card p{margin:0; font-size:.88rem; line-height:1.62; color:var(--muted); flex:1}
+.route-cta{
+  display:inline-flex; align-items:center; gap:.55rem; margin-top:.5rem;
+  font-size:.64rem; letter-spacing:.16em; text-transform:uppercase; color:var(--gold-soft);
+}
+.route-card:hover .route-cta{color:var(--gold)}
+.route-cta i{font-style:normal; font-size:.85rem}
+
+/* Tier 1 — featured, journey visible */
+.route-featured{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.5rem}
+.route-card.is-featured{padding:2rem 1.9rem; gap:.7rem}
+.route-card.is-featured h3{font-size:clamp(1.3rem,2vw,1.65rem)}
+.route-card.is-featured p{font-size:.94rem}
+
+.journey-strip{
+  list-style:none; margin:.9rem 0 .3rem; padding:0;
+  display:flex; flex-wrap:wrap; align-items:center; gap:.35rem .55rem;
+}
+.journey-strip li{display:flex; align-items:center; gap:.55rem; margin:0}
+/* Only hidden once JS has armed the animation, never before. */
+.journey-strip.is-armed li{opacity:0; transform:translateY(3px)}
+.journey-strip.is-shown li{
+  opacity:1; transform:none;
+  transition:opacity .28s ease-out calc(var(--i) * 60ms), transform .28s ease-out calc(var(--i) * 60ms);
+}
+.journey-strip li span{
+  font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+  white-space:nowrap; padding:.28rem .5rem; border:1px solid var(--line);
+}
+/* Thin gold connector with a chevron, never after the last step. */
+.journey-strip li:not(:last-child)::after{
+  content:"›"; color:var(--gold); font-size:.8rem; line-height:1;
+  padding-inline-start:.15rem;
+}
+.route-card:hover .journey-strip li span{border-color:var(--gold-dim); color:var(--ivory)}
+
+/* Tier rules and bands */
+.tier-rule{display:flex; align-items:center; gap:1.1rem; margin:.4rem 0 -.9rem}
+.tier-rule b{font-size:.64rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); white-space:nowrap}
+.tier-rule i{flex:1; height:1px; background:var(--line)}
+
+.route-grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.2rem}
+
+.route-specialist{border-top:1px solid var(--line); padding-top:1.4rem}
+.route-specialist > summary{
+  display:flex; align-items:center; gap:.7rem; cursor:pointer; list-style:none;
+  padding:.4rem 0; margin-bottom:0;
+}
+.route-specialist > summary::-webkit-details-marker{display:none}
+.route-specialist > summary b{font-size:.64rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold)}
+.route-specialist > summary span{font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.route-specialist > summary::after{content:"+"; color:var(--gold); font-size:1.1rem; line-height:1; margin-inline-start:auto}
+.route-specialist[open] > summary::after{content:"–"}
+.route-specialist[open] > summary{margin-bottom:1.2rem}
+.route-specialist > summary:focus-visible{outline:2px solid var(--cyan); outline-offset:3px}
+
+/* Pending route */
+.pending-route{
+  max-width:74ch; padding:1.6rem 1.7rem; border:1px dashed var(--gold-dim); background:var(--deep);
+  display:flex; flex-direction:column; gap:.8rem;
+}
+.pending-route > b{font-size:.66rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold)}
+.pending-route > p{margin:0; font-size:.95rem; line-height:1.65; color:var(--muted)}
+.pending-route .hero-actions{margin-top:.6rem}
+
+@media(max-width:1180px){
+  .route-featured{grid-template-columns:minmax(0,1fr)}
+  .route-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:720px){
+  .route-grid{grid-template-columns:minmax(0,1fr)}
+  .orientation-band{flex-direction:column; align-items:flex-start; gap:1rem}
+  .route-card.is-featured{padding:1.5rem 1.3rem}
+  /* Chips wrap; the strip never scrolls sideways. */
+  .journey-strip{gap:.3rem .4rem}
+  .journey-strip li span{font-size:.56rem; letter-spacing:.1em}
+}
+@media(prefers-reduced-motion:reduce){
+  .journey-strip li,.journey-strip.is-armed li,.journey-strip.is-shown li{opacity:1; transform:none; transition:none}
+}
+html[data-theme="light"] .route-card{background:#FFF}
+html[data-theme="light"] .route-card:hover{background:#FAF6ED}
+html[data-theme="light"] .orientation-band{background:#F5EDDD}
+html[data-theme="light"] .pending-route{background:#F5EDDD}

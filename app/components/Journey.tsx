@@ -5,7 +5,7 @@ import { useState } from "react";
 import { type Stage } from "../data/journey";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import { getDict, fill } from "../i18n/dictionary";
-import { getStages, getTracks, getPersonas, getGroups } from "../i18n/content";
+import { getStages, getTracks, getGroups, getRoutes } from "../i18n/content";
 
 /* ------------------------------------------------------------------ *
  * HERO RIBBON
@@ -102,31 +102,31 @@ export function JourneyRibbon({ locale = DEFAULT_LOCALE }: { locale?: Locale }) 
  * PERSONA SELECTOR — "start from where you are"
  * ------------------------------------------------------------------ */
 
-/** The four routes most visitors need; the rest are professional roles. */
-const PRIMARY = ["buying", "investing", "developing", "new-to-uae"];
+/** Featured plus the first core routes — the same list /roles leads with,
+ *  read from the single route source so the two pages cannot diverge. */
+const PRIMARY = ["buying", "developing", "investing", "selling"];
 
-function Tile({ slug, index, locale }: { slug: string; index: number; locale: Locale }) {
-  const d = getDict(locale);
-  const persona = getPersonas(locale).find((p) => p.slug === slug)!;
+function Tile({ slug, locale }: { slug: string; locale: Locale }) {
+  const route = getRoutes(locale).find((r) => r.slug === slug)!;
   return (
-    <Link href={localePath(locale, `/roles/${persona.slug}`)} className="persona-tile">
-      <span className="tile-num">{String(index + 1).padStart(2, "0")}</span>
-      <b>{persona.card}</b>
-      <p>{persona.promise}</p>
-      <i>{persona.name} {d.roles.journeySuffix} →</i>
+    <Link href={localePath(locale, `/roles/${route.slug}`)} className="persona-tile">
+      <span className="tile-num">{String(route.order).padStart(2, "0")}</span>
+      <b>{route.title}</b>
+      <p>{route.sub}</p>
+      <i>{route.ctaLabel} →</i>
     </Link>
   );
 }
 
 export function PersonaSelector({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
-  const all = getPersonas(locale);
-  const primary = all.filter((p) => PRIMARY.includes(p.slug));
-  const secondary = all.filter((p) => !PRIMARY.includes(p.slug));
+  const all = getRoutes(locale);
+  const primary = all.filter((r) => PRIMARY.includes(r.slug));
+  const secondary = all.filter((r) => !PRIMARY.includes(r.slug)).slice(0, 4);
   return (
     <>
       <div className="persona-select">
-        {primary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i} locale={locale} />)}
+        {primary.map((r) => <Tile key={r.slug} slug={r.slug} locale={locale} />)}
       </div>
 
       {/* Desktop shows all eight at once; mobile collapses the professional
@@ -140,7 +140,7 @@ export function PersonaSelector({ locale = DEFAULT_LOCALE }: { locale?: Locale }
           <span>{fill(d.roles.more, { n: secondary.length })}</span>
         </summary>
         <div className="persona-select">
-          {secondary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i + primary.length} locale={locale} />)}
+          {secondary.map((r) => <Tile key={r.slug} slug={r.slug} locale={locale} />)}
         </div>
       </details>
     </>
@@ -156,8 +156,8 @@ export function PersonaQuickPick({ locale = DEFAULT_LOCALE }: { locale?: Locale 
       <b>{d.journey.quickPick}</b>
       <div>
         {PRIMARY.map((slug) => {
-          const p = getPersonas(locale).find((x) => x.slug === slug)!;
-          return <Link key={slug} href={localePath(locale, `/roles/${slug}`)}>{p.name}</Link>;
+          const r = getRoutes(locale).find((x) => x.slug === slug)!;
+          return <Link key={slug} href={localePath(locale, `/roles/${slug}`)}>{r.ctaLabel.replace(/ journey$/i, "")}</Link>;
         })}
       </div>
     </nav>
