@@ -225,8 +225,6 @@ const CONCURRENCY_NO: Bilingual = {
   ar: "لا توجد مرحلة تجري بالتوازي مع {stage} في النموذج المعتمد — فهي قائمة بذاتها في التسلسل. وهذا أمر يستحق المعرفة بدل الافتراض: فمعظم مراحل هذه الدورة تتداخل مع غيرها، وما لا يتداخل منها تحكمه عادةً موافقة يجب أن تصدر أولًا.",
 };
 
-const THEN: Bilingual = { en: "Then:", ar: "ثم:" };
-
 const PRODUCT_TEXT: Bilingual = {
   en: "Yes — there is a platform built around this workflow, separate from the educational material you are reading. It is a different thing from the journey content, so it lives on its own page rather than inside an explanation.",
   ar: "نعم — توجد منصة مبنية حول سياق العمل هذا، منفصلة عن المادة التعليمية التي تقرأها. وهي شيء مختلف عن محتوى الرحلة، لذا فهي على صفحتها الخاصة لا داخل الشرح.",
@@ -316,7 +314,10 @@ export function mockAnswer(request: AIRequest, snapshot: KnowledgeSnapshot): AIR
               .replace("{stage}", stage.name)
               .replace("{others}", concurrent.join(locale === "ar" ? " و" : " and "))
           : pick(CONCURRENCY_NO, locale).replace("{stage}", stage.name))
-      : `${stage.summary}${stage.nextStep ? ` ${pick(THEN, locale)} ${stage.nextStep}` : ""}`;
+      // Just the summary: the journey trail below already renders `nextStep`,
+      // and repeating it here printed the same sentence twice. Prefixed with the
+      // stage name because journey.ts summaries are written to follow it.
+      : `${stage.name}: ${stage.summary}`;
     return {
       ...shell(snapshot, answer),
       persona,

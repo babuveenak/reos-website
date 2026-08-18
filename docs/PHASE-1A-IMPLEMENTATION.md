@@ -11,13 +11,13 @@ npx tsc --noEmit                    # clean
 npm run lint                        # clean
 npm run build                       # compiles; 173 static pages (was 169)
 npm run build:sites                 # worker output — the HTML tests read from dist/
-node --test "tests/assistant.test.mjs" "tests/rendered-html.test.mjs"   # 38 pass
+node --test "tests/assistant.test.mjs" "tests/rendered-html.test.mjs"   # 41 pass
 
 npm run dev                                        # in another terminal, then:
-node --test tests/assistant-interaction.test.mjs   # 15 pass
+node --test tests/assistant-interaction.test.mjs   # 19 pass
 ```
 
-**53 tests pass, 0 fail.** Note the explicit file list: `node --test tests/`
+**60 tests pass, 0 fail.** Note the explicit file list: `node --test tests/`
 (directory form) fails on this Node version — it treats the directory as a test
 file. The interaction suite needs a dev server and skips loudly without one.
 
@@ -271,6 +271,37 @@ Not done: the dock is **not** seeded with the current stage on journey pages —
 only the inline stage assistant is. Seeding it would mean threading the stage
 through `Page`, which is shared furniture on 173 pages. Worth doing if the dock
 becomes the primary surface.
+
+---
+
+## 5c · The composer, rebuilt as a messaging bar
+
+Replaced the stacked textarea + two labelled buttons with a single rounded pill,
+on the ChatGPT/WhatsApp pattern: **paperclip · field · mic · send**, all inside
+one bordered bar. The "Ask next" ready prompts are unchanged.
+
+| Behaviour | Detail |
+|---|---|
+| Field grows with content | One row at rest, grows to a ~168px cap, then scrolls. Same as every messaging composer |
+| Focus ring on the bar | `:focus-within`, so the indicator surrounds the whole control rather than drawing a second box inside it |
+| Send activates on content | Inactive (outlined) when empty or whitespace; filled gold once there is something to commit |
+| Mic becomes stop | While listening the microphone swaps for a stop square, tinted cyan, `aria-pressed="true"` — the control that started recording also ends it |
+| Send works during dictation | The arrow activates on the live transcript; pressing it stops recognition, which emits `final` and sends. Previously it sat inert while text was visibly in the field |
+| Enter / Shift+Enter | Sends / newline |
+| Voice state | Only shown when there is something to say, but kept in the DOM so the live region is registered before it needs to announce |
+| Icons are inline SVG | Matching `PreferencesControls` and `Logo`; no emoji-font dependency, and they inherit `currentColor` from the theme tokens |
+| RTL | Logical properties throughout — paperclip inline-start, mic and send inline-end, mirrored in Arabic |
+| Mobile | The bar stays one row (a stacked messaging composer is not a composer); touch targets grow to 42px instead |
+
+**The paperclip is honest about itself.** There is no document storage yet, so
+clicking it reveals a one-line note saying attachments arrive with the document
+repository. It is not a file picker that silently discards what you choose.
+
+Two content defects fixed while verifying it: the stage answer appended
+`nextStep` to its body while the journey trail rendered the same sentence again
+underneath, and the summaries in `journey.ts` are written to follow the stage
+name, so used alone they opened as a fragment. Both were visible only on screen,
+which is why the screenshot pass matters as much as the test pass.
 
 ---
 
