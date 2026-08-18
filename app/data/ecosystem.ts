@@ -27,6 +27,10 @@ export type Group = {
   short: string;
   cluster: ClusterId;
   controls: string;
+  /** Where the line sits when two groups look like they overlap. Only present
+   *  where misclassification is a real risk — a project-finance bank and an
+   *  escrow bank are both "banks" but belong to different groups. */
+  boundary?: string;
   members: string[];
   phases: ("Originate" | "Deliver" | "Own" | "Evolve")[];
   status: ContentStatus;
@@ -45,73 +49,80 @@ export const groups: Group[] = [
   {
     id: "land-developer", number: 1, name: "Land, Developer & Project Ownership", short: "Developers", cluster: "capital",
     controls: "Development rights, project control and the ownership structure that carries them.",
-    members: ["Landowners", "Property Developers", "Master Developers", "Development Companies", "Joint Venture Partners", "Special Purpose Vehicles", "Owner-side Development Managers"],
+    members: ["Landowners", "Property Developers", "Master Developers / Master Community Developers", "Development Companies", "Joint Venture Partners", "Special Purpose Vehicles (SPVs)", "Owner-side Development Managers"],
     phases: ["Originate", "Deliver", "Own"], status: "Validated",
   },
   {
     id: "investors", number: 2, name: "Investors & Capital Providers", short: "Capital", cluster: "capital",
     controls: "The capital that enters the project and the conditions attached to it.",
-    members: ["Equity Investors", "Institutional Investors", "Family Offices", "Investment Funds", "Project Finance Lenders", "Mortgage Lenders", "Islamic Finance Providers"],
+    boundary: "This group is who PROVIDES capital. A project-finance bank and a mortgage lender belong here; the same institution acting as escrow trustee belongs to group 06.",
+    members: ["Equity Investors", "Institutional Investors", "Private Investors", "Family Offices", "Investment Funds", "Banks / Project Finance Lenders", "Mortgage Lenders", "Islamic Finance Providers", "Other Capital Providers"],
     phases: ["Originate", "Deliver", "Evolve"], status: "Validated",
   },
   {
     id: "authorities", number: 3, name: "Government, Regulatory & Registration Authorities", short: "Authorities", cluster: "rail",
     controls: "Permission. Every approval, registration and licence that gates a project.",
-    members: ["Federal Authorities", "Emirate Authorities", "Municipalities", "Real Estate Regulators", "Planning Authorities", "Building & Construction Authorities", "Land Registration Authorities", "Economic Licensing Authorities", "Free-zone Regulators", "Registration Trustee Offices"],
+    boundary: "Includes jurisdiction-specific authorities, not only emirate-level ones: DIFC, DDA, Trakhees / PCFC and DMCC each operate their own approval regime.",
+    members: ["Federal Government Authorities", "Emirate-level Authorities", "Municipalities", "Real Estate Regulators", "Planning Authorities", "Building & Construction Authorities", "Land & Property Registration Authorities", "Economic & Business Licensing Authorities", "Free-zone Regulators / Authorities", "Registration Trustee Offices", "Other Regulatory Bodies"],
     phases: ["Originate", "Deliver", "Own", "Evolve"], status: "Validated",
   },
   {
     id: "consultants", number: 4, name: "Design, Engineering & Technical Consultants", short: "Consultants", cluster: "delivery",
     controls: "The design intent, the technical submissions and the professional liability behind them.",
-    members: ["Architects", "Master Planners", "Urban Designers", "Structural Engineers", "MEP Consultants", "Civil Engineers", "Geotechnical Consultants", "Surveyors", "Quantity Surveyors", "Environmental Consultants", "Project Management Consultants"],
+    boundary: "External technical and consultant-side delivery expertise. Independent inspection, testing and certification sit here rather than with legal assurance, because what they produce is a technical finding.",
+    members: ["Architects", "Master Planners", "Urban Designers", "Structural Engineers", "MEP Consultants", "Civil Engineers", "Geotechnical Consultants", "Surveyors", "Quantity Surveyors", "Environmental Consultants", "Specialist Consultants", "Consultant-side Project Management Consultants", "Third-party Inspection Bodies", "Testing Laboratories", "Certification Bodies", "Building Completion / Inspection Specialists", "Civil Defence-related Technical & Approval Specialists"],
     phases: ["Originate", "Deliver"], status: "Validated",
   },
   {
     id: "contractors", number: 5, name: "Contractors & Construction Supply Chain", short: "Contractors", cluster: "delivery",
     controls: "Physical delivery, programme and the supply chain that determines both.",
-    members: ["Main Contractors", "Subcontractors", "Specialist Contractors", "Suppliers", "Manufacturers", "Material Vendors", "Equipment Providers"],
+    members: ["Main Contractors", "Subcontractors", "Specialist Contractors", "Suppliers", "Manufacturers", "Material Vendors", "Equipment Providers", "Construction Service Providers"],
     phases: ["Deliver"], status: "Validated",
   },
   {
     id: "escrow-financial", number: 6, name: "Banking, Escrow & Financial Operations", short: "Escrow", cluster: "assurance",
     controls: "Custody and control of project money — distinct from those who provide it.",
-    members: ["Escrow Trustee Banks", "Escrow Agents", "Payment Service Providers", "Accountants", "Project Auditors", "Fund Administrators"],
+    boundary: "This group OPERATES, controls, records, administers or verifies project money. The distinction decides where a bank sits: project finance and mortgage lending are group 02, escrow trusteeship is here.",
+    members: ["Escrow Trustee Banks / Escrow Agents", "Payment Service Providers", "Accountants", "Auditors", "Fund Administrators", "Financial Operations Providers"],
     phases: ["Deliver", "Own"], status: "Validated",
   },
   {
-    id: "legal-assurance", number: 7, name: "Legal, Compliance, Insurance & Assurance", short: "Assurance", cluster: "assurance",
+    id: "legal-assurance", number: 7, name: "Legal, Compliance, Insurance & Professional Assurance", short: "Assurance", cluster: "assurance",
     controls: "Enforceable obligations, transferred risk and independent verification.",
-    members: ["Law Firms", "Legal Advisors", "Corporate Service Providers", "Compliance Professionals", "Insurance Providers", "Risk Advisors", "Due-Diligence Providers", "Notaries", "Third-party Inspection Bodies", "Testing Laboratories", "Certification Bodies"],
+    boundary: "Insurance here covers the UAE project and property lines specifically: Contractor's All Risks (CAR), decennial liability, professional indemnity and related project cover.",
+    members: ["Law Firms", "Legal Advisors", "Corporate Service Providers", "Compliance Professionals", "Insurance Providers", "Insurance Brokers / Advisors", "Risk Advisors", "Due-Diligence Providers", "Notaries / Attestation Services"],
     phases: ["Originate", "Deliver", "Own", "Evolve"], status: "Validated",
   },
   {
     id: "sales-brokerage", number: 8, name: "Real Estate Sales, Marketing & Brokerage", short: "Brokerage", cluster: "market",
     controls: "Demand, representation and the permitted marketing of inventory.",
-    members: ["Real Estate Brokers", "Brokerage Companies", "Sales Agents", "Mortgage Brokers", "Marketing Agencies", "Property Portals", "Lead Generation Providers"],
+    members: ["Real Estate Brokers", "Brokerage Companies", "Sales Agents", "Mortgage Brokers / Finance Intermediaries", "Marketing Agencies", "Property Portals", "Lead Generation Providers", "Sales & CRM Service Providers"],
     phases: ["Deliver", "Evolve"], status: "Validated",
   },
   {
     id: "customers", number: 9, name: "Customers, Buyers & End Users", short: "Customers", cluster: "market",
     controls: "Purchase commitment, occupation and the ownership that outlives the project.",
+    boundary: "The Owners' Association itself belongs here, as the collective of owners. The regulated company that manages it belongs to group 11.",
     members: ["Individual Buyers", "Investor Buyers", "Institutional Buyers", "End Users", "Property Owners", "Tenants", "Owners' Associations"],
     phases: ["Deliver", "Own", "Evolve"], status: "Validated",
   },
   {
     id: "utilities", number: 10, name: "Utilities & Infrastructure Providers", short: "Utilities", cluster: "market",
     controls: "Connection, capacity and the servicing without which nothing can be occupied.",
-    members: ["Electricity Providers", "Water Providers", "District Cooling Providers", "Telecommunications Providers", "Gas Providers", "Waste Management", "Roads & Transport Authorities"],
+    members: ["Electricity Providers", "Water Providers", "District Cooling Providers", "Telecommunications Providers", "Gas Providers", "Waste Management", "Roads & Transport Authorities", "Infrastructure Providers"],
     phases: ["Deliver", "Own"], status: "Validated",
   },
   {
-    id: "operations", number: 11, name: "Property & Community Operators", short: "Operations", cluster: "market",
+    id: "operations", number: 11, name: "Handover, Property & Facility Operations", short: "Operations", cluster: "market",
     controls: "The asset after handover — condition, cost, community and long-term performance.",
-    members: ["Property Managers", "Facility Managers", "Community Managers", "Maintenance Companies", "Security Providers", "FM Contractors", "Handover Specialists", "Asset Managers", "OA Management Companies"],
+    boundary: "The regulated management function, not the ownership collective: a Mollak-registered Owners' Association management company sits here, while the Association itself sits in group 09.",
+    members: ["Property Managers", "Facility Managers", "Community Managers", "Maintenance Companies", "Security Providers", "Cleaning Providers", "FM Contractors", "Handover Specialists", "Asset Managers", "Mollak-registered Owners' Association Management Companies"],
     phases: ["Own", "Evolve"], status: "Validated",
   },
   {
     id: "enablers", number: 12, name: "Supporting & Specialised Ecosystem", short: "Enablers", cluster: "enablers",
     controls: "Valuation, evidence, technology and expertise that other groups depend on at specific gates.",
-    members: ["Property Valuers", "Real Estate Researchers", "Market Intelligence Providers", "Technology Providers", "PropTech Companies", "Data Providers", "ESG Consultants", "Dispute Resolution Professionals", "Training & Certification Bodies", "Residency Service Providers"],
+    members: ["Property Valuers", "Real Estate Researchers", "Market Intelligence Providers", "Technology Providers", "PropTech Companies", "Data Providers", "ESG & Sustainability Consultants", "Dispute Resolution Professionals", "Training & Certification Bodies", "Property-linked Residency & Visa Service Providers", "Other Specialist Service Providers"],
     phases: ["Originate", "Deliver", "Own", "Evolve"], status: "Validated",
   },
 ];

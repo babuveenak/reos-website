@@ -319,6 +319,7 @@ const en = {
   common: {
     integrityLabel: "Before you act on this",
     skipToContent: "Skip to content",
+    boundary: "Where the line sits",
     translationNotice: "The Arabic version is a working translation and is being reviewed by native speakers. Where the two differ, the English text is authoritative.",
   },
 };
@@ -620,6 +621,7 @@ const ar: Dict = {
   common: {
     integrityLabel: "قبل أن تتصرف بناءً على هذا",
     skipToContent: "تخطَّ إلى المحتوى",
+    boundary: "حيث يقع الحد",
     translationNotice: "النسخة العربية ترجمة عمل قيد المراجعة من متحدثين أصليين. وعند الاختلاف، يُعتد بالنص الإنجليزي.",
   },
 };

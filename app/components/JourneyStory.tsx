@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
-import { getGroups } from "../i18n/content";
-import { modules } from "../data/ecosystem";
+import { getGroups, getModules } from "../i18n/content";
 import { SectionIntro, StatusTag } from "./SiteShell";
 
 /* ------------------------------------------------------------------ *
@@ -72,6 +71,7 @@ export function JourneyStakeholders({ locale = DEFAULT_LOCALE }: { locale?: Loca
           <div>
             <b>{g.name}</b>
             <small>{g.controls}</small>
+            {g.boundary && <small className="jl-rail-boundary">{g.boundary}</small>}
           </div>
           <StatusTag status={g.status} locale={locale} />
         </div>
@@ -112,6 +112,9 @@ export function JourneyIntelligence({ locale = DEFAULT_LOCALE }: { locale?: Loca
 
 export function JourneyPlatformPreview({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const t = getDict(locale).journey.landing.platform;
+  /* Through the i18n getter, not the raw data file: the Arabic overlay for
+     modules exists and importing `modules` directly rendered English. */
+  const modules = getModules(locale);
   return (
     <section className="section-pad jl-platform">
       <SectionIntro
