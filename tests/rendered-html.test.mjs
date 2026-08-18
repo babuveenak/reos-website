@@ -18,6 +18,31 @@ test("renders the REOS homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
+test("the journey landing projects the canonical stages rather than listing its own", async () => {
+  // The seven hero markers are an editorial view of the twelve canonical
+  // stages. Each must still resolve to a real stage id, or the page has
+  // quietly become a competing lifecycle — the thing rule 1 forbids.
+  const html = await (await render("/journey")).text();
+  for (const id of ["land-ownership", "planning-feasibility", "construction-delivery",
+                    "marketing-sales", "registration-compliance", "occupancy-community",
+                    "investment-resale"]) {
+    assert.match(html, new RegExp(`href="/journey/${id}"`), `marker for ${id} lost its canonical stage`);
+  }
+  // And all twelve remain reachable from the page, so the projection never
+  // replaces the spine it is drawn from.
+  assert.match(html, /href="\/journey\/finance-escrow"/);
+  assert.match(html, /href="\/journey\/handover-snagging"/);
+});
+
+test("the journey landing states concurrency instead of implying a queue", async () => {
+  // Construction and Sales run together in UAE off-plan. The landing page
+  // draws them on parallel strands and must say so in words too.
+  const en = await (await render("/journey")).text();
+  assert.match(en, /These run together/i);
+  const ar = await (await render("/ar/journey")).text();
+  assert.match(ar, /يجري|بالتوازي/, "concurrency must be stated in Arabic too");
+});
+
 test("the demo CTA appears only on the platform page", async () => {
   // The site is educational; a sales CTA in the page furniture undercuts that.
   // It belongs where someone has actually asked about the product.

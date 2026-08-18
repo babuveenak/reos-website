@@ -1,8 +1,14 @@
 import { getStages } from "../i18n/content";
-import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
+import { getDict } from "../i18n/dictionary";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JourneyMap, TrackLegend } from "../components/Journey";
+import { JourneyHero, JourneyMoments } from "../components/JourneyHero";
+import {
+  JourneyProblemSection, JourneyStakeholders, JourneyIntelligence,
+  JourneyPlatformPreview, JourneyFinalCTA,
+} from "../components/JourneyStory";
 import { Page, SectionIntro } from "../components/SiteShell";
 import { groupById } from "../data/ecosystem";
 
@@ -12,32 +18,42 @@ export const metadata: Metadata = {
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
-  return <Page className="inner-page" locale={locale}>
-    <section className="inner-hero">
-      <span className="eyebrow">THE PROPERTY JOURNEY</span>
-      <h1>The UAE property journey,<br /><em>mapped end to end.</em></h1>
-      <p>Property does not move through one process. It moves through twelve connected stages, several of which run at the same time, each involving different participants, permissions and evidence. This is the full map.</p>
-    </section>
+  const d = getDict(locale);
+  const t = d.journey.landing;
 
-    <section className="section-pad">
+  return <Page className="inner-page jl-page" locale={locale}>
+    <JourneyHero locale={locale} />
+    <JourneyMoments locale={locale} />
+
+    {/* 1 · the problem */}
+    <JourneyProblemSection locale={locale} />
+
+    {/* 2 · the spine — the canonical twelve, not a second version of them */}
+    <section className="section-pad" id="the-map">
       <SectionIntro
-        label="INTERACTIVE MAP"
-        title={<>Select a stage.<br /><em>See what it involves.</em></>}
-        copy="Stages are numbered for reference, not to suggest a strict queue. Where two stages genuinely run together, the map says so."
+        label={t.connect.label}
+        title={<>{t.connect.title}<br /><em>{t.connect.titleEm}</em></>}
+        copy={t.connect.copy}
       />
       <JourneyMap locale={locale} />
       <TrackLegend locale={locale} />
     </section>
 
+    {/* 3 · who is connected */}
+    <JourneyStakeholders locale={locale} />
+
+    {/* 4 · visibility becomes intelligence */}
+    <JourneyIntelligence locale={locale} />
+
     <section className="section-pad stage-index-band">
       <SectionIntro
-        label="ALL TWELVE STAGES"
+        label={d.journey.allStages.replace("{n}", "12").toUpperCase()}
         title={<>Every stage,<br /><em>in full.</em></>}
         copy="Each stage page sets out what happens, who is involved, the documents in play, the risks that recur and what jurisdiction changes."
       />
       <div className="stage-index">
         {getStages(locale).map((stage) => (
-          <Link key={stage.id} href={`/journey/${stage.id}`} className="stage-index-card">
+          <Link key={stage.id} href={localePath(locale, `/journey/${stage.id}`)} className="stage-index-card">
             <header>
               <span>{String(stage.number).padStart(2, "0")}</span>
               <em>{stage.track}</em>
@@ -52,10 +68,16 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
+    {/* 5 · and only now, the product */}
+    <JourneyPlatformPreview locale={locale} />
+
     <section className="integrity-strip">
       <b>Before you act on this</b>
       <p>These pages describe how UAE property development generally works. Exact requirements, fees, timelines and eligibility depend on the emirate, the zone, the asset and the parties involved — and they change. Confirm your specific case with the relevant authority or a qualified adviser before committing.</p>
     </section>
+
+    {/* 6 · close */}
+    <JourneyFinalCTA locale={locale} />
   </Page>;
 }
 
