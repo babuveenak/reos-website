@@ -258,6 +258,63 @@ test("every suggested question the site offers is answerable", opts, async () =>
   }
 });
 
+/* ── the composer bar behaves like a messaging composer ──────────────────── */
+
+test("send activates only when there is something to commit", opts, async () => {
+  await withPage("/assistant", async (page) => {
+    const send = page.locator(".assistant-full .composer-send");
+    assert.equal(await send.isDisabled(), true, "empty field: send must be inactive");
+    await page.locator(".assistant-full textarea").fill("Who are the stakeholders involved?");
+    assert.equal(await send.isDisabled(), false, "typed: send must activate");
+    await page.locator(".assistant-full textarea").fill("   ");
+    assert.equal(await send.isDisabled(), true, "whitespace only: send must stay inactive");
+  });
+});
+
+test("the field grows with its content and stops at a cap", opts, async () => {
+  await withPage("/assistant", async (page) => {
+    const height = () => page.evaluate(() =>
+      Math.round(document.querySelector(".assistant-full textarea").getBoundingClientRect().height));
+    await page.locator(".assistant-full textarea").fill("one line");
+    const one = await height();
+    await page.locator(".assistant-full textarea").fill("a\nb\nc\nd");
+    const four = await height();
+    assert.ok(four > one, `expected growth, got ${one} → ${four}`);
+    await page.locator(".assistant-full textarea").fill(Array.from({ length: 40 }, (_, i) => `line ${i}`).join("\n"));
+    const many = await height();
+    assert.ok(many <= 180, `the field must cap rather than grow forever, got ${many}`);
+  });
+});
+
+test("the mic becomes a stop control while listening", opts, async () => {
+  await withPage("/assistant", async (page) => {
+    const mic = page.locator(".assistant-full .assistant-mic");
+    assert.equal(await mic.locator("rect").count(), 0, "idle: should show a microphone");
+    await mic.click();
+    await page.waitForFunction(() =>
+      document.querySelector(".assistant-full").dataset.voiceState === "listening");
+    assert.equal(await mic.locator("rect").count(), 1, "listening: should show a stop square");
+    assert.equal(await mic.getAttribute("aria-pressed"), "true");
+    // Send acts on the live transcript rather than sitting inert.
+    await page.waitForFunction(() =>
+      !document.querySelector(".assistant-full .composer-send").disabled, null, { timeout: 5000 });
+  });
+});
+
+test("Enter sends and Shift+Enter makes a newline", opts, async () => {
+  await withPage("/assistant", async (page) => {
+    const field = page.locator(".assistant-full textarea");
+    await field.fill("first");
+    await field.press("Shift+Enter");
+    await field.type("second");
+    assert.match(await field.inputValue(), /first\nsecond/, "Shift+Enter must not send");
+    await field.fill("Who are the stakeholders involved?");
+    await field.press("Enter");
+    await page.waitForSelector(".assistant-log .ai-answer", { timeout: 8000 });
+    assert.equal(await field.inputValue(), "", "sending clears the field");
+  });
+});
+
 /* ── the REOS wordmark must never mirror ─────────────────────────────────── */
 
 test("the dock wordmark reads REOS in both directions", opts, async () => {

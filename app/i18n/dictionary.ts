@@ -37,7 +37,11 @@ const en = {
     voiceCta: "Ask by voice",
     voiceStop: "Stop listening",
     voiceCancel: "Cancel",
-    typePlaceholder: "Type your question…",
+    typePlaceholder: "Ask anything…",
+    attach: "Attach a document",
+    /* Honest rather than silent: there is no document storage yet, so the
+       control says what it is waiting on instead of appearing broken. */
+    attachNote: "Attachments need the document repository, which arrives with the knowledge base. The control is here so the flow is visible — nothing is uploaded yet.",
     inputLabel: "Your question",
     send: "Send",
     suggestionsLabel: "Try one of these",
@@ -250,7 +254,9 @@ const ar: Dict = {
     voiceCta: "اسأل بالصوت",
     voiceStop: "أوقف الاستماع",
     voiceCancel: "إلغاء",
-    typePlaceholder: "اكتب سؤالك…",
+    typePlaceholder: "اسأل عن أي شيء…",
+    attach: "إرفاق مستند",
+    attachNote: "يحتاج الإرفاق إلى مستودع المستندات الذي يأتي مع قاعدة المعرفة. وهذا الزر موجود لبيان المسار — ولا يُرفع أي شيء بعد.",
     inputLabel: "سؤالك",
     send: "إرسال",
     suggestionsLabel: "جرّب أحد هذه الأسئلة",

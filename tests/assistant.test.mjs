@@ -38,9 +38,10 @@ test("the homepage leads with the assistant", async () => {
   assert.match(html, /Ask about the property journey/i);
   assert.match(html, /id="ask"/, "the assistant band needs a stable anchor");
   assert.match(html, /class="assistant assistant-compact"/);
-  // Both input modes are offered.
-  assert.match(html, /Type your question/);
-  assert.match(html, /Ask by voice/i);
+  // Both input modes are offered, as icon controls in one bar.
+  assert.match(html, /placeholder="Ask anything…"/);
+  assert.match(html, /aria-label="Ask by voice"/i);
+  assert.match(html, /class="composer-bar"/);
 });
 
 test("the assistant has its own route, in both locales", async () => {
@@ -166,7 +167,7 @@ test("the Arabic assistant is Arabic, right-to-left", async () => {
   assert.match(html, /dir="rtl"/);
   assert.ok(arabicCount(html) > 800, `expected Arabic content, found ${arabicCount(html)} characters`);
   // Interface strings, not just content.
-  assert.match(html, /اكتب سؤالك/, "the composer placeholder must be Arabic");
+  assert.match(html, /اسأل عن أي شيء/, "the composer placeholder must be Arabic");
   assert.match(html, /اسأل بالصوت/, "the voice button must be Arabic");
   assert.match(html, /المصادر/, "the sources heading must be Arabic");
 });
@@ -200,6 +201,36 @@ test("only routes with published journeys are suggested", async () => {
   // `selling` has no persona entry yet; suggesting it would produce a question
   // the assistant cannot answer.
   assert.doesNotMatch(html, /I am selling or brokering property — where do I start\?/);
+});
+
+/* ── the composer bar ────────────────────────────────────────────────────── */
+
+test("the composer is one bar: attach, field, mic, send", async () => {
+  const html = await text("/assistant");
+  const bar = html.slice(html.indexOf('class="composer-bar"'), html.indexOf("</form>"));
+  assert.match(bar, /class="composer-icon composer-attach/, "missing the attachment control");
+  assert.match(bar, /<textarea/, "missing the text field");
+  assert.match(bar, /class="composer-icon assistant-mic/, "missing the mic");
+  assert.match(bar, /class="composer-send"/, "missing the send control");
+  // Icon-only: every control still carries a name for assistive technology.
+  for (const label of ["Attach a document", "Ask by voice", "Send"]) {
+    assert.ok(bar.includes(`aria-label="${label}"`), `control not labelled: ${label}`);
+  }
+});
+
+test("send starts inactive and the field starts one row", async () => {
+  const html = await text("/assistant");
+  assert.match(html, /class="composer-send" disabled/, "send must be inactive with an empty field");
+  assert.match(html, /rows="1"/, "the field should start at one row and grow");
+});
+
+test("the attachment control says what it is waiting for", async () => {
+  // It cannot upload anything yet — no document repository. Better to say so
+  // than to present a control that silently does nothing.
+  const html = await text("/assistant");
+  assert.match(html, /aria-expanded="false"[^>]*aria-label="Attach a document"|aria-label="Attach a document"/);
+  const ar = await text("/ar/assistant");
+  assert.match(ar, /aria-label="إرفاق مستند"/, "the attachment control must be labelled in Arabic");
 });
 
 /* ── the REOS dock ───────────────────────────────────────────────────────── */

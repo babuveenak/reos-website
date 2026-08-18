@@ -38,14 +38,47 @@ type Props = {
   initialStageId?: string | null;
 };
 
-/** Inline SVG rather than an emoji: matches the icon convention in
- *  PreferencesControls and does not depend on an emoji font being present. */
+/* Inline SVG throughout, matching the icon convention already used in
+   PreferencesControls and Logo — no emoji font dependency, and they inherit
+   currentColor so the theme tokens drive them. */
+
+const svg = {
+  width: 18, height: 18, viewBox: "0 0 24 24", "aria-hidden": true as const,
+  fill: "none", stroke: "currentColor", strokeWidth: 1.7,
+  strokeLinecap: "round" as const, strokeLinejoin: "round" as const,
+};
+
 function MicIcon() {
   return (
-    <svg className="mic-icon" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"
-      fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+    <svg className="mic-icon" {...svg}>
       <path d="M12 3.5a2.6 2.6 0 0 1 2.6 2.6v5.2a2.6 2.6 0 0 1-5.2 0V6.1A2.6 2.6 0 0 1 12 3.5Z" />
       <path d="M6.4 11a5.6 5.6 0 0 0 11.2 0M12 16.6v3.9" />
+    </svg>
+  );
+}
+
+/** Shown in place of the mic while listening — the same affordance WhatsApp and
+ *  ChatGPT use, so the control that started recording also stops it. */
+function StopIcon() {
+  return (
+    <svg {...svg} fill="currentColor" stroke="none">
+      <rect x="6" y="6" width="12" height="12" rx="2.6" />
+    </svg>
+  );
+}
+
+function PaperclipIcon() {
+  return (
+    <svg {...svg}>
+      <path d="M17.2 7.5l-7.6 7.6a2.3 2.3 0 0 0 3.2 3.2l7.1-7.1a4.1 4.1 0 0 0-5.8-5.8l-7.4 7.4a5.9 5.9 0 0 0 8.4 8.4l4.2-4.2" />
+    </svg>
+  );
+}
+
+function SendIcon() {
+  return (
+    <svg {...svg} strokeWidth={2}>
+      <path d="M12 19.5V5.2M6.2 11l5.8-5.8 5.8 5.8" />
     </svg>
   );
 }
@@ -77,6 +110,7 @@ export function Assistant({ snapshot, locale = DEFAULT_LOCALE, variant = "compac
   const [voiceState, setVoiceState] = useState<VoiceState>("idle");
   const [partial, setPartial] = useState("");
   const [pickingPersona, setPickingPersona] = useState(false);
+  const [showAttachNote, setShowAttachNote] = useState(false);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const logRef = useRef<HTMLDivElement>(null);
@@ -138,6 +172,16 @@ export function Assistant({ snapshot, locale = DEFAULT_LOCALE, variant = "compac
     }
   }, [ai, d.error, locale]);
 
+  /* Grow the field with its content up to a cap, then let it scroll — the
+     behaviour every messaging composer has. `auto` first, so it shrinks back
+     when text is deleted. */
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 168)}px`;
+  }, [draft, partial]);
+
   /* Keep the newest turn in view inside the dock, whose panel scrolls on its
      own. Not done for the inline variants: there the page is the scroll
      container, and moving it under the reader on every turn is worse than
@@ -194,6 +238,9 @@ export function Assistant({ snapshot, locale = DEFAULT_LOCALE, variant = "compac
   const selectable = snapshot.routes.filter((r) => r.hasContent);
 
   const hasConversation = state.messages.length > 0;
+  /* Enabled whenever there is something visible to commit — the typed draft, or
+     the live transcript while the mic is open. */
+  const canSend = !pending && (listening ? partial.trim().length > 0 : draft.trim().length > 0);
 
   return (
     <div className={`assistant assistant-${variant}`} data-voice-state={displayVoiceState}>
@@ -255,64 +302,97 @@ export function Assistant({ snapshot, locale = DEFAULT_LOCALE, variant = "compac
 
       {error && <p className="assistant-error" role="alert">{error}</p>}
 
-      {/* ── composer ────────────────────────────────────────────────────── */}
+      {/* ── composer: one bar — attach · field · mic · send ─────────────── */}
       <form
         className="assistant-composer"
-        onSubmit={(event) => { event.preventDefault(); void send(draft); }}
+        onSubmit={(event) => {
+          event.preventDefault();
+          // While listening, committing means "stop hearing me and answer":
+          // stopListening emits `final`, which is what actually sends.
+          if (listening) { void voice.stopListening(); return; }
+          void send(draft);
+        }}
       >
-        <label className="assistant-field">
-          <span className="visually-hidden">{d.inputLabel}</span>
-          <textarea
-            ref={inputRef}
-            rows={variant === "full" ? 3 : 2}
-            value={listening && partial ? partial : draft}
-            // While listening the field mirrors the transcript, so it is
-            // read-only rather than accepting keystrokes it would discard.
-            readOnly={listening}
-            onChange={(event) => setDraft(event.target.value)}
-            onKeyDown={(event) => {
-              // Enter sends; Shift+Enter is a newline. Standard for a composer.
-              if (event.key === "Enter" && !event.shiftKey) {
-                event.preventDefault();
-                void send(draft);
-              }
-            }}
-            placeholder={d.typePlaceholder}
-            disabled={pending}
-          />
-        </label>
-
-        <div className="assistant-controls">
-          <button type="submit" className="button gold" disabled={pending || draft.trim().length === 0}>
-            {d.send}
+        <div className="composer-bar">
+          <button
+            type="button"
+            className={`composer-icon composer-attach${showAttachNote ? " is-active" : ""}`}
+            onClick={() => setShowAttachNote((v) => !v)}
+            aria-expanded={showAttachNote}
+            aria-label={d.attach}
+            title={d.attach}
+          >
+            <PaperclipIcon />
           </button>
+
+          <label className="composer-field">
+            <span className="visually-hidden">{d.inputLabel}</span>
+            <textarea
+              ref={inputRef}
+              rows={1}
+              value={listening && partial ? partial : draft}
+              /* While listening the field mirrors the transcript, so it is
+                 read-only rather than accepting keystrokes it would discard. */
+              readOnly={listening}
+              onChange={(event) => setDraft(event.target.value)}
+              onKeyDown={(event) => {
+                // Enter sends; Shift+Enter is a newline. Standard for a composer.
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  void send(draft);
+                }
+              }}
+              placeholder={d.typePlaceholder}
+              disabled={pending}
+            />
+          </label>
 
           <button
             type="button"
-            className={`button ghost assistant-mic${listening ? " is-listening" : ""}`}
+            className={`composer-icon assistant-mic${listening ? " is-listening" : ""}`}
             onClick={() => void toggleVoice()}
             aria-pressed={listening}
             aria-label={listening ? d.voiceStop : d.voiceCta}
+            title={listening ? d.voiceStop : d.voiceCta}
           >
-            <MicIcon /> {listening ? d.voiceStop : d.voiceCta}
+            {listening ? <StopIcon /> : <MicIcon />}
           </button>
 
-          {listening && (
-            <button type="button" className="ai-chip" onClick={() => voice.cancelListening()}>
-              {d.voiceCancel}
-            </button>
-          )}
-
-          {hasConversation && (
-            <button type="button" className="ai-chip" onClick={reset}>{d.clear}</button>
-          )}
+          <button
+            type="submit"
+            className="composer-send"
+            disabled={!canSend}
+            aria-label={d.send}
+            title={d.send}
+          >
+            <SendIcon />
+          </button>
         </div>
 
-        {/* Voice state is announced, not only animated. */}
-        <p className="assistant-voice-state" role="status">
+        {showAttachNote && (
+          <p className="composer-note" role="status">{d.attachNote}</p>
+        )}
+
+        {/* Voice state stays in the DOM so the live region is registered before
+            it has anything to announce; it is only shown once there is something
+            to say, which keeps the bar quiet at rest. */}
+        <p className={`assistant-voice-state${displayVoiceState === "idle" ? " is-idle" : ""}`} role="status">
           <span className={`assistant-pulse assistant-pulse-${displayVoiceState}`} aria-hidden="true" />
           {d.voiceState[displayVoiceState]}
         </p>
+
+        {(listening || hasConversation) && (
+          <div className="assistant-controls">
+            {listening && (
+              <button type="button" className="ai-chip" onClick={() => voice.cancelListening()}>
+                {d.voiceCancel}
+              </button>
+            )}
+            {hasConversation && (
+              <button type="button" className="ai-chip" onClick={reset}>{d.clear}</button>
+            )}
+          </div>
+        )}
       </form>
 
       {/* ── openings ────────────────────────────────────────────────────── */}
