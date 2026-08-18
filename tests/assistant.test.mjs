@@ -252,6 +252,24 @@ test("the dock is absent where it would be redundant", async () => {
   }
 });
 
+test("the floating mark still appears on the assistant page, as a way back", async () => {
+  // Withholding the panel is right — it would be a second transcript on a page
+  // that already holds one. Withholding the BUTTON was not: the mark vanished
+  // on navigation and nothing led back to the composer once it scrolled away.
+  for (const path of ["/assistant", "/ar/assistant"]) {
+    const html = await text(path);
+    assert.match(html, /class="dock-jump"/, `${path} lost the way back to the assistant`);
+    assert.doesNotMatch(html, /class="dock-panel"/, `${path} must not open a second conversation`);
+  }
+  // It is a labelled control, not a bare icon, in both languages.
+  assert.match(await text("/assistant"), /aria-label="Back to the assistant"/);
+  assert.match(await text("/ar/assistant"), /aria-label="العودة إلى المساعد"/);
+  // And it belongs only there — other pages get the real dock instead.
+  for (const path of ["/", "/journey", "/admin"]) {
+    assert.doesNotMatch(await text(path), /class="dock-jump"/, `${path} should use the dock, not the jump`);
+  }
+});
+
 test("the dock spells REOS in four separately animatable letters", async () => {
   const html = await text("/");
   // Four spans, not one string: the sequenced animation needs per-letter targets.
