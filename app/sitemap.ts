@@ -4,12 +4,14 @@ import { stages } from "./data/journey";
 import { personas } from "./data/personas";
 import { lifecycleStages, stakeholders } from "./data/reos";
 import { SITE_URL } from "./data/site";
+import { LOCALES, localePath } from "./i18n/config";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entry = (path: string, priority: number): MetadataRoute.Sitemap[number] =>
     ({ url: `${SITE_URL}${path}`, changeFrequency: "monthly", priority });
 
-  return [
+  // Every route is emitted for both locales so each language is crawlable.
+  const base = [
     entry("", 1),
     entry("/journey", 0.9),
     entry("/roles", 0.9),
@@ -28,4 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...stakeholders.map((s) => entry(`/stakeholders/${s.id}`, 0.7)),
     ...journeys.map((j) => entry(`/journeys/${j.slug}`, 0.5)),
   ];
+  return LOCALES.flatMap((l) =>
+    base.map((e) => ({ ...e, url: `${SITE_URL}${localePath(l, new URL(e.url).pathname)}` })),
+  );
 }

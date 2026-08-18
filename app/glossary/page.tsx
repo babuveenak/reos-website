@@ -1,17 +1,17 @@
+import { getTerms, getStages } from "../i18n/content";
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro } from "../components/SiteShell";
-import { terms } from "../data/glossary";
-import { stages } from "../data/journey";
 
 export const metadata: Metadata = {
   title: "UAE Property Terms Explained | REOS Glossary",
   description: "Plain-language definitions of the UAE property terms that appear across the journey — escrow, off-plan, snagging, service charge, NOC, SPV and more.",
 };
 
-export default function GlossaryPage() {
-  const sorted = [...terms].sort((a, b) => a.term.localeCompare(b.term));
-  return <Page className="inner-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const sorted = [...getTerms(locale)].sort((a, b) => a.term.localeCompare(b.term));
+  return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
       <span className="eyebrow">GLOSSARY</span>
       <h1>The terms,<br /><em>in plain language.</em></h1>
@@ -48,7 +48,7 @@ export default function GlossaryPage() {
         copy="A definition tells you what a word means. The stage tells you why it matters and who it involves."
       />
       <div className="stage-index">
-        {stages.slice(0, 6).map((stage) => (
+        {getStages(locale).slice(0, 6).map((stage) => (
           <Link key={stage.id} href={`/journey/${stage.id}`} className="stage-index-card">
             <header><span>{String(stage.number).padStart(2, "0")}</span><em>{stage.track}</em></header>
             <h3>{stage.name}</h3>
@@ -63,4 +63,8 @@ export default function GlossaryPage() {
       <p>These definitions describe general market practice so you can keep reading. They are not legal definitions, and several terms carry a regulated meaning that differs by emirate. Confirm the meaning that applies to your case with the relevant authority or a qualified adviser.</p>
     </section>
   </Page>;
+}
+
+export default function GlossaryPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

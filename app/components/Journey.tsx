@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { stages, tracks, type Stage } from "../data/journey";
-import { personas } from "../data/personas";
-import { groupById } from "../data/ecosystem";
+import { type Stage } from "../data/journey";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
+import { getDict, fill } from "../i18n/dictionary";
+import { getStages, getTracks, getPersonas, getGroups } from "../i18n/content";
 
 /* ------------------------------------------------------------------ *
  * HERO RIBBON
@@ -21,7 +22,7 @@ const H = 470;
  * climbs from an empty plot at the lower left to an owned, occupied,
  * income-producing asset at the upper right.
  */
-function nodePoints() {
+function nodePoints(stages: Stage[]) {
   return stages.map((stage, i) => {
     const t = i / (stages.length - 1);
     const x = 74 + t * (W - 148);
@@ -39,15 +40,17 @@ function curvePath(pts: { x: number; y: number }[]) {
   }, "");
 }
 
-export function JourneyRibbon() {
-  const pts = nodePoints();
+export function JourneyRibbon({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const stages = getStages(locale);
+  const pts = nodePoints(stages);
   const path = curvePath(pts);
   const [active, setActive] = useState<number | null>(null);
   const shown = active === null ? null : pts[active];
 
   return (
     <figure className="ribbon">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="The property journey from land to living, in twelve stages">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${d.home.h1} ${d.home.h1em}`}>
         <defs>
           <linearGradient id="ribbon-line" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="var(--accent)" stopOpacity=".25" />
@@ -89,7 +92,7 @@ export function JourneyRibbon() {
       <figcaption aria-live="polite">
         {shown
           ? <><b>{String(shown.stage.number).padStart(2, "0")} {shown.stage.name}</b><span>{shown.stage.summary}</span></>
-          : <><b>From land to living</b><span>Twelve connected stages, from an empty plot to a property that is owned, occupied and eventually sold again.</span></>}
+          : <><b>{d.home.h1em}</b><span>{d.home.journeyCopy}</span></>}
       </figcaption>
     </figure>
   );
@@ -102,25 +105,28 @@ export function JourneyRibbon() {
 /** The four routes most visitors need; the rest are professional roles. */
 const PRIMARY = ["buying", "investing", "developing", "new-to-uae"];
 
-function Tile({ slug, index }: { slug: string; index: number }) {
-  const persona = personas.find((p) => p.slug === slug)!;
+function Tile({ slug, index, locale }: { slug: string; index: number; locale: Locale }) {
+  const d = getDict(locale);
+  const persona = getPersonas(locale).find((p) => p.slug === slug)!;
   return (
-    <Link href={`/roles/${persona.slug}`} className="persona-tile">
+    <Link href={localePath(locale, `/roles/${persona.slug}`)} className="persona-tile">
       <span className="tile-num">{String(index + 1).padStart(2, "0")}</span>
       <b>{persona.card}</b>
       <p>{persona.promise}</p>
-      <i>{persona.name} journey →</i>
+      <i>{persona.name} {d.roles.journeySuffix} →</i>
     </Link>
   );
 }
 
-export function PersonaSelector() {
-  const primary = personas.filter((p) => PRIMARY.includes(p.slug));
-  const secondary = personas.filter((p) => !PRIMARY.includes(p.slug));
+export function PersonaSelector({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const all = getPersonas(locale);
+  const primary = all.filter((p) => PRIMARY.includes(p.slug));
+  const secondary = all.filter((p) => !PRIMARY.includes(p.slug));
   return (
     <>
       <div className="persona-select">
-        {primary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i} />)}
+        {primary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i} locale={locale} />)}
       </div>
 
       {/* Desktop shows all eight at once; mobile collapses the professional
@@ -130,11 +136,11 @@ export function PersonaSelector() {
         if (el && !el.dataset.init) { el.dataset.init = "1"; el.open = window.innerWidth > 720; }
       }}>
         <summary>
-          <b>Professional routes</b>
-          <span>{secondary.length} more</span>
+          <b>{d.roles.professional}</b>
+          <span>{fill(d.roles.more, { n: secondary.length })}</span>
         </summary>
         <div className="persona-select">
-          {secondary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i + primary.length} />)}
+          {secondary.map((p, i) => <Tile key={p.slug} slug={p.slug} index={i + primary.length} locale={locale} />)}
         </div>
       </details>
     </>
@@ -143,14 +149,15 @@ export function PersonaSelector() {
 
 /** Mobile-only quick pick, placed directly under the hero so the first
  *  personalised decision is one tap away rather than a screen down. */
-export function PersonaQuickPick() {
+export function PersonaQuickPick({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale);
   return (
-    <nav className="persona-quick" aria-label="Quick role selection">
-      <b>I am&hellip;</b>
+    <nav className="persona-quick" aria-label={d.journey.quickPick}>
+      <b>{d.journey.quickPick}</b>
       <div>
         {PRIMARY.map((slug) => {
-          const p = personas.find((x) => x.slug === slug)!;
-          return <Link key={slug} href={`/roles/${slug}`}>{p.name}</Link>;
+          const p = getPersonas(locale).find((x) => x.slug === slug)!;
+          return <Link key={slug} href={localePath(locale, `/roles/${slug}`)}>{p.name}</Link>;
         })}
       </div>
     </nav>
@@ -163,17 +170,20 @@ export function PersonaQuickPick() {
  * them would teach a process that does not exist in off-plan development.
  * ------------------------------------------------------------------ */
 
-export function JourneyMap({ compact = false }: { compact?: boolean }) {
+export function JourneyMap({ compact = false, locale = DEFAULT_LOCALE }: { compact?: boolean; locale?: Locale }) {
+  const d = getDict(locale);
+  const stages = getStages(locale);
+  const groups = getGroups(locale);
   const [active, setActive] = useState<Stage>(stages[0]);
   const parallel = active.runsWith.map((id) => stages.find((s) => s.id === id)).filter(Boolean) as Stage[];
 
   return (
     <div className={`journey-map ${compact ? "is-compact" : ""}`}>
       <p className="rail-cue" aria-hidden="true">
-        <span>Swipe to explore all {stages.length} stages</span>
+        <span>{fill(d.journey.swipeCue, { n: stages.length })}</span>
         <b>{String(active.number).padStart(2, "0")} / {stages.length}</b>
       </p>
-      <ol className="map-rail-stages" aria-label="Twelve stages of the property journey">
+      <ol className="map-rail-stages" aria-label={d.home.journeyTitle}>
         {stages.map((stage) => (
           <li key={stage.id}>
             <button
@@ -184,7 +194,7 @@ export function JourneyMap({ compact = false }: { compact?: boolean }) {
             >
               <i>{String(stage.number).padStart(2, "0")}</i>
               <span>{stage.name}</span>
-              <em>{stage.track}</em>
+              <em>{getTracks(locale).find((t) => t.id === stage.track)?.label}</em>
             </button>
           </li>
         ))}
@@ -192,32 +202,32 @@ export function JourneyMap({ compact = false }: { compact?: boolean }) {
 
       <article className="map-stage-detail" aria-live="polite">
         <header>
-          <span className="stage-eyebrow">STAGE {String(active.number).padStart(2, "0")} · {active.track.toUpperCase()}</span>
+          <span className="stage-eyebrow">{d.journey.stage} {String(active.number).padStart(2, "0")} · {getTracks(locale).find((t) => t.id === active.track)?.label}</span>
           <h3>{active.name}</h3>
           <p className="stage-summary">{active.summary}</p>
         </header>
 
         {parallel.length > 0 && (
           <p className="stage-parallel">
-            <b>Runs at the same time as</b>
+            <b>{d.journey.runsWith}</b>
             {parallel.map((s) => <span key={s.id}>{s.name}</span>)}
           </p>
         )}
 
         <div className="stage-cols">
           <div>
-            <small>What happens</small>
+            <small>{d.journey.whatHappens}</small>
             <ul>{active.whatHappens.slice(0, compact ? 2 : 4).map((x) => <li key={x}>{x}</li>)}</ul>
           </div>
           <div>
-            <small>Who is involved</small>
-            <div className="chip-row">{active.groupIds.map((id) => <span key={id}>{groupById[id]?.short}</span>)}</div>
-            <small>Documents</small>
+            <small>{d.journey.whoInvolved}</small>
+            <div className="chip-row">{active.groupIds.map((id) => <span key={id}>{groups.find((g) => g.id === id)?.short}</span>)}</div>
+            <small>{d.journey.documents}</small>
             <div className="chip-row">{active.documents.slice(0, 3).map((d) => <span key={d}>{d}</span>)}</div>
           </div>
         </div>
 
-        <Link className="text-link" href={`/journey/${active.id}`}>Open this stage in full <span>→</span></Link>
+        <Link className="text-link" href={localePath(locale, `/journey/${active.id}`)}>{d.journey.openStage} <span>→</span></Link>
       </article>
     </div>
   );
@@ -227,10 +237,10 @@ export function JourneyMap({ compact = false }: { compact?: boolean }) {
  * TRACK LEGEND — explains that the journey has concurrent lanes.
  * ------------------------------------------------------------------ */
 
-export function TrackLegend() {
+export function TrackLegend({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   return (
     <ul className="track-legend">
-      {tracks.map((track) => (
+      {getTracks(locale).map((track) => (
         <li key={track.id} className={`track-${track.id.toLowerCase()}`}>
           <b>{track.label}</b>
           <span>{track.note}</span>

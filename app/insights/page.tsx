@@ -1,9 +1,8 @@
+import { getPersonas, getStages, getInsightCategories } from "../i18n/content";
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro } from "../components/SiteShell";
-import { insightCategories } from "../data/ecosystem";
-import { personas } from "../data/personas";
-import { stages } from "../data/journey";
 
 export const metadata: Metadata = {
   title: "Learn Before You Buy, Build, Invest or Manage | REOS Insights",
@@ -15,14 +14,14 @@ export const metadata: Metadata = {
  * promising articles that have not been written. Every card below leads to
  * real content; the categories awaiting long-form pieces say so plainly.
  */
-export default function InsightsPage() {
-  return <Page className="inner-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
       <span className="eyebrow">KNOWLEDGE HUB</span>
       <h1>Learn before you buy,<br /><em>build, invest or manage.</em></h1>
       <p>Explanations written for people approaching UAE property without prior local knowledge. Start with the journey stage or the role that matches your situation.</p>
       <ul className="availability-key">
-        <li><b>Available now</b><span>{personas.length} role guides and {stages.length} stage explainers, written and published.</span></li>
+        <li><b>Available now</b><span>{getPersonas(locale).length} role guides and {getStages(locale).length} stage explainers, written and published.</span></li>
         <li><b>In development</b><span>Deeper topics being verified against official sources. We publish them when they are sourced, not before.</span></li>
       </ul>
     </section>
@@ -34,7 +33,7 @@ export default function InsightsPage() {
         copy="Each route explains the full sequence for that role, the documents involved and the mistakes that recur."
       />
       <div className="insight-grid">
-        {personas.map((persona) => (
+        {getPersonas(locale).map((persona) => (
           <Link key={persona.slug} href={`/roles/${persona.slug}`} className="insight-card">
             <small>{persona.name}</small>
             <h3>{persona.headline}</h3>
@@ -52,7 +51,7 @@ export default function InsightsPage() {
         copy="Every stage of the journey explained: what takes place, who is involved, which documents matter and what changes between emirates."
       />
       <div className="stage-index">
-        {stages.map((stage) => (
+        {getStages(locale).map((stage) => (
           <Link key={stage.id} href={`/journey/${stage.id}`} className="stage-index-card">
             <header><span>{String(stage.number).padStart(2, "0")}</span><em>{stage.track}</em></header>
             <h3>{stage.name}</h3>
@@ -69,7 +68,7 @@ export default function InsightsPage() {
         copy="These topics are being written and verified against official sources. We publish them when they are sourced, not before."
       />
       <div className="topic-grid">
-        {insightCategories.map((category) => (
+        {getInsightCategories(locale).map((category) => (
           <article key={category.id}>
             <h3>{category.name}</h3>
             <p>{category.copy}</p>
@@ -84,4 +83,8 @@ export default function InsightsPage() {
       <p>These explainers describe how things generally work. They are not legal, financial or tax advice, and they do not replace the official position of any authority. Requirements differ by emirate and change over time — confirm your specific case before acting.</p>
     </section>
   </Page>;
+}
+
+export default function InsightsPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

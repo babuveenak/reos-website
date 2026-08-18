@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro } from "../components/SiteShell";
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
   description: "Why REOS exists: to make the UAE property journey understandable, navigable and connected for everyone who takes part in it.",
 };
 
-export default function AboutPage() {
-  return <Page className="inner-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  return <Page className="inner-page" locale={locale}>
     <section className="inner-hero atmos atmos-city">
       <span className="eyebrow">ABOUT REOS</span>
       <h1>Building the digital map<br /><em>of the property ecosystem.</em></h1>
@@ -44,4 +45,8 @@ export default function AboutPage() {
       </div>
     </section>
   </Page>;
+}
+
+export default function AboutPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

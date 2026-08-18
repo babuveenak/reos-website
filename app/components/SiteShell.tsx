@@ -1,66 +1,75 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
+import { DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from "../i18n/config";
+import { getDict } from "../i18n/dictionary";
 import { Logo } from "./Logo";
 import { PreferencesControls } from "./PreferencesControls";
 
-const nav = [
-  ["/journey", "Property journey"],
-  ["/roles", "Roles"],
-  ["/ecosystem", "Ecosystem"],
-  ["/insights", "Insights"],
-  ["/glossary", "Glossary"],
-  ["/platform", "Platform"],
-];
+const NAV_ROUTES = ["/journey", "/roles", "/ecosystem", "/insights", "/glossary", "/platform"] as const;
+const NAV_KEYS = ["journey", "roles", "ecosystem", "insights", "glossary", "platform"] as const;
 
-export function Header() {
+export function Header({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const L = (path: string) => localePath(locale, path);
+  const nav = NAV_ROUTES.map((route, i) => [L(route), d.nav[NAV_KEYS[i]]] as const);
   return (
     <header className="site-header">
-      <Link className="brand" href="/" aria-label="REOS home">
+      <Link className="brand" href={L("/")} aria-label={d.brand.home}>
         <span className="brand-mark"><Logo /></span>
-        <span><b>REOS</b><small>REAL ESTATE OPERATING SYSTEM</small></span>
+        <span><b>REOS</b><small>{d.brand.tagline}</small></span>
       </Link>
-      <nav aria-label="Primary navigation">
+      <nav aria-label={d.nav.primary}>
         {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
       </nav>
-      <PreferencesControls />
+      <PreferencesControls locale={locale} />
       <details className="mobile-menu">
-        <summary aria-label="Open navigation"><span /><span /><span /></summary>
-        <nav aria-label="Mobile navigation">
+        <summary aria-label={d.nav.open}><span /><span /><span /></summary>
+        <nav aria-label={d.nav.mobile}>
           {nav.map(([href, label]) => <Link key={href} href={href}>{label}</Link>)}
-          <PreferencesControls />
+          <PreferencesControls locale={locale} />
         </nav>
       </details>
     </header>
   );
 }
 
-export function Footer() {
+export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const L = (path: string) => localePath(locale, path);
   return (
     <footer className="site-footer">
-      <div><span className="eyebrow">REOS · UAE REAL ESTATE</span><h2>Know where you are.<br /><em>Know what comes next.</em></h2></div>
+      <div><span className="eyebrow">{d.footer.eyebrow}</span><h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2></div>
       <div className="footer-links">
-        <Link href="/journey">Property journey</Link>
-        <Link href="/roles">Find your role</Link>
-        <Link href="/ecosystem">Ecosystem map</Link>
-        <Link href="/authorities">Authorities</Link>
-        <Link href="/platform">Platform</Link>
-        <Link href="/insights">Insights</Link>
-        <Link href="/glossary">Glossary</Link>
-        <Link href="/about">About</Link>
+        <Link href={L("/journey")}>{d.nav.journey}</Link>
+        <Link href={L("/roles")}>{d.footer.findRole}</Link>
+        <Link href={L("/ecosystem")}>{d.footer.ecosystemMap}</Link>
+        <Link href={L("/authorities")}>{d.nav.authorities}</Link>
+        <Link href={L("/platform")}>{d.nav.platform}</Link>
+        <Link href={L("/insights")}>{d.nav.insights}</Link>
+        <Link href={L("/glossary")}>{d.nav.glossary}</Link>
+        <Link href={L("/about")}>{d.nav.about}</Link>
       </div>
-      <p className="fineprint">Independent knowledge and navigation layer for UAE property development. REOS does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements, fees, timelines, laws and eligibility are jurisdiction-specific and change — verify with the relevant authority or regulated provider before acting.</p>
+      <p className="fineprint">{d.footer.fineprint}</p>
     </footer>
   );
 }
 
-export function Page({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <><Header /><main className={className}>{children}</main><Footer /></>;
+export function Page({ children, className = "", locale = DEFAULT_LOCALE }: { children: ReactNode; className?: string; locale?: Locale }) {
+  const d = getDict(locale);
+  return <>
+    <Header locale={locale} />
+    {locale !== DEFAULT_LOCALE && (
+      <p className="translation-notice"><b>{LOCALE_META[locale].nativeName}</b> — {d.common.translationNotice}</p>
+    )}
+    <main className={className}>{children}</main>
+    <Footer locale={locale} />
+  </>;
 }
 
-export function StatusTag({ status }: { status: ContentStatus }) {
+export function StatusTag({ status, locale = DEFAULT_LOCALE }: { status: ContentStatus; locale?: Locale }) {
   const key = status.toLowerCase().replaceAll(" ", "-");
-  return <span className={`status status-${key}`}>{status}</span>;
+  return <span className={`status status-${key}`}>{getDict(locale).status[status]}</span>;
 }
 
 export function SectionIntro({ label, title, copy }: { label: string; title: ReactNode; copy?: ReactNode }) {

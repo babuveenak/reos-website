@@ -1,17 +1,17 @@
+import { getGroups, getClusters, getStages } from "../i18n/content";
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EcosystemMap } from "../components/Ecosystem";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
-import { clusterById, groups } from "../data/ecosystem";
-import { stages } from "../data/journey";
 
 export const metadata: Metadata = {
   title: "The 12 Stakeholder Groups Behind the UAE Property Journey | REOS",
   description: "Who participates in UAE property development, what each group controls, when they enter the journey and what they exchange with everyone else.",
 };
 
-export default function EcosystemPage() {
-  return <Page className="inner-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
       <span className="eyebrow">THE ECOSYSTEM</span>
       <h1>The twelve stakeholder groups<br /><em>behind the property journey.</em></h1>
@@ -38,9 +38,9 @@ export default function EcosystemPage() {
         title={<>What each group controls,<br /><em>and when they enter.</em></>}
       />
       <div className="group-list">
-        {groups.map((group) => {
-          const entryStages = stages.filter((stage) => stage.groupIds.includes(group.id));
-          const cluster = clusterById[group.cluster];
+        {getGroups(locale).map((group) => {
+          const entryStages = getStages(locale).filter((stage) => stage.groupIds.includes(group.id));
+          const cluster = getClusters(locale).find((c) => c.id === group.cluster);
           return (
             <article key={group.id} id={group.id} className={`group-card cluster-${group.cluster}`}>
               <header>
@@ -84,4 +84,8 @@ export default function EcosystemPage() {
       </div>
     </section>
   </Page>;
+}
+
+export default function EcosystemPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

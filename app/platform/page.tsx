@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
   description: "How REOS moves from explaining the UAE property journey to running it: knowledge, discovery and execution layers, and the eight modules beneath them.",
 };
 
-export default function PlatformPage() {
-  return <Page className="inner-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
       <span className="eyebrow">REOS PLATFORM</span>
       <h1>The execution layer<br /><em>for the property journey.</em></h1>
@@ -78,4 +79,8 @@ export default function PlatformPage() {
       </div>
     </section>
   </Page>;
+}
+
+export default function PlatformPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

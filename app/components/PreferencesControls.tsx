@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LOCALE_META, localePath, type Locale } from "../i18n/config";
 
 type Theme = "dark" | "light";
 type Scale = "normal" | "large" | "xlarge";
@@ -11,7 +12,7 @@ const LABELS = {
   ar: { language: "اللغة", size: "حجم النص", toDark: "التبديل إلى الوضع الداكن", toLight: "التبديل إلى الوضع الفاتح" },
 };
 
-export function PreferencesControls() {
+export function PreferencesControls({ locale = "en" }: { locale?: Locale }) {
   const [theme, setTheme] = useState<Theme>("light");
   const [scale, setScale] = useState<Scale>("normal");
   const [language, setLanguage] = useState<Language>("en");
@@ -28,10 +29,12 @@ export function PreferencesControls() {
     const root = document.documentElement;
     const t = (localStorage.getItem("reos-theme") as Theme) || (root.dataset.theme as Theme) || "light";
     const s = (localStorage.getItem("reos-scale") as Scale) || (root.dataset.fontScale as Scale) || "normal";
-    const l = (localStorage.getItem("reos-language") as Language) || (root.lang as Language) || "en";
+    const l = locale as Language;
     // Restore client-only preferences after hydration.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(t); setScale(s); setLanguage(l); apply(t, s, l);
+    // locale is fixed per route, so this runs once by design.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** One control, two states — no menu to open for a binary choice. */
@@ -42,17 +45,26 @@ export function PreferencesControls() {
     apply(next, scale, language);
   }
   function changeScale(v: Scale) { setScale(v); localStorage.setItem("reos-scale", v); apply(theme, v, language); }
-  function changeLanguage(v: Language) { setLanguage(v); localStorage.setItem("reos-language", v); apply(theme, scale, v); }
+  /** Language is a route, not a preference: /journey vs /ar/journey. Setting
+   *  `dir` alone was the original bug — it reversed the layout and translated
+   *  nothing, because the Arabic text lives on the Arabic pages. */
+  function changeLanguage(v: Language) {
+    if (v === language) return;
+    localStorage.setItem("reos-language", v);
+    const here = window.location.pathname;
+    const bare = here === "/ar" || here.startsWith("/ar/") ? here.slice(3) || "/" : here;
+    window.location.href = localePath(v as Locale, bare) + window.location.hash;
+  }
 
-  const t = LABELS[language];
+  const t = LABELS[locale as Language] ?? LABELS.en;
 
   return (
     <div className="preference-controls">
       <label>
         <span>{t.language}</span>
         <select aria-label={t.language} value={language} onChange={(e) => changeLanguage(e.target.value as Language)}>
-          <option value="en">English</option>
-          <option value="ar">العربية</option>
+          <option value="en">{LOCALE_META.en.nativeName}</option>
+          <option value="ar">{LOCALE_META.ar.nativeName}</option>
         </select>
       </label>
 

@@ -53,11 +53,31 @@ test("concurrency is stated, not flattened into a sequence", async () => {
   assert.match(html, /Marketing &(amp;)? Sales|Marketing & Sales/);
 });
 
+test("Arabic routes render Arabic, right-to-left", async () => {
+  // The original bug: the language control set dir/lang and nothing else, so
+  // the layout reversed and every word stayed English.
+  const arabic = (t) => (t.match(/[\u0600-\u06FF]/g) || []).length;
+  for (const path of ["/ar", "/ar/journey", "/ar/roles/buying", "/ar/glossary"]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /dir="rtl"/, `${path} must be RTL`);
+    assert.ok(arabic(html) > 400, `${path} should carry Arabic text, found ${arabic(html)}`);
+  }
+  // English must stay untouched at the root.
+  const en = await (await render("/journey")).text();
+  assert.doesNotMatch(en, /dir="rtl"/);
+});
+
+test("the review notice appears on Arabic pages only", async () => {
+  assert.match(await (await render("/ar")).text(), /translation-notice/);
+  assert.doesNotMatch(await (await render("/")).text(), /translation-notice/);
+});
+
 test("renders core routes", async () => {
   for (const path of [
     "/journey", "/journey/finance-escrow", "/roles", "/roles/developing",
     "/ecosystem", "/platform", "/insights", "/about", "/demo",
     "/authorities", "/lifecycle", "/stakeholders", "/stakeholders/developer",
+    "/ar", "/ar/journey", "/ar/roles", "/ar/ecosystem", "/ar/glossary", "/ar/platform",
   ]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);

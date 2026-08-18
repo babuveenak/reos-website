@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
   description: "The same development ecosystem, read through each stakeholder lens — what they receive, what they produce, who they depend on and where they are blocked.",
 };
 
-export default function StakeholdersPage() {
-  return <Page className="inner-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
       <span className="eyebrow">STAKEHOLDER LENSES</span>
       <h1>One ecosystem.<br /><em>Different journeys.</em></h1>
@@ -71,4 +72,8 @@ export default function StakeholdersPage() {
       <p>Lenses describe a research-backed operating model. Exact processes, authorities, requirements, documents, fees and timelines vary by jurisdiction, asset and transaction and must be verified against the applicable official source before use.</p>
     </section>
   </Page>;
+}
+
+export default function StakeholdersPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

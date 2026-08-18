@@ -1,3 +1,4 @@
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import { DemoForm } from "../components/DemoForm";
 import { Page } from "../components/SiteShell";
@@ -7,8 +8,8 @@ export const metadata: Metadata = {
   description: "Walk through your emirate, asset type and delivery route against the connected model and see where dependencies, approvals and handoffs actually sit.",
 };
 
-export default function DemoPage() {
-  return <Page className="inner-page demo-page">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  return <Page className="inner-page demo-page" locale={locale}>
     <section className="demo-layout atmos atmos-city">
       <div className="demo-intro">
         <span className="eyebrow">BOOK A DEMO</span>
@@ -43,4 +44,8 @@ export default function DemoPage() {
       <p>REOS does not issue approvals, execute transactions, hold client money or provide legal, financial or tax advice. We explain how the journey works and connect the parties, documents and permissions involved. Binding decisions remain with the relevant authority or regulated provider.</p>
     </section>
   </Page>;
+}
+
+export default function DemoPage() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

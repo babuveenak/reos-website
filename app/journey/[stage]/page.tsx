@@ -1,3 +1,5 @@
+import { getStages, getPersonas } from "../../i18n/content";
+import { DEFAULT_LOCALE, type Locale } from "../../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -5,7 +7,7 @@ import { Page, StatusTag } from "../../components/SiteShell";
 import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 import { stageById, stages } from "../../data/journey";
-import { personas } from "../../data/personas";
+
 import { stageById as detailById } from "../../data/reos";
 
 type Props = { params: Promise<{ stage: string }> };
@@ -24,18 +26,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function StagePage({ params }: Props) {
+export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale?: Locale }) {
   const { stage: slug } = await params;
-  const stage = stageById[slug];
+  const all = getStages(locale);
+  const stage = all.find((s) => s.id === slug);
   if (!stage) notFound();
 
-  const previous = stages[stage.number - 2];
-  const next = stages[stage.number];
-  const parallel = stage.runsWith.map((id) => stageById[id]).filter(Boolean);
+  const previous = all[stage.number - 2];
+  const next = all[stage.number];
+  const parallel = stage.runsWith.map((id) => all.find((s) => s.id === id)).filter(Boolean) as typeof all;
   const details = stage.detailStageIds.map((id) => detailById[id]).filter(Boolean);
-  const relevantPersonas = personas.filter((p) => p.steps.some((s) => s.stageId === stage.id));
+  const relevantPersonas = getPersonas(locale).filter((p) => p.steps.some((s) => s.stageId === stage.id));
 
-  return <Page className="inner-page stage-page">
+  return <Page className="inner-page stage-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
       <Link href="/journey">Property journey</Link>
       <span aria-hidden="true">/</span>
@@ -45,7 +48,7 @@ export default async function StagePage({ params }: Props) {
     <section className="stage-hero">
       <div className="stage-hero-number">{String(stage.number).padStart(2, "0")}</div>
       <div>
-        <span className="eyebrow">{stage.track.toUpperCase()} · STAGE {stage.number} OF {stages.length}</span>
+        <span className="eyebrow">{stage.track.toUpperCase()} · STAGE {stage.number} OF {all.length}</span>
         <h1>{stage.name}</h1>
         <p>{stage.summary}</p>
         <StatusTag status={stage.status} />
@@ -152,7 +155,11 @@ export default async function StagePage({ params }: Props) {
         : <span />}
       {next
         ? <Link href={`/journey/${next.id}`}><small>NEXT</small><b>{next.name} →</b></Link>
-        : <Link href="/journey"><small>COMPLETE MAP</small><b>All {stages.length} stages →</b></Link>}
+        : <Link href="/journey"><small>COMPLETE MAP</small><b>All {all.length} stages →</b></Link>}
     </nav>
   </Page>;
+}
+
+export default async function StagePage(props: Props) {
+  return View({ ...props, locale: DEFAULT_LOCALE });
 }

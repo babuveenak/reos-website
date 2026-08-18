@@ -1,50 +1,54 @@
+import { DEFAULT_LOCALE, type Locale } from "./i18n/config";
+import { getDict } from "./i18n/dictionary";
+import { getFragments, getLayers, getModules, getOutcomes, getStages, getGroups } from "./i18n/content";
 import Link from "next/link";
 import { EcosystemMap } from "./components/Ecosystem";
 import { JourneyMap, JourneyRibbon, PersonaQuickPick, PersonaSelector, TrackLegend } from "./components/Journey";
 import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
-import { fragments, groups, modules, outcomes } from "./data/ecosystem";
-import { layers, stages } from "./data/journey";
+
 import { authorities } from "./data/reos";
 
-export default function Home() {
-  return <Page className="home">
+export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const d = getDict(locale);
+  const L = (p: string) => (locale === DEFAULT_LOCALE ? p : `/ar${p === "/" ? "" : p}`);
+  return <Page className="home" locale={locale}>
 
     {/* 01 — HERO. The journey, not the ecosystem. */}
     <section className="hero-primary">
       <div className="hero-ground" aria-hidden="true" />
       <div className="hero-copy">
-        <span className="eyebrow">UAE REAL ESTATE</span>
-        <h1>Understand the property journey.<br /><em>From land to living.</em></h1>
-        <p>Explore how property is planned, financed, designed, developed, built, sold, registered, handed over, managed and invested in across the UAE.</p>
-        <p className="hero-benefit">Understand what happens, who is involved, what comes next, and which decisions affect your outcome.</p>
+        <span className="eyebrow">{d.home.eyebrow}</span>
+        <h1>{d.home.h1}<br /><em>{d.home.h1em}</em></h1>
+        <p>{d.home.lede}</p>
+        <p className="hero-benefit">{d.home.benefit}</p>
         <div className="hero-actions">
-          <Link className="button gold" href="/#start">Start my journey <span>↗</span></Link>
-          <Link className="button ghost" href="/ecosystem">Explore the ecosystem</Link>
+          <Link className="button gold" href={`${L("/")}#start`}>{d.home.ctaStart} <span>↗</span></Link>
+          <Link className="button ghost" href={L("/ecosystem")}>{d.home.ctaEcosystem}</Link>
         </div>
       </div>
-      <div className="hero-visual"><JourneyRibbon /></div>
-      <PersonaQuickPick />
+      <div className="hero-visual"><JourneyRibbon locale={locale} /></div>
+      <PersonaQuickPick locale={locale} />
     </section>
 
     {/* 02 — WHERE ARE YOU. Persona entry, high on the page. */}
     <section className="section-pad start-band" id="start">
       <SectionIntro
-        label="FIND YOUR STARTING POINT"
-        title={<>Start from<br /><em>where you are.</em></>}
-        copy="Everyone enters the property ecosystem differently. Choose your role to see the journey, decisions, participants and documents that apply to you — and skip the ones that do not."
+        label={d.home.startLabel}
+        title={<>{d.home.startTitle}<br /><em>{d.home.startTitleEm}</em></>}
+        copy={d.home.startCopy}
       />
-      <PersonaSelector />
+      <PersonaSelector locale={locale} />
     </section>
 
     {/* 03 — PROBLEM. */}
     <section className="section-pad problem-band" id="problem">
       <SectionIntro
-        label="WHY THIS IS HARD"
-        title={<>Today&rsquo;s property journey<br /><em>is fragmented.</em></>}
-        copy="A single property passes through dozens of organisations, approvals, documents and handoffs. Buyers, developers, investors, banks, contractors and authorities each see only their own part of it."
+        label={d.home.problemLabel}
+        title={<>{d.home.problemTitle}<br /><em>{d.home.problemTitleEm}</em></>}
+        copy={d.home.problemCopy}
       />
       <div className="fragment-cards">
-        {fragments.map((item, index) => (
+        {getFragments(locale).map((item, index) => (
           <article key={item.title}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{item.title}</h3>
@@ -58,36 +62,36 @@ export default function Home() {
     {/* 04 — THE JOURNEY MAP. Concurrency shown, not flattened. */}
     <section className="section-pad journey-band" id="journey">
       <SectionIntro
-        label="THE PROPERTY JOURNEY"
-        title={<>One property journey.<br /><em>Many connected stages.</em></>}
-        copy="At every stage, different participants enter, exchange information, meet obligations and trigger the next step. Some stages run at the same time — in off-plan development, selling and building happen together."
+        label={d.home.journeyLabel}
+        title={<>{d.home.journeyTitle}<br /><em>{d.home.journeyTitleEm}</em></>}
+        copy={d.home.journeyCopy}
       />
-      <JourneyMap compact />
-      <TrackLegend />
+      <JourneyMap compact locale={locale} />
+      <TrackLegend locale={locale} />
     </section>
 
     {/* 05 — ECOSYSTEM REVEAL. The 12 groups arrive after the journey. */}
     <section className="section-pad ecosystem-band" id="ecosystem">
       <SectionIntro
-        label="THE ECOSYSTEM BEHIND IT"
-        title={<>Behind every stage<br /><em>is a connected ecosystem.</em></>}
+        label={d.home.ecoLabel}
+        title={<>{d.home.ecoTitle}<br /><em>{d.home.ecoTitleEm}</em></>}
         copy="The journey is carried by twelve stakeholder groups across ownership, capital, regulation, design, construction, finance, legal, sales, utilities, operations and enabling services. Authorities sit on their own rail because they issue the approvals that gate everyone else."
       />
       <EcosystemMap />
       <div className="band-cta">
-        <Link className="button gold" href="/ecosystem">Explore the ecosystem map <span>↗</span></Link>
+        <Link className="button gold" href={L("/ecosystem")}>{d.home.ecoCta} <span>↗</span></Link>
       </div>
     </section>
 
     {/* 06 — HOW REOS CONNECTS. Three layers. */}
     <section className="section-pad layer-band atmos atmos-rays">
       <SectionIntro
-        label="HOW REOS CONNECTS IT"
-        title={<>Understand it. Find your part in it.<br /><em>Then run the work.</em></>}
-        copy="REOS connects the people, processes, documents and data behind the journey — in three layers, each usable on its own."
+        label={d.home.layerLabel}
+        title={<>{d.home.layerTitle}<br /><em>{d.home.layerTitleEm}</em></>}
+        copy={d.home.layerCopy}
       />
       <div className="layer-grid">
-        {layers.map((layer, index) => (
+        {getLayers(locale).map((layer, index) => (
           <article key={layer.id}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{layer.name}</h3>
@@ -101,21 +105,21 @@ export default function Home() {
     {/* 07 — PLATFORM MODULES, with honest status. */}
     <section className="section-pad module-band" id="platform">
       <SectionIntro
-        label="FROM KNOWLEDGE TO EXECUTION"
-        title={<>Eight modules.<br /><em>One connected model.</em></>}
+        label={d.home.moduleLabel}
+        title={<>{d.home.moduleTitle}<br /><em>{d.home.moduleTitleEm}</em></>}
         copy="Each module is labelled with what it is today. Validated means researched and built; designed means architected but not yet delivered. We would rather show the roadmap than imply a finished product."
       />
       <div className="module-grid">
-        {modules.map((module, index) => (
+        {getModules(locale).map((module, index) => (
           <article key={module.id}>
-            <header><span>{String(index + 1).padStart(2, "0")}</span><StatusTag status={module.status} /></header>
+            <header><span>{String(index + 1).padStart(2, "0")}</span><StatusTag status={module.status} locale={locale} /></header>
             <h3>{module.name}</h3>
             <p>{module.copy}</p>
           </article>
         ))}
         <article className="module-roadmap">
           <header><span>&mdash;</span></header>
-          <h3>The roadmap continues</h3>
+          <h3>{d.home.roadmapTitle}</h3>
           <p>Further capabilities are added only once they are sourced, validated and connected to the lifecycle model — not before.</p>
         </article>
       </div>
@@ -124,11 +128,11 @@ export default function Home() {
     {/* 08 — OUTCOMES, per audience. */}
     <section className="section-pad outcome-band">
       <SectionIntro
-        label="WHAT CHANGES"
-        title={<>Know where you are.<br /><em>Know what comes next.</em></>}
+        label={d.home.outcomeLabel}
+        title={<>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></>}
       />
       <div className="outcome-grid">
-        {outcomes.map((outcome) => (
+        {getOutcomes(locale).map((outcome) => (
           <article key={outcome.audience}>
             <small>{outcome.audience}</small>
             <h3>{outcome.claim}</h3>
@@ -137,24 +141,28 @@ export default function Home() {
         ))}
       </div>
       <div className="coverage-strip">
-        <div><b>{stages.length}</b><span>journey stages mapped</span></div>
-        <div><b>{groups.length}</b><span>stakeholder groups</span></div>
-        <div><b>{authorities.length}</b><span>authorities with official sources</span></div>
-        <div><b>7</b><span>emirates in the jurisdiction model</span></div>
+        <div><b>{getStages(locale).length}</b><span>{d.home.statStages}</span></div>
+        <div><b>{getGroups(locale).length}</b><span>{d.home.statGroups}</span></div>
+        <div><b>{authorities.length}</b><span>{d.home.statAuthorities}</span></div>
+        <div><b>7</b><span>{d.home.statEmirates}</span></div>
       </div>
     </section>
 
     {/* 09 — WHERE TO GO NEXT. Educational, not a sales close. */}
     <section className="demo-band atmos atmos-city" id="start-reading">
-      <span className="eyebrow">START ANYWHERE</span>
-      <h2>Know where you are.<br /><em>Know what comes next.</em></h2>
+      <span className="eyebrow">{d.home.closeLabel}</span>
+      <h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2>
       <p>Follow the journey from land to living, pick the route that matches your situation, or look up a term you have run into. Nothing here asks you to commit to anything.</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/journey">Explore the journey <span>↗</span></Link>
-        <Link className="button ghost" href="/glossary">Look up a term</Link>
+        <Link className="button gold" href={L("/journey")}>{d.home.closeCta} <span>↗</span></Link>
+        <Link className="button ghost" href={L("/glossary")}>{d.home.closeCta2}</Link>
       </div>
       <p className="demo-note">REOS is an independent knowledge and navigation layer. It does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements differ by emirate and change over time — verify with the relevant authority before acting.</p>
     </section>
 
   </Page>;
+}
+
+export default function Home() {
+  return <View locale={DEFAULT_LOCALE} />;
 }

@@ -1,10 +1,12 @@
+import { getPersonas, getStage } from "../../i18n/content";
+import { DEFAULT_LOCALE, type Locale } from "../../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Page, StatusTag } from "../../components/SiteShell";
 import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
-import { stageById } from "../../data/journey";
+
 import { personaBySlug, personas } from "../../data/personas";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -27,14 +29,15 @@ function readingMinutes(p: { steps: { detail: string; title: string }[]; audienc
   return Math.max(2, Math.round(words / 200));
 }
 
-export default async function PersonaPage({ params }: Props) {
+export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale?: Locale }) {
   const { slug } = await params;
-  const persona = personaBySlug[slug];
+  const all = getPersonas(locale);
+  const persona = all.find((p) => p.slug === slug);
   if (!persona) notFound();
 
-  const others = personas.filter((p) => p.slug !== persona.slug).slice(0, 3);
+  const others = all.filter((p) => p.slug !== persona.slug).slice(0, 3);
 
-  return <Page className="inner-page persona-page">
+  return <Page className="inner-page persona-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
       <Link href="/roles">Roles</Link>
       <span aria-hidden="true">/</span>
@@ -67,7 +70,7 @@ export default async function PersonaPage({ params }: Props) {
     <section className="section-pad">
       <div className="persona-flow">
         {persona.steps.map((step, index) => {
-          const stage = stageById[step.stageId];
+          const stage = getStage(locale, step.stageId);
           const newPhase = step.phase && step.phase !== persona.steps[index - 1]?.phase;
           return (
             <div key={step.title}>
@@ -140,4 +143,8 @@ export default async function PersonaPage({ params }: Props) {
       </div>
     </section>
   </Page>;
+}
+
+export default async function PersonaPage(props: Props) {
+  return View({ ...props, locale: DEFAULT_LOCALE });
 }
