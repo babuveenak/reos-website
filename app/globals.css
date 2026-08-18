@@ -1394,3 +1394,55 @@ html[data-theme="light"] .route-card{background:#FFF}
 html[data-theme="light"] .route-card:hover{background:#FAF6ED}
 html[data-theme="light"] .orientation-band{background:#F5EDDD}
 html[data-theme="light"] .pending-route{background:#F5EDDD}
+
+/* ============================================================
+   INNER-PAGE ARCH
+   Was a hollow outline drawn for the dark theme. On ivory it read as a
+   failed image load — a 504x462 empty box beside the headline. It now
+   frames the connected-city artwork, so the architectural motif carries
+   something instead of announcing an absence.
+   ============================================================ */
+.inner-hero::after{
+  /* Logical inset so the arch mirrors in Arabic instead of staying right. */
+  right:auto; inset-inline-end:7vw;
+  background-image:
+    linear-gradient(180deg, rgba(10,10,15,0) 30%, var(--void) 96%),
+    image-set(url("/images/connected-city-1280.webp") type("image/webp"),
+              url("/images/connected-city-1280.jpg") type("image/jpeg"));
+  background-size:cover, cover;
+  background-position:center 65%, center 60%;
+  background-repeat:no-repeat;
+  border-color:var(--gold-dim);
+  opacity:.5;
+}
+html[data-theme="light"] .inner-hero::after{
+  /* Dark artwork on ivory needs to sit much further back, and the veil
+     matches the page rather than the void. */
+  background-image:
+    linear-gradient(180deg, rgba(248,245,238,0) 24%, var(--void) 94%),
+    image-set(url("/images/connected-city-1280.webp") type("image/webp"),
+              url("/images/connected-city-1280.jpg") type("image/jpeg"));
+  opacity:.3; border-color:rgba(137,101,31,.3);
+}
+@media(max-width:820px){
+  .inner-hero::after{
+    background-image:
+      linear-gradient(180deg, rgba(10,10,15,0) 30%, var(--void) 96%),
+      image-set(url("/images/connected-city-768.webp") type("image/webp"),
+                url("/images/connected-city-768.jpg") type("image/jpeg"));
+  }
+  html[data-theme="light"] .inner-hero::after{
+    background-image:
+      linear-gradient(180deg, rgba(248,245,238,0) 24%, var(--void) 94%),
+      image-set(url("/images/connected-city-768.webp") type("image/webp"),
+                url("/images/connected-city-768.jpg") type("image/jpeg"));
+  }
+}
+/* On narrow screens the arch sits behind the copy, so it stays a whisper. */
+@media(max-width:720px){
+  .inner-hero::after{opacity:.16}
+  html[data-theme="light"] .inner-hero::after{opacity:.1}
+}
+/* No base rule: the artwork fades out instead of stopping at a hard line,
+   so the arch reads as an opening rather than a pasted-in box. */
+.inner-hero::after{border-bottom:none}
