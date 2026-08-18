@@ -1,0 +1,879 @@
+<title>REOS Ecosystem Assessment</title>
+<style>
+:root{
+  --paper:#F3F4F1; --card:#FBFBF9; --sunk:#EAECE7;
+  --ink:#16202A; --ink-2:#3A4750; --muted:#6B7770;
+  --rule:#D5D9D2; --rule-soft:#E3E6E0;
+  --accent:#0E6A66; --accent-soft:#DCE9E7;
+  --flag:#A63A22; --flag-soft:#F2E0DA;
+  --keep:#4A6B3A; --keep-soft:#E2EADA;
+  --shadow:0 1px 2px rgba(22,32,42,.05), 0 8px 24px -16px rgba(22,32,42,.25);
+  --display:"Avenir Next","Avenir","Segoe UI",system-ui,sans-serif;
+  --body:"Charter","Bitstream Charter","Source Serif 4",Cambria,Georgia,serif;
+  --mono:"SF Mono",SFMono-Regular,"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#10151A; --card:#171E24; --sunk:#1C242B;
+    --ink:#E7EAE7; --ink-2:#B4BDB9; --muted:#8D9A96;
+    --rule:#2A343B; --rule-soft:#222B32;
+    --accent:#43ABA2; --accent-soft:#12302E;
+    --flag:#DE7C5B; --flag-soft:#33201A;
+    --keep:#8CAE6C; --keep-soft:#212A1B;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#10151A; --card:#171E24; --sunk:#1C242B;
+  --ink:#E7EAE7; --ink-2:#B4BDB9; --muted:#8D9A96;
+  --rule:#2A343B; --rule-soft:#222B32;
+  --accent:#43ABA2; --accent-soft:#12302E;
+  --flag:#DE7C5B; --flag-soft:#33201A;
+  --keep:#8CAE6C; --keep-soft:#212A1B;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--display); font-weight:600; line-height:1.15; text-wrap:balance; margin:0}
+p{margin:0}
+a{color:var(--accent); text-underline-offset:3px; text-decoration-thickness:1px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:2px}
+
+/* ---------- shell ---------- */
+.shell{max-width:1220px; margin:0 auto; padding:0 clamp(1.1rem,4vw,3rem)}
+.masthead{border-bottom:1px solid var(--rule); padding:clamp(3rem,7vw,5.5rem) 0 clamp(2rem,4vw,3rem)}
+.stamp{
+  display:inline-flex; align-items:center; gap:.55rem; font-family:var(--mono);
+  font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+  border:1px solid var(--accent); padding:.36rem .7rem; border-radius:2px; margin-bottom:1.6rem;
+}
+.masthead h1{font-size:clamp(2.1rem,5.2vw,3.5rem); letter-spacing:-.02em; max-width:20ch}
+.masthead .dek{font-size:clamp(1.05rem,2vw,1.24rem); color:var(--ink-2); max-width:62ch; margin-top:1.2rem}
+.meta{
+  display:flex; flex-wrap:wrap; gap:.5rem 2rem; margin-top:2.2rem;
+  font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; color:var(--muted);
+}
+.meta b{color:var(--ink-2); font-weight:500}
+
+.layout{display:grid; grid-template-columns:1fr; gap:0}
+@media (min-width:1080px){
+  .layout{grid-template-columns:238px minmax(0,1fr); gap:clamp(2.5rem,5vw,4.5rem)}
+  .toc{position:sticky; top:0; align-self:start; max-height:100vh; overflow-y:auto; padding:3rem 0 3rem}
+}
+.toc{border-bottom:1px solid var(--rule); padding:2rem 0}
+@media (min-width:1080px){.toc{border-bottom:none; border-right:1px solid var(--rule); padding-right:1.5rem}}
+.toc h2{font-size:.7rem; font-family:var(--mono); font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:1rem}
+.toc ol{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.1rem}
+.toc a{
+  display:grid; grid-template-columns:1.9rem 1fr; gap:.4rem; align-items:baseline;
+  padding:.34rem .4rem .34rem 0; font-family:var(--display); font-size:.845rem;
+  line-height:1.35; color:var(--ink-2); text-decoration:none; border-radius:3px;
+}
+.toc a:hover{color:var(--accent); background:var(--sunk)}
+.toc a span{font-family:var(--mono); font-size:.68rem; color:var(--muted)}
+
+main{padding:clamp(2.5rem,5vw,4rem) 0 6rem; min-width:0}
+section{scroll-margin-top:1.5rem; padding-bottom:clamp(2.8rem,5vw,4rem)}
+section + section{border-top:1px solid var(--rule-soft); padding-top:clamp(2.8rem,5vw,4rem)}
+.sec-num{font-family:var(--mono); font-size:.7rem; letter-spacing:.14em; color:var(--accent); display:block; margin-bottom:.7rem}
+section > h2{font-size:clamp(1.5rem,3.2vw,2.05rem); letter-spacing:-.015em; max-width:24ch}
+section > h3{font-size:1.06rem; margin:2.2rem 0 .7rem; letter-spacing:-.005em}
+section > h3:first-of-type{margin-top:1.8rem}
+section > p, section > ul, section > ol{max-width:70ch}
+section > p{margin-top:1rem}
+ul,ol{padding-left:1.15rem; margin:.9rem 0}
+li{margin:.42rem 0}
+li::marker{color:var(--muted)}
+strong{font-weight:600; color:var(--ink)}
+code{font-family:var(--mono); font-size:.86em; background:var(--sunk); padding:.1em .34em; border-radius:3px; color:var(--ink-2)}
+
+/* ---------- devices ---------- */
+.lede{font-size:1.09rem; color:var(--ink-2); max-width:66ch; margin-top:1.1rem}
+
+.verdict{
+  border-left:3px solid var(--accent); background:var(--card); box-shadow:var(--shadow);
+  padding:1.25rem 1.4rem; margin:1.8rem 0; border-radius:0 4px 4px 0; max-width:74ch;
+}
+.verdict.flag{border-left-color:var(--flag)}
+.verdict.keep{border-left-color:var(--keep)}
+.verdict .tag{
+  font-family:var(--mono); font-size:.66rem; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--accent); display:block; margin-bottom:.5rem;
+}
+.verdict.flag .tag{color:var(--flag)}
+.verdict.keep .tag{color:var(--keep)}
+.verdict p + p{margin-top:.7rem}
+
+.finding{
+  display:grid; grid-template-columns:auto 1fr; gap:0 1rem; align-items:start;
+  background:var(--card); border:1px solid var(--rule); border-radius:4px;
+  padding:1.05rem 1.25rem; margin:.85rem 0; box-shadow:var(--shadow); max-width:74ch;
+}
+.finding .sev{
+  font-family:var(--mono); font-size:.64rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:.22rem .48rem; border-radius:2px; white-space:nowrap; margin-top:.15rem;
+}
+.sev-critical{background:var(--flag-soft); color:var(--flag)}
+.sev-major{background:var(--accent-soft); color:var(--accent)}
+.sev-keep{background:var(--keep-soft); color:var(--keep)}
+.finding h4{font-size:.98rem; margin-bottom:.3rem}
+.finding p{font-size:.94rem; color:var(--ink-2)}
+.finding p + p{margin-top:.5rem}
+.finding .ev{
+  font-family:var(--mono); font-size:.74rem; color:var(--muted); margin-top:.55rem;
+  display:block; line-height:1.5;
+}
+
+.tablewrap{overflow-x:auto; margin:1.5rem 0; border:1px solid var(--rule); border-radius:4px; background:var(--card)}
+table{border-collapse:collapse; width:100%; font-size:.9rem; min-width:540px}
+th,td{text-align:left; padding:.72rem .9rem; border-bottom:1px solid var(--rule-soft); vertical-align:top}
+th{
+  font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); font-weight:500; background:var(--sunk); white-space:nowrap;
+}
+tr:last-child td{border-bottom:none}
+td b{font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+
+.figure{margin:2rem 0; border:1px solid var(--rule); border-radius:4px; background:var(--card); overflow:hidden}
+.figure .frame{overflow-x:auto; padding:1.4rem}
+.figure svg{display:block; min-width:520px; max-width:100%; height:auto; margin:0 auto}
+.figure figcaption{
+  font-family:var(--mono); font-size:.72rem; color:var(--muted); line-height:1.55;
+  padding:.8rem 1.2rem; border-top:1px solid var(--rule-soft); background:var(--sunk);
+}
+.figure figcaption b{color:var(--ink-2); font-weight:500}
+
+.split{display:grid; gap:1rem; margin:1.6rem 0}
+@media (min-width:700px){.split{grid-template-columns:1fr 1fr}}
+.split > div{background:var(--card); border:1px solid var(--rule); border-radius:4px; padding:1.1rem 1.25rem}
+.split h4{font-size:.72rem; font-family:var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:.6rem}
+.split ul{margin:0; padding-left:1.05rem; font-size:.92rem}
+.split.contrast > div:first-child{border-left:3px solid var(--flag)}
+.split.contrast > div:last-child{border-left:3px solid var(--keep)}
+
+.stack{list-style:none; padding:0; margin:1.5rem 0; display:flex; flex-direction:column; gap:.5rem; max-width:74ch}
+.stack li{
+  display:grid; grid-template-columns:auto 1fr; gap:1rem; align-items:baseline; margin:0;
+  padding:.85rem 1.1rem; background:var(--card); border:1px solid var(--rule); border-radius:4px;
+}
+.stack li > b{font-family:var(--mono); font-size:.72rem; color:var(--accent); letter-spacing:.08em; white-space:nowrap}
+.stack li span{font-size:.94rem; color:var(--ink-2)}
+.stack li span em{font-style:normal; color:var(--ink); font-weight:600; font-family:var(--display); display:block; margin-bottom:.15rem; font-size:1rem}
+
+.pathline{
+  font-family:var(--mono); font-size:.82rem; line-height:2; color:var(--ink-2);
+  background:var(--sunk); border:1px solid var(--rule); border-radius:4px;
+  padding:.9rem 1.1rem; margin:1.3rem 0; overflow-x:auto; white-space:nowrap;
+}
+.pathline .hit{color:var(--flag); font-weight:600}
+
+.footer{border-top:1px solid var(--rule); padding:2rem 0 3rem; font-family:var(--mono); font-size:.74rem; color:var(--muted); line-height:1.7}
+</style>
+
+<div class="shell">
+<header class="masthead">
+  <span class="stamp">Strategic assessment · pre-build</span>
+  <h1>REOS is shipping two products. Only one of them is yours.</h1>
+  <p class="dek">A code-level review of the live site against the connected-ecosystem vision — what exists, what is buried, where the stakeholder model breaks, and the architecture to build instead.</p>
+  <div class="meta">
+    <span><b>Reviewed</b> reos-website @ 2b76a4a</span>
+    <span><b>Scope</b> 48 files · 24 stages · 8 stakeholders · 11 authorities</span>
+    <span><b>Live</b> reos-website.vercel.app</span>
+  </div>
+</header>
+
+<div class="layout">
+<nav class="toc" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#s1"><span>01</span>Executive assessment</a></li>
+    <li><a href="#s2"><span>02</span>What the site appears to be</a></li>
+    <li><a href="#s3"><span>03</span>What the product should be</a></li>
+    <li><a href="#s4"><span>04</span>Gap analysis</a></li>
+    <li><a href="#s5"><span>05</span>The 12 stakeholder groups</a></li>
+    <li><a href="#s6"><span>06</span>The four super-clusters</a></li>
+    <li><a href="#s7"><span>07</span>Lifecycle architecture</a></li>
+    <li><a href="#s8"><span>08</span>Knowledge graph model</a></li>
+    <li><a href="#s9"><span>09</span>User journeys</a></li>
+    <li><a href="#s10"><span>10</span>Information architecture</a></li>
+    <li><a href="#s11"><span>11</span>UI/UX direction</a></li>
+    <li><a href="#s12"><span>12</span>Homepage strategy</a></li>
+    <li><a href="#s13"><span>13</span>Search &amp; discovery</a></li>
+    <li><a href="#s14"><span>14</span>Trust &amp; source governance</a></li>
+    <li><a href="#s15"><span>15</span>Future AI architecture</a></li>
+    <li><a href="#s16"><span>16</span>Critical risks</a></li>
+    <li><a href="#s17"><span>17</span>Recommended direction</a></li>
+    <li><a href="#s18"><span>18</span>Rebuild plan</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="s1">
+  <span class="sec-num">01</span>
+  <h2>Executive assessment</h2>
+  <p class="lede">No — the current website does not communicate the intended product. But the diagnosis is far more encouraging than "it needs a redesign," because the intended product <em>is already in the codebase</em>. It has simply been disconnected from the navigation.</p>
+
+  <p>The repository contains two independent content models that were never reconciled:</p>
+
+  <div class="split contrast">
+    <div>
+      <h4>What the site leads with</h4>
+      <ul>
+        <li><code>app/data/phase1.ts</code></li>
+        <li>3 roles: Investor, Buyer, Owner</li>
+        <li>12 consumer journeys (buy, rent out, renovate, move in, sell)</li>
+        <li>5 generic steps each, no relationships</li>
+        <li>Powers the homepage, the starter, <code>/stakeholders</code>, the sitemap</li>
+      </ul>
+    </div>
+    <div>
+      <h4>What you actually described</h4>
+      <ul>
+        <li><code>app/data/reos.ts</code></li>
+        <li>24 development stages across 4 phases</li>
+        <li>8 ecosystems, 8 stakeholders, 11 authorities</li>
+        <li>Typed relations: inputs, outputs, dependencies, entry conditions, bottlenecks, systems</li>
+        <li>Reachable only through the Authorities page</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>The second model is a genuine first draft of a property-development knowledge graph. It has stable IDs, cross-referenced entities, and a content-governance status field. It is the more valuable asset in the repository by a wide margin. And a visitor arriving at the homepage will almost never see it.</p>
+
+  <div class="verdict flag">
+    <span class="tag">Central finding</span>
+    <p>The site's link topology is <strong>authority-centric</strong> — the exact structure your brief rules out — even though its content model is not. The only practical route from the homepage into the 24-stage development lifecycle runs through the Authorities page. You did not build an authority-first site on purpose; you built a journey-first data model and then navigated to it through the authority door.</p>
+  </div>
+
+  <p>This means the rebuild is not a rescue. It is a promotion: take the model that already exists, correct three structural flaws in it, and rebuild the navigation and design register around it.</p>
+</section>
+
+<section id="s2">
+  <span class="sec-num">02</span>
+  <h2>What the current website appears to be</h2>
+  <p class="lede">A first-time visitor concludes, within about eight seconds, that REOS is a well-designed consumer guide to buying property in Dubai. Nothing on the primary path contradicts that.</p>
+
+  <h3>The evidence a visitor actually sees</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Signal</th><th>What it says</th><th>Reads as</th></tr></thead>
+      <tbody>
+        <tr><td>Page title</td><td>"The Operating System for the Property <b>Journey</b>"</td><td>Singular — one person's purchase</td></tr>
+        <tr><td>H1</td><td>"One connected journey. Every property decision."</td><td>Consumer decision support</td></tr>
+        <tr><td>Hero body</td><td>"connects <b>buyers</b>, investors, owners, developers…"</td><td>Buyers named first</td></tr>
+        <tr><td>Lifecycle band</td><td>Discover → Validate → Compare → Buy → Finance → Own → Manage → Maintain → Lease → Sell</td><td>A purchase funnel, not a development lifecycle</td></tr>
+        <tr><td>Trust line</td><td>"navigation layer for <b>Dubai property</b>"</td><td>One emirate, consumer scope</td></tr>
+        <tr><td>Footer</td><td>"REOS · DUBAI PHASE 1 … educational guidance for Dubai property journeys"</td><td>An information site, correctly disclaimed</td></tr>
+        <tr><td>Starter widget</td><td>Where / Who (Investor, Buyer, Owner) / What → 12 consumer journeys</td><td>Confirms the consumer read</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Against your eleven diagnostic questions: the site communicates <strong>a</strong> connected journey, but it is the customer's transaction journey, not the development ecosystem. It does not communicate the development lifecycle. It does not communicate stakeholder relationships — the word "dependency" appears in copy but no dependency is ever rendered. And it reads as a polished information website with platform ambitions, not as a knowledge platform or an operating layer.</p>
+
+  <h3>Where the professional user is actively turned away</h3>
+  <p>Four of the seven homepage personas — <strong>Developer, Broker, Tenant, Service provider</strong> — all link to the same destination, <code>/stakeholders</code>. That page's headline is "Customer journeys now. Professional depth later," and it lists "Developer and sub-developer" under a heading marked <em>Stage 2</em>.</p>
+
+  <div class="verdict flag">
+    <span class="tag">Dead end</span>
+    <p>Your primary intended user clicks the persona card labelled <strong>Developer</strong> and is told to come back later. This is the single most damaging interaction on the site, and it is four clicks' worth of the homepage's most prominent grid.</p>
+  </div>
+</section>
+
+<section id="s3">
+  <span class="sec-num">03</span>
+  <h2>What the product should be</h2>
+  <p class="lede">Stated in product language, stripped of aspiration: REOS is a <strong>structured, sourced, navigable model of how a property development project moves through the UAE regulatory and commercial system</strong> — expressed as a graph, entered through intent, and read through whichever stakeholder lens the user occupies.</p>
+
+  <p>Three properties distinguish it from every adjacent product:</p>
+
+  <ul class="stack">
+    <li><b>01</b><span><em>It is relational, not topical</em>Competing resources answer "what is X?" REOS answers "what does X block, what unblocks X, and who holds it?" The value is in the edges, not the nodes.</span></li>
+    <li><b>02</b><span><em>It is sequenced and conditional</em>Content carries applicability logic — jurisdiction, asset type, height, tenure, route — so guidance narrows as facts are supplied rather than hedging across all cases.</span></li>
+    <li><b>03</b><span><em>It is sourced at claim level</em>Every operative statement carries an authority, a source, an effective date, and a verification date. This is the moat and the legal shield simultaneously.</span></li>
+  </ul>
+
+  <p>What it is <em>not</em>, and should never drift toward: a listing portal, a directory of service providers, a regulatory news blog, or an authority-by-authority reference. Each of these is easier to build, already served by incumbents, and would consume the editorial capacity the graph requires.</p>
+</section>
+
+<section id="s4">
+  <span class="sec-num">04</span>
+  <h2>Gap analysis</h2>
+  <p class="lede">Seven concrete gaps, ordered by how much they cost you. Each is verified against the source, not inferred from the rendered page.</p>
+
+  <div class="finding">
+    <span class="sev sev-critical">Critical</span>
+    <div>
+      <h4>The development model is an orphaned subgraph</h4>
+      <p><code>/lifecycle</code> appears in no header navigation, no footer link, and is absent from <code>sitemap.ts</code>. The 24 stage pages and 8 stakeholder journey pages are live and render correctly — they are simply unreachable by browsing.</p>
+      <span class="ev">Header nav: /#platform · /#start · /#solutions · /authorities · /reos<br>Footer: /#start · /stakeholders · /authorities · /reos<br>sitemap.ts: "", /stakeholders, /authorities, /reos + 12 /journeys/*</span>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-critical">Critical</span>
+    <div>
+      <h4>The only door into the lifecycle is the Authorities page</h4>
+      <p>Because each authority card links to its lifecycle touchpoints, the sole browsable path from the homepage into the development model is authority-first — inverting your stated principle at the level of link structure.</p>
+      <div class="pathline">Home → <span class="hit">Authorities</span> → /lifecycle/{stage} → /stakeholders/{role}</div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-critical">Critical</span>
+    <div>
+      <h4>The stakeholder index does not link to the stakeholder pages</h4>
+      <p><code>/stakeholders</code> renders the three <em>phase1</em> consumer roles and links onward to <code>/journeys/*</code>. The eight rich stakeholder journey pages at <code>/stakeholders/{id}</code> are never linked from their own index. They are reachable only from a lifecycle stage page.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-major">Major</span>
+    <div>
+      <h4>The components that express the vision are dead code</h4>
+      <p><code>EcosystemOrbit</code>, <code>DualEntry</code> and <code>JourneyStarter</code> are exported from <code>Experience.tsx</code> and rendered nowhere. The README still advertises them ("interactive eight-ecosystem REOS map", "dual entry by stakeholder role or lifecycle stage"). The test suite asserts the homepage contains the string <em>"Eight ecosystems"</em> — the live homepage does not, so <code>npm test</code> is asserting against a homepage that no longer exists.</p>
+      <span class="ev">Verified: 0 occurrences of "Eight ecosystems" in live homepage HTML</span>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-major">Major</span>
+    <div>
+      <h4>Three incompatible lifecycles ship at once</h4>
+      <p>The homepage band shows 10 consumer verbs. <code>reos.ts</code> defines 24 development stages in 4 phases. Each journey has its own 5 generic steps. None reference each other. A visitor cannot determine which is "the" REOS lifecycle — and neither can a search engine.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-major">Major</span>
+    <div>
+      <h4>The design register contradicts the product category</h4>
+      <p>Tokens are <code>--void:#0A0A0F</code>, <code>--gold:#C8A45D</code>, Cormorant Garamond at weight 300, <code>h1</code> at <code>clamp(3.6rem, 8vw, 8rem)</code>, section padding at <code>9rem</code>. That is a luxury off-plan sales brochure — one of the exact registers your brief excludes. 128px display type and 144px section padding also make the information density of a reference platform structurally impossible.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-keep">Preserve</span>
+    <div>
+      <h4>What is already right and must survive the rebuild</h4>
+      <p>The <code>ContentStatus</code> union (Validated / To Be Validated / Illustrative / Future REOS Capability) with its <code>StatusTag</code> component is real knowledge governance, and almost nobody in this category has it. Stable entity IDs with <code>*ById</code> lookup maps are graph-ready. The <code>Stakeholder</code> type already carries <code>inputs</code>, <code>outputs</code>, <code>dependencies</code>, <code>entryConditions</code>, <code>bottlenecks</code> and <code>systems</code> — that is a process-graph node shape, not a marketing bio. <code>Authority.sourceUrl</code> plus <code>jurisdiction</code> starts provenance. The jurisdiction discipline in the copy ("Dubai is not Abu Dhabi") is both correct and legally protective. Theme, text-scale and RTL controls are already wired.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <span class="sec-num">05</span>
+  <h2>Assessment of the 12 stakeholder groups</h2>
+  <p class="lede">The groups are a good inventory and a flawed taxonomy. The inventory should survive; the taxonomy needs one structural correction that resolves most of the problems you already sensed.</p>
+
+  <h3>The core defect: three taxonomies wearing one coat</h3>
+  <p>Your 12 groups classify by three different criteria simultaneously — <strong>actor type</strong> (who someone is), <strong>function</strong> (what they do), and <strong>lifecycle position</strong> (when they appear). Group 11 is the clearest tell: "Handover, Property &amp; Facility Operations" is named after a <em>phase</em>, while its members are actor types. Group 6 is defined by function ("who operates project money"), while Group 5 is defined by actor type.</p>
+
+  <p>You have already felt this defect twice and patched it twice — the Group 2 / Group 6 bank rule, and the Owners' Association split across Groups 9 and 11. Both patches solve the symptom by <em>duplicating an entity across groups</em>. The underlying cause is that one organisation legitimately plays several roles at different moments.</p>
+
+  <div class="verdict">
+    <span class="tag">Recommended correction</span>
+    <p>Separate <strong>Actor</strong> (a party type — "commercial bank") from <strong>Role</strong> (a function played in a specific activity — "escrow account trustee", "project finance lender", "buyer's mortgage lender"). Groups classify <em>actors</em>. Roles attach to <em>activities</em>. One actor may hold many roles.</p>
+    <p>This single change dissolves the bank problem, the Owners' Association problem, and the future problems you have not hit yet — the developer who is also the master developer, the consultant who is also the engineer of record, the contractor who is also the FM provider under a DBFO structure.</p>
+  </div>
+
+  <h3>Group 3 should not be a stakeholder group at all</h3>
+  <p>Authorities are not peers of contractors. They occupy a categorically different position: they <em>issue the approvals that gate the graph</em>. Filing them as "stakeholder group 3" flattens the most important asymmetry in the domain — everything else in your model is appointed, negotiated and commercial; this is compulsory, external and dispositive.</p>
+  <p>Notably, <strong>your code already models this correctly.</strong> In <code>reos.ts</code>, <code>Authority</code> is a distinct type with its own jurisdiction and source URL, not a stakeholder. Your prose model regressed from your data model. Restore the code's position: Authority is its own entity class, sitting as a <em>rail</em> beneath all four clusters.</p>
+
+  <h3>Actors missing from the twelve</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Missing actor / role</th><th>Why it matters</th><th>Belongs</th></tr></thead>
+      <tbody>
+        <tr><td><b>Escrow account trustee</b> (as distinct from the escrow bank)</td><td>The registered trustee function is a regulated appointment with its own obligations; conflating it with "escrow bank" hides a real control point</td><td>Role, not group</td></tr>
+        <tr><td><b>Engineer / consultant of record</b></td><td>The signing consultant carries statutory design liability. Your Group 4 lists disciplines but not this role</td><td>Role on activities</td></tr>
+        <tr><td><b>Contractor classification &amp; registration bodies</b></td><td>Grading determines who may legally bid for what scale of work — a hard gate before procurement</td><td>Authority rail</td></tr>
+        <tr><td><b>Advertising / listing permit regime</b></td><td>Off-plan marketing is permit-gated. Group 8 has brokers but no gate on what they may advertise</td><td>Approval entity</td></tr>
+        <tr><td><b>Project escrow auditor</b></td><td>Periodic project audit is a distinct mandated function, not the generic "auditors" in Group 6</td><td>Role</td></tr>
+        <tr><td><b>Dispute forums</b> (rental dispute centre, real estate dispute settlement, arbitration centres)</td><td>Group 12 lists dispute <em>professionals</em> but not the <em>institutions</em> — different entity class</td><td>Authority rail</td></tr>
+        <tr><td><b>District cooling concessionaire</b></td><td>Typically a long-term exclusive concession with major cost and handover consequences; sits awkwardly between Groups 10 and 11</td><td>Actor + role</td></tr>
+        <tr><td><b>Master community service provider</b></td><td>Sets private requirements that function like approvals but are not public ones — a frequent source of user confusion</td><td>Group 1 actor, Group 11 role</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Classifications to revisit</h3>
+  <ul>
+    <li><strong>Group 4 is overloaded.</strong> It contains design disciplines, cost management, inspection bodies, testing laboratories and certification bodies. Certifiers and testing labs are <em>assurance</em>, not <em>design</em> — they verify rather than produce. Consider moving third-party inspection, testing and certification into the assurance cluster, where their independence is the point.</li>
+    <li><strong>"Owner-side Development Managers" (G1) vs "Consultant-side PMC" (G4)</strong> is a role distinction dressed as a group distinction. Same profession, different contract. This is exactly what the actor/role split fixes.</li>
+    <li><strong>Group 9 mixes counterparties with occupants.</strong> An institutional buyer and a tenant have almost nothing in common in graph terms — different contracts, different rights, different lifecycle entry points. Consider splitting purchaser-side from occupier-side.</li>
+    <li><strong>Group 12 is a residual bucket.</strong> "Cross-cutting" is honest, but valuers and dispute forums are load-bearing at specific gates (valuation gates finance; disputes gate transfer). Anything that gates an activity should be modelled as a role on that activity, not parked in a supporting set.</li>
+  </ul>
+
+  <div class="verdict keep">
+    <span class="tag">Verdict on the twelve</span>
+    <p><strong>Keep all 12 as the actor inventory.</strong> They are comprehensive and well-observed — better than most industry maps. Change three things: introduce the actor/role split, promote Authority out of Group 3 into its own entity class, and rename Group 11 to something actor-shaped ("Property &amp; Community Operators") so it stops being a phase name.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <span class="sec-num">06</span>
+  <h2>Assessment of the four super-clusters</h2>
+  <p class="lede">The instinct is right and the cut is nearly right. Four clusters is the correct number for navigation — twelve equal boxes would be unusable, and you identified that yourself. One cluster is mis-composed.</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Your cluster</th><th>Groups</th><th>Assessment</th></tr></thead>
+      <tbody>
+        <tr><td><b>Capital &amp; Ownership</b></td><td>1 + 2</td><td><b>Correct.</b> Coherent — who owns the project and who funds it. Users understand this immediately.</td></tr>
+        <tr><td><b>Delivery &amp; Technical</b></td><td>4 + 5</td><td><b>Correct,</b> with the caveat that inspection/testing/certification should move out to assurance.</td></tr>
+        <tr><td><b>Governance &amp; Assurance</b></td><td>3 + 6 + 7</td><td><b>Mis-composed.</b> See below.</td></tr>
+        <tr><td><b>Market &amp; Operations</b></td><td>8 + 9 + 10 + 11</td><td><b>Workable but broad.</b> Four groups spanning sale through decades of operation. Acceptable for navigation; watch it in the data model.</td></tr>
+        <tr><td><b>Cross-Cutting Enablers</b></td><td>12</td><td><b>Correct as a treatment.</b> Rightly handled differently.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The Governance &amp; Assurance problem</h3>
+  <p>Grouping 3 + 6 + 7 places <strong>the state</strong> in the same conceptual box as <strong>your law firm and your escrow bank</strong>. To a user these are opposites: one is compulsory, external and cannot be chosen; the others are appointed, commercial and can be replaced. Putting them together teaches the wrong mental model at exactly the moment the user most needs the right one.</p>
+
+  <div class="verdict">
+    <span class="tag">Recommended structure</span>
+    <p>Keep four clusters. Lift Group 3 out to a <strong>regulatory rail</strong> that runs beneath all of them — visually and structurally a different layer, matching what authorities actually are. The fourth cluster then becomes <strong>Money &amp; Assurance</strong> (6 + 7), which is genuinely coherent: the parties who hold, verify, insure and defend the project's money and obligations.</p>
+  </div>
+
+  <div class="figure">
+    <div class="frame">
+      <svg viewBox="0 0 720 300" role="img" aria-label="Four stakeholder clusters over a regulatory rail, with cross-cutting enablers">
+        <g font-family="'Avenir Next',system-ui,sans-serif">
+          <text x="0" y="14" font-size="10" fill="currentColor" opacity=".55" font-family="'SF Mono',ui-monospace,monospace" letter-spacing="1.4">CROSS-CUTTING ENABLERS · GROUP 12</text>
+          <rect x="0" y="24" width="720" height="30" rx="3" fill="none" stroke="currentColor" stroke-opacity=".3" stroke-dasharray="4 3"/>
+          <text x="360" y="43" font-size="12" fill="currentColor" opacity=".7" text-anchor="middle">Valuers · Data · PropTech · ESG · Research · Training</text>
+
+          <g>
+            <rect x="0" y="80" width="168" height="98" rx="4" fill="currentColor" fill-opacity=".05" stroke="currentColor" stroke-opacity=".35"/>
+            <text x="14" y="104" font-size="10" font-family="'SF Mono',ui-monospace,monospace" fill="currentColor" opacity=".5">01 + 02</text>
+            <text x="14" y="127" font-size="14" fill="currentColor" font-weight="600">Capital &amp;</text>
+            <text x="14" y="145" font-size="14" fill="currentColor" font-weight="600">Ownership</text>
+            <text x="14" y="165" font-size="11" fill="currentColor" opacity=".62">Who owns · who funds</text>
+          </g>
+          <g>
+            <rect x="184" y="80" width="168" height="98" rx="4" fill="currentColor" fill-opacity=".05" stroke="currentColor" stroke-opacity=".35"/>
+            <text x="198" y="104" font-size="10" font-family="'SF Mono',ui-monospace,monospace" fill="currentColor" opacity=".5">04 + 05</text>
+            <text x="198" y="127" font-size="14" fill="currentColor" font-weight="600">Delivery &amp;</text>
+            <text x="198" y="145" font-size="14" fill="currentColor" font-weight="600">Technical</text>
+            <text x="198" y="165" font-size="11" fill="currentColor" opacity=".62">Who designs · who builds</text>
+          </g>
+          <g>
+            <rect x="368" y="80" width="168" height="98" rx="4" fill="currentColor" fill-opacity=".05" stroke="currentColor" stroke-opacity=".35"/>
+            <text x="382" y="104" font-size="10" font-family="'SF Mono',ui-monospace,monospace" fill="currentColor" opacity=".5">06 + 07</text>
+            <text x="382" y="127" font-size="14" fill="currentColor" font-weight="600">Money &amp;</text>
+            <text x="382" y="145" font-size="14" fill="currentColor" font-weight="600">Assurance</text>
+            <text x="382" y="165" font-size="11" fill="currentColor" opacity=".62">Who holds · verifies · insures</text>
+          </g>
+          <g>
+            <rect x="552" y="80" width="168" height="98" rx="4" fill="currentColor" fill-opacity=".05" stroke="currentColor" stroke-opacity=".35"/>
+            <text x="566" y="104" font-size="10" font-family="'SF Mono',ui-monospace,monospace" fill="currentColor" opacity=".5">08 · 09 · 10 · 11</text>
+            <text x="566" y="127" font-size="14" fill="currentColor" font-weight="600">Market &amp;</text>
+            <text x="566" y="145" font-size="14" fill="currentColor" font-weight="600">Operations</text>
+            <text x="566" y="165" font-size="11" fill="currentColor" opacity=".62">Who sells · occupies · operates</text>
+          </g>
+
+          <line x1="0" y1="206" x2="720" y2="206" stroke="currentColor" stroke-opacity=".2"/>
+          <rect x="0" y="222" width="720" height="52" rx="4" fill="currentColor" fill-opacity=".09" stroke="currentColor" stroke-opacity=".45"/>
+          <text x="16" y="243" font-size="10" font-family="'SF Mono',ui-monospace,monospace" fill="currentColor" opacity=".6" letter-spacing="1.4">REGULATORY RAIL · GROUP 03 — NOT A CLUSTER</text>
+          <text x="16" y="263" font-size="13" fill="currentColor" font-weight="600">Authorities issue the approvals that gate every activity above</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption><b>Figure 1.</b> Four clusters remain the navigational surface. Group 3 is re-typed as a rail because authorities are compulsory and external, not appointed and commercial — the asymmetry that "Governance &amp; Assurance" currently hides.</figcaption>
+  </div>
+</section>
+
+<section id="s7">
+  <span class="sec-num">07</span>
+  <h2>Recommended lifecycle architecture</h2>
+  <p class="lede">Your 18-stage prose list is weaker than the 24-stage model already in your code, and both share one flaw that will actively mislead users: they present concurrent tracks as a sequence.</p>
+
+  <h3>Three problems with a flat stage list</h3>
+  <ul>
+    <li><strong>Sales and escrow are not stage 11 and 12.</strong> In an off-plan project they run <em>parallel to</em> procurement and construction, often starting before the main contract is awarded. Numbering them after construction teaches a sequence that does not exist.</li>
+    <li><strong>Financing is not a stage.</strong> It recurs: land finance, the construction facility, buyer mortgages, refinancing at stabilisation. Modelled as stage 5, it disappears from every later moment where it is decisive.</li>
+    <li><strong>18 items cannot be navigated.</strong> Neither can 24. A flat list of that length has no shape a user can hold in memory.</li>
+  </ul>
+
+  <h3>The three-tier structure to adopt</h3>
+  <ul class="stack">
+    <li><b>TIER 1</b><span><em>Phase — 4 to 6, the navigational spine</em>Your code already has this right: <code>Originate · Deliver · Own · Evolve</code>. Add <code>Entitle</code> if you want approvals to read as their own act. This is what appears in navigation and what a user remembers.</span></li>
+    <li><b>TIER 2</b><span><em>Stage — 18 to 24, the addressable pages</em>Your existing list. Each is a URL, a page, an SEO target. Never shown all at once outside the explorer.</span></li>
+    <li><b>TIER 3</b><span><em>Activity — hundreds, the atomic graph node</em>The unit that actually carries dependencies, roles, documents and approvals. This is what your model is missing and what the AI layer will need. "Obtain building permit" is a stage; "submit structural drawings for review" is an activity.</span></li>
+  </ul>
+
+  <h3>Model tracks, not only sequence</h3>
+  <p>Above the phases, define a small number of <strong>concurrent tracks</strong> that run across them — <em>Regulatory</em>, <em>Commercial</em>, <em>Financial</em>, <em>Physical delivery</em>. Every activity belongs to one track and one phase. This is what lets you show, honestly, that a sales launch and a piling contract are happening in the same week under different logic, and it is far more informative than any horizontal timeline.</p>
+
+  <p>Dependencies then become explicit typed edges between activities, not implied by numbering:</p>
+  <ul>
+    <li><code>blocks</code> — hard prerequisite; the successor cannot legally start</li>
+    <li><code>enables</code> — soft; the successor becomes practical but is not gated</li>
+    <li><code>informs</code> — an output feeds a later input without gating it</li>
+    <li><code>runs-parallel-to</code> — explicit concurrency, so the absence of an edge is not read as sequence</li>
+  </ul>
+</section>
+
+<section id="s8">
+  <span class="sec-num">08</span>
+  <h2>Recommended knowledge graph model</h2>
+  <p class="lede">Your proposed chain — Project → Stage → Activity → Stakeholder → Authority → System → Documents → Approval → Dependency → Next — is directionally right but is a <em>path</em>, not a <em>schema</em>. Written as a chain it forces a linear reading of something that branches.</p>
+
+  <h3>Entity types</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Entity</th><th>Role in the graph</th><th>Status today</th></tr></thead>
+      <tbody>
+        <tr><td><b>Phase</b></td><td>Navigational grouping of stages</td><td>Exists (4 phases)</td></tr>
+        <tr><td><b>Stage</b></td><td>Addressable chapter of the lifecycle</td><td>Exists (24)</td></tr>
+        <tr><td><b>Activity</b></td><td><b>Atomic unit.</b> Carries roles, inputs, outputs, conditions, dependencies</td><td><b>Missing</b></td></tr>
+        <tr><td><b>Actor type</b></td><td>Party class — the 12 groups classify these</td><td>Exists (8, thin)</td></tr>
+        <tr><td><b>Role</b></td><td>Function played by an actor on an activity</td><td><b>Missing</b></td></tr>
+        <tr><td><b>Authority</b></td><td>Issuer of approvals; own entity class, not a stakeholder</td><td>Exists (11) — already correctly typed</td></tr>
+        <tr><td><b>Approval</b></td><td>The gate. Has issuer, inputs, validity, prerequisites</td><td><b>Missing</b> — the most valuable gap</td></tr>
+        <tr><td><b>Document</b></td><td>Artefact produced or consumed; reused across activities</td><td><b>Missing</b></td></tr>
+        <tr><td><b>System</b></td><td>Portal or channel where an activity is transacted</td><td>Free-text only</td></tr>
+        <tr><td><b>Jurisdiction</b></td><td>Emirate, zone, free zone, master community</td><td>String field only</td></tr>
+        <tr><td><b>Condition</b></td><td>Typed predicate governing whether an edge applies</td><td><b>Missing</b> — required for AI</td></tr>
+        <tr><td><b>Claim</b></td><td>A single sourced assertion with date, authority, confidence</td><td>Page-level status only</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The two additions that matter most</h3>
+  <p><strong>Approval as a first-class entity.</strong> Today an approval is implied by a stage name. Modelled properly — with its issuing authority, required documents, prerequisite approvals, validity period and what it unlocks — it becomes the natural join between the regulatory rail and the delivery graph, and the highest-intent page type you can own in search. "What do I need for a building permit in Dubai" is the query; the approval page is the answer.</p>
+
+  <p><strong>Condition as a typed predicate on edges.</strong> An edge that says "requires civil defence approval" is unusable without knowing <em>when</em>. An edge carrying <code>{jurisdiction: DDA, use: residential, storeys: &gt;G+4}</code> can be evaluated. Without typed conditions, every page must hedge across all cases — which produces exactly the vague content you are trying to escape — and any future AI layer will invent the branch it cannot look up.</p>
+
+  <div class="verdict">
+    <span class="tag">Build order</span>
+    <p>Do <strong>not</strong> start with a graph database. Author structured content with a schema — typed data files or a headless CMS with relations — and derive the graph. Your README's "CMS-ready, file-backed" instinct is correct. A graph store before the content exists will cost you months and buy nothing; the bottleneck is editorial, not storage.</p>
+  </div>
+</section>
+
+<section id="s9">
+  <span class="sec-num">09</span>
+  <h2>Recommended user journeys</h2>
+  <p class="lede">The platform needs three entry modes, not one. Your brief's example prompts split cleanly into them, and each demands a different first screen.</p>
+
+  <ul class="stack">
+    <li><b>MODE A</b><span><em>Intent — "I want to develop a 20-storey residential building in Dubai"</em>A project configurator: jurisdiction → asset type → tenure/sale route → scale. Produces a filtered lifecycle view. This is the flagship, and it should be on the homepage.</span></li>
+    <li><b>MODE B</b><span><em>Identity — "I am a consultant; what am I responsible for?"</em>A lens. Same graph, filtered to the activities where that role appears, ordered by phase. Shows what they receive, produce, and hand to whom.</span></li>
+    <li><b>MODE C</b><span><em>Object — "What is escrow?" · "What is a building completion certificate?"</em>Direct entry to a stage, approval, document or term page — arriving from search, not from your homepage. Most traffic will land here first, so every such page must reconstruct context above the fold.</span></li>
+  </ul>
+
+  <h3>The universal movement</h3>
+  <p>Whatever the entry, the user must be able to move along the same spine — and, critically, in both directions. Forward answers "what next"; backward answers "why am I blocked", which is the more common and more valuable question in development.</p>
+
+  <div class="pathline">Intent → Context (jurisdiction · asset · route) → Phase → Activity → Roles → Approvals → Documents → Dependencies → Next / Blocked-by</div>
+
+  <h3>Three journeys worked through</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>User</th><th>Enters</th><th>Sees</th><th>Leaves with</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><b>First-time developer</b></td>
+          <td>Configurator: Dubai · residential · G+20 · off-plan sale</td>
+          <td>Phase spine with their activity count per phase; the four gates that most commonly stop projects like theirs</td>
+          <td>An ordered picture of what must exist before land is committed</td>
+        </tr>
+        <tr>
+          <td><b>Off-plan buyer</b></td>
+          <td>Search → "escrow" approval page</td>
+          <td>Where their money sits, which activity releases it, who audits it, what registration protects them</td>
+          <td>The specific document to ask the developer for, and which authority verifies it</td>
+        </tr>
+        <tr>
+          <td><b>MEP consultant</b></td>
+          <td>Role lens</td>
+          <td>Their activities by phase; upstream inputs they depend on; who is blocked when they are late</td>
+          <td>Their own dependency map, including handoffs they don't currently see</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="verdict flag">
+    <span class="tag">Decision required before any build</span>
+    <p>You cannot serve "what happens to my deposit" and "how do I structure an SPV for a tower" from the same homepage and the same navigation. They need different vocabulary, different trust framing and different depth. The current site attempted both and collapsed into the consumer one — that is the mechanism behind every finding in section 04.</p>
+    <p><strong>Recommendation: lead with development.</strong> Consumer property guidance in Dubai is commoditised by portals and the authorities' own channels; the development graph is defensible, differentiated and monetisable. Keep the buyer as a <em>lens into the development graph</em> — an off-plan buyer genuinely is a development-lifecycle actor — rather than as a parallel consumer funnel.</p>
+  </div>
+</section>
+
+<section id="s10">
+  <span class="sec-num">10</span>
+  <h2>Recommended information architecture</h2>
+
+  <h3>Primary navigation — four items and a search field</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Item</th><th>Answers</th><th>Route</th></tr></thead>
+      <tbody>
+        <tr><td><b>Lifecycle</b></td><td>"What happens, in what order?"</td><td><code>/lifecycle</code> → <code>/lifecycle/{phase}</code> → <code>/lifecycle/{stage}</code> → <code>/activity/{id}</code></td></tr>
+        <tr><td><b>Stakeholders</b></td><td>"Who is involved and what do they owe?"</td><td><code>/stakeholders/{cluster}/{group}/{actor}</code></td></tr>
+        <tr><td><b>Approvals</b></td><td>"What is required and who issues it?"</td><td><code>/approvals/{approval}</code>, with <code>/authorities/{authority}</code> <b>nested beneath</b></td></tr>
+        <tr><td><b>Journeys</b></td><td>"Show me my case"</td><td><code>/journeys/{scenario}</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Note what the third item does structurally: <strong>authority becomes an attribute of an approval rather than a top-level destination.</strong> That is how "journey-centric, not authority-centric" gets enforced in the URL space rather than merely asserted in copy — and it is the direct fix for the finding in section 04.</p>
+
+  <h3>Persistent context bar</h3>
+  <p>A slim, always-present strip carrying the user's resolved facts — <em>Dubai · Mainland (DM) · Residential · Off-plan</em> — that filters every page beneath it and is editable from anywhere. This is the single highest-value interface element in the entire product, because it is what converts a generic reference into an answer, and it is what makes a graph feel like a system rather than a website.</p>
+
+  <h3>Page types</h3>
+  <p>Your proposed list, revised. Removed: standalone "Ecosystem", "Cluster" and "Regulatory reference" pages — the first two are navigational rather than destinations, the third fragments provenance that belongs on the claims themselves.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Page type</th><th>Job</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td><b>Activity</b></td><td>The atom: roles, inputs, outputs, conditions, blocked-by, unblocks</td><td>Core — new</td></tr>
+        <tr><td><b>Approval</b></td><td>Issuer, prerequisites, documents, validity, what it unlocks</td><td>Core — new, highest search value</td></tr>
+        <tr><td><b>Stage</b></td><td>Chapter view: activities, tracks, common failure points</td><td>Core — exists, needs depth</td></tr>
+        <tr><td><b>Actor / Role</b></td><td>The lens: what this party does across the lifecycle</td><td>Core — exists, needs the actor/role split</td></tr>
+        <tr><td><b>Document</b></td><td>What it is, who issues it, where it is consumed</td><td>High — new; documents recur and deserve one canonical page</td></tr>
+        <tr><td><b>Scenario / journey</b></td><td>A configured path through the graph</td><td>High — the marketable artefact</td></tr>
+        <tr><td><b>Authority</b></td><td>Mandate, jurisdiction, approvals issued, systems</td><td>Medium — deliberately demoted</td></tr>
+        <tr><td><b>Jurisdiction</b></td><td>What differs here and which route applies</td><td>Medium — new; carries the "Dubai is not Abu Dhabi" discipline</td></tr>
+        <tr><td><b>Term / glossary</b></td><td>One definition, linked everywhere</td><td>Medium — new; terminology is a real barrier</td></tr>
+        <tr><td><b>Claim / source record</b></td><td>The provenance ledger behind an assertion</td><td>Medium — new; the trust device made inspectable</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Cross-linking rules</h3>
+  <ul>
+    <li>Every activity page shows <strong>blocked-by</strong> and <strong>unblocks</strong> as navigable lists — bidirectional traversal is the product.</li>
+    <li>Every mention of a role, approval, document or term is a link to its canonical page. No orphan nouns.</li>
+    <li>Breadcrumbs reflect the graph position, not the URL: <em>Deliver › Construction › Structural inspection › Site engineer</em>.</li>
+    <li>Every page carries a "seen from" switcher that re-renders the same node through a different role lens.</li>
+  </ul>
+</section>
+
+<section id="s11">
+  <span class="sec-num">11</span>
+  <h2>Recommended UI/UX direction</h2>
+  <p class="lede">The current design is skilful and wrong for the category. Replace the register, not the craft. Target: an instrument a professional keeps open in a tab — closer to a technical standard or a well-made reference tool than to a development brochure.</p>
+
+  <h3>Principles</h3>
+  <ul>
+    <li><strong>Density is a feature.</strong> Bring <code>h1</code> from 128px to roughly 36–44px and section padding from 144px to 48–64px. A professional judges a knowledge platform by how much it can see at once, not by how cinematic the scroll is.</li>
+    <li><strong>Ship the serif, keep a serif.</strong> Cormorant Garamond at weight 300 is a display face doing body work; it is poor at small sizes, poor for dense tables, and has no Arabic counterpart for the parity you have already scaffolded. A text serif for reading plus a neutral sans for interface and data will hold authority without the brochure connotation.</li>
+    <li><strong>Retire gold-on-void as the primary system.</strong> It is the single strongest signal that this is a luxury sales asset. Reserve one restrained accent for wayfinding and spend colour instead on <em>semantics</em>: status, confidence, gate type, jurisdiction. In a knowledge platform, colour that means something beats colour that sets a mood.</li>
+    <li><strong>Light theme as the default.</strong> Reference material is read in daylight, printed, and pasted into reports. Keep the dark theme — it is already built and well-executed — but do not lead with it.</li>
+  </ul>
+
+  <h3>Interface patterns the product needs</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Pattern</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td><b>Context bar</b></td><td>Persistent jurisdiction/asset/route filter. The core mechanic.</td></tr>
+        <tr><td><b>Dependency panel</b></td><td>Blocked-by / unblocks, always in the same position on every activity page.</td></tr>
+        <tr><td><b>Status &amp; confidence chips</b></td><td>Your <code>ContentStatus</code> promoted from badge to filter — let users show only validated content.</td></tr>
+        <tr><td><b>Source chip</b></td><td>Authority + effective date + last verified, inline on the claim, linking to the source record.</td></tr>
+        <tr><td><b>Approval gate marker</b></td><td>A distinct visual form for gates so a scan reveals where a project can stop.</td></tr>
+        <tr><td><b>Track swimlanes</b></td><td>Shows concurrency honestly where a timeline would imply false sequence.</td></tr>
+        <tr><td><b>Lens switcher</b></td><td>Re-render the current node through another role. Makes "same ecosystem, different journey" tangible in one click.</td></tr>
+        <tr><td><b>Jurisdiction diff</b></td><td>Side-by-side "in Dubai / in Abu Dhabi" for the same activity — a genuinely novel and defensible feature.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>What to preserve from the current build</h3>
+  <p>The accessibility work — theme, three text scales, language toggle with RTL <code>dir</code> switching — is already implemented and ahead of most of this category. Carry it forward intact. The <code>StatusTag</code> component and the disciplined disclaimer language in the footer are also assets; they should become more prominent, not less.</p>
+</section>
+
+<section id="s12">
+  <span class="sec-num">12</span>
+  <h2>Homepage strategy</h2>
+  <p class="lede">The homepage has exactly one job: convince a professional in under ten seconds that this models their world with more structure than anything else available, then get them into the graph. It is a doorway, not a narrative.</p>
+
+  <h3>What it must communicate, in order</h3>
+  <ul class="stack">
+    <li><b>01</b><span><em>Scope, in one line</em>UAE property development, end to end — not property buying. The headline must make the category unambiguous, because the current one does not.</span></li>
+    <li><b>02</b><span><em>The configurator, above the fold</em>Jurisdiction · asset type · role · position. This is the product's thesis made operable. It should be the first interactive element, not the fourth section down.</span></li>
+    <li><b>03</b><span><em>The graph, shown not described</em>One legible visual of the actual ecosystem — phases, clusters, the regulatory rail, real edge counts. Showing the structure proves the claim; a paragraph asserting connectedness does not.</span></li>
+    <li><b>04</b><span><em>Proof of depth</em>Real numbers from real data: stages modelled, approvals mapped, sourced claims, last-verified date. This is what separates a knowledge platform from a landing page.</span></li>
+    <li><b>05</b><span><em>Governance, stated plainly</em>How content is sourced and what REOS deliberately does not do. Trust is a feature here, and it belongs on the homepage, not only in the footer.</span></li>
+  </ul>
+
+  <h3>What to cut</h3>
+  <p>The problem/solution before-and-after, the fictional "journey intelligence" product preview, and the persona grid whose cards resolve to a page telling four of seven personas to come back later. All three are brochure devices; none of them survive contact with a professional user. Replace the persona grid with the same list rendered as <em>lenses into the graph</em>, every one of which leads somewhere real.</p>
+</section>
+
+<section id="s13">
+  <span class="sec-num">13</span>
+  <h2>Search and discovery strategy</h2>
+  <p class="lede">Most users will arrive from a search engine on a deep page, not the homepage. Design for that.</p>
+  <ul>
+    <li><strong>Every entity page must rebuild its own context</strong> above the fold: which phase, which jurisdiction, which approval gates it, what it blocks. A visitor landing on an activity page from an external search should be able to orient without going up a level.</li>
+    <li><strong>Entity-aware internal search.</strong> Results should be typed — an approval, an activity, a document, a role — not a flat list of pages. Filterable by jurisdiction, phase, actor and content status.</li>
+    <li><strong>Question-shaped titles for the highest-intent pages.</strong> Approval and document pages should be titled the way the query is phrased, because that is where the durable organic traffic sits.</li>
+    <li><strong>Fix the sitemap first.</strong> <code>sitemap.ts</code> currently omits <code>/lifecycle</code>, all 24 stage pages and all 8 stakeholder pages — the most substantive content in the repository is invisible to crawlers. This is a small change with disproportionate return, and it can be made before any redesign.</li>
+    <li><strong>Structured data on every entity page.</strong> Typed markup for processes, definitions and how-to steps is how a knowledge graph earns rich results and, increasingly, citation in AI answers.</li>
+  </ul>
+</section>
+
+<section id="s14">
+  <span class="sec-num">14</span>
+  <h2>Trust, source and regulatory governance</h2>
+  <p class="lede">You already have the beginning of this and should treat it as the product's spine, not its disclaimer. Governance is the moat: anyone can write about Dubai development; almost nobody will maintain a sourced, dated, versioned claim set.</p>
+
+  <h3>Classify every claim by epistemic type</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Type</th><th>Means</th><th>Requires</th></tr></thead>
+      <tbody>
+        <tr><td><b>Legislative</b></td><td>Law, decree or regulation</td><td>Instrument reference + article</td></tr>
+        <tr><td><b>Regulatory requirement</b></td><td>A binding authority requirement</td><td>Official source URL + retrieval date</td></tr>
+        <tr><td><b>Official procedure</b></td><td>A published authority process</td><td>Service page + version if stated</td></tr>
+        <tr><td><b>Market practice</b></td><td>What is customary, not mandated</td><td>Explicit labelling as practice, not rule</td></tr>
+        <tr><td><b>Professional guidance</b></td><td>Institute or industry-body position</td><td>Attributed body</td></tr>
+        <tr><td><b>REOS interpretation</b></td><td>Your synthesis across sources</td><td>Marked as interpretation, with reasoning visible</td></tr>
+        <tr><td><b>Commercial information</b></td><td>Provider-supplied</td><td>Disclosed as such</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Metadata on every claim</h3>
+  <p>Source · issuing authority · jurisdiction · effective from · last verified · version · applicability conditions · confidence · related activities · related roles. Your <code>ContentStatus</code> field is the seed of this; the change is moving it from <em>page level</em> to <em>claim level</em>, and surfacing verification dates in the interface rather than storing them privately.</p>
+
+  <div class="verdict keep">
+    <span class="tag">Turn the constraint into the feature</span>
+    <p>A visible "last verified" date on every operative claim is simultaneously your credibility signal, your legal protection, and your editorial workflow. Stale claims become self-identifying. Make the verification queue a public artefact — "142 claims verified this quarter" is a stronger trust argument than any assertion of authority you could write.</p>
+  </div>
+</section>
+
+<section id="s15">
+  <span class="sec-num">15</span>
+  <h2>Future AI architecture</h2>
+  <p class="lede">Your instinct that the architecture should support an AI layer is correct, and the sequencing matters: the graph is the product, the AI is an interface onto it. Build the graph such that an AI <em>cannot</em> answer beyond it.</p>
+
+  <h3>Four requirements the current model does not yet meet</h3>
+  <ul>
+    <li><strong>Typed conditions on edges.</strong> Without machine-readable predicates, a model asked "does my 20-storey tower need this approval?" will infer the branch. Conditions are what turn retrieval into reasoning.</li>
+    <li><strong>Claim-level provenance.</strong> Page-level status cannot support per-sentence citation. If the answer cites, the graph must carry citations at the granularity of the assertion.</li>
+    <li><strong>Temporal versioning.</strong> <code>effective_from</code> and <code>superseded_by</code> let the system answer "what applied in 2024", detect its own staleness, and refuse confidently when a claim has expired.</li>
+    <li><strong>Encoded refusal boundaries.</strong> The graph must know where it stops. In this domain the most valuable AI behaviour is declining to answer and naming the authority to ask — an unhedged wrong answer about escrow or eligibility is a category-ending event.</li>
+  </ul>
+
+  <h3>The right generation pattern</h3>
+  <p>Not open generation over prose. <strong>Constrained assembly over the graph:</strong> resolve the user's facts against jurisdiction and asset conditions, traverse the applicable subgraph, and render only what the nodes carry — each rendered claim showing its source chip. The model composes and sequences; it does not supply facts. This makes the same mechanism serve both the trust story and the AI story, and it is far more defensible than retrieval over articles.</p>
+
+  <p>The natural progression: filtered journeys (deterministic, no model) → natural-language entry mapped onto the configurator → constrained assembly with citations → saved project state → project dashboards. Each step is useful shipped alone, which is what you want when the underlying data is still being built.</p>
+</section>
+
+<section id="s16">
+  <span class="sec-num">16</span>
+  <h2>Critical risks</h2>
+
+  <div class="finding">
+    <span class="sev sev-critical">Highest</span>
+    <div>
+      <h4>Editorial capacity, not engineering, is the binding constraint</h4>
+      <p>24 stages × hundreds of activities × jurisdiction variants runs to thousands of claim-nodes, each needing sourcing and periodic re-verification. Dubai alone is a sustained specialist workload. Every finding in this document is fixable in weeks; this one is the multi-year commitment, and it is what will actually determine whether the product exists.</p>
+      <p><strong>Mitigation: depth-first, never breadth-first.</strong> One jurisdiction, one asset class, one route — fully sourced end to end. A single complete, citable spine is worth more than seven emirates at twenty percent, and it is the only version that is demonstrably true.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-critical">Highest</span>
+    <div>
+      <h4>Regulatory decay with reputational consequence</h4>
+      <p>Fees change, thresholds move, portals migrate, authority mandates get reorganised. A stale dependency edge that someone sequences a project on is the failure mode that ends the platform's credibility — and dependency edges are precisely the thing you cannot easily spot-check.</p>
+      <p><strong>Mitigation:</strong> publish the graph's <em>shape</em> broadly but gate <em>actionable</em> claims behind a cited source and a verification date. Make status a first-class filter so a user can choose to see only validated content.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-major">High</span>
+    <div>
+      <h4>Audience collapse — already happened once</h4>
+      <p>The consumer funnel is easier to write, easier to rank for, and easier to explain. It out-competed the development model inside your own codebase without a decision ever being made. Unless the audience call in section 09 is made explicitly and defended, the same drift will recur.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-major">High</span>
+    <div>
+      <h4>Regulatory positioning exposure</h4>
+      <p>Real-estate advertising and advisory are regulated activities in the UAE; residency guidance belongs to immigration authorities. The current disclaimers are well-drafted and should be strengthened rather than softened as the platform's confidence grows. This risk scales directly with how authoritative the positioning claims to be — which is the subject of the next section.</p>
+    </div>
+  </div>
+
+  <div class="finding">
+    <span class="sev sev-major">High</span>
+    <div>
+      <h4>Complexity outrunning comprehension</h4>
+      <p>A fully-typed graph with conditions, roles, tracks and claim provenance is correct and could easily produce an interface only its author can use. The context bar exists to absorb this: complexity lives in the data, and the interface's job is to narrow it to the user's case before showing anything.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s17">
+  <span class="sec-num">17</span>
+  <h2>Recommended direction</h2>
+
+  <h3>On "Single Source of Truth for UAE Property Development"</h3>
+  <div class="verdict flag">
+    <span class="tag">Do not use it</span>
+    <p><strong>It contradicts your own design.</strong> You correctly hold that binding actions return to the authority, and your <code>/reos</code> neutrality charter says so explicitly. If the Land Department is the system of record, REOS is by definition not the source of truth — the claim is falsified by your own architecture.</p>
+    <p><strong>It asserts an authority you do not hold.</strong> In a regulated market, claiming to be the source of truth on registration, escrow, off-plan and residency invites exactly the scrutiny your careful disclaimer language is designed to avoid.</p>
+    <p><strong>It is unsubstantiable on day one.</strong> With content at mixed validation status, any domain expert can disprove it in a single session. The phrase makes a promise the editorial model cannot keep.</p>
+  </div>
+
+  <p>Stronger alternatives, in order of preference — each is true at launch and gets truer as the graph fills:</p>
+  <ul class="stack">
+    <li><b>PRIMARY</b><span><em>"The connected map of UAE property development."</em>Claims structure and connection — which is your actual differentiator — without claiming authority. "Map" also correctly implies it points at territory it does not own.</span></li>
+    <li><b>ALT</b><span><em>"How property development actually works in the UAE."</em>Plainer, more confident, strong in search. Reads as explanation rather than assertion, which is what you are.</span></li>
+    <li><b>ALT</b><span><em>"The development operating layer for the UAE."</em>Carries the platform ambition. Hold this until there is project state to operate on; used now it over-promises.</span></li>
+  </ul>
+
+  <p>Supporting line: <em>REOS connects the authorities, approvals, documents and stakeholders that make property development happen — and links every requirement back to its official source.</em> That sentence claims connection and provenance, not authority, and it is defensible from the first page you publish.</p>
+
+  <h3>The architecture in one paragraph</h3>
+  <p>A development-first knowledge graph for the UAE. <strong>Actors</strong> (12 groups, 4 clusters) play <strong>roles</strong> on <strong>activities</strong>; activities sit in <strong>stages</strong> within four <strong>phases</strong> and run on concurrent <strong>tracks</strong>; activities consume and produce <strong>documents</strong>, are gated by <strong>approvals</strong> issued by <strong>authorities</strong> on a regulatory rail, and connect through typed, conditional <strong>dependencies</strong>. Every operative statement is a sourced, dated <strong>claim</strong>. The user resolves their <strong>jurisdiction and asset facts once</strong> in a persistent context bar, then reads the same graph through whichever <strong>lens</strong> they occupy. Later, an AI assembles paths across this graph and may assert nothing the graph does not carry.</p>
+</section>
+
+<section id="s18">
+  <span class="sec-num">18</span>
+  <h2>Rebuild plan</h2>
+  <p class="lede">Sequenced so that each phase is independently useful and the riskiest question is settled before any code is written. Phases 0 and 1 are the ones that determine the outcome.</p>
+
+  <ul class="stack">
+    <li><b>PHASE 0</b><span><em>Decide — no code</em>Settle the audience question in section 09 and the positioning in section 17. Write both down as constraints the build is measured against. Everything downstream inherits these two decisions; leaving them open is what produced the current split.</span></li>
+    <li><b>PHASE 1</b><span><em>Schema</em>Introduce Activity, Role, Approval, Document, Condition and Claim. Split actor from role. Promote Authority out of the stakeholder set. Migrate <code>reos.ts</code> onto the new shape. No visual work. This is the highest-leverage week in the project.</span></li>
+    <li><b>PHASE 2</b><span><em>One complete vertical slice</em>"Develop a residential building in Dubai, mainland route" — end to end, every claim sourced and dated. Depth over coverage. This slice is simultaneously the proof of concept, the editorial template, and the thing you can show an investor.</span></li>
+    <li><b>PHASE 3</b><span><em>Navigation and IA</em>Four-item primary nav, the context bar, approval pages with authorities nested beneath them. Retire the orphaned routes and the dead components. Decide the consumer content's fate — folded in as a lens, or moved out.</span></li>
+    <li><b>PHASE 4</b><span><em>Design system</em>Density-first replacement: new type scale, semantic colour, gate and status treatments, dependency and swimlane patterns. Carry the accessibility work forward unchanged.</span></li>
+    <li><b>PHASE 5</b><span><em>Discovery</em>Entity-aware search, corrected sitemap, structured data, glossary, jurisdiction diffs. Note the sitemap fix is a same-day change and need not wait for this phase.</span></li>
+    <li><b>PHASE 6</b><span><em>AI layer</em>Natural-language entry onto the configurator, then constrained assembly with mandatory citation. Only once the graph carries conditions and claim-level provenance — earlier, it would generate exactly the unsourced confidence the product exists to replace.</span></li>
+  </ul>
+
+  <div class="verdict">
+    <span class="tag">Two changes worth making this week, independent of everything above</span>
+    <p>Add <code>/lifecycle</code> to the header navigation and to <code>sitemap.ts</code>, and link <code>/stakeholders</code> to the eight stakeholder journey pages. That is roughly a dozen lines, requires no strategic decision, and immediately exposes the most on-strategy content you already have — content that is currently live, correct, and reachable by nobody.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  Assessment prepared against reos-website @ 2b76a4a · 48 files reviewed · link graph and live routes verified against production.<br>
+  Findings cite source locations in the repository; recommendations are strategic and precede any implementation.
+</footer>
+
+</main>
+</div>
+</div>

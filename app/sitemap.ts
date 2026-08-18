@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Every route is emitted for both locales so each language is crawlable.
   const base = [
     entry("", 1),
+    entry("/assistant", 0.95),
     entry("/journey", 0.9),
     entry("/roles", 0.9),
     entry("/ecosystem", 0.9),

@@ -4,6 +4,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Page, StatusTag } from "../../components/SiteShell";
+import { Assistant } from "../../components/Assistant";
+import { buildSnapshot } from "../../assistant/snapshot";
+import { getDict } from "../../i18n/dictionary";
 import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 import { stageById, stages } from "../../data/journey";
@@ -37,6 +40,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
   const parallel = stage.runsWith.map((id) => all.find((s) => s.id === id)).filter(Boolean) as typeof all;
   const details = stage.detailStageIds.map((id) => detailById[id]).filter(Boolean);
   const relevantPersonas = getPersonas(locale).filter((p) => p.steps.some((s) => s.stageId === stage.id));
+  const d = getDict(locale);
 
   return <Page className="inner-page stage-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
@@ -147,6 +151,14 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
           </div>
         )}
       </aside>
+    </section>
+
+    {/* Ask in place, seeded with this stage so the answer already knows where
+        the visitor is standing. */}
+    <section className="section-pad stage-assistant">
+      <span className="eyebrow">{d.assistant.eyebrow}</span>
+      <h2>{d.assistant.onStageTitle}</h2>
+      <Assistant snapshot={buildSnapshot(locale)} locale={locale} variant="compact" initialStageId={stage.id} />
     </section>
 
     <nav className="stage-nav" aria-label="Adjacent stages">
