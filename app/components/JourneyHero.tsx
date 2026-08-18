@@ -80,44 +80,14 @@ function Skyline() {
   );
 }
 
-export function JourneyHero({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
-  const d = getDict(locale);
-  const t = d.journey.landing;
-  const localised = getStages(locale);
-  const byId = new Map(localised.map((s) => [s.id, s]));
-
-  /* Derived, never eyeballed — the honest counts that sit under the
-     aspirational scope figures in the stat bar. */
-  const realCounts = {
-    stages: canonicalStages.length,
-    groups: groups.length,
-    docs: canonicalStages.reduce((n, s) => n + s.documents.length, 0),
-  };
-
-  const statItems = [
-    t.stats.items.groups,
-    t.stats.items.processes,
-    t.stats.items.documents,
-    t.stats.items.ecosystem,
-  ];
-
+/* The flow visual. Lives in the homepage hero, where it replaces the earlier
+   stage ribbon. Split out from the hero section itself so the homepage can
+   compose it into its own existing two-column hero rather than bringing a
+   second hero shell with it. */
+export function JourneyFlow({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const t = getDict(locale).journey.landing;
+  const byId = new Map(getStages(locale).map((s) => [s.id, s]));
   return (
-    <section className="jl-hero">
-      <div className="jl-hero-copy">
-        <span className="eyebrow">{t.eyebrow}</span>
-        <h1>{t.h1}<br /><em>{t.h1em}</em></h1>
-        <p className="jl-sub">{t.sub}</p>
-        <p className="jl-support">{t.support}</p>
-        <div className="jl-actions">
-          <Link className="button gold" href="#the-map">
-            {t.ctaPrimary}<span aria-hidden="true">→</span>
-          </Link>
-          <Link className="button" href={localePath(locale, "/platform")}>
-            {t.ctaSecondary}<span aria-hidden="true">→</span>
-          </Link>
-        </div>
-      </div>
-
       <figure className="jl-flow">
         <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" role="img" aria-label={t.heroAlt}>
           <defs>
@@ -197,7 +167,24 @@ export function JourneyHero({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <small>{t.orchestrationSub}</small>
         </p>
       </figure>
+  );
+}
 
+/** Scope figures, labelled. Separate from the flow so the hero can place it. */
+export function JourneyStatsBar({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const t = getDict(locale).journey.landing;
+  /* Derived, never eyeballed — the honest counts that sit beneath the
+     aspirational scope figures. */
+  const realCounts = {
+    stages: canonicalStages.length,
+    groups: groups.length,
+    docs: canonicalStages.reduce((n, s) => n + s.documents.length, 0),
+  };
+  const statItems = [
+    t.stats.items.groups, t.stats.items.processes,
+    t.stats.items.documents, t.stats.items.ecosystem,
+  ];
+  return (
       <aside className="jl-stats" aria-label={t.stats.scopeLabel}>
         <header className="jl-stats-head">
           <span className="jl-stats-label">{t.stats.scopeLabel}</span>
@@ -213,7 +200,6 @@ export function JourneyHero({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         </dl>
         <p className="jl-stats-note">{fill(t.stats.scopeNote, realCounts)}</p>
       </aside>
-    </section>
   );
 }
 

@@ -3,7 +3,9 @@ import { getDict } from "./i18n/dictionary";
 import { getFragments, getLayers, getModules, getOutcomes, getStages, getGroups } from "./i18n/content";
 import Link from "next/link";
 import { EcosystemMap } from "./components/Ecosystem";
-import { JourneyMap, JourneyRibbon, PersonaQuickPick, PersonaSelector, TrackLegend } from "./components/Journey";
+import { JourneyMap, PersonaQuickPick, PersonaSelector, TrackLegend } from "./components/Journey";
+import { JourneyFlow, JourneyStatsBar, JourneyMoments } from "./components/JourneyHero";
+import { JourneyIntelligence } from "./components/JourneyStory";
 import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
@@ -30,9 +32,12 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <Link className="button ghost" href={L("/ecosystem")}>{d.home.ctaEcosystem}</Link>
         </div>
       </div>
-      <div className="hero-visual"><JourneyRibbon locale={locale} /></div>
+      <div className="hero-visual"><JourneyFlow locale={locale} /></div>
+      <JourneyStatsBar locale={locale} />
       <PersonaQuickPick locale={locale} />
     </section>
+
+    <JourneyMoments locale={locale} />
 
     {/* 02 — ASK. The assistant is the front door: a question before the reading. */}
     <section className="section-pad assistant-band" id="ask">
@@ -96,6 +101,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <Link className="button gold" href={L("/ecosystem")}>{d.home.ecoCta} <span>↗</span></Link>
       </div>
     </section>
+
+    <JourneyIntelligence locale={locale} />
 
     {/* 07 — HOW REOS CONNECTS. Three layers. */}
     <section className="section-pad layer-band atmos atmos-rays">

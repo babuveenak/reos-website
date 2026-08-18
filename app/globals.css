@@ -340,6 +340,7 @@ html[data-theme="light"] .stage-focus{background:linear-gradient(110deg,#FFF,#F1
   .hero-copy{order:1}
   .persona-quick{order:2}
   .hero-visual{min-height:auto; order:3}
+  .jl-stats{order:4}
   .eco-ring{width:min(440px,84vw)}
   .flow-track{grid-template-columns:repeat(2,1fr)}
 }
@@ -1711,14 +1712,6 @@ html[data-theme="light"] .reos-dock .assistant-composer::before{background:linea
  * reading in the dark theme, from one set of rules.
  * ==================================================================== */
 
-.jl-hero{position:relative;display:grid;grid-template-columns:minmax(0,44fr) minmax(0,56fr);gap:clamp(2rem,4vw,4.5rem);align-items:center;min-height:90vh;padding:9rem max(5vw,2rem) 3rem;max-width:var(--max);margin:auto}
-.jl-hero-copy{position:relative;z-index:2;animation:jlRise .9s cubic-bezier(.2,.8,.3,1) both}
-.jl-hero-copy h1{margin:1.8rem 0 1.6rem}
-.jl-sub{font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.6;color:#c9c3be;max-width:34rem}
-html[data-theme="light"] .jl-sub{color:#4a4550}
-.jl-support{font-size:.86rem;line-height:1.75;color:var(--muted);max-width:32rem;padding-inline-start:1rem;border-inline-start:1px solid var(--gold-dim)}
-.jl-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.4rem}
-.jl-actions .button:hover{transform:translateY(-3px);box-shadow:0 0 34px var(--jl-glow,rgba(200,164,93,.28))}
 
 /* ── the flow visual ─────────────────────────────────────────────── */
 /* Square, like .orbit-map: the SVG keeps its aspect ratio so strokes never
@@ -1760,7 +1753,6 @@ html[data-theme="light"] .jl-skyline rect{fill:var(--gold)}
 .jl-badge{flex:none;display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;background:var(--void);color:var(--gold-soft);font-family:var(--serif);font-size:.78rem;transition:.3s;box-shadow:0 0 0 4px color-mix(in srgb,var(--void) 70%,transparent)}
 .jl-marker-body{display:flex;flex-direction:column;gap:.15rem;min-width:0}
 .jl-marker-body b{font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;font-weight:400;color:var(--ivory)}
-.jl-marker-copy{font-size:.68rem;line-height:1.4;color:var(--muted)}
 .jl-marker-canon{font-size:.55rem;line-height:1.3;letter-spacing:.04em;color:var(--gold);opacity:.8}
 .jl-marker>a:hover .jl-badge,.jl-marker>a:focus-visible .jl-badge{background:var(--gold);color:var(--void);box-shadow:0 0 22px var(--gold)}
 .jl-marker>a:hover .jl-marker-body b{color:var(--gold-soft)}
@@ -1790,24 +1782,7 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
 .jl-stats-note{margin:1.2rem 0 0;padding-top:1rem;border-top:1px solid var(--line);font-size:.68rem;line-height:1.6;max-width:70ch}
 
 /* ── story sections ──────────────────────────────────────────────── */
-.jl-problem-grid,.jl-group-grid,.jl-module-grid,.jl-shift{list-style:none;margin:0;padding:0;display:grid;gap:1px}
-.jl-problem-grid{grid-template-columns:repeat(auto-fit,minmax(min(15rem,100%),1fr))}
-.jl-problem-grid li{outline:1px solid var(--line)}
-.jl-problem-grid li{padding:1.6rem 1.4rem;background:var(--void);display:flex;flex-direction:column;gap:.6rem;transition:background .3s}
-.jl-problem-grid li:hover{background:var(--deep)}
-.jl-problem-grid b{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--gold-soft)}
-.jl-problem-grid p{margin:0;font-size:.82rem;line-height:1.65;color:var(--muted)}
-.jl-group-grid{grid-template-columns:repeat(auto-fit,minmax(min(13rem,100%),1fr));margin-bottom:1.5rem}
-.jl-group-grid li{outline:1px solid var(--line)}
-.jl-group-grid li{padding:1.3rem;background:var(--void);display:flex;flex-direction:column;gap:.45rem}
-.jl-group-grid span{font-family:var(--serif);font-size:1.3rem;color:var(--gold);opacity:.5}
-.jl-group-grid b{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:400}
-.jl-group-grid small{font-size:.74rem;line-height:1.55;color:var(--muted)}
-.jl-rail{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap;padding:1.3rem 1.5rem;border:1px solid rgba(111,212,212,.3);background:linear-gradient(90deg,color-mix(in srgb,var(--cyan) 8%,transparent),transparent);margin-bottom:2rem}
-.jl-rail>span{font-family:var(--serif);font-size:1.6rem;color:var(--cyan)}
-.jl-rail>div{flex:1 1 18rem;min-width:0}
-.jl-rail b{display:block;font-family:var(--serif);font-size:1.2rem;font-weight:400}
-.jl-rail small{color:var(--muted);font-size:.78rem;line-height:1.55}
+.jl-shift{list-style:none;margin:0;padding:0;display:grid;gap:1px}
 .jl-shift{gap:0;border-top:1px solid var(--line)}
 .jl-shift li{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) minmax(0,2fr);gap:1.4rem;align-items:center;padding:1.5rem .4rem;border-bottom:1px solid var(--line)}
 .jl-shift-from{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
@@ -1815,16 +1790,6 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
 .jl-shift-to{font-family:var(--serif);font-size:1.3rem;color:var(--gold-soft)}
 .jl-shift p{margin:0;font-size:.82rem;line-height:1.65;color:var(--muted)}
 [dir="rtl"] .jl-shift i{transform:scaleX(-1)}
-.jl-module-grid{grid-template-columns:repeat(auto-fit,minmax(min(17rem,100%),1fr));gap:1px;margin-bottom:1.5rem}
-.jl-module-grid li{outline:1px solid var(--line)}
-.jl-module-grid li{padding:1.5rem 1.4rem;background:var(--void);display:flex;flex-direction:column;gap:.7rem}
-.jl-module-grid header{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}
-.jl-module-grid b{font-family:var(--serif);font-size:1.15rem;font-weight:400;flex:1 1 auto}
-.jl-module-grid p{margin:0;font-size:.8rem;line-height:1.65;color:var(--muted)}
-.jl-final{max-width:var(--max);margin:auto;padding:7rem max(5vw,2rem);text-align:center;background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--gold) 7%,transparent),transparent 60%)}
-.jl-final h2{margin-bottom:1.4rem}
-.jl-final p{font-family:var(--serif);font-size:1.2rem;color:var(--muted);margin-bottom:2.4rem}
-.jl-final .jl-actions{justify-content:center}
 
 /* ── animation ───────────────────────────────────────────────────── */
 @keyframes jlRise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
@@ -1840,7 +1805,6 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
 
 /* ── responsive ──────────────────────────────────────────────────── */
 @media(max-width:1180px){
-  .jl-hero{grid-template-columns:minmax(0,1fr);gap:3rem;padding-top:7.5rem;min-height:0}
   .jl-flow{max-width:34rem}
   .jl-shift li{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);row-gap:.7rem}
   .jl-shift p{grid-column:1/-1}
@@ -1855,7 +1819,6 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
   .jl-marker{position:static;top:auto;transform:none;animation:jlRise .6s ease both}
   .jl-marker,.jl-marker-end,.jl-marker-start{inset-inline-start:auto;inset-inline-end:auto;margin-inline:0}
   .jl-marker>a,.jl-marker-start>a{flex-direction:row;text-align:start;max-width:none}
-  .jl-marker-copy{font-size:.74rem}
   .jl-core{position:static;transform:none;align-self:flex-start;margin-top:1.4rem}
   [dir="rtl"] .jl-core{transform:none}
   .jl-stats dl{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem 1rem}
@@ -1868,7 +1831,7 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
   .jl-stats dl{grid-template-columns:minmax(0,1fr)}
 }
 @media(prefers-reduced-motion:reduce){
-  .jl-hero-copy,.jl-flow,.jl-marker,.jl-stats,.jl-halo,.jl-packet,.jl-seg,
+  .jl-flow,.jl-marker,.jl-stats,.jl-halo,.jl-packet,.jl-seg,
   .jl-concurrent-note,.jl-core{animation:none!important}
   .jl-seg{stroke-dashoffset:0}
   .jl-packet{display:none}
@@ -1899,4 +1862,3 @@ html[data-theme="light"] .jl-stats{box-shadow:0 20px 50px rgba(57,45,27,.12)}
    overlap. Only some groups carry one, so these must survive being absent. */
 .detail-boundary,.group-boundary{margin:.9rem 0 1.2rem;padding-inline-start:.85rem;border-inline-start:1px solid var(--gold-dim);font-size:.78rem;line-height:1.6;color:var(--muted)}
 .detail-boundary b,.group-boundary b{display:block;margin-bottom:.25rem;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;font-weight:400;color:var(--gold)}
-.jl-rail-boundary{display:block;margin-top:.5rem;padding-inline-start:.75rem;border-inline-start:1px solid rgba(111,212,212,.35);color:var(--muted);font-size:.74rem;line-height:1.55}

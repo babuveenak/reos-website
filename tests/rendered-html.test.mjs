@@ -18,28 +18,33 @@ test("renders the REOS homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
-test("the journey landing projects the canonical stages rather than listing its own", async () => {
+test("the homepage hero projects the canonical stages rather than listing its own", async () => {
   // The seven hero markers are an editorial view of the twelve canonical
   // stages. Each must still resolve to a real stage id, or the page has
   // quietly become a competing lifecycle — the thing rule 1 forbids.
-  const html = await (await render("/journey")).text();
+  // They live on the homepage: it is the journey-first landing page.
+  const html = await (await render("/")).text();
   for (const id of ["land-ownership", "planning-feasibility", "construction-delivery",
                     "marketing-sales", "registration-compliance", "occupancy-community",
                     "investment-resale"]) {
     assert.match(html, new RegExp(`href="/journey/${id}"`), `marker for ${id} lost its canonical stage`);
   }
-  // And all twelve remain reachable from the page, so the projection never
-  // replaces the spine it is drawn from.
-  assert.match(html, /href="\/journey\/finance-escrow"/);
-  assert.match(html, /href="\/journey\/handover-snagging"/);
+  // And the spine the projection is drawn from stays reachable in full. The
+  // seven are a view of the twelve, never a replacement for them, so the
+  // complete index is asserted where it actually lives — /journey.
+  const index = await (await render("/journey")).text();
+  for (const id of ["finance-escrow", "design-approvals", "project-formation",
+                    "handover-snagging", "property-management"]) {
+    assert.match(index, new RegExp(`href="/journey/${id}"`), `${id} missing from the stage index`);
+  }
 });
 
-test("the journey landing states concurrency instead of implying a queue", async () => {
-  // Construction and Sales run together in UAE off-plan. The landing page
+test("the homepage hero states concurrency instead of implying a queue", async () => {
+  // Construction and Sales run together in UAE off-plan. The hero route
   // draws them on parallel strands and must say so in words too.
-  const en = await (await render("/journey")).text();
+  const en = await (await render("/")).text();
   assert.match(en, /These run together/i);
-  const ar = await (await render("/ar/journey")).text();
+  const ar = await (await render("/ar")).text();
   assert.match(ar, /يجري|بالتوازي/, "concurrency must be stated in Arabic too");
 });
 
