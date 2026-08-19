@@ -1,12 +1,12 @@
-import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { DEFAULT_LOCALE, type Locale } from "../../i18n/config";
 import type { Metadata } from "next";
-import { RouteGrid } from "../components/Routes";
-import { Page } from "../components/SiteShell";
-import { getRouteUi } from "../i18n/content";
+import { RouteGrid } from "../../components/Routes";
+import { Page } from "../../components/SiteShell";
+import { getRouteUi } from "../../i18n/content";
 
 export const metadata: Metadata = {
-  title: "Find Your Place in the Property Journey | REOS",
-  description: "Twelve routes into the UAE property journey — for buyers and owners, developers, investors, brokers, financiers, consultants, contractors, managers, utilities, authorities and specialist advisers.",
+  title: "Guides | REOS Intelligence",
+  description: "Everyday guides into the UAE property journey — for buyers and owners, developers, investors, brokers, financiers, consultants, contractors, managers, utilities, authorities and specialist advisers.",
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
@@ -29,6 +29,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   </Page>;
 }
 
-export default function RolesPage() {
+export default function GuidesPage() {
   return <View locale={DEFAULT_LOCALE} />;
 }

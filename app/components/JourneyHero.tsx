@@ -30,30 +30,41 @@ import { StatusTag } from "./SiteShell";
  * disabled under prefers-reduced-motion.
  * ------------------------------------------------------------------ */
 
-type MarkerKey = "land" | "masterplan" | "construction" | "sales" | "title" | "community" | "investment";
+/* THE SEVEN MARKERS ARE THE SEVEN CANONICAL STAGES, 1:1.
+ *
+ * Until 2026-08-19 this was a projection: seven editorial labels picked out
+ * of a twelve-stage canon, so the hero could show a manageable number of
+ * stops without becoming a thirteenth stage list. Now that journey.ts's own
+ * canon IS seven stages, there is nothing left to project — every marker
+ * below is one real stage, keyed by its own id. The "projection, not a
+ * list" caution above is kept only because the next reader will otherwise
+ * wonder why marker keys and stage ids look identical: they are, on
+ * purpose, and there is no shorter list this is secretly standing in for. */
+type MarkerKey = "land" | "design" | "approvals" | "build" | "sales" | "living" | "growth";
 
 /** Marker → canonical stage id, plus its coordinates on the route (%). */
 const MARKERS: { key: MarkerKey; stageId: string; x: number; y: number; side: "start" | "end" }[] = [
-  { key: "land",         stageId: "land-ownership",           x:  7, y: 87, side: "end" },
-  { key: "masterplan",   stageId: "planning-feasibility",     x: 25, y: 68, side: "end" },
-  { key: "construction", stageId: "construction-delivery",    x: 52, y: 69, side: "end" },
-  { key: "sales",        stageId: "marketing-sales",          x: 52, y: 50, side: "end" },
-  { key: "title",        stageId: "registration-compliance",  x: 72, y: 59, side: "end" },
-  { key: "community",    stageId: "occupancy-community",      x: 84, y: 35, side: "start" },
-  { key: "investment",   stageId: "investment-resale",        x: 95, y: 14, side: "start" },
+  { key: "land",      stageId: "land-vision",               x:  7, y: 88, side: "end" },
+  { key: "design",     stageId: "planning-design",           x: 20, y: 74, side: "end" },
+  { key: "approvals",  stageId: "authorities-approvals",     x: 24, y: 50, side: "end" },
+  { key: "build",      stageId: "construction-delivery",     x: 52, y: 70, side: "end" },
+  { key: "sales",      stageId: "sales-transfer",            x: 38, y: 39, side: "end" },
+  { key: "living",     stageId: "living-operations",       x: 76, y: 42, side: "start" },
+  { key: "growth",     stageId: "asset-growth-intelligence", x: 93, y: 15, side: "start" },
 ];
 
 /** The two markers that run together, drawn as parallel strands. */
-const CONCURRENT: MarkerKey[] = ["construction", "sales"];
+const CONCURRENT: MarkerKey[] = ["build", "sales"];
 
 /* Route geometry, in the same 0–100 space as the markers so the line and the
-   pods cannot disagree. Between x=40 and x=62 the route parts into two strands
-   that bow apart and rejoin — a narrow lens, not a detour. Construction and
-   Sales sit one on each strand because they genuinely run together. */
-const SPINE_IN = "M 7 87 C 14 84, 19 74, 25 68 C 31 63, 36 61, 40 60";
-const BRANCH_UPPER = "M 40 60 C 44 54, 48 50, 52 50 C 56 50, 59 55, 62 60";
-const BRANCH_LOWER = "M 40 60 C 44 66, 48 69, 52 69 C 56 69, 59 65, 62 60";
-const SPINE_OUT = "M 62 60 C 66 60, 69 60, 72 59 C 78 52, 81 42, 84 35 C 88 27, 92 20, 95 14";
+   pods cannot disagree. Three stages lead in, the route parts at x=40 into
+   two strands that bow apart and rejoin at x=62 — a narrow lens, not a
+   detour — because Construction & Delivery and Sales & Transfer genuinely
+   run together, then two stages lead out to close the journey. */
+const SPINE_IN = "M 7 88 C 12 84, 16 78, 20 74 C 24 69, 28 63, 30 60 C 32 59, 34 58, 36 58";
+const BRANCH_UPPER = "M 36 58 C 38 48, 38 43, 38 39 C 40 28, 58 22, 62 59";
+const BRANCH_LOWER = "M 36 58 C 41 62, 47 68, 52 70 C 56 71, 59 66, 62 59";
+const SPINE_OUT = "M 62 59 C 68 58, 72 50, 76 42 C 82 32, 88 22, 93 15";
 
 /** Join a segment onto the previous one: its moveto becomes a lineto to the
  *  same point, which is a no-op geometrically and keeps the path valid. */
@@ -145,7 +156,7 @@ export function JourneyFlow({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
                 className={`jl-marker jl-marker-${m.side}${CONCURRENT.includes(m.key) ? " is-concurrent" : ""}`}
                 style={{ "--x": `${m.x}%`, "--y": `${m.y}%`, "--i": i } as React.CSSProperties}
               >
-                <Link href={localePath(locale, `/journey/${m.stageId}`)}>
+                <Link href={localePath(locale, `/property-journey/${m.stageId}`)}>
                   <span className="jl-badge" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                   <span className="jl-marker-body">
                     <b>{copy.title}</b>
@@ -215,7 +226,7 @@ export function JourneyMoments({ locale = DEFAULT_LOCALE }: { locale?: Locale })
         const copy = t.markers[m.key];
         return (
           <li key={m.key} style={{ "--i": i } as React.CSSProperties}>
-            <Link href={localePath(locale, `/journey/${m.stageId}`)}>
+            <Link href={localePath(locale, `/property-journey/${m.stageId}`)}>
               <span className="jl-badge" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
               <b>{copy.title}</b>
               <p>{copy.copy}</p>

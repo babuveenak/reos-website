@@ -17,7 +17,7 @@ import type { Locale } from "../i18n/config";
 
 /* ── identifiers, bound to the existing content model ───────────────────── */
 
-/** A stage id from app/data/journey.ts — the canonical twelve. */
+/** A stage id from app/data/journey.ts — the canonical seven. */
 export type StageId = string;
 /** A route slug from app/data/routes.ts. This is the persona surface. */
 export type RouteSlug = string;

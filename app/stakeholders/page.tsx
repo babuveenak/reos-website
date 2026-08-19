@@ -1,75 +1,79 @@
-import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { getGroups, getClusters, getStages } from "../i18n/content";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
-import { journeys, roles } from "../data/phase1";
-import { ecosystemById, lifecycleStages, stakeholders } from "../data/reos";
 
 export const metadata: Metadata = {
-  title: "Stakeholder Journeys | REOS",
-  description: "The same development ecosystem, read through each stakeholder lens — what they receive, what they produce, who they depend on and where they are blocked.",
+  title: "UAE Property Stakeholders | REOS",
+  description: "The 12 stakeholder groups participating across the UAE property journey — what each controls, when they enter, and what they exchange with everyone else.",
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const L = (path: string) => localePath(locale, path);
+  const stages = getStages(locale);
+  const clusterById = Object.fromEntries(getClusters(locale).map((c) => [c.id, c]));
   return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
-      <span className="eyebrow">STAKEHOLDER LENSES</span>
-      <h1>One ecosystem.<br /><em>Different journeys.</em></h1>
-      <p>Every participant sees a different part of the same project. Select a lens to see what that party receives, what it produces, which authorities it engages and where its work typically stops.</p>
+      <span className="eyebrow">STAKEHOLDERS</span>
+      <h1>UAE property<br /><em>stakeholders.</em></h1>
+      <p>Who is involved in the UAE property journey? Explore the 12 stakeholder groups participating across it — their responsibilities, decisions, documents, approvals and dependencies.</p>
     </section>
 
-    <section className="section-pad">
+    <section className="section-pad group-detail-band">
       <SectionIntro
-        label="OPEN A LENS"
-        title={<>Read the lifecycle<br /><em>from where you stand.</em></>}
-        copy="Each lens maps the same 24-stage model to one party's responsibilities, inputs, outputs, dependencies and bottlenecks."
+        label="12 STAKEHOLDER GROUPS"
+        title={<>Every group in full,<br /><em>and when they enter.</em></>}
+        copy="Select a group to see its role in the journey, key responsibilities, decisions, documents, approvals and who it works with."
       />
-      <div className="lens-grid">
-        {stakeholders.map((person) => {
-          const stages = lifecycleStages.filter((stage) => person.stageIds.includes(stage.id));
+      <div className="group-list">
+        {getGroups(locale).map((group) => {
+          const entryStages = stages.filter((stage) => stage.groupIds.includes(group.id));
+          const cluster = clusterById[group.cluster];
           return (
-            <Link key={person.id} href={`/stakeholders/${person.id}`} className="lens-card">
+            <Link key={group.id} href={L(`/stakeholders/${group.id}`)} className={`group-card cluster-${group.cluster}`}>
               <header>
-                <small>{ecosystemById[person.ecosystemId]?.short}</small>
-                <StatusTag status={person.status} />
+                <span className="group-num">{String(group.number).padStart(2, "0")}</span>
+                <div>
+                  <small>{cluster?.name}</small>
+                  <h3>{group.name}</h3>
+                </div>
+                <StatusTag status={group.status} locale={locale} />
               </header>
-              <h3>{person.name}</h3>
-              <p>{person.identity}</p>
-              <footer>
-                <b>{String(stages.length).padStart(2, "0")}</b>
-                <span>lifecycle stages</span>
-                <i>Open lens →</i>
-              </footer>
+
+              <p className="group-controls">{group.controls}</p>
+
+              <div className="group-cols">
+                <div>
+                  <small>Participants</small>
+                  <div className="chip-row">{group.members.slice(0, 4).map((m) => <span key={m}>{m}</span>)}</div>
+                </div>
+                <div>
+                  <small>Enters the journey at</small>
+                  <div className="chip-row">
+                    {entryStages.map((stage) => <span key={stage.id}>{String(stage.number).padStart(2, "0")} {stage.short}</span>)}
+                  </div>
+                </div>
+              </div>
             </Link>
           );
         })}
       </div>
     </section>
 
-    <section className="section-pad">
-      <SectionIntro
-        label="CUSTOMER-SIDE JOURNEYS"
-        title={<>Buying, owning<br /><em>and operating.</em></>}
-        copy="Customer journeys are a lens into the same development graph, not a separate product. An off-plan buyer is a lifecycle participant — their money, contract and registration sit inside the delivery phase."
-      />
-      <div className="role-cards">
-        {roles.map((role) => (
-          <article key={role.id}>
-            <span>{role.name}</span>
-            <p>{role.copy}</p>
-            <div className="touchpoints">
-              {journeys.filter((journey) => journey.roles.includes(role.id)).map((journey) => (
-                <Link key={journey.slug} href={`/journeys/${journey.slug}`}>{journey.title}</Link>
-              ))}
-            </div>
-          </article>
-        ))}
+    <section className="reos-opportunity">
+      <span className="eyebrow">NOT SURE WHICH ONE IS YOU?</span>
+      <h2>Start with a guide<br /><em>written for you instead.</em></h2>
+      <p>If you would rather read your own step-by-step journey — as a buyer, developer, investor or another everyday role — the guides walk through it in plain language.</p>
+      <div className="hero-actions">
+        <Link className="button gold" href={L("/intelligence/guides")}>Find your guide <span>↗</span></Link>
+        <Link className="button ghost" href={L("/ecosystem")}>See how they connect</Link>
       </div>
     </section>
 
     <section className="integrity-strip">
-      <b>Content integrity</b>
-      <p>Lenses describe a research-backed operating model. Exact processes, authorities, requirements, documents, fees and timelines vary by jurisdiction, asset and transaction and must be verified against the applicable official source before use.</p>
+      <b>Before you act on this</b>
+      <p>These pages describe a research-backed operating model. Exact processes, authorities, requirements, documents, fees and timelines vary by jurisdiction, asset and transaction — verify with the relevant authority or a qualified adviser before acting.</p>
     </section>
   </Page>;
 }

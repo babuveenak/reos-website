@@ -201,7 +201,7 @@ test("two voice turns in a row both work", opts, async () => {
 /* ── on a journey stage page ─────────────────────────────────────────────── */
 
 test("the stage page assistant is seeded with that stage", opts, async () => {
-  await withPage("/journey/construction-delivery", async (page) => {
+  await withPage("/property-journey/construction-delivery", async (page) => {
     assert.ok(await page.locator(".stage-assistant .assistant").count());
     await ask(page, ".stage-assistant", "What should I be watching here?");
     const trail = await page.evaluate(() =>
@@ -370,8 +370,8 @@ test("the sticky composer actually covers the text scrolling under it", opts, as
 test("no horizontal overflow on any breakpoint or locale", opts, async () => {
   browser ??= await chromium.launch({ channel: "chrome" });
   for (const [w, h] of [[1280, 900], [768, 1024], [390, 844]]) {
-    for (const path of ["/", "/assistant", "/ar/assistant", "/journey/construction-delivery",
-                        "/journey", "/ar/journey"]) {
+    for (const path of ["/", "/assistant", "/ar/assistant", "/property-journey/construction-delivery",
+                        "/property-journey", "/ar/property-journey"]) {
       const page = await browser.newPage({ viewport: { width: w, height: h } });
       try {
         await page.goto(BASE + path, { waitUntil: "networkidle" });

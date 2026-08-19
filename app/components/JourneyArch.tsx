@@ -2,12 +2,13 @@
  * THE INNER-HERO ARCH — drawn, not photographed.
  *
  * `.inner-hero::after` frames a photograph on eleven other pages
- * (/ecosystem, /roles, /glossary, /stakeholders, /lifecycle, /platform,
- * /insights, /reos, /admin and its /gaps twin, and the 404 page) via a
- * shared CSS rule. /journey is the one page where that photo is being
- * replaced by this SVG, so nothing here touches the shared rule — a new
- * class carries the visual, and a modifier on the /journey section only
- * turns the photo off there.
+ * (/ecosystem, /stakeholders, /intelligence, /intelligence/guides,
+ * /intelligence/definitions-and-glossary, /lifecycle, /platform, /reos,
+ * /admin and its /gaps twin, and the 404 page) via a shared CSS rule.
+ * /property-journey is the one page where that photo is being replaced by
+ * this SVG, so nothing here touches the shared rule — a new class carries
+ * the visual, and a modifier on the /property-journey section only turns
+ * the photo off there.
  *
  * The brief behind it: REOS as a connected system, drawn rather than
  * photographed so it recolours between themes, mirrors correctly in

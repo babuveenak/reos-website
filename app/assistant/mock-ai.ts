@@ -102,19 +102,19 @@ const RULES: Rule[] = [
   // Regulated advice — declined, never answered.
   { persona: null, intent: "out-of-scope", stageId: null,
     re: /\b(should i (buy|invest)|best return|guaranteed|golden visa|residency|tax advice|which is better)\b|تأشيرة ذهبية|إقامة|أفضل عائد|هل أشتري|نصيحة ضريبية/i },
-  { persona: "developing", intent: "diagnose-blocker", stageId: "design-approvals",
+  { persona: "developing", intent: "diagnose-blocker", stageId: "authorities-approvals",
     re: /\b(blocked|can'?t start|cannot start|stuck|why can'?t|waiting on)\b|متوقف|لا أستطيع البدء|عالق/i },
-  { persona: "developing", intent: "understand-process", stageId: "land-ownership",
+  { persona: "developing", intent: "understand-process", stageId: "land-vision",
     re: /\b(become a (property )?developer|developing|development|land|plot|first project)\b|مطور|تطوير|أرض|مشروعي الأول/i },
-  { persona: "financing", intent: "identify-responsibility", stageId: "finance-escrow",
+  { persona: "financing", intent: "identify-responsibility", stageId: "sales-transfer",
     re: /\b(bank|banker|lender|escrow|financ|mortgage|loan|drawdown)\b|بنك|مصرفي|تمويل|حساب الضمان|قرض|رهن/i },
-  { persona: "investing", intent: "understand-process", stageId: "investment-resale",
+  { persona: "investing", intent: "understand-process", stageId: "asset-growth-intelligence",
     // `invest\w*`, not `invest\b`: the trailing boundary failed on "investing",
     // which is the word the investing route's own title uses.
     re: /\b(invest\w*|yield|exit|portfolio|capital)\b|استثمار|مستثمر|عائد|خروج|رأس مال/i },
-  { persona: "buying", intent: "understand-process", stageId: "marketing-sales",
+  { persona: "buying", intent: "understand-process", stageId: "sales-transfer",
     re: /\b(buy|buying|buyer|purchase|apartment|flat|villa|off.?plan|deposit)\b|شراء|مشتري|شقة|فيلا|على المخطط|دفعة/i },
-  { persona: null, intent: "understand-timeline", stageId: "construction-delivery",
+  { persona: null, intent: "understand-timeline", stageId: "living-operations",
     re: /\b(after construction|handover|snagging|completion|what happens after)\b|بعد البناء|التسليم|الإنجاز/i },
   { persona: null, intent: "identify-responsibility", stageId: null,
     re: /\b(who is involved|stakeholders?|who does what|participants)\b|أصحاب المصلحة|من يشارك|من يفعل/i },
@@ -150,7 +150,7 @@ function namedRoute(snapshot: KnowledgeSnapshot, question: string) {
  *  answerable instead of falling through to the not-in-corpus reply. */
 function namedStage(snapshot: KnowledgeSnapshot, question: string) {
   const q = question.toLowerCase();
-  // Longest name first, so "Marketing & Sales" wins over a shorter substring.
+  // Longest name first, so "Sales & Transfer" wins over a shorter substring.
   return [...snapshot.stages]
     .sort((a, b) => b.name.length - a.name.length)
     .find((stage) => q.includes(stage.name.toLowerCase()) || q.includes(stage.short.toLowerCase()))
@@ -195,8 +195,8 @@ const ANSWERS: Record<string, Bilingual> = {
     ar: "ما يلي مرحلة البناء يعتمد على هوية السائل، وهذه المراحل لا تسير في صف واحد. فإصدار شهادات الإنجاز والتسليم والتسجيل أمور متداخلة؛ كما أن التسويق والبيع كانا يجريان طوال فترة البناء لا بعده — وهذا بالضبط سبب وجود حساب الضمان.",
   },
   stakeholders: {
-    en: "Twelve stakeholder groups carry the journey, across ownership, capital, design, construction, money operations, legal, sales, buyers, utilities, operations and enabling services. Government authorities are shown on their own rail rather than as a thirteenth peer, because they issue the approvals that gate everyone else — every other participant is appointed and commercial, and they are not.",
-    ar: "تحمل الرحلة اثنتا عشرة مجموعة من أصحاب المصلحة، تشمل الملكية ورأس المال والتصميم والبناء وعمليات الأموال والشؤون القانونية والبيع والمشترين والمرافق والتشغيل والخدمات المساندة. أما الجهات الحكومية فتُعرض على مسار خاص بها لا كمجموعة ثالثة عشرة نظيرة، لأنها تصدر الموافقات التي تحكم الجميع — فكل مشارك آخر يُعيَّن بعقد تجاري، وهي ليست كذلك.",
+    en: "Twelve stakeholder groups carry the journey: landowners and investors, developers, consultants and designers, contractors, suppliers and vendors, brokers and agencies, banks and financial institutions, property owners, residents and tenants, and facility and community operators. Authorities and regulators are shown on their own rail rather than as a thirteenth peer, because they issue the approvals that gate everyone else — every other group is appointed and commercial, and they are not.",
+    ar: "تحمل الرحلة اثنتا عشرة مجموعة من أصحاب المصلحة: الملاك والمستثمرون، والمطوّرون، والاستشاريون والمصممون، والمقاولون، والمورّدون، والوسطاء والوكالات، والبنوك والمؤسسات المالية، وملاك العقارات، والسكان والمستأجرون، ومشغّلو المرافق والمجتمعات. أما الجهات المختصة فتُعرض على مسار خاص بها لا كمجموعة ثالثة عشرة نظيرة، لأنها تصدر الموافقات التي تحكم الجميع — فكل مجموعة أخرى تُعيَّن بعقد تجاري، وهي ليست كذلك.",
   },
   fallback: {
     en: "I don't have enough verified information to answer that accurately yet. This assistant is running on illustrative content while its knowledge base is built, so it can show you where a question belongs in the journey but cannot give you a sourced answer to it.",
@@ -327,7 +327,7 @@ export function mockAnswer(request: AIRequest, snapshot: KnowledgeSnapshot): AIR
       sources: sources(snapshot, SOURCE_SETS[stage.id] ?? [], locale),
       suggestedQuestions: stageSuggestions(snapshot, stage.id),
       navigationActions: [
-        { kind: "open-stage", path: L(locale, `/journey/${stage.id}`), label: ui.openStage },
+        { kind: "open-stage", path: L(locale, `/property-journey/${stage.id}`), label: ui.openStage },
       ],
       statePatch: { lifecycleStage: stage.id, ...(persona ? { persona } : {}) },
     };
@@ -338,7 +338,7 @@ export function mockAnswer(request: AIRequest, snapshot: KnowledgeSnapshot): AIR
       ...shell(snapshot, pick(REFUSAL_TEXT.regulatedAdvice, locale)),
       intent,
       refusal: "regulated-advice",
-      navigationActions: [{ kind: "navigate", path: L(locale, "/journey"), label: ui.journey }],
+      navigationActions: [{ kind: "navigate", path: L(locale, "/property-journey"), label: ui.journey }],
       statePatch: { intent },
     };
   }
@@ -361,7 +361,7 @@ export function mockAnswer(request: AIRequest, snapshot: KnowledgeSnapshot): AIR
       persona,
       intent: "understand-regulation",
       refusal: "jurisdiction-unresolved",
-      journey: journeyContext(snapshot, "design-approvals", persona),
+      journey: journeyContext(snapshot, "authorities-approvals", persona),
       conditions: [
         { label: ui.emirate, value: ui.dubai },
         { label: ui.zoneLabel, value: ui.zone, unresolved: true },
@@ -382,14 +382,14 @@ export function mockAnswer(request: AIRequest, snapshot: KnowledgeSnapshot): AIR
     : "fallback";
 
   const PERSONA_STAGE: Record<string, StageId> = {
-    buying: "marketing-sales", developing: "land-ownership",
-    investing: "investment-resale", financing: "finance-escrow",
+    buying: "sales-transfer", developing: "land-vision",
+    investing: "asset-growth-intelligence", financing: "sales-transfer",
   };
   const resolvedStage = stageId ?? (persona ? PERSONA_STAGE[persona] ?? null : null);
   const route = routeIn(snapshot, persona);
   const nav: AIResponse["navigationActions"] = [];
-  if (route?.hasContent) nav.push({ kind: "open-route", path: L(locale, `/roles/${route.slug}`), label: ui.showRoute });
-  if (resolvedStage) nav.push({ kind: "open-stage", path: L(locale, `/journey/${resolvedStage}`), label: ui.openStage });
+  if (route?.hasContent) nav.push({ kind: "open-route", path: L(locale, `/intelligence/guides/${route.slug}`), label: ui.showRoute });
+  if (resolvedStage) nav.push({ kind: "open-stage", path: L(locale, `/property-journey/${resolvedStage}`), label: ui.openStage });
   if (key === "stakeholders") nav.push({ kind: "navigate", path: L(locale, "/ecosystem"), label: ui.ecosystem });
 
   return {

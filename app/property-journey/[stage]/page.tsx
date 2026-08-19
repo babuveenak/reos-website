@@ -44,7 +44,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
 
   return <Page className="inner-page stage-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
-      <Link href="/journey">Property journey</Link>
+      <Link href="/property-journey">Property journey</Link>
       <span aria-hidden="true">/</span>
       <b>{stage.name}</b>
     </nav>
@@ -64,7 +64,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         <b>This stage does not wait its turn.</b>
         <p>
           It runs at the same time as {parallel.map((s, i) => (
-            <span key={s.id}>{i > 0 && (i === parallel.length - 1 ? " and " : ", ")}<Link href={`/journey/${s.id}`}>{s.name}</Link></span>
+            <span key={s.id}>{i > 0 && (i === parallel.length - 1 ? " and " : ", ")}<Link href={`/property-journey/${s.id}`}>{s.name}</Link></span>
           ))}. Treating these as a sequence is one of the most common misunderstandings of UAE development.
         </p>
       </section>
@@ -117,7 +117,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
           <small>Who is involved</small>
           <ul className="link-list">
             {stage.groupIds.map((id) => (
-              <li key={id}><Link href={`/ecosystem#${id}`}>{groupById[id]?.name}</Link></li>
+              <li key={id}><Link href={`/stakeholders/${id}`}>{groupById[id]?.name}</Link></li>
             ))}
           </ul>
         </div>
@@ -134,7 +134,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
             <small>Whose journey passes through here</small>
             <ul className="link-list">
               {relevantPersonas.map((p) => (
-                <li key={p.slug}><Link href={`/roles/${p.slug}`}>{p.name}</Link></li>
+                <li key={p.slug}><Link href={`/intelligence/guides/${p.slug}`}>{p.name}</Link></li>
               ))}
             </ul>
           </div>
@@ -163,11 +163,11 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
 
     <nav className="stage-nav" aria-label="Adjacent stages">
       {previous
-        ? <Link href={`/journey/${previous.id}`}><small>PREVIOUS</small><b>← {previous.name}</b></Link>
+        ? <Link href={`/property-journey/${previous.id}`}><small>PREVIOUS</small><b>← {previous.name}</b></Link>
         : <span />}
       {next
-        ? <Link href={`/journey/${next.id}`}><small>NEXT</small><b>{next.name} →</b></Link>
-        : <Link href="/journey"><small>COMPLETE MAP</small><b>All {all.length} stages →</b></Link>}
+        ? <Link href={`/property-journey/${next.id}`}><small>NEXT</small><b>{next.name} →</b></Link>
+        : <Link href="/property-journey"><small>COMPLETE MAP</small><b>All {all.length} stages →</b></Link>}
     </nav>
   </Page>;
 }

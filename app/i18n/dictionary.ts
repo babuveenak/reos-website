@@ -16,9 +16,9 @@ const en = {
   brand: { tagline: "REAL ESTATE OPERATING SYSTEM", home: "REOS home" },
   nav: {
     journey: "Property journey",
-    roles: "Roles",
+    stakeholders: "Stakeholders",
     ecosystem: "Ecosystem",
-    insights: "Insights",
+    intelligence: "Intelligence",
     glossary: "Glossary",
     platform: "Platform",
     about: "About",
@@ -41,13 +41,15 @@ const en = {
     pageTitleEm: "about UAE real estate.",
     sub: "Get guided answers across documents, stakeholders, approvals, dependencies and next steps.",
     lede: "Ask about buying, developing, investing, financing, constructing, owning or managing property in the UAE. REOS maps your question to the right journey stage and shows what happens, who is involved, what documents matter, and what comes next.",
-    /** The twelve areas the graph names. Short enough to sit beside a 7px node. */
+    /** The twelve stakeholder groups from ecosystem.ts, one per node. Short
+     *  form (matches each group's own `short` field), so it sits beside a
+     *  7px node without wrapping. */
     graphLabels: {
-      parcel: "Land", masterplan: "Masterplan", tower: "Construction", coin: "Finance",
-      tag: "Sales", deed: "Title deed", key: "Handover", community: "Community",
-      growth: "Investment", shield: "Compliance", page: "Documents", people: "Stakeholders",
+      parcel: "Investors", masterplan: "Developers", tower: "Contractors", coin: "Banks",
+      tag: "Brokers", deed: "Owners", key: "Residents", community: "Operators",
+      bolt: "Utilities", shield: "Authorities", page: "Consultants", crate: "Suppliers",
     },
-    heroVisualAlt: "A question entering the REOS intelligence core, which places it in the property journey and draws on twelve connected areas of knowledge — land, masterplan, construction, finance, sales, title, handover, community, investment, compliance, documents and stakeholders — before returning a guided answer.",
+    heroVisualAlt: "A question entering the REOS intelligence core, which places it in the property journey and draws on the twelve connected stakeholder groups — landowners and investors, developers, consultants, contractors, suppliers, authorities, utilities, brokers, banks, owners, residents and operators — before returning a guided answer.",
     voiceCta: "Ask by voice",
     voiceStop: "Stop listening",
     voiceCancel: "Cancel",
@@ -130,8 +132,15 @@ const en = {
     headlineEm: "Know what comes next.",
     fineprint:
       "Independent knowledge and navigation layer for UAE property development. REOS does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements, fees, timelines, laws and eligibility are jurisdiction-specific and change — verify with the relevant authority or regulated provider before acting.",
-    findRole: "Find your role",
-    ecosystemMap: "Ecosystem map",
+    exploreHeading: "Explore",
+    intelligenceHeading: "Intelligence",
+    platformHeading: "Platform",
+    guides: "Guides",
+    regulations: "Regulations",
+    processes: "Processes",
+    authorityInformation: "Authority Information",
+    definitionsGlossary: "Definitions & Glossary",
+    knowledgeGraph: "Knowledge Graph",
   },
   home: {
     eyebrow: "UAE REAL ESTATE",
@@ -207,23 +216,23 @@ const en = {
     completeMap: "COMPLETE MAP",
     allStages: "All {n} stages",
     /* ── Option C landing page. Every string here is editorial copy for the
-       /journey hero and story sections. The seven hero markers are a
-       PROJECTION of the twelve canonical stages in data/journey.ts, keyed by
-       stage id — never a competing list. ─────────────────────────────────── */
+       /journey hero and story sections. The seven hero markers ARE the seven
+       canonical stages in data/journey.ts, keyed by stage id, one each — not
+       a projection of a larger set, since the canon itself is seven. ────── */
     landing: {
-      heroAlt: "Animated UAE property lifecycle journey showing land parcel, masterplan, construction, sales, title deed, community, and investment connected by REOS.",
+      heroAlt: "Animated UAE property lifecycle journey showing land and vision, planning and design, authorities and approvals, construction and delivery, sales and transfer, living and operations, and asset growth and intelligence, connected by REOS.",
       orchestration: "REOS",
       orchestrationSub: "ORCHESTRATION LAYER",
       concurrent: "These run together",
-      canonical: "Stage {n} of the twelve",
+      canonical: "Stage {n} of seven",
       markers: {
-        land: { title: "Land Parcel", copy: "Identify and evaluate the right land opportunity." },
-        masterplan: { title: "Masterplan", copy: "Plan the vision. Design communities that inspire." },
-        construction: { title: "Construction", copy: "Build with confidence. Track progress with quality and precision." },
-        sales: { title: "Sales", copy: "Market with clarity. Match the right property to the right buyer." },
-        title: { title: "Title Deed", copy: "Register with trust. Secure ownership with confidence." },
-        community: { title: "Community", copy: "Handover and activate. Create places where life thrives." },
-        investment: { title: "Investment", copy: "Grow value. Unlock returns across generations." },
+        land: { title: "Land", copy: "Identify and evaluate the right opportunity, and prove it works." },
+        design: { title: "Design", copy: "Plan the vision. Coordinate a buildable design package." },
+        approvals: { title: "Approvals", copy: "Submit to every body that must clear it. Obtain permission to build." },
+        build: { title: "Build", copy: "Build with confidence. Track progress with quality and precision." },
+        sales: { title: "Sales", copy: "Market with clarity. Transfer ownership through the official register." },
+        living: { title: "Living", copy: "Hand over unit by unit. Create places where life thrives." },
+        growth: { title: "Growth", copy: "Grow value. Unlock returns across generations." },
       },
       stats: {
         scopeLabel: "TARGET SCOPE",
@@ -292,9 +301,9 @@ const ar: Dict = {
   brand: { tagline: "نظام تشغيل القطاع العقاري", home: "الصفحة الرئيسية لـ REOS" },
   nav: {
     journey: "رحلة العقار",
-    roles: "الأدوار",
+    stakeholders: "أصحاب المصلحة",
     ecosystem: "المنظومة",
-    insights: "المعرفة",
+    intelligence: "المعرفة",
     glossary: "المصطلحات",
     platform: "المنصة",
     about: "من نحن",
@@ -314,11 +323,11 @@ const ar: Dict = {
     sub: "إجابات موجّهة تغطي المستندات وأصحاب المصلحة والموافقات والارتباطات والخطوات التالية.",
     lede: "اسأل عن الشراء أو التطوير أو الاستثمار أو التمويل أو الإنشاء أو التملّك أو إدارة العقار في الإمارات. يربط REOS سؤالك بالمرحلة الصحيحة من الرحلة ويوضّح ما الذي يحدث، ومن المشارك، وأي المستندات مهمة، وما الخطوة التالية.",
     graphLabels: {
-      parcel: "الأرض", masterplan: "المخطط الرئيسي", tower: "الإنشاء", coin: "التمويل",
-      tag: "البيع", deed: "سند الملكية", key: "التسليم", community: "المجتمع",
-      growth: "الاستثمار", shield: "الامتثال", page: "المستندات", people: "أصحاب المصلحة",
+      parcel: "المستثمرون", masterplan: "المطوّرون", tower: "المقاولون", coin: "البنوك",
+      tag: "الوسطاء", deed: "الملاك", key: "السكان", community: "المشغّلون",
+      bolt: "المرافق", shield: "الجهات المختصة", page: "الاستشاريون", crate: "المورّدون",
     },
-    heroVisualAlt: "سؤال يدخل إلى نواة الذكاء في REOS، فتضعه في مرحلته من رحلة العقار وتستدعي اثني عشر مجالاً مترابطاً من المعرفة — الأرض والمخطط الرئيسي والإنشاء والتمويل والبيع والملكية والتسليم والمجتمع والاستثمار والامتثال والمستندات وأصحاب المصلحة — قبل أن تعيد إجابة موجّهة.",
+    heroVisualAlt: "سؤال يدخل إلى نواة الذكاء في REOS، فتضعه في مرحلته من رحلة العقار وتستدعي مجموعات أصحاب المصلحة الاثنتي عشرة المترابطة — الملاك والمستثمرون، والمطوّرون، والاستشاريون، والمقاولون، والمورّدون، والجهات المختصة، والمرافق، والوسطاء، والبنوك، والملاك، والسكان، والمشغّلون — قبل أن تعيد إجابة موجّهة.",
     voiceCta: "اسأل بالصوت",
     voiceStop: "أوقف الاستماع",
     voiceCancel: "إلغاء",
@@ -396,8 +405,15 @@ const ar: Dict = {
     headlineEm: "واعرف ما يأتي بعد ذلك.",
     fineprint:
       "طبقة معرفة وتوجيه مستقلة للتطوير العقاري في دولة الإمارات. لا تصدر REOS أي موافقات، ولا تنفّذ أي معاملات، ولا تحل محل الاستشارة القانونية أو المالية أو المنظَّمة. تختلف المتطلبات والرسوم والمُهل والقوانين وشروط الأهلية من إمارة إلى أخرى وتتغيّر مع الوقت — يُرجى التحقق من الجهة المختصة أو مزوّد الخدمة المرخّص قبل اتخاذ أي إجراء.",
-    findRole: "اعثر على دورك",
-    ecosystemMap: "خريطة المنظومة",
+    exploreHeading: "استكشف",
+    intelligenceHeading: "المعرفة",
+    platformHeading: "المنصة",
+    guides: "الأدلة الإرشادية",
+    regulations: "الأنظمة",
+    processes: "الإجراءات",
+    authorityInformation: "معلومات الجهات المختصة",
+    definitionsGlossary: "التعريفات والمصطلحات",
+    knowledgeGraph: "خريطة المعرفة",
   },
   home: {
     eyebrow: "عقارات دولة الإمارات",
@@ -473,19 +489,19 @@ const ar: Dict = {
     completeMap: "الخريطة الكاملة",
     allStages: "جميع المراحل الـ {n}",
     landing: {
-      heroAlt: "رحلة دورة حياة العقار في الإمارات: قطعة الأرض، المخطط الرئيسي، الإنشاء، البيع، سند الملكية، المجتمع، والاستثمار مترابطة عبر REOS.",
+      heroAlt: "رحلة دورة حياة العقار في الإمارات: الأرض والرؤية، والتخطيط والتصميم، والجهات والموافقات، والإنشاء والتسليم، والبيع والنقل، والسكن والتشغيل، ونمو الأصل والذكاء، مترابطة عبر REOS.",
       orchestration: "REOS",
       orchestrationSub: "طبقة التنسيق",
       concurrent: "تجري هذه بالتوازي",
-      canonical: "المرحلة {n} من الاثنتي عشرة",
+      canonical: "المرحلة {n} من سبع",
       markers: {
-        land: { title: "قطعة الأرض", copy: "تحديد الفرصة العقارية المناسبة وتقييمها." },
-        masterplan: { title: "المخطط الرئيسي", copy: "رسم الرؤية وتصميم مجتمعات ملهمة." },
-        construction: { title: "الإنشاء", copy: "ابنِ بثقة وتابع التقدّم بجودة ودقة." },
-        sales: { title: "البيع", copy: "سوّق بوضوح واربط العقار المناسب بالمشتري المناسب." },
-        title: { title: "سند الملكية", copy: "سجّل بثقة وأمّن الملكية باطمئنان." },
-        community: { title: "المجتمع", copy: "سلّم وفعّل، واصنع أماكن تنبض بالحياة." },
-        investment: { title: "الاستثمار", copy: "نمِّ القيمة واستخلص العوائد على مدى الأجيال." },
+        land: { title: "الأرض", copy: "تحديد الفرصة المناسبة وتقييمها، وإثبات جدواها." },
+        design: { title: "التصميم", copy: "ارسم الرؤية ونسّق حزمة تصميم قابلة للتنفيذ." },
+        approvals: { title: "الموافقات", copy: "قدّم إلى كل جهة يجب أن تعتمد المشروع. احصل على إذن البناء." },
+        build: { title: "البناء", copy: "ابنِ بثقة وتابع التقدّم بجودة ودقة." },
+        sales: { title: "البيع", copy: "سوّق بوضوح وانقل الملكية عبر السجل الرسمي." },
+        living: { title: "السكن", copy: "سلّم وحدة تلو الأخرى، واصنع أماكن تنبض بالحياة." },
+        growth: { title: "النمو", copy: "نمِّ القيمة واستخلص العوائد على مدى الأجيال." },
       },
       stats: {
         scopeLabel: "النطاق المستهدف",

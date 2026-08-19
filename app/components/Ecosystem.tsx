@@ -140,7 +140,7 @@ export function EcosystemMap() {
         </ul>
 
         <StatusTag status={active.status} />
-        <Link className="text-link" href="/lifecycle">See where this group enters the lifecycle <span>→</span></Link>
+        <Link className="text-link" href={`/stakeholders/${active.id}`}>Open this stakeholder&rsquo;s full profile <span>→</span></Link>
       </aside>
     </div>
   );

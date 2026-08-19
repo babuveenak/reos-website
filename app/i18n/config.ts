@@ -1,8 +1,8 @@
 /**
  * Locale configuration.
  *
- * English stays at the root (`/journey`) so existing URLs and their search
- * history survive; Arabic is served from a parallel `/ar` tree. Both are
+ * English stays at the root (`/property-journey`) so existing URLs and their
+ * search history survive; Arabic is served from a parallel `/ar` tree. Both are
  * statically generated, so each language is independently shareable,
  * crawlable and cacheable — which a client-side-only toggle could never be.
  */

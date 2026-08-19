@@ -28,7 +28,7 @@ const SHAPE_EXAMPLE: KnowledgeGap = {
   occurrences: 0,
   refusal: "not-in-corpus",
   detectedRoute: "developing",
-  detectedStage: "design-approvals",
+  detectedStage: "authorities-approvals",
   gapStatus: "needs-review",
 };
 
