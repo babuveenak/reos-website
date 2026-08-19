@@ -175,8 +175,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2>
       <p>Follow the journey from land to living, pick the route that matches your situation, or look up a term you have run into. Nothing here asks you to commit to anything.</p>
       <div className="hero-actions">
-        <Link className="button gold" href={L("/journey")}>{d.home.closeCta} <span>↗</span></Link>
-        <Link className="button ghost" href={L("/glossary")}>{d.home.closeCta2}</Link>
+        <Link className="button gold" href={L("/property-journey")}>{d.home.closeCta} <span>↗</span></Link>
+        <Link className="button ghost" href={L("/intelligence/definitions-and-glossary")}>{d.home.closeCta2}</Link>
       </div>
       <p className="demo-note">REOS is an independent knowledge and navigation layer. It does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements differ by emirate and change over time — verify with the relevant authority before acting.</p>
     </section>

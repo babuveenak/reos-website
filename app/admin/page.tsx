@@ -17,7 +17,7 @@ import { DEFAULT_LOCALE } from "../i18n/config";
  * Revisit when the admin is real and has actual operators.
  *
  * Records are derived from the real content model. Nothing is invented: the
- * twelve stages and eleven authorities below are the repository as it stands.
+ * seven stages and eleven authorities below are the repository as it stands.
  */
 export const metadata: Metadata = {
   title: "Knowledge Administration | REOS",

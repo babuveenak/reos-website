@@ -1,8 +1,8 @@
-import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
-import { modules } from "../data/ecosystem";
+import { getModules } from "../i18n/content";
 import { layers } from "../data/journey";
 
 export const metadata: Metadata = {
@@ -11,6 +11,8 @@ export const metadata: Metadata = {
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const L = (path: string) => localePath(locale, path);
+  const modules = getModules(locale);
   return <Page className="inner-page" locale={locale}>
     <section className="inner-hero">
       <span className="eyebrow">REOS PLATFORM</span>
@@ -40,7 +42,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       />
       <div className="module-grid">
         {modules.map((module, index) => (
-          <article key={module.id}>
+          <article key={module.id} id={module.id}>
             <header><span>{String(index + 1).padStart(2, "0")}</span><StatusTag status={module.status} /></header>
             <h3>{module.name}</h3>
             <p>{module.copy}</p>
@@ -74,8 +76,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <h2>Bring a project.<br /><em>We will map it.</em></h2>
       <p>Walk through your emirate, asset type and delivery route against the connected model, and see where the dependencies, approvals and handoffs actually sit.</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/demo">Book a demo <span>↗</span></Link>
-        <Link className="button ghost" href="/journey">Explore the journey</Link>
+        <Link className="button gold" href={L("/demo")}>Book a demo <span>↗</span></Link>
+        <Link className="button ghost" href={L("/property-journey")}>Explore the journey</Link>
       </div>
     </section>
   </Page>;

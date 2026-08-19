@@ -18,24 +18,27 @@ test("renders the REOS homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
-test("the homepage hero projects the canonical stages rather than listing its own", async () => {
-  // The seven hero markers are an editorial view of the twelve canonical
-  // stages. Each must still resolve to a real stage id, or the page has
-  // quietly become a competing lifecycle — the thing rule 1 forbids.
-  // They live on the homepage: it is the journey-first landing page.
+test("the homepage hero shows every canonical stage, once each", async () => {
+  // Until 2026-08-19 the seven hero markers were an editorial view carved out
+  // of a twelve-stage canon. The canon is seven stages now, so there is
+  // nothing left to be a view OF — each marker IS one canonical stage, and
+  // this asserts all seven are present and none has drifted from journey.ts's
+  // own ids, which is what would happen if the page quietly grew a competing
+  // lifecycle (the thing rule 1 forbids).
   const html = await (await render("/")).text();
-  for (const id of ["land-ownership", "planning-feasibility", "construction-delivery",
-                    "marketing-sales", "registration-compliance", "occupancy-community",
-                    "investment-resale"]) {
-    assert.match(html, new RegExp(`href="/journey/${id}"`), `marker for ${id} lost its canonical stage`);
+  for (const id of ["land-vision", "planning-design", "authorities-approvals",
+                    "construction-delivery", "sales-transfer", "living-operations",
+                    "asset-growth-intelligence"]) {
+    assert.match(html, new RegExp(`href="/property-journey/${id}"`), `marker for ${id} lost its canonical stage`);
   }
-  // And the spine the projection is drawn from stays reachable in full. The
-  // seven are a view of the twelve, never a replacement for them, so the
-  // complete index is asserted where it actually lives — /journey.
-  const index = await (await render("/journey")).text();
-  for (const id of ["finance-escrow", "design-approvals", "project-formation",
-                    "handover-snagging", "property-management"]) {
-    assert.match(index, new RegExp(`href="/journey/${id}"`), `${id} missing from the stage index`);
+  // The same seven, in full, are also what /property-journey's own index
+  // lists — the homepage and /property-journey must never show two
+  // different-sized lifecycles.
+  const index = await (await render("/property-journey")).text();
+  for (const id of ["land-vision", "planning-design", "authorities-approvals",
+                    "construction-delivery", "sales-transfer", "living-operations",
+                    "asset-growth-intelligence"]) {
+    assert.match(index, new RegExp(`href="/property-journey/${id}"`), `${id} missing from the stage index`);
   }
 });
 
@@ -51,7 +54,8 @@ test("the homepage hero states concurrency instead of implying a queue", async (
 test("the demo CTA appears only on the platform page", async () => {
   // The site is educational; a sales CTA in the page furniture undercuts that.
   // It belongs where someone has actually asked about the product.
-  for (const path of ["/", "/journey", "/roles", "/roles/buying", "/ecosystem", "/insights", "/about", "/glossary"]) {
+  for (const path of ["/", "/property-journey", "/stakeholders", "/stakeholders/developers",
+                      "/ecosystem", "/intelligence", "/about", "/intelligence/definitions-and-glossary"]) {
     const html = await (await render(path)).text();
     assert.doesNotMatch(html, /href="\/demo"/, `${path} should not link to the demo`);
   }
@@ -66,11 +70,23 @@ test("the mobile menu is actually displayable", async () => {
   assert.match(css, /aria-label="Mobile navigation"/);
 });
 
-test("homepage routes into the journey, roles and ecosystem", async () => {
+test("the primary navigation is the five frozen items, in order", async () => {
+  // REOS IA Freeze v1.0, 2026-08-19: exactly Property Journey, Stakeholders,
+  // Ecosystem, Intelligence, Platform — no more, no fewer, no reordering.
   const html = await (await render()).text();
-  assert.match(html, /href="\/journey"/);
-  assert.match(html, /href="\/roles\/buying"/);
-  assert.match(html, /href="\/glossary"/);
+  const nav = html.match(/<nav aria-label="Primary navigation">.*?<\/nav>/s)?.[0] ?? "";
+  const hrefs = [...nav.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(hrefs, ["/property-journey", "/stakeholders", "/ecosystem", "/intelligence", "/platform"]);
+  assert.doesNotMatch(nav, />Roles</);
+  assert.doesNotMatch(nav, />Insights</);
+  assert.doesNotMatch(nav, />Glossary</);
+});
+
+test("homepage routes into the journey, stakeholders and ecosystem", async () => {
+  const html = await (await render()).text();
+  assert.match(html, /href="\/property-journey"/);
+  assert.match(html, /href="\/intelligence\/guides\/buying"/);
+  assert.match(html, /href="\/intelligence\/definitions-and-glossary"/);
   assert.match(html, /href="\/ecosystem"/);
   assert.match(html, /Regulatory Rail/);
 });
@@ -78,22 +94,22 @@ test("homepage routes into the journey, roles and ecosystem", async () => {
 test("concurrency is stated, not flattened into a sequence", async () => {
   // Sales runs alongside construction in UAE off-plan. A stage page that
   // fails this assertion has quietly reintroduced a false sequence.
-  const html = await (await render("/journey/construction-delivery")).text();
+  const html = await (await render("/property-journey/construction-delivery")).text();
   assert.match(html, /does not wait its turn/i);
-  assert.match(html, /Marketing &(amp;)? Sales|Marketing & Sales/);
+  assert.match(html, /Sales &(amp;)? Transfer|Sales & Transfer/);
 });
 
 test("Arabic routes render Arabic, right-to-left", async () => {
   // The original bug: the language control set dir/lang and nothing else, so
   // the layout reversed and every word stayed English.
-  const arabic = (t) => (t.match(/[\u0600-\u06FF]/g) || []).length;
-  for (const path of ["/ar", "/ar/journey", "/ar/roles/buying", "/ar/glossary"]) {
+  const arabic = (t) => (t.match(/[؀-ۿ]/g) || []).length;
+  for (const path of ["/ar", "/ar/property-journey", "/ar/intelligence/guides/buying", "/ar/intelligence/definitions-and-glossary"]) {
     const html = await (await render(path)).text();
     assert.match(html, /dir="rtl"/, `${path} must be RTL`);
     assert.ok(arabic(html) > 400, `${path} should carry Arabic text, found ${arabic(html)}`);
   }
   // English must stay untouched at the root.
-  const en = await (await render("/journey")).text();
+  const en = await (await render("/property-journey")).text();
   assert.doesNotMatch(en, /dir="rtl"/);
 });
 
@@ -102,8 +118,25 @@ test("the review notice appears on Arabic pages only", async () => {
   assert.doesNotMatch(await (await render("/")).text(), /translation-notice/);
 });
 
-test("the roles page shows twelve routes in frequency order", async () => {
-  const html = await (await render("/roles")).text();
+test("stakeholders shows all 12 canonical groups in frequency order", async () => {
+  const html = await (await render("/stakeholders")).text();
+  for (let n = 1; n <= 12; n++) {
+    assert.match(html, new RegExp(`>${String(n).padStart(2, "0")}<`), `group ${n} missing`);
+  }
+  assert.match(html, /Banks & Financial Institutions|Banks &amp; Financial Institutions/);
+  assert.doesNotMatch(html, /Bankers & Financial|Bankers &amp; Financial/);
+});
+
+test("stage 6 is Living & Operations everywhere it appears", async () => {
+  const home = await (await render("/")).text();
+  assert.match(home, /Living & Operations|Living &amp; Operations/);
+  assert.doesNotMatch(home, /Handover & Operations|Handover &amp; Operations/);
+  const journey = await (await render("/property-journey")).text();
+  assert.match(journey, /Living & Operations|Living &amp; Operations/);
+});
+
+test("the guides page (former /roles) shows every guide in frequency order", async () => {
+  const html = await (await render("/intelligence/guides")).text();
   for (let n = 1; n <= 12; n++) {
     assert.match(html, new RegExp(`>${String(n).padStart(2, "0")}<`), `route ${n} missing`);
   }
@@ -113,21 +146,75 @@ test("the roles page shows twelve routes in frequency order", async () => {
   assert.doesNotMatch(html, /taxonomyGroup/);
 });
 
-test("every route link resolves, including retired URLs", async () => {
+test("every guide link resolves", async () => {
   const slugs = ["buying","developing","investing","selling","financing","design-engineering",
     "building","legal-compliance","managing","utilities","regulators","specialist-services",
     "new-to-uae","professional-services"];
   for (const slug of slugs) {
-    assert.equal((await render(`/roles/${slug}`)).status, 200, `/roles/${slug}`);
+    assert.equal((await render(`/intelligence/guides/${slug}`)).status, 200, `/intelligence/guides/${slug}`);
+  }
+});
+
+test("retired routes redirect forward instead of 404ing", async () => {
+  // REOS IA Freeze v1.0: /journey, /roles, /insights, /glossary and the old
+  // stakeholder ids all moved. Every historical URL must still resolve.
+  //
+  // The /journey/:stage cases use the REAL 12-stage ids this repo shipped
+  // with before this session (confirmed against `git show HEAD:app/data/
+  // journey.ts`), not the transient in-session ids — a redirect keyed to an
+  // id that was never actually committed protects nobody's bookmark.
+  const cases = [
+    ["/journey", "/property-journey"],
+    ["/journey/land-ownership", "/property-journey/land-vision"],
+    ["/journey/project-formation", "/property-journey/land-vision"],
+    ["/journey/planning-feasibility", "/property-journey/land-vision"],
+    ["/journey/design-approvals", "/property-journey/planning-design"],
+    ["/journey/finance-escrow", "/property-journey/sales-transfer"],
+    ["/journey/marketing-sales", "/property-journey/sales-transfer"],
+    ["/journey/registration-compliance", "/property-journey/sales-transfer"],
+    ["/journey/handover-snagging", "/property-journey/living-operations"],
+    ["/journey/occupancy-community", "/property-journey/living-operations"],
+    ["/journey/property-management", "/property-journey/asset-growth-intelligence"],
+    ["/journey/investment-resale", "/property-journey/asset-growth-intelligence"],
+    // construction-delivery's id never changed — this exercises the general
+    // wildcard fallback rather than a specific mapping.
+    ["/journey/construction-delivery", "/property-journey/construction-delivery"],
+    ["/roles", "/intelligence/guides"],
+    ["/roles/buying", "/intelligence/guides/buying"],
+    ["/insights", "/intelligence"],
+    ["/glossary", "/intelligence/definitions-and-glossary"],
+    ["/stakeholders/government-authority", "/stakeholders/authorities-regulators"],
+    ["/stakeholders/master-developer", "/stakeholders/developers"],
+    ["/stakeholders/developer", "/stakeholders/developers"],
+    ["/stakeholders/consultant", "/stakeholders/consultants-designers"],
+    ["/stakeholders/bank", "/stakeholders/banks-financial"],
+    ["/stakeholders/broker", "/stakeholders/brokers-agencies"],
+    ["/stakeholders/investor", "/stakeholders/landowners-investors"],
+    ["/stakeholders/property-owner", "/stakeholders/property-owners"],
+  ];
+  for (const [from, to] of cases) {
+    const response = await render(from);
+    assert.equal(response.status, 308, `${from} should redirect (308), got ${response.status}`);
+    assert.equal(response.headers.get("location"), to, `${from} should redirect to ${to}`);
+  }
+});
+
+test("every canonical stakeholder group page resolves", async () => {
+  const slugs = ["landowners-investors", "developers", "consultants-designers", "authorities-regulators",
+    "utility-providers", "contractors", "suppliers-vendors", "brokers-agencies", "banks-financial",
+    "property-owners", "residents-tenants", "facility-community-operators"];
+  for (const slug of slugs) {
+    assert.equal((await render(`/stakeholders/${slug}`)).status, 200, `/stakeholders/${slug}`);
   }
 });
 
 test("renders core routes", async () => {
   for (const path of [
-    "/journey", "/journey/finance-escrow", "/roles", "/roles/developing",
-    "/ecosystem", "/platform", "/insights", "/about", "/demo",
-    "/authorities", "/lifecycle", "/stakeholders", "/stakeholders/developer",
-    "/ar", "/ar/journey", "/ar/roles", "/ar/ecosystem", "/ar/glossary", "/ar/platform",
+    "/property-journey", "/property-journey/sales-transfer", "/stakeholders", "/stakeholders/developers",
+    "/ecosystem", "/platform", "/intelligence", "/intelligence/guides", "/intelligence/definitions-and-glossary",
+    "/about", "/demo", "/authorities", "/lifecycle",
+    "/ar", "/ar/property-journey", "/ar/stakeholders", "/ar/ecosystem",
+    "/ar/intelligence", "/ar/intelligence/definitions-and-glossary", "/ar/platform",
   ]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);

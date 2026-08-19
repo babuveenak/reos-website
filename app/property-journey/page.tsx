@@ -9,7 +9,7 @@ import { groupById } from "../data/ecosystem";
 
 export const metadata: Metadata = {
   title: "The UAE Property Journey, Mapped End to End | REOS",
-  description: "Twelve connected stages from land to living: what happens, who is involved, which documents matter, what can go wrong and what comes next.",
+  description: "Seven connected stages from land to living: what happens, who is involved, which documents matter, what can go wrong and what comes next.",
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
@@ -17,7 +17,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     <section className="inner-hero inner-hero-no-photo">
       <span className="eyebrow">THE PROPERTY JOURNEY</span>
       <h1>The UAE property journey,<br /><em>mapped end to end.</em></h1>
-      <p>Property does not move through one process. It moves through twelve connected stages, several of which run at the same time, each involving different participants, permissions and evidence. This is the full map.</p>
+      <p>Property does not move through one process. It moves through seven connected stages, several of which run at the same time, each involving different participants, permissions and evidence. This is the full map.</p>
       <JourneyArchVisual />
     </section>
 
@@ -33,13 +33,13 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
 
     <section className="section-pad stage-index-band">
       <SectionIntro
-        label="ALL TWELVE STAGES"
+        label="ALL SEVEN STAGES"
         title={<>Every stage,<br /><em>in full.</em></>}
         copy="Each stage page sets out what happens, who is involved, the documents in play, the risks that recur and what jurisdiction changes."
       />
       <div className="stage-index">
         {getStages(locale).map((stage) => (
-          <Link key={stage.id} href={localePath(locale, `/journey/${stage.id}`)} className="stage-index-card">
+          <Link key={stage.id} href={localePath(locale, `/property-journey/${stage.id}`)} className="stage-index-card">
             <header>
               <span>{String(stage.number).padStart(2, "0")}</span>
               <em>{stage.track}</em>

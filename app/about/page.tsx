@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro } from "../components/SiteShell";
@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
+  const L = (path: string) => localePath(locale, path);
   return <Page className="inner-page" locale={locale}>
     <section className="inner-hero atmos atmos-city">
       <span className="eyebrow">ABOUT REOS</span>
@@ -40,8 +41,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <h2>From understanding<br /><em>to execution.</em></h2>
       <p>The knowledge layer makes the journey legible. The discovery layer narrows it to your case. The execution layer runs the work. Each is useful alone, and each makes the next one possible.</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/journey">Explore the journey <span>↗</span></Link>
-        <Link className="button ghost" href="/platform">See the platform</Link>
+        <Link className="button gold" href={L("/property-journey")}>Explore the journey <span>↗</span></Link>
+        <Link className="button ghost" href={L("/platform")}>See the platform</Link>
       </div>
     </section>
   </Page>;

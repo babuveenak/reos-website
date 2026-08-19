@@ -106,12 +106,13 @@ test("answers locate the visitor in the canonical lifecycle", async () => {
   // Phase and stage come from journey.ts, not from prose in the mock.
   assert.match(html, /Where you are/);
   assert.match(html, /Originate|Deliver|Own|Evolve/);
-  assert.match(html, /Land &(amp;)? Ownership|Marketing &(amp;)? Sales|Finance &(amp;)? Escrow/);
+  assert.match(html, /Land &(amp;)? Vision|Sales &(amp;)? Transfer|Construction &(amp;)? Delivery/);
 });
 
 test("concurrency is stated in answers, not flattened", async () => {
   // The guarded site-wide rule, enforced at the assistant layer too: the buyer
-  // example sits on Marketing & Sales, which runs with construction and escrow.
+  // example sits on Sales & Transfer, which runs together with Construction &
+  // Delivery — the one concurrency the new seven-stage model still carries.
   const html = await text("/assistant");
   assert.match(html, /Runs at the same time as:/);
   assert.match(html, /Construction &(amp;)? Delivery/);
@@ -119,8 +120,8 @@ test("concurrency is stated in answers, not flattened", async () => {
 
 test("answers offer a real next step into the site", async () => {
   const html = await text("/assistant");
-  assert.match(html, /href="\/roles\/buying"/);
-  assert.match(html, /href="\/journey\/[a-z-]+"/);
+  assert.match(html, /href="\/intelligence\/guides\/buying"/);
+  assert.match(html, /href="\/property-journey\/[a-z-]+"/);
 });
 
 /* ── citations: real sources, no invented dates ──────────────────────────── */
@@ -158,7 +159,7 @@ test("worked examples never turn into a sales pitch", async () => {
 });
 
 test("the assistant does not add a demo link to any existing page", async () => {
-  for (const path of ["/", "/journey", "/roles", "/ecosystem", "/assistant", "/admin"]) {
+  for (const path of ["/", "/property-journey", "/stakeholders", "/ecosystem", "/assistant", "/admin"]) {
     assert.doesNotMatch(await text(path), /href="\/demo"/, `${path} must not link to the demo`);
   }
 });
@@ -239,8 +240,8 @@ test("the attachment control says what it is waiting for", async () => {
 /* ── the REOS dock ───────────────────────────────────────────────────────── */
 
 test("the REOS dock is on every visitor-facing page", async () => {
-  for (const path of ["/", "/journey", "/journey/construction-delivery", "/roles/buying",
-                      "/ecosystem", "/glossary", "/ar", "/ar/journey"]) {
+  for (const path of ["/", "/property-journey", "/property-journey/construction-delivery", "/intelligence/guides/buying",
+                      "/ecosystem", "/intelligence/definitions-and-glossary", "/ar", "/ar/property-journey"]) {
     const html = await text(path);
     assert.match(html, /class="dock-button"/, `${path} is missing the dock`);
     assert.match(html, /aria-expanded="false"[^>]*aria-controls|aria-controls="[^"]*"[^>]*aria-expanded="false"/,

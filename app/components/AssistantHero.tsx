@@ -39,15 +39,20 @@ const NODES: { x: number; y: number; g: Glyph; r: number }[] = [
   { x: 82, y: 38, g: "deed",      r: 3.0 },
   { x: 80, y: 50, g: "key",       r: 3.2 },
   { x: 76, y: 60, g: "community", r: 3.0 },
-  { x: 65, y: 65, g: "growth",    r: 3.3 },
+  { x: 65, y: 65, g: "bolt",      r: 3.3 },
   { x: 53, y: 63, g: "shield",    r: 3.0 },
   { x: 43, y: 56, g: "page",      r: 3.2 },
-  { x: 37, y: 44, g: "people",    r: 3.0 },
+  { x: 37, y: 44, g: "crate",     r: 3.0 },
 ];
 
+/* The twelve nodes represent the twelve stakeholder groups in ecosystem.ts,
+   not a mixed bag of lifecycle moments and cross-cutting concepts — that was
+   the pre-2026-08-19 reading. Positions are unchanged from that version
+   (only two glyphs were swapped, growth→bolt and people→crate) because they
+   were already tuned so no label collides with another label or a node. */
 type Glyph =
   | "parcel" | "masterplan" | "tower" | "coin" | "tag" | "deed"
-  | "key" | "community" | "growth" | "shield" | "page" | "people";
+  | "key" | "community" | "bolt" | "shield" | "page" | "crate";
 
 /** Tiny geometric marks — abstract enough to stay elegant at 7px across. */
 function GlyphMark({ g, x, y }: { g: Glyph; x: number; y: number }) {
@@ -62,10 +67,10 @@ function GlyphMark({ g, x, y }: { g: Glyph; x: number; y: number }) {
     deed:       <><path d="M-13-18h20l8 8v28h-28Z" {...common} /><path d="M-6 0h14M-6 8h14" {...common} /></>,
     key:        <><circle cx="-8" cy="0" r="9" {...common} /><path d="M1 0h19M14 0v8" {...common} /></>,
     community:  <><path d="M-18 18V-2l10-8 10 8v20" {...common} /><path d="M2 18V4l8-6 8 6v14" {...common} /></>,
-    growth:     <><path d="M-16 12 -4 0 4 8 16-12" {...common} /><path d="M6-12h10v10" {...common} /></>,
+    bolt:       <path d="M4-18-10 4h9l-3 14 14-22h-9Z" {...common} />,
     shield:     <path d="M0-18 16-11v12C16 12 0 18 0 18S-16 12-16 1v-12Z" {...common} />,
     page:       <><path d="M-12-18h24v36h-24Z" {...common} /><path d="M-5-8h10M-5 0h10M-5 8h6" {...common} /></>,
-    people:     <><circle cx="-8" cy="-6" r="6" {...common} /><circle cx="9" cy="-3" r="5" {...common} /><path d="M-18 16c2-8 16-8 18 0M2 16c1-6 12-7 15-1" {...common} /></>,
+    crate:      <><path d="M-18-8 0-18 18-8v16L0 18-18 8Z" {...common} /><path d="M-18-8 0 2 18-8M0 2v16" {...common} /></>,
   };
   return <g transform={t}>{shapes[g]}</g>;
 }

@@ -57,13 +57,13 @@ export function homepageSuggestions(snapshot: KnowledgeSnapshot): SuggestedQuest
     .map<SuggestedQuestion>((r) => ({
       text: p.route(r.title),
       origin: "route",
-      path: L(locale, `/roles/${r.slug}`),
+      path: L(locale, `/intelligence/guides/${r.slug}`),
     }));
 
   const extras: SuggestedQuestion[] = [];
   const concurrent = snapshot.stages.find((s) => s.runsWithNames.length > 0);
   if (concurrent) {
-    extras.push({ text: p.concurrency(concurrent.name), origin: "stage", path: L(locale, `/journey/${concurrent.id}`) });
+    extras.push({ text: p.concurrency(concurrent.name), origin: "stage", path: L(locale, `/property-journey/${concurrent.id}`) });
   }
   extras.push({ text: p.ecosystem, origin: "route", path: L(locale, "/ecosystem") });
 
@@ -78,14 +78,14 @@ export function stageSuggestions(snapshot: KnowledgeSnapshot, stageId: string): 
   if (!stage) return homepageSuggestions(snapshot);
 
   const out: SuggestedQuestion[] = [
-    { text: p.stage(stage.name), origin: "stage", path: L(locale, `/journey/${stage.id}`) },
+    { text: p.stage(stage.name), origin: "stage", path: L(locale, `/property-journey/${stage.id}`) },
   ];
   if (stage.runsWithNames.length > 0) {
-    out.push({ text: p.concurrency(stage.name), origin: "stage", path: L(locale, `/journey/${stage.id}`) });
+    out.push({ text: p.concurrency(stage.name), origin: "stage", path: L(locale, `/property-journey/${stage.id}`) });
   }
   const next = snapshot.stages.find((s) => s.number === stage.number + 1);
   if (next) {
-    out.push({ text: p.stage(next.name), origin: "follow-up", path: L(locale, `/journey/${next.id}`) });
+    out.push({ text: p.stage(next.name), origin: "follow-up", path: L(locale, `/property-journey/${next.id}`) });
   }
   return out;
 }
@@ -111,20 +111,20 @@ export function stageSuggestions(snapshot: KnowledgeSnapshot, stageId: string): 
  */
 const ASSISTANT_OPENERS: Record<Locale, { text: string; path: string }[]> = {
   en: [
-    { text: "How do I verify an off-plan property before signing?", path: "/journey/marketing-sales" },
-    { text: "Why can't construction start yet?", path: "/journey/design-approvals" },
-    { text: "When is the title deed issued and who is involved?", path: "/journey/registration-compliance" },
-    { text: "Who controls the escrow account and when is it released?", path: "/journey/finance-escrow" },
-    { text: "Which stakeholders are involved in handover?", path: "/journey/handover-snagging" },
-    { text: "What risks should an investor check before committing?", path: "/journey/investment-resale" },
+    { text: "How do I verify an off-plan property before signing?", path: "/property-journey/sales-transfer" },
+    { text: "Why can't construction start yet?", path: "/property-journey/authorities-approvals" },
+    { text: "When is the title deed issued and who is involved?", path: "/property-journey/sales-transfer" },
+    { text: "Who controls the escrow account and when is it released?", path: "/property-journey/sales-transfer" },
+    { text: "Which stakeholders are involved in handover?", path: "/property-journey/living-operations" },
+    { text: "What risks should an investor check before committing?", path: "/property-journey/asset-growth-intelligence" },
   ],
   ar: [
-    { text: "كيف أتحقق من عقار على المخطط قبل التوقيع؟", path: "/journey/marketing-sales" },
-    { text: "لماذا لا أستطيع البدء في الإنشاء؟", path: "/journey/design-approvals" },
-    { text: "متى يُصدر سند الملكية ومن يشارك في ذلك؟", path: "/journey/registration-compliance" },
-    { text: "من يتحكم في حساب الضمان ومتى يُفرج عن الأموال؟", path: "/journey/finance-escrow" },
-    { text: "من هم أصحاب المصلحة المشاركون في التسليم؟", path: "/journey/handover-snagging" },
-    { text: "ما المخاطر التي ينبغي أن يتحقق منها المستثمر قبل الالتزام؟", path: "/journey/investment-resale" },
+    { text: "كيف أتحقق من عقار على المخطط قبل التوقيع؟", path: "/property-journey/sales-transfer" },
+    { text: "لماذا لا أستطيع البدء في الإنشاء؟", path: "/property-journey/authorities-approvals" },
+    { text: "متى يُصدر سند الملكية ومن يشارك في ذلك؟", path: "/property-journey/sales-transfer" },
+    { text: "من يتحكم في حساب الضمان ومتى يُفرج عن الأموال؟", path: "/property-journey/sales-transfer" },
+    { text: "من هم أصحاب المصلحة المشاركون في التسليم؟", path: "/property-journey/living-operations" },
+    { text: "ما المخاطر التي ينبغي أن يتحقق منها المستثمر قبل الالتزام؟", path: "/property-journey/asset-growth-intelligence" },
   ],
 };
 

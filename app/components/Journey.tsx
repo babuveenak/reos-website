@@ -102,14 +102,15 @@ export function JourneyRibbon({ locale = DEFAULT_LOCALE }: { locale?: Locale }) 
  * PERSONA SELECTOR — "start from where you are"
  * ------------------------------------------------------------------ */
 
-/** Featured plus the first core routes — the same list /roles leads with,
- *  read from the single route source so the two pages cannot diverge. */
+/** Featured plus the first core routes — the same list /intelligence/guides
+ *  leads with, read from the single route source so the two pages cannot
+ *  diverge. */
 const PRIMARY = ["buying", "developing", "investing", "selling"];
 
 function Tile({ slug, locale }: { slug: string; locale: Locale }) {
   const route = getRoutes(locale).find((r) => r.slug === slug)!;
   return (
-    <Link href={localePath(locale, `/roles/${route.slug}`)} className="persona-tile">
+    <Link href={localePath(locale, `/intelligence/guides/${route.slug}`)} className="persona-tile">
       <span className="tile-num">{String(route.order).padStart(2, "0")}</span>
       <b>{route.title}</b>
       <p>{route.sub}</p>
@@ -157,7 +158,7 @@ export function PersonaQuickPick({ locale = DEFAULT_LOCALE }: { locale?: Locale 
       <div>
         {PRIMARY.map((slug) => {
           const r = getRoutes(locale).find((x) => x.slug === slug)!;
-          return <Link key={slug} href={localePath(locale, `/roles/${slug}`)}>{r.ctaLabel.replace(/ journey$/i, "")}</Link>;
+          return <Link key={slug} href={localePath(locale, `/intelligence/guides/${slug}`)}>{r.ctaLabel.replace(/ journey$/i, "")}</Link>;
         })}
       </div>
     </nav>
@@ -227,7 +228,7 @@ export function JourneyMap({ compact = false, locale = DEFAULT_LOCALE }: { compa
           </div>
         </div>
 
-        <Link className="text-link" href={localePath(locale, `/journey/${active.id}`)}>{d.journey.openStage} <span>→</span></Link>
+        <Link className="text-link" href={localePath(locale, `/property-journey/${active.id}`)}>{d.journey.openStage} <span>→</span></Link>
       </article>
     </div>
   );

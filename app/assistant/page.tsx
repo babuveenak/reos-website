@@ -80,9 +80,9 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
 
       <section className="section-pad">
         <p className="assistant-more">
-          <Link className="button ghost" href={L("/journey")}>{d.nav.journey}</Link>{" "}
+          <Link className="button ghost" href={L("/property-journey")}>{d.nav.journey}</Link>{" "}
           <Link className="button ghost" href={L("/ecosystem")}>{d.nav.ecosystem}</Link>{" "}
-          <Link className="button ghost" href={L("/glossary")}>{d.nav.glossary}</Link>
+          <Link className="button ghost" href={L("/intelligence/definitions-and-glossary")}>{d.nav.glossary}</Link>
         </p>
         <p className="fineprint">{d.footer.fineprint}</p>
       </section>

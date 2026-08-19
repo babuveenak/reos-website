@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   applicationName: "REOS",
   keywords: ["REOS", "UAE property development", "real estate operating system", "development lifecycle", "property approvals", "PropTech"],
   alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: "REOS", title: "REOS — Understand the Property Journey", description: "The digital map of the UAE real estate ecosystem. Twelve connected stages, twelve stakeholder groups, seven emirates.", images: [{ url: "/og.png", width: 1200, height: 630, alt: "REOS — Understand the Property Journey, from land to living" }] },
+  openGraph: { type: "website", siteName: "REOS", title: "REOS — Understand the Property Journey", description: "The digital map of the UAE real estate ecosystem. Seven connected stages, twelve stakeholder groups, seven emirates.", images: [{ url: "/og.png", width: 1200, height: 630, alt: "REOS — Understand the Property Journey, from land to living" }] },
   twitter: { card: "summary_large_image", title: "REOS — Understand the Property Journey", description: "The digital map of the UAE real estate ecosystem.", images: ["/og.png"] },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };

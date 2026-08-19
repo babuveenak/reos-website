@@ -3,9 +3,29 @@ import type { ContentStatus } from "./reos";
 /**
  * THE CANONICAL PROPERTY JOURNEY.
  *
- * One spine. Twelve stages. Every other view on the site — the homepage
- * ribbon, the persona flows, the 24 detailed lifecycle stages in reos.ts —
- * is a projection of this list, never a competing version of it.
+ * One spine. SEVEN stages. Every other view on the site — the homepage hero,
+ * the persona flows, the 24 detailed lifecycle stages in reos.ts and the
+ * assistant — is a projection of this list, never a competing version of it.
+ *
+ * Re-founded from twelve stages to seven on 2026-08-19, at the owner's
+ * explicit direction, because the twelve-stage spine and the twelve-GROUP
+ * ecosystem in ecosystem.ts were easy to mistake for the same number
+ * describing two different things. Seven stages, twelve groups: the stages
+ * are the timeline, the groups are who is linked to it.
+ *
+ * Every old stage's validated content survives somewhere in the new seven —
+ * nothing here was invented from nothing. Two old stages folded together
+ * without changing meaning (Handover & Snagging + Occupancy & Community →
+ * Living & Operations; Property Management + Investment, Leasing & Resale →
+ * Asset Growth & Intelligence). One old stage split across two new ones
+ * where its own content already separated cleanly (Design & Approvals →
+ * Planning & Design for the design half, Authorities & Approvals for the
+ * permitting half). Finance & Escrow lost its standalone slot — it was never
+ * a stage so much as a control that runs through others — so its content now
+ * sits where each part of it actually happens: construction drawdowns under
+ * Construction & Delivery, buyer escrow and registration under Sales &
+ * Transfer. Nothing about escrow or drawdowns was deleted, only relocated to
+ * sit next to the activity it controls.
  *
  * Stages are ordered, but order is not the same as sequence: `runsWith`
  * records genuine concurrency. In UAE off-plan development, marketing and
@@ -17,7 +37,7 @@ import type { ContentStatus } from "./reos";
  * of use rather than assumed.
  */
 
-export type Track = "Origination" | "Regulatory" | "Financial" | "Delivery" | "Commercial" | "Operations";
+export type Track = "Origination" | "Regulatory" | "Delivery" | "Commercial" | "Operations";
 
 export type Stage = {
   id: string;
@@ -45,252 +65,154 @@ export type Stage = {
 export const tracks: { id: Track; label: string; note: string }[] = [
   { id: "Origination", label: "Origination", note: "Securing the land, the entity and the case for building" },
   { id: "Regulatory", label: "Regulatory", note: "Permissions that gate everything downstream" },
-  { id: "Financial", label: "Financial", note: "Capital in, controlled money out — recurring, not one-off" },
   { id: "Delivery", label: "Delivery", note: "Designing and physically building the asset" },
-  { id: "Commercial", label: "Commercial", note: "Selling, leasing and transferring the product" },
+  { id: "Commercial", label: "Commercial", note: "Selling, leasing, transferring and growing the asset's value" },
   { id: "Operations", label: "Operations", note: "Running the property once people live in it" },
 ];
 
 const raw: Omit<Stage, "number">[] = [
   {
-    id: "land-ownership", name: "Land & Ownership", short: "Land", phase: "Originate", track: "Origination", runsWith: [],
-    summary: "Establishing who owns the land, what may legally be built on it, and on what terms it can change hands.",
+    id: "land-vision", name: "Land & Vision", short: "Land", phase: "Originate", track: "Origination", runsWith: [],
+    summary: "Securing the right opportunity and proving, before large sums are committed, that it actually works.",
     whatHappens: [
-      "Confirm registered ownership and any rights, mortgages or restrictions attached to the plot",
-      "Check the permitted use and development limits that apply to this exact location",
-      "Confirm whether the buyer is eligible to own in this area — eligibility varies by nationality and zone",
-      "Agree commercial terms, then complete transfer through the official registration channel",
+      "Identify the land or project opportunity and confirm registered ownership, permitted use and any rights, mortgages or restrictions attached to the plot",
+      "Test the market — what sells or leases here, at what price, to whom — and build an investment case around it",
+      "Run feasibility: development controls, a cost plan and a development programme, modelled against the capital that would be required",
+      "Choose an ownership structure, often a special purpose vehicle, and obtain the licences and developer registration the activity requires",
     ],
-    groupIds: ["land-developer", "investors", "authorities", "legal-assurance", "enablers"],
-    documents: ["Title deed or plot ownership evidence", "Site plan and survey", "Planning and zoning information", "Sale agreement", "Clearances required before transfer"],
+    groupIds: ["landowners-investors", "developers", "consultants-designers", "banks-financial"],
+    documents: ["Title deed or plot ownership evidence", "Site plan and survey", "Market and pricing study", "Cost plan and financial model", "Company formation and developer registration documents"],
     risks: [
       "Buying land whose permitted use will not support the intended project",
+      "Optimistic pricing or absorption assumptions that only surface during sales",
       "Ownership eligibility assumed rather than verified for the specific plot and buyer",
-      "Access, utility capacity or master-community obligations discovered after purchase",
+      "Structure chosen before financing or the sale of units was considered",
     ],
     nextStep: "Confirm the plot's approving authority and permitted use in writing before negotiating price.",
     jurisdiction: "Ownership eligibility, registration route and permitted use differ by emirate and by zone within an emirate. A plot inside a free zone or a designated development zone is governed differently from one on municipal land next door.",
-    detailStageIds: ["land-opportunity", "land-acquisition"], status: "Validated",
+    detailStageIds: ["land-opportunity", "land-acquisition", "developer-establishment", "feasibility"], status: "Validated",
   },
   {
-    id: "project-formation", name: "Project Formation", short: "Formation", phase: "Originate", track: "Origination", runsWith: ["planning-feasibility"],
-    summary: "Creating the legal entity that will own, build and sell the project, and obtaining the licences it needs to act as a developer.",
+    id: "planning-design", name: "Planning & Design", short: "Design", phase: "Originate", track: "Delivery", runsWith: [],
+    summary: "Turning the concept into a coordinated, buildable design package.",
     whatHappens: [
-      "Choose an ownership structure — often a special purpose vehicle, a company created for one project so its risks stay separate",
-      "Obtain the commercial licence and any developer registration the activity requires",
-      "Document arrangements between partners, investors and the entity",
-      "Appoint the people authorised to sign and submit on the project's behalf",
+      "Appoint licensed architects and engineers, including the consultant of record who will sign submissions and carry design liability",
+      "Develop the master plan — height, density, setbacks, parking and use mix — against what the plot actually allows",
+      "Coordinate architectural, structural and building-services design into one buildable package",
+      "Resolve master-community requirements and fire and life-safety design intent before submission",
     ],
-    groupIds: ["land-developer", "investors", "authorities", "legal-assurance"],
-    documents: ["Company formation documents", "Trade or commercial licence", "Developer registration where required", "Shareholder or joint venture agreement", "Authorised signatory records"],
+    groupIds: ["developers", "consultants-designers"],
+    documents: ["Consultant appointment and scope", "Concept massing studies", "Coordinated architectural and engineering drawings", "Development control compliance record"],
     risks: [
-      "Starting design or marketing before the entity is licensed to do so",
-      "Structure that blocks later financing or the sale of units",
-      "Partner obligations agreed verbally and documented late",
+      "Design frozen before the master community has commented",
+      "Disciplines coordinated on paper too late to avoid a clash discovered on site",
+      "Programme that ignores how long the approvals that follow actually take",
     ],
-    nextStep: "Confirm which licences and registrations this specific activity requires before incurring project cost.",
-    jurisdiction: "Licensing authority, permitted activity wording and developer registration requirements are set by each emirate's economic and real-estate regulators, and separately by each free zone.",
-    detailStageIds: ["developer-establishment"], status: "To Be Validated",
-  },
-  {
-    id: "planning-feasibility", name: "Planning & Feasibility", short: "Feasibility", phase: "Originate", track: "Origination", runsWith: ["project-formation"],
-    summary: "Testing whether the project works — physically, commercially and financially — before large sums are committed.",
-    whatHappens: [
-      "Establish what the plot allows: height, density, setbacks, parking and use mix",
-      "Test the market — what sells or leases here, at what price, to whom",
-      "Build a cost plan and a development programme",
-      "Model returns against the capital that would be required, and decide whether to proceed",
-    ],
-    groupIds: ["land-developer", "investors", "consultants", "enablers"],
-    documents: ["Development control information", "Concept massing studies", "Market and pricing study", "Cost plan", "Financial model and programme"],
-    risks: [
-      "Optimistic pricing or absorption assumptions that only surface during sales",
-      "Costs estimated before the ground conditions are known",
-      "Programme that ignores how long approvals actually take",
-    ],
-    nextStep: "Test the model against a pessimistic case before committing capital, not only the expected one.",
+    nextStep: "Resolve which single authority governs this plot before the design package is frozen.",
     jurisdiction: "Development controls are issued by the planning authority for that plot, and a master community may impose further private requirements on top.",
-    detailStageIds: ["feasibility"], status: "Validated",
+    detailStageIds: ["planning-design"], status: "Validated",
   },
   {
-    id: "design-approvals", name: "Design & Approvals", short: "Design", phase: "Originate", track: "Regulatory", runsWith: [],
-    summary: "Turning the concept into approved, buildable drawings — and obtaining the permits that make construction lawful.",
+    id: "authorities-approvals", name: "Authorities & Approvals", short: "Approvals", phase: "Originate", track: "Regulatory", runsWith: [],
+    summary: "Submitting the design package to every body that must clear it, and obtaining permission to build.",
     whatHappens: [
-      "Appoint licensed architects and engineers, including the consultant who will sign and carry design liability",
-      "Develop and coordinate architectural, structural and building-services design",
-      "Submit for planning and building approval, and obtain the no-objection certificates other bodies require",
-      "Resolve fire and life-safety, infrastructure and utility requirements, then obtain the building permit",
+      "Resolve which authority governs the plot — municipality, development-zone authority or free-zone regulator — before any submission is prepared",
+      "Submit to the planning and building authority, and to RERA or the equivalent real-estate regulator where the activity requires it",
+      "Obtain the no-objection certificates utility, transport and civil defence bodies require",
+      "Resolve fire and life-safety and infrastructure requirements, then obtain the building permit",
     ],
-    groupIds: ["consultants", "authorities", "land-developer", "utilities", "legal-assurance"],
-    documents: ["Consultant appointment and scope", "Approved architectural and engineering drawings", "No-objection certificates from utility and transport bodies", "Fire and life-safety approval", "Building permit"],
+    groupIds: ["authorities-regulators", "utility-providers", "developers", "consultants-designers"],
+    documents: ["Authority submission package", "No-objection certificates from utility and transport bodies", "Civil defence fire and life-safety approval", "Building permit"],
     risks: [
       "Submitting to the wrong authority because the plot's jurisdiction was never resolved",
       "Redesign after a late-arriving requirement from a body nobody consulted early",
-      "Design frozen before the master community has commented",
+      "Utility approvals treated as a formality rather than a real lead-time item",
     ],
-    nextStep: "Resolve which single authority governs this plot before any submission is prepared.",
+    nextStep: "Confirm every no-objection certificate this specific plot needs before the first submission, not after a rejection.",
     jurisdiction: "This is where jurisdiction matters most. A Dubai plot may fall to the municipality, a development-zone authority, or a free-zone built-environment regulator — each with different submissions, sequences and fees.",
-    detailStageIds: ["planning-design", "authority-approvals"], status: "Validated",
+    detailStageIds: ["authority-approvals"], status: "Validated",
   },
   {
-    id: "finance-escrow", name: "Finance & Escrow", short: "Finance", phase: "Originate", track: "Financial", runsWith: ["construction-delivery", "marketing-sales"],
-    summary: "Arranging the capital that funds construction, and the controlled account through which buyer money must flow.",
+    id: "construction-delivery", name: "Construction & Delivery", short: "Build", phase: "Deliver", track: "Delivery", runsWith: ["sales-transfer"],
+    summary: "Procuring the contractor and physically building the asset, with quality, safety and progress evidenced throughout — while construction finance is drawn down against that same evidence.",
     whatHappens: [
-      "Register the project with the real-estate regulator so units may lawfully be sold",
-      "Open an escrow account — a regulated account, held by an approved bank, that ring-fences buyer payments for this project alone",
-      "Arrange construction finance and agree how funds are drawn against verified progress",
-      "Set the payment plan that links what buyers pay to what has actually been built",
-    ],
-    groupIds: ["investors", "escrow-financial", "authorities", "land-developer", "legal-assurance"],
-    documents: ["Project registration certificate", "Escrow account agreement", "Facility agreement and security documents", "Approved payment plan", "Progress certificates supporting each release"],
-    risks: [
-      "Marketing or taking deposits before the project is registered and escrow is open",
-      "Payment plan that collects faster than construction progresses",
-      "Drawdowns delayed because progress evidence does not satisfy the bank",
-    ],
-    nextStep: "Confirm the project is registered and escrow is open before any unit is offered for sale.",
-    jurisdiction: "Escrow is mandatory for off-plan sales and is governed by each emirate's real-estate regulator, which approves the trustee banks and the release conditions.",
-    detailStageIds: ["project-registration", "finance-escrow", "payments"], status: "Validated",
-  },
-  {
-    id: "construction-delivery", name: "Construction & Delivery", short: "Build", phase: "Deliver", track: "Delivery", runsWith: ["marketing-sales", "finance-escrow"],
-    summary: "Procuring the contractor and building the asset, while quality, safety and progress are evidenced throughout.",
-    whatHappens: [
-      "Tender and award the main contract, and put insurances in place before anyone goes on site",
+      "Tender and award the main contract, and put contractor's all-risks and third-party insurance in place before anyone goes on site",
       "Mobilise the site, then build against the approved drawings",
       "Inspect and test as work proceeds, and record what was inspected and by whom",
-      "Manage changes, claims and delays against the contract, and certify genuine progress for payment",
+      "Certify genuine progress for payment, and draw construction finance down against that verified progress, not against claims",
     ],
-    groupIds: ["contractors", "consultants", "land-developer", "escrow-financial", "legal-assurance"],
-    documents: ["Main contract and subcontracts", "Contractor's all-risks and third-party insurance", "Inspection and test records", "Progress certificates and valuations", "Variation and claim records"],
+    groupIds: ["contractors", "suppliers-vendors", "consultants-designers", "developers", "banks-financial"],
+    documents: ["Main contract and subcontracts", "Contractor's all-risks and third-party insurance", "Inspection and test records", "Progress certificates and valuations", "Facility agreement and drawdown records"],
     risks: [
       "Progress claimed ahead of work actually completed",
       "Design changes made on site without the consultant's approval or a permit amendment",
-      "Contractor not graded for work of this scale, discovered after award",
+      "Drawdowns delayed because progress evidence does not satisfy the bank",
     ],
     nextStep: "Fix the inspection and certification chain before mobilisation, not during it.",
     jurisdiction: "Inspection regimes, contractor grading and site-safety enforcement are administered by the building authority for that plot.",
-    detailStageIds: ["procurement", "construction", "inspection"], status: "Validated",
+    detailStageIds: ["procurement", "construction", "inspection", "finance-escrow"], status: "Validated",
   },
   {
-    id: "marketing-sales", name: "Marketing & Sales", short: "Sales", phase: "Deliver", track: "Commercial", runsWith: ["construction-delivery", "finance-escrow"],
-    summary: "Selling units — which in off-plan development happens while the building is still going up, not after it is finished.",
+    id: "sales-transfer", name: "Sales & Transfer", short: "Sales", phase: "Deliver", track: "Commercial", runsWith: ["construction-delivery"],
+    summary: "Selling units — which in off-plan development happens while the building is still going up — and transferring ownership through the official register.",
     whatHappens: [
-      "Obtain the permits that allow the project and its units to be advertised",
-      "Appoint licensed brokers and agree how they may represent the project",
-      "Take reservations, then issue the sale and purchase agreement setting out unit, price, payment plan and delivery obligations",
-      "Collect buyer payments into escrow, never into the developer's own account",
+      "Register the project with the real-estate regulator and open a regulated escrow account before any unit is offered for sale",
+      "Obtain advertising permits, appoint licensed brokers, and market the project",
+      "Onboard buyers: take reservations, then issue the sale and purchase agreement, collecting every payment into escrow, never into the developer's own account",
+      "Register each sale on the official register, which records the buyer against the specific unit and is what legally protects their interest",
     ],
-    groupIds: ["sales-brokerage", "customers", "land-developer", "authorities", "escrow-financial"],
-    documents: ["Advertising and listing permits", "Broker agreements", "Reservation form", "Sale and purchase agreement", "Payment receipts showing escrow deposit"],
+    groupIds: ["brokers-agencies", "property-owners", "authorities-regulators", "banks-financial", "developers"],
+    documents: ["Project registration certificate and escrow account agreement", "Advertising and listing permits", "Sale and purchase agreement", "Payment receipts showing escrow deposit", "Official sale registration record"],
     risks: [
-      "Advertising without a permit, or on terms the permit does not cover",
+      "Marketing or taking deposits before the project is registered and escrow is open",
       "Buyer expectations set by marketing material that the contract does not support",
-      "Cancellations concentrated in one payment milestone",
-    ],
-    nextStep: "Check the advertising permit covers every channel and claim being used, including third-party portals.",
-    jurisdiction: "Advertising permits, broker licensing and off-plan sale registration are regulated separately in each emirate; a permit in one is not valid in another.",
-    detailStageIds: ["sales", "offplan-escrow", "customer-onboarding"], status: "Validated",
-  },
-  {
-    id: "registration-compliance", name: "Registration & Compliance", short: "Register", phase: "Deliver", track: "Regulatory", runsWith: ["marketing-sales"],
-    summary: "Recording each sale on the official register so the buyer's interest in the property is legally protected.",
-    whatHappens: [
-      "Register the off-plan sale on the official register, which records the buyer against the specific unit",
-      "Keep the register current as payments, transfers and assignments occur",
-      "Meet ongoing regulatory reporting on project progress and escrow position",
-      "Maintain audit trails that survive a change of staff, agent or owner",
-    ],
-    groupIds: ["authorities", "land-developer", "customers", "escrow-financial", "legal-assurance"],
-    documents: ["Off-plan sale registration record", "Buyer identity and eligibility evidence", "Regulatory progress reports", "Escrow audit records"],
-    risks: [
       "Sales concluded but never registered, leaving buyers unprotected",
-      "Register out of step with the developer's own records",
-      "Reporting missed because no single party owns it",
     ],
-    nextStep: "Reconcile the official register against internal sales records on a fixed cycle, not on request.",
-    jurisdiction: "Each emirate maintains its own register and its own off-plan registration process. Registration in one emirate confers nothing in another.",
-    detailStageIds: ["offplan-escrow", "title"], status: "Validated",
+    nextStep: "Confirm the project is registered and escrow is open before any unit is offered for sale.",
+    jurisdiction: "Escrow, advertising permits, broker licensing and off-plan sale registration are all regulated separately by each emirate's real-estate regulator; a permit or registration in one is not valid in another.",
+    detailStageIds: ["project-registration", "sales", "offplan-escrow", "customer-onboarding", "payments", "title"], status: "Validated",
   },
   {
-    id: "handover-snagging", name: "Handover & Snagging", short: "Handover", phase: "Own", track: "Delivery", runsWith: [],
-    summary: "Completing the building, proving it is fit to occupy, and transferring it unit by unit to the people who bought it.",
+    id: "living-operations", name: "Living & Operations", short: "Living", phase: "Own", track: "Operations", runsWith: [],
+    summary: "Completing the building, transferring it to the people who bought it, and turning it into a working, serviced place where people can actually live.",
     whatHappens: [
-      "Obtain completion approval and the certificate confirming the building may be occupied",
-      "Notify buyers, collect final payments and complete transfer of ownership",
-      "Inspect each unit with the buyer and record defects — commonly called snagging",
-      "Rectify defects through the liability period, during which the developer remains responsible for putting them right",
+      "Obtain completion approval, notify buyers and complete transfer of ownership unit by unit",
+      "Inspect each unit with the buyer, record defects — commonly called snagging — and rectify them through the liability period",
+      "Connect utilities, register occupants with the community, and establish the owners' association and the service charges that fund shared upkeep",
+      "Set up how residents and tenants report faults and request services",
     ],
-    groupIds: ["land-developer", "customers", "consultants", "contractors", "authorities", "operations"],
-    documents: ["Completion certificate", "Handover notice", "Unit inspection and snag list", "Final payment and transfer evidence", "Warranties, manuals and keys inventory"],
+    groupIds: ["property-owners", "residents-tenants", "facility-community-operators", "utility-providers", "developers"],
+    documents: ["Completion certificate and handover notice", "Unit inspection and snag list", "Utility connection applications", "Owners' association constitution and service charge schedule"],
     risks: [
       "Handover notices issued before completion approval is actually in hand",
       "Defects recorded informally and disputed later",
-      "Buyer unable to complete because mortgage timing was not coordinated",
-    ],
-    nextStep: "Give every buyer one dated evidence pack — inspection record, warranties, meter readings, keys.",
-    jurisdiction: "Completion approval, occupancy certification and transfer are issued by different bodies depending on the plot's jurisdiction.",
-    detailStageIds: ["handover", "snagging-dlp"], status: "Validated",
-  },
-  {
-    id: "occupancy-community", name: "Occupancy & Community Living", short: "Occupancy", phase: "Own", track: "Operations", runsWith: [],
-    summary: "Turning a completed building into a working, serviced place where people can actually live.",
-    whatHappens: [
-      "Connect and activate electricity, water and cooling in the occupant's name",
-      "Register occupants and vehicles with the community, and set access permissions",
-      "Establish the owners' association and the service charges that fund shared upkeep",
-      "Set up how residents report faults and request services",
-    ],
-    groupIds: ["utilities", "operations", "customers", "land-developer"],
-    documents: ["Utility connection applications and deposits", "Community registration and access approvals", "Service charge schedule", "Owners' association constitution", "Move-in approvals"],
-    risks: [
       "Occupation delayed by utility connection lead times nobody planned for",
       "Service charges set below the real cost of running the building",
-      "Cooling supplied under a long exclusive concession with costs residents did not expect",
     ],
-    nextStep: "Confirm utility and community move-in requirements through official channels before committing to a move date.",
-    jurisdiction: "Utility providers, community rules and owners' association regulation are emirate-specific, and district cooling is often a single contracted provider per community.",
-    detailStageIds: ["utilities", "community"], status: "Validated",
+    nextStep: "Give every buyer one dated evidence pack — inspection record, warranties, meter readings, keys.",
+    jurisdiction: "Completion approval, occupancy certification, community rules and owners' association regulation are all emirate-specific, and district cooling is often a single contracted provider per community.",
+    detailStageIds: ["handover", "snagging-dlp", "utilities", "community"], status: "Validated",
   },
   {
-    id: "property-management", name: "Property Management", short: "Management", phase: "Evolve", track: "Operations", runsWith: ["investment-resale"],
-    summary: "Keeping the asset in good condition, correctly insured, properly funded and worth what it should be.",
+    id: "asset-growth-intelligence", name: "Asset Growth & Intelligence", short: "Growth", phase: "Evolve", track: "Commercial", runsWith: [],
+    summary: "Keeping the asset in good condition and correctly funded, and earning from it — by leasing, selling, refinancing or holding for the long term.",
     whatHappens: [
-      "Run planned and reactive maintenance across the building and its equipment",
-      "Collect service charges and manage the reserve fund for major future works",
-      "Keep insurance, safety certification and statutory inspections current",
-      "Report condition, cost and performance to owners",
+      "Run planned and reactive maintenance, and fund the reserve for major future works from service charges",
+      "Lease the property and register the tenancy through the official system, or track owner-occupied performance",
+      "Track income, cost and yield against the original investment case, using portfolio-level reporting and analytics",
+      "Refinance, restructure or sell — clearing mortgages and community dues, then transferring title — or plan succession",
     ],
-    groupIds: ["operations", "customers", "legal-assurance", "enablers", "utilities"],
-    documents: ["Maintenance plan and asset register", "Service charge budget and reserve fund study", "Insurance policies", "Safety and equipment certificates", "Owner reporting pack"],
+    groupIds: ["property-owners", "banks-financial", "brokers-agencies", "facility-community-operators", "residents-tenants"],
+    documents: ["Maintenance plan and asset register", "Tenancy contract and registration", "Rent, cost and yield records", "Valuation and refinancing documents", "Mortgage settlement and transfer documents"],
     risks: [
       "Deferred maintenance that turns into capital expenditure",
-      "Reserve fund too small for the first major replacement cycle",
-      "Records lost when the managing agent changes",
-    ],
-    nextStep: "Check the reserve fund against a condition-based replacement schedule, not a flat percentage.",
-    jurisdiction: "Owners' association management and service charge approval are regulated per emirate, with an approved-manager regime in some.",
-    detailStageIds: ["ownership-operations", "community"], status: "Validated",
-  },
-  {
-    id: "investment-resale", name: "Investment, Leasing & Resale", short: "Invest", phase: "Evolve", track: "Commercial", runsWith: ["property-management"],
-    summary: "Earning from the property and eventually exiting it — by leasing, selling, refinancing or passing it on.",
-    whatHappens: [
-      "Lease the property and register the tenancy through the official system",
-      "Track income, cost and yield against the original investment case",
-      "Refinance or restructure where it improves the return",
-      "Sell — clearing mortgages and community dues, then transferring title — or plan succession",
-    ],
-    groupIds: ["customers", "sales-brokerage", "investors", "escrow-financial", "authorities", "enablers"],
-    documents: ["Tenancy contract and registration", "Rent and expense records", "Valuation", "Mortgage settlement and clearance certificates", "Transfer documents"],
-    risks: [
-      "Sale delayed because service charge or mortgage clearances were left to the end",
       "Yield calculated before service charges, agency fees and vacancy",
+      "Sale delayed because service charge or mortgage clearances were left to the end",
       "Succession unplanned, leaving ownership contested",
     ],
-    nextStep: "Assemble the clearance pack — mortgage, service charge, community — before listing, not after an offer.",
-    jurisdiction: "Tenancy registration, rent regulation, transfer fees and inheritance treatment all differ by emirate and by the owner's personal status.",
-    detailStageIds: ["leasing", "resale", "succession-exit"], status: "Validated",
+    nextStep: "Check the reserve fund against a condition-based replacement schedule, and assemble the clearance pack before listing, not after an offer.",
+    jurisdiction: "Tenancy registration, rent regulation, transfer fees, service charge approval and inheritance treatment all differ by emirate and by the owner's personal status.",
+    detailStageIds: ["ownership-operations", "leasing", "resale", "succession-exit"], status: "Validated",
   },
 ];
 

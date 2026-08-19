@@ -3,13 +3,18 @@ import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
 import { DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
+import { getModules } from "../i18n/content";
 import { Logo } from "./Logo";
 import { PreferencesControls } from "./PreferencesControls";
 import { AssistantDock } from "./AssistantDock";
 import { buildSnapshot } from "../assistant/snapshot";
 
-const NAV_ROUTES = ["/journey", "/roles", "/ecosystem", "/insights", "/glossary", "/platform"] as const;
-const NAV_KEYS = ["journey", "roles", "ecosystem", "insights", "glossary", "platform"] as const;
+/* THE FIVE FROZEN PRIMARY NAV ITEMS, in this exact order — REOS IA Freeze
+ * v1.0, 2026-08-19. Do not add, remove or reorder without an explicit new
+ * instruction: Property Journey, Stakeholders, Ecosystem, Intelligence,
+ * Platform. */
+const NAV_ROUTES = ["/property-journey", "/stakeholders", "/ecosystem", "/intelligence", "/platform"] as const;
+const NAV_KEYS = ["journey", "stakeholders", "ecosystem", "intelligence", "platform"] as const;
 
 export function Header({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -36,6 +41,11 @@ export function Header({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   );
 }
 
+/** Footer architecture aligned to the frozen primary IA — REOS IA Freeze
+ *  v1.0, 2026-08-19: EXPLORE (the five nav destinations, plus About and
+ *  Authorities), INTELLIGENCE (its six categories) and PLATFORM (its
+ *  modules). Glossary is deliberately NOT a standalone footer column —
+ *  it sits inside INTELLIGENCE as Definitions & Glossary. */
 export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
   const L = (path: string) => localePath(locale, path);
@@ -43,14 +53,37 @@ export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     <footer className="site-footer">
       <div><span className="eyebrow">{d.footer.eyebrow}</span><h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2></div>
       <div className="footer-links">
-        <Link href={L("/journey")}>{d.nav.journey}</Link>
-        <Link href={L("/roles")}>{d.footer.findRole}</Link>
-        <Link href={L("/ecosystem")}>{d.footer.ecosystemMap}</Link>
-        <Link href={L("/authorities")}>{d.nav.authorities}</Link>
-        <Link href={L("/platform")}>{d.nav.platform}</Link>
-        <Link href={L("/insights")}>{d.nav.insights}</Link>
-        <Link href={L("/glossary")}>{d.nav.glossary}</Link>
-        <Link href={L("/about")}>{d.nav.about}</Link>
+        <div className="footer-group">
+          <span className="footer-group-heading">{d.footer.exploreHeading}</span>
+          <div className="footer-subnav">
+            <Link href={L("/property-journey")}>{d.nav.journey}</Link>
+            <Link href={L("/stakeholders")}>{d.nav.stakeholders}</Link>
+            <Link href={L("/ecosystem")}>{d.nav.ecosystem}</Link>
+            <Link href={L("/intelligence")}>{d.nav.intelligence}</Link>
+            <Link href={L("/platform")}>{d.nav.platform}</Link>
+            <Link href={L("/authorities")}>{d.nav.authorities}</Link>
+            <Link href={L("/about")}>{d.nav.about}</Link>
+          </div>
+        </div>
+        <div className="footer-group">
+          <span className="footer-group-heading">{d.footer.intelligenceHeading}</span>
+          <div className="footer-subnav">
+            <Link href={L("/intelligence/guides")}>{d.footer.guides}</Link>
+            <Link href={L("/intelligence#regulations")}>{d.footer.regulations}</Link>
+            <Link href={L("/intelligence#processes")}>{d.footer.processes}</Link>
+            <Link href={L("/intelligence#authority-information")}>{d.footer.authorityInformation}</Link>
+            <Link href={L("/intelligence/definitions-and-glossary")}>{d.footer.definitionsGlossary}</Link>
+            <Link href={L("/intelligence#knowledge-graph")}>{d.footer.knowledgeGraph}</Link>
+          </div>
+        </div>
+        <div className="footer-group">
+          <span className="footer-group-heading">{d.footer.platformHeading}</span>
+          <div className="footer-subnav">
+            {getModules(locale).map((module) => (
+              <Link key={module.id} href={L(`/platform#${module.id}`)}>{module.name}</Link>
+            ))}
+          </div>
+        </div>
       </div>
       <p className="fineprint">{d.footer.fineprint}</p>
     </footer>

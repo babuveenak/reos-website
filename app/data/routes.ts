@@ -21,7 +21,7 @@ export type Route = {
   /** INTERNAL ONLY — never rendered. Maps to the twelve stakeholder groups.
    *  Route 05 spans two groups: capital providers and the parties that
    *  operate project money, so it carries both. */
-  taxonomyGroup: number | number[];
+  taxonomyGroup: number;
   /** Old URLs that must keep resolving to this route. */
   aliases?: string[];
   /** Where this route's written content lives in personas.ts, when the route
@@ -31,21 +31,21 @@ export type Route = {
 
 export const routes: Route[] = [
   {
-    order: 1, slug: "buying", tier: 1, taxonomyGroup: 9,
+    order: 1, slug: "buying", tier: 1, taxonomyGroup: 10,
     title: "I am buying or I own property",
     ctaLabel: "Buyer & owner journey",
     sub: "From first search to keys in hand — what to verify, what to sign, and what protects your money along the way.",
     journey: ["Discover", "Verify", "Reserve", "Contract", "Finance", "Register", "Handover", "Own"],
   },
   {
-    order: 2, slug: "developing", tier: 1, taxonomyGroup: 1,
+    order: 2, slug: "developing", tier: 1, taxonomyGroup: 2,
     title: "I am developing a project",
     ctaLabel: "Developer journey",
     sub: "Every approval, appointment, dependency and handoff between buying a plot and handing over the last unit.",
     journey: ["Land", "Project registration", "Design approvals", "Escrow", "Construction", "Completion", "Title deed", "Handover"],
   },
   {
-    order: 3, slug: "investing", tier: 2, taxonomyGroup: 2,
+    order: 3, slug: "investing", tier: 2, taxonomyGroup: 1,
     title: "I am investing in property",
     ctaLabel: "Investor journey",
     sub: "See where capital enters, what controls protect it, which risks concentrate where, and how an exit actually works.",
@@ -59,14 +59,14 @@ export const routes: Route[] = [
     journey: ["List", "Match", "Offer", "Contract", "Transfer", "Commission"],
   },
   {
-    order: 5, slug: "financing", tier: 2, taxonomyGroup: [2, 6],
+    order: 5, slug: "financing", tier: 2, taxonomyGroup: 9,
     title: "I am financing property",
     ctaLabel: "Bank & financier journey",
     sub: "Where money enters, what controls it, how progress is verified, and what evidence supports each release.",
     journey: ["Assess", "Approve", "Secure", "Disburse", "Monitor", "Discharge"],
   },
   {
-    order: 6, slug: "design-engineering", tier: 2, taxonomyGroup: 4,
+    order: 6, slug: "design-engineering", tier: 2, taxonomyGroup: 3,
     aliases: ["professional-services"], personaSlug: "professional-services",
     title: "I am designing or engineering a project",
     ctaLabel: "Consultant & engineer journey",
@@ -74,42 +74,42 @@ export const routes: Route[] = [
     journey: ["Appointment", "Concept", "Authority submission", "Supervision", "Certification"],
   },
   {
-    order: 7, slug: "building", tier: 2, taxonomyGroup: 5,
+    order: 7, slug: "building", tier: 2, taxonomyGroup: 6,
     title: "I am building or supplying",
     ctaLabel: "Contractor & supplier journey",
     sub: "What must exist before you mobilise, what you must evidence during construction, and what completion actually requires.",
     journey: ["Tender", "Award", "Mobilise", "Build", "Test", "Handover"],
   },
   {
-    order: 8, slug: "legal-compliance", tier: 3, taxonomyGroup: 7,
+    order: 8, slug: "legal-compliance", tier: 3, taxonomyGroup: 3,
     title: "I provide legal, compliance or insurance services",
     ctaLabel: "Legal & compliance journey",
     sub: "Your appointment, your submissions, your liability, and the parties whose work depends on yours.",
     journey: ["Appointment", "Advice", "Documentation", "Compliance", "Dispute"],
   },
   {
-    order: 9, slug: "managing", tier: 3, taxonomyGroup: 11,
+    order: 9, slug: "managing", tier: 3, taxonomyGroup: 12,
     title: "I manage property or facilities",
     ctaLabel: "Property & facility manager journey",
     sub: "Taking the building on, running it well, funding it correctly and keeping the record intact for whoever comes next.",
     journey: ["Handover", "Onboard", "Operate", "Fund", "Report"],
   },
   {
-    order: 10, slug: "utilities", tier: 3, taxonomyGroup: 10,
+    order: 10, slug: "utilities", tier: 3, taxonomyGroup: 5,
     title: "I provide utilities or infrastructure",
     ctaLabel: "Utilities & infrastructure journey",
     sub: "Connection, capacity and commissioning — what a project needs from you, and when it needs it.",
     journey: ["Capacity", "Design review", "Connection", "Commissioning", "Activation"],
   },
   {
-    order: 11, slug: "regulators", tier: 3, taxonomyGroup: 3,
+    order: 11, slug: "regulators", tier: 3, taxonomyGroup: 4,
     title: "I am an authority or regulator",
     ctaLabel: "Authority & regulator view",
     sub: "Where approvals gate the journey, what evidence supports each decision, and how status flows back to participants.",
     journey: ["Submission", "Review", "Decision", "Registration", "Oversight"],
   },
   {
-    order: 12, slug: "specialist-services", tier: 3, taxonomyGroup: 12,
+    order: 12, slug: "specialist-services", tier: 3, taxonomyGroup: 3,
     title: "I provide specialist or advisory services",
     ctaLabel: "Specialist services journey",
     sub: "Valuation, data, technology, ESG and residency services — where your work enters the journey and who depends on it.",

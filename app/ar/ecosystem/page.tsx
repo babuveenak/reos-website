@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 /** Arabic route. Renders the shared view with locale="ar"; content falls
  *  back to English per-field where a translation is not yet in place. */
 export const metadata: Metadata = {
-  title: "The 12 Stakeholder Groups Behind the UAE Property Journey | REOS",
-  description: "Who participates in UAE property development, what each group controls, when they enter the journey and what they exchange with everyone else.",
+  title: "The Connected Property Ecosystem | REOS",
+  description: "How the 12 stakeholder groups connect across the seven-stage UAE property journey — relationships, dependencies and information flows, with REOS at the centre.",
 };
 
 export default function Page() {

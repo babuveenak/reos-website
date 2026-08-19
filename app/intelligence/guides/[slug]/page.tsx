@@ -1,15 +1,15 @@
-import { getPersonas, getStage } from "../../i18n/content";
-import { DEFAULT_LOCALE, type Locale } from "../../i18n/config";
+import { getPersonas, getStage } from "../../../i18n/content";
+import { DEFAULT_LOCALE, type Locale } from "../../../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Page, StatusTag } from "../../components/SiteShell";
-import { withTerms } from "../../components/Term";
-import { groupById } from "../../data/ecosystem";
+import { Page, StatusTag } from "../../../components/SiteShell";
+import { withTerms } from "../../../components/Term";
+import { groupById } from "../../../data/ecosystem";
 
-import { personaBySlug, personas } from "../../data/personas";
-import { allRouteSlugs, contentSlug, resolveRoute } from "../../data/routes";
-import { getRouteUi } from "../../i18n/content";
+import { personaBySlug, personas } from "../../../data/personas";
+import { allRouteSlugs, contentSlug, resolveRoute } from "../../../data/routes";
+import { getRouteUi } from "../../../i18n/content";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -51,7 +51,9 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
 
   return <Page className="inner-page persona-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
-      <Link href="/roles">Roles</Link>
+      <Link href="/intelligence">Intelligence</Link>
+      <span aria-hidden="true">/</span>
+      <Link href="/intelligence/guides">Guides</Link>
       <span aria-hidden="true">/</span>
       <b>{persona.name}</b>
     </nav>
@@ -95,7 +97,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
                 <h2>{step.title}</h2>
                 <p>{withTerms(step.detail)}</p>
                 {stage && (
-                  <Link className="step-stage" href={`/journey/${stage.id}`}>
+                  <Link className="step-stage" href={`/property-journey/${stage.id}`}>
                     <span>STAGE {String(stage.number).padStart(2, "0")}</span>
                     <b>{stage.name}</b>
                     <i>→</i>
@@ -114,7 +116,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         <span className="eyebrow">WHO YOU WORK WITH</span>
         <ul className="link-list">
           {persona.worksWith.map((id) => (
-            <li key={id}><Link href={`/ecosystem#${id}`}>{groupById[id]?.name}</Link></li>
+            <li key={id}><Link href={`/stakeholders/${id}`}>{groupById[id]?.name}</Link></li>
           ))}
         </ul>
       </article>
@@ -137,16 +139,16 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
       <h2>{persona.plural} see<br /><em>the whole journey.</em></h2>
       <p>{persona.reosHelp}</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/journey">See the full journey <span>↗</span></Link>
-        <Link className="button ghost" href="/roles">Try another route</Link>
+        <Link className="button gold" href="/property-journey">See the full journey <span>↗</span></Link>
+        <Link className="button ghost" href="/intelligence/guides">Try another guide</Link>
       </div>
     </section>
 
     <section className="section-pad other-roles">
-      <span className="eyebrow">OTHER ROUTES</span>
+      <span className="eyebrow">OTHER GUIDES</span>
       <div className="role-links">
         {others.map((other) => (
-          <Link key={other.slug} href={`/roles/${other.slug}`}>
+          <Link key={other.slug} href={`/intelligence/guides/${other.slug}`}>
             <b>{other.name}</b>
             <span>{other.card}</span>
             <i>→</i>
@@ -164,7 +166,7 @@ function PendingRoute({ route, locale }: { route: NonNullable<ReturnType<typeof 
   const L = (p: string) => (locale === DEFAULT_LOCALE ? p : `/ar${p}`);
   return <Page className="inner-page persona-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
-      <Link href={L("/roles")}>Roles</Link>
+      <Link href={L("/intelligence/guides")}>Guides</Link>
       <span aria-hidden="true">/</span>
       <b>{route.title}</b>
     </nav>
@@ -185,8 +187,8 @@ function PendingRoute({ route, locale }: { route: NonNullable<ReturnType<typeof 
           ))}
         </ol>
         <div className="hero-actions">
-          <Link className="button gold" href={L("/journey")}>See the full journey <span>↗</span></Link>
-          <Link className="button ghost" href={L("/roles")}>Try another route</Link>
+          <Link className="button gold" href={L("/property-journey")}>See the full journey <span>↗</span></Link>
+          <Link className="button ghost" href={L("/intelligence/guides")}>Try another guide</Link>
         </div>
       </div>
     </section>

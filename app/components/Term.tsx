@@ -48,7 +48,7 @@ export function Term({ children, of }: { children?: React.ReactNode; of: string 
 
   return (
     <span className="term-wrap">
-      <Link className="term" href={`/glossary#${term.id}`} aria-describedby={describedById}>
+      <Link className="term" href={`/intelligence/definitions-and-glossary#${term.id}`} aria-describedby={describedById}>
         {children ?? term.term}
       </Link>
       <span role="tooltip" id={describedById} className="term-tip">

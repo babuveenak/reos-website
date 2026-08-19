@@ -54,7 +54,7 @@ function JourneyStrip({ steps }: { steps: string[] }) {
 function RouteCard({ route, locale, featured = false }: { route: Route; locale: Locale; featured?: boolean }) {
   return (
     <Link
-      href={localePath(locale, `/roles/${route.slug}`)}
+      href={localePath(locale, `/intelligence/guides/${route.slug}`)}
       className={`route-card ${featured ? "is-featured" : ""}`}
     >
       <span className="route-num">{String(route.order).padStart(2, "0")}</span>
@@ -83,7 +83,7 @@ export function RouteGrid({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <b>{orient.title}</b>
           <p>{orient.sub}</p>
         </div>
-        <Link className="route-cta" href={localePath(locale, `/roles/${orient.slug}`)}>
+        <Link className="route-cta" href={localePath(locale, `/intelligence/guides/${orient.slug}`)}>
           {orient.ctaLabel} <i aria-hidden="true">→</i>
         </Link>
       </aside>
