@@ -32,3 +32,18 @@ hotspot and guarded by the rendered HTML test suite.
 
 Ring position and label placement are exposed as `data-ring-position` and
 `data-label-placement` attributes and guarded by the rendered HTML test suite.
+
+## Shared REOS visual treatment
+
+- Property Journey, Stakeholders, Ecosystem and Intelligence use the same warm
+  visual temperature: ivory and cream foundations, pearl-white coded labels,
+  champagne-gold connections and antique-bronze emphasis.
+- Deep charcoal is reserved for readable interface text and structural detail.
+  Muted teal is secondary and is used only to distinguish selected data flows.
+- Ecosystem and Intelligence retain their own meaning and composition, but their
+  right-side visual explorers remain bright in both site themes. Dark theme must
+  not turn their maps, coded labels, previews or mobile selectors into dark-mode
+  illustrations.
+- Generated foundations remain text-free. Labels, numbers, hotspots, preview
+  content and navigation remain coded so the layout can prevent collisions and
+  stay accessible at every breakpoint.
