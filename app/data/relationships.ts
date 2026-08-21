@@ -12,6 +12,7 @@ import { stakeholderDetailById } from "./stakeholderDetails";
  */
 export type RelationshipLevel = "lead" | "active" | "supporting" | "informed";
 export type RelationshipEditorialStatus = "approved" | "draft";
+export type RelationshipFlowType = "information" | "decision" | "document" | "approval" | "service" | "capital";
 
 export type RelationshipReference = {
   id: string;
@@ -37,6 +38,8 @@ export type JourneyStakeholderRelationship = {
   systemIds: string[];
   dependencyStakeholderIds: string[];
   intelligenceContentIds: string[];
+  flowTypes: RelationshipFlowType[];
+  direction: "bidirectional";
   detailRoute: string;
   editorialStatus: RelationshipEditorialStatus;
 };
@@ -154,6 +157,16 @@ const relationshipNoun: Record<RelationshipLevel, string> = {
   informed: "an informed stakeholder",
 };
 
+const capitalStakeholders = new Set(["landowners-investors", "banks-financial"]);
+const serviceStakeholders = new Set([
+  "consultants-designers",
+  "utility-providers",
+  "contractors",
+  "suppliers-vendors",
+  "brokers-agencies",
+  "facility-community-operators",
+]);
+
 export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] = stages.flatMap((stage) =>
   stage.groupIds.map((stakeholderId) => {
     const stakeholder = groupById[stakeholderId];
@@ -180,6 +193,12 @@ export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] =
           .map((interaction) => interaction.groupId)
           .filter((id) => stage.groupIds.includes(id))
       : [];
+    const flowTypes: RelationshipFlowType[] = ["information"];
+    if (canPublishDetail && detail.keyDecisions.length > 0) flowTypes.push("decision");
+    if (stageDocumentIds.length > 0) flowTypes.push("document");
+    if (stageApprovalIds.length > 0 || stakeholderId === "authorities-regulators") flowTypes.push("approval");
+    if (serviceStakeholders.has(stakeholderId)) flowTypes.push("service");
+    if (capitalStakeholders.has(stakeholderId)) flowTypes.push("capital");
 
     return {
       id: `${stage.id}--${stakeholderId}`,
@@ -199,6 +218,8 @@ export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] =
       systemIds,
       dependencyStakeholderIds,
       intelligenceContentIds,
+      flowTypes,
+      direction: "bidirectional" as const,
       detailRoute: `/property-journey/${stage.id}/stakeholders/${stakeholderId}`,
       editorialStatus: "approved" as const,
     };

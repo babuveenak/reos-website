@@ -18,11 +18,21 @@ The relationship module derives its records from the stage-owned participation l
 
 ## User views
 
+The `/ecosystem` hero is the compact entry point to these views. Its orbital map places the twelve stakeholder groups around the seven journey stages and the REOS Core. The hero and detailed explorer share a single React interaction provider, URL state and canonical relationship dataset; selecting a dimension in the hero therefore carries that same selection into the detailed explorer below.
+
 - **Journey View** is the default. Select a stage, then select one of its connected stakeholders.
 - **Stakeholder View** reverses the interaction. Select a stakeholder, then select one of its connected stages.
 - **Full Map** shows the complete 12 × 7 matrix. Only mapped intersections are interactive.
 
 All three views read the same relationship records and open the same relationship panel. The selected view and dimensions are written to URL query parameters, and the selected mode is remembered for the browser session.
+
+## Orbital hero visual contract
+
+- `public/images/ecosystem-orbital-foundation-v1.jpg` is a subtle, text-free architectural foundation only.
+- All stakeholder names, stage names, REOS Core text, paths, flow legend, focus states and previews are coded HTML/SVG, so text remains accessible and responsive.
+- The six flow types — information, decision, document, approval, service and capital — are derived from the approved relationship record fields. They use line weight and dash patterns as well as labels; meaning never depends on color alone.
+- Pointer hover and keyboard focus preview a node without changing the URL. Activation selects the same shared stage/stakeholder state used by the detailed explorer.
+- On small screens the dense orbital arrangement becomes a REOS Core control plus seven stage controls and twelve stakeholder controls; the mobile experience never requires horizontal scrolling.
 
 ## Relationship levels
 

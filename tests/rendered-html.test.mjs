@@ -285,6 +285,20 @@ test("Journey × Stakeholder Explorer exposes all three shared-data views", asyn
   assert.match(html, /Reset view/);
 });
 
+test("ecosystem hero is a coded orbital map over a text-free foundation", async () => {
+  const html = await (await render("/ecosystem")).text();
+  assert.match(html, /ecosystem-orbital-foundation-v1\.jpg/);
+  assert.match(html, /REOS Ecosystem Orbital Map/);
+  assert.match(html, /REOS Core/);
+  assert.equal((html.match(/Select to explore stakeholder\./g) ?? []).length, 12);
+  assert.equal((html.match(/Select to explore stage\./g) ?? []).length, 7);
+  for (const flow of ["Information", "Decisions", "Documents", "Approvals", "Services", "Capital"]) {
+    assert.match(html, new RegExp(`>${flow}<`), `${flow} flow missing from the coded legend`);
+  }
+  assert.match(html, /id="ecosystem-detailed-map"/);
+  assert.doesNotMatch(html, /12 STAKEHOLDER GROUPS[\s\S]*7 PROPERTY JOURNEY STAGES[\s\S]*REOS CORE[\s\S]*Information • Documents/);
+});
+
 test("canonical relationship pages explain the selected intersection", async () => {
   const path = "/property-journey/authorities-approvals/stakeholders/authorities-regulators";
   const response = await render(path);
