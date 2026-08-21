@@ -1,10 +1,10 @@
 import { getStages } from "../i18n/content";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { JourneyMap, TrackLegend } from "../components/Journey";
 import { Page, SectionIntro } from "../components/SiteShell";
-import { JourneyArchVisual } from "../components/JourneyArch";
 import { groupById } from "../data/ecosystem";
 
 export const metadata: Metadata = {
@@ -14,11 +14,22 @@ export const metadata: Metadata = {
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   return <Page className="inner-page" locale={locale}>
-    <section className="inner-hero inner-hero-no-photo">
-      <span className="eyebrow">THE PROPERTY JOURNEY</span>
-      <h1>The UAE property journey,<br /><em>mapped end to end.</em></h1>
-      <p>Property does not move through one process. It moves through seven connected stages, several of which run at the same time, each involving different participants, permissions and evidence. This is the full map.</p>
-      <JourneyArchVisual />
+    <section className="inner-hero inner-hero-no-photo property-journey-hero">
+      <div className="property-journey-copy">
+        <span className="eyebrow">THE PROPERTY JOURNEY</span>
+        <h1>The UAE property journey,<br /><em>mapped end to end.</em></h1>
+        <p>Property does not move through one process. It moves through seven connected stages, several of which run at the same time, each involving different participants, permissions and evidence. This is the full map.</p>
+      </div>
+      <figure className="property-journey-visual">
+        <Image
+          src="/images/property-journey-lifecycle-v2.png"
+          alt="Seven connected UAE property lifecycle environments progress from land and ownership through planning, parallel design and construction with marketing and sales, registration, community living, and investment and leasing."
+          width={1672}
+          height={941}
+          sizes="(max-width: 720px) 760px, (max-width: 1200px) 92vw, 1500px"
+          preload
+        />
+      </figure>
     </section>
 
     <section className="section-pad">
