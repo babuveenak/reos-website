@@ -135,6 +135,15 @@ test("stakeholders hero exposes exactly 12 interactive architectural groups", as
   assert.doesNotMatch(html, /12\+ STAKEHOLDER GROUPS/);
 });
 
+test("property journey hero exposes exactly seven interactive architectural stages", async () => {
+  const html = await (await render("/property-journey")).text();
+  assert.match(html, /property-journey-interactive-foundation-v1\.png/);
+  assert.equal((html.match(/Select to view stage details\./g) ?? []).length, 7);
+  assert.match(html, /href="\/property-journey\/construction-delivery"/);
+  assert.match(html, /Construction and sales run in parallel/);
+  assert.doesNotMatch(html, /property-journey-lifecycle-v2\.png/);
+});
+
 test("stage 6 is Living & Operations everywhere it appears", async () => {
   const home = await (await render("/")).text();
   assert.match(home, /Living & Operations|Living &amp; Operations/);
