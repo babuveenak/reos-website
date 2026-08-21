@@ -2,6 +2,7 @@ import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro } from "../components/SiteShell";
+import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "Building the Digital Map of the Property Ecosystem | About REOS",
@@ -16,6 +17,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <h1>Building the digital map<br /><em>of the property ecosystem.</em></h1>
       <p>REOS exists to make the property journey understandable, navigable and connected — for the people buying, the people building, the people funding it and the people who will run it long after handover.</p>
     </section>
+
+    <HowReosWorks locale={locale} compact />
 
     <section className="section-pad">
       <SectionIntro label="THE PROBLEM WE STARTED FROM" title={<>The information exists.<br /><em>The connections do not.</em></>} />
@@ -45,6 +48,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <Link className="button ghost" href={L("/platform")}>See the platform</Link>
       </div>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Understand how REOS connects governed knowledge to licensed workflow products without replacing official authority."
+      audience="Enterprise buyers, partners, property participants and governance reviewers."
+      nextAction="Review the operating model, inspect product maturity and evaluate the workflow that matches your organization."
+      primaryLabel="Explore the Platform"
+      primaryHref="/platform"
+      secondaryLabel="Explore the Property Journey"
+      secondaryHref="/property-journey"
+    />
   </Page>;
 }
 

@@ -1,12 +1,13 @@
 export type ProductMarket = "B2B" | "B2G" | "B2C";
+export type ProductMaturity = "Live" | "Pilot" | "Early Access" | "Coming Soon";
 
 export type ReosProduct = {
   slug: string;
   number: number;
   name: string;
   category: string;
-  status: "First product" | "Next product";
-  availability: "Licensing preview" | "In development";
+  maturity: ProductMaturity;
+  maturityNote: string;
   summary: string;
   outcome: string;
   markets: ProductMarket[];
@@ -25,8 +26,8 @@ export const products: ReosProduct[] = [
     number: 1,
     name: "Title Deed Automation",
     category: "Ownership & registration",
-    status: "First product",
-    availability: "Licensing preview",
+    maturity: "Early Access",
+    maturityNote: "Available to qualified design partners for scoped workflow validation.",
     summary: "Coordinate the evidence, reviews, parties and handoffs required to move an eligible property case toward title registration.",
     outcome: "A controlled, traceable title-deed workflow with the official registry remaining the system of record.",
     markets: ["B2B", "B2G", "B2C"],
@@ -38,8 +39,8 @@ export const products: ReosProduct[] = [
     number: 2,
     name: "NOC Automation",
     category: "Approvals & clearances",
-    status: "Next product",
-    availability: "In development",
+    maturity: "Coming Soon",
+    maturityNote: "In development; no operational customer access is implied.",
     summary: "Coordinate no-objection certificate requests across the organization, applicant and issuing party without treating every NOC as the same process.",
     outcome: "A jurisdiction-aware NOC workflow that makes prerequisites, ownership, evidence and downstream dependencies visible.",
     markets: ["B2B", "B2G", "B2C"],

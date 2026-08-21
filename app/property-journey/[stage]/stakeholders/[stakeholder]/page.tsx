@@ -18,6 +18,7 @@ import {
   relationshipsByStakeholder,
   relationshipSystems,
 } from "../../../../data/relationships";
+import { RouteGovernance } from "../../../../components/Governance";
 
 type Props = { params: Promise<{ stage: string; stakeholder: string }> };
 
@@ -109,6 +110,17 @@ export default async function RelationshipDetailPage({ params }: Props) {
         <Link className="button ghost" href={`/ecosystem?view=stakeholder&stakeholder=${stakeholder.id}`}>All {stakeholderRelationships.length} stages for this stakeholder</Link>
       </div>
     </section>
+
+    <RouteGovernance
+      businessOutcome={`Make ${stakeholder.name}'s work in ${stage.name} visible, evidence-backed and accountable.`}
+      audience={`${stakeholder.name} and the organizations dependent on this handoff.`}
+      nextAction="Review the mapped responsibilities, documents, approvals and dependencies before progressing the workflow."
+      stageIds={[stage.id]}
+      stakeholderIds={[stakeholder.id]}
+      primaryLabel="Explore the relevant product"
+      secondaryLabel="Return to the interactive relationship"
+      secondaryHref={`/ecosystem?view=journey&stage=${stage.id}&stakeholder=${stakeholder.id}`}
+    />
 
     <nav className="stage-nav" aria-label="Adjacent stage relationships">
       {previous ? <Link href={previous.detailRoute}><small>PREVIOUS CONNECTION</small><b>← {stageById[previous.stageId].name}</b></Link> : <span />}

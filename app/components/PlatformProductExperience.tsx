@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { ReosProduct } from "../data/products";
+import { ProductMaturityBadge } from "./Governance";
 
 type ProductAccess = ReosProduct & { accessHref: string };
 
@@ -118,7 +119,7 @@ function ProductTabs({ products, selectedSlug, onSelect }: { products: ProductAc
           onClick={() => onSelect(product.slug)}
         >
           <i>{String(product.number).padStart(2, "0")}</i>
-          <span><b>{product.name}</b><small>{product.availability}</small></span>
+          <span><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></span>
         </button>
       ))}
     </div>

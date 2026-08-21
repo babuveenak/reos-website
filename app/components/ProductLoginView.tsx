@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getProduct } from "../data/products";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import { Page } from "./SiteShell";
+import { ProductMaturityBadge } from "./Governance";
 
 export function ProductLoginView({ locale = DEFAULT_LOCALE, slug }: { locale?: Locale; slug: string }) {
   const product = getProduct(slug);
@@ -15,9 +16,12 @@ export function ProductLoginView({ locale = DEFAULT_LOCALE, slug }: { locale?: L
         <span className="eyebrow">REOS LICENSED PRODUCT {String(product.number).padStart(2, "0")}</span>
         <h1>{product.name}</h1>
         <p>{product.outcome}</p>
+        <ProductMaturityBadge maturity={product.maturity} />
         <div className="platform-market-tags">{product.markets.map((market) => <span key={market}>{market}</span>)}</div>
         <dl>
-          <div><dt>Product status</dt><dd>{product.availability}</dd></div>
+          <div><dt>Product maturity</dt><dd>{product.maturity}</dd></div>
+          <div><dt>Available now</dt><dd>{product.maturityNote}</dd></div>
+          <div><dt>Built for</dt><dd>{product.stakeholders.join(" · ")}</dd></div>
           <div><dt>Access model</dt><dd>Organization licence · Product entitlement · Role-based user access</dd></div>
         </dl>
       </div>
@@ -30,7 +34,7 @@ export function ProductLoginView({ locale = DEFAULT_LOCALE, slug }: { locale?: L
         <button type="button" disabled>Sign in with licensed account</button>
         <span className="product-login-notice">Product authentication and subscription entitlements are not connected in this website preview.</span>
         <div className="product-login-actions">
-          <Link href={L("/demo")}>Request a product licence ↗</Link>
+          <Link href={L("/demo")}>{product.maturity === "Live" ? "Request a product licence" : "Request product access"} ↗</Link>
           <Link href={L("/platform")}>View all products</Link>
         </div>
       </div>

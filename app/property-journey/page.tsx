@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PropertyJourneyHero, type JourneyHeroStage } from "../components/PropertyJourneyHero";
 import { Page, SectionIntro } from "../components/SiteShell";
+import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "The UAE Property Journey, Mapped End to End | REOS",
@@ -36,7 +37,9 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <PropertyJourneyHero stages={heroStages} />
     </section>
 
-    <section className="section-pad stage-index-band">
+    <HowReosWorks locale={locale} compact />
+
+    <section className="section-pad stage-index-band" id="all-seven-stages">
       <SectionIntro
         label="ALL SEVEN STAGES"
         title={<>Every stage,<br /><em>in full.</em></>}
@@ -58,6 +61,18 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         ))}
       </div>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="See how property moves from land and approvals to delivery, operations and asset growth without hiding the stages that run in parallel."
+      audience="Every stakeholder participating in the UAE property journey."
+      nextAction="Select the stage that matches your current work, then review its stakeholders, evidence, risks and relevant REOS products."
+      stageIds={stages.map((stage) => stage.id)}
+      primaryLabel="Select a journey stage"
+      primaryHref="/property-journey#all-seven-stages"
+      secondaryLabel="See the connected ecosystem"
+      secondaryHref="/ecosystem"
+    />
 
     <section className="integrity-strip">
       <b>Before you act on this</b>

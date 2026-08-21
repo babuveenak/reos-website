@@ -11,6 +11,7 @@ import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 import { stageById, stages } from "../../data/journey";
 import { relationshipLevelLabels, relationshipsByStage } from "../../data/relationships";
+import { RouteGovernance } from "../../components/Governance";
 
 import { stageById as detailById } from "../../data/reos";
 
@@ -182,6 +183,18 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
       <h2>{d.assistant.onStageTitle}</h2>
       <Assistant snapshot={buildSnapshot(locale)} locale={locale} variant="compact" initialStageId={stage.id} />
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome={`Prepare ${stage.name} with clearer ownership, evidence readiness and visibility of parallel dependencies.`}
+      audience={stage.groupIds.map((id) => groupById[id]?.name).filter(Boolean).join(" · ")}
+      nextAction={stage.nextStep}
+      stageIds={[stage.id]}
+      stakeholderIds={stage.groupIds}
+      primaryLabel="Explore the relevant product"
+      secondaryLabel="Open this stage in the ecosystem map"
+      secondaryHref={`/ecosystem?view=journey&stage=${stage.id}`}
+    />
 
     <nav className="stage-nav" aria-label="Adjacent stages">
       {previous

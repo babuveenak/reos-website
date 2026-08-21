@@ -5,6 +5,7 @@ import { EcosystemHeroMap } from "../components/EcosystemHeroMap";
 import { EcosystemInteractionProvider } from "../components/EcosystemInteractionContext";
 import { JourneyStakeholderExplorer } from "../components/JourneyStakeholderExplorer";
 import { Page, SectionIntro } from "../components/SiteShell";
+import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "The Connected Property Ecosystem | REOS",
@@ -32,6 +33,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <EcosystemHeroMap pathPrefix={locale === DEFAULT_LOCALE ? "" : `/${locale}`} />
       </section>
 
+      <HowReosWorks locale={locale} compact />
+
       <section id="ecosystem-detailed-map" className="section-pad ecosystem-detailed-map">
         <SectionIntro
           label="JOURNEY × STAKEHOLDER EXPLORER"
@@ -55,6 +58,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <Link className="button ghost" href={L("/stakeholders")}>Explore the full stakeholder directory</Link>
       </div>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Find the exact stage × stakeholder relationship causing an approval, evidence or responsibility dependency."
+      audience="Operations, transformation, governance and delivery teams across all twelve stakeholder groups."
+      nextAction="Select an intersection, review the contextual relationship, then inspect the product that can govern the workflow."
+      primaryLabel="Use the full relationship map"
+      primaryHref="/ecosystem#ecosystem-detailed-map"
+      secondaryLabel="Explore REOS products"
+      secondaryHref="/platform"
+    />
   </Page>;
 }
 

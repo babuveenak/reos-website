@@ -2,6 +2,8 @@ import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import { DemoForm } from "../components/DemoForm";
 import { Page } from "../components/SiteShell";
+import { ProductMaturityBadge } from "../components/Governance";
+import { products } from "../data/products";
 
 export const metadata: Metadata = {
   title: "Map Your Property Journey with REOS | Book a Demo",
@@ -15,6 +17,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <span className="eyebrow">BOOK A DEMO</span>
         <h1>Map your property journey<br /><em>with REOS.</em></h1>
         <p>Bring a real project or a real question. We will walk it through the connected model and show where the dependencies, approvals and handoffs actually sit.</p>
+        <p className="demo-audience"><b>Designed for:</b> enterprise buyers, product sponsors, transformation leaders and operational teams across the twelve REOS stakeholder groups.</p>
 
         <div className="demo-proof">
           <small>TYPICAL OUTCOMES FROM A MAPPING SESSION</small>
@@ -32,6 +35,11 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <li><b>Jurisdiction first</b><span>We start by resolving which emirate, zone and authority govern your case, because everything downstream depends on it.</span></li>
           <li><b>No obligation</b><span>You leave with the map whether or not you go further with us.</span></li>
         </ul>
+
+        <div className="demo-product-readiness">
+          <small>PRODUCTS AVAILABLE FOR DISCUSSION</small>
+          {products.map((product) => <div key={product.slug}><span><b>{product.name}</b><small>{product.maturityNote}</small></span><ProductMaturityBadge maturity={product.maturity} /></div>)}
+        </div>
       </div>
 
       <div className="demo-form-panel">

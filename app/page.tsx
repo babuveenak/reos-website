@@ -9,6 +9,8 @@ import { JourneyIntelligence } from "./components/JourneyStory";
 import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
+import { HowReosWorks, RouteGovernance } from "./components/Governance";
+import { REOS_VALUE_PROPOSITION } from "./data/governance";
 
 import { authorities } from "./data/reos";
 
@@ -25,7 +27,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="hero-copy">
         <span className="eyebrow">{d.home.eyebrow}</span>
         <h1>{d.home.h1}<br /><em>{d.home.h1em}</em></h1>
-        <p>{d.home.lede}</p>
+        <p>{REOS_VALUE_PROPOSITION}</p>
         <p className="hero-benefit">{d.home.benefit}</p>
         <div className="hero-actions">
           <Link className="button gold" href={`${L("/")}#start`}>{d.home.ctaStart} <span>↗</span></Link>
@@ -36,6 +38,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <JourneyStatsBar locale={locale} />
       <PersonaQuickPick locale={locale} />
     </section>
+
+    <HowReosWorks locale={locale} />
 
     <JourneyMoments locale={locale} />
 
@@ -168,6 +172,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <div><b>7</b><span>{d.home.statEmirates}</span></div>
       </div>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Choose the right journey, understand the operating context and see where a governed REOS product can remove workflow friction."
+      audience="All twelve stakeholder groups, enterprise buyers and UAE property participants."
+      nextAction="Start with your journey. When the process and stakeholder context are clear, inspect the product that supports execution."
+      primaryLabel="Start with the Property Journey"
+      primaryHref="/property-journey"
+      secondaryLabel="Explore REOS products"
+      secondaryHref="/platform"
+    />
 
     {/* 10 — WHERE TO GO NEXT. Educational, not a sales close. */}
     <section className="demo-band atmos atmos-city" id="start-reading">

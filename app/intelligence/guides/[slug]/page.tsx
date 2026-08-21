@@ -9,6 +9,7 @@ import { withTerms } from "../../../components/Term";
 
 import { personaBySlug, personas } from "../../../data/personas";
 import { allRouteSlugs, contentSlug, resolveRoute } from "../../../data/routes";
+import { RouteGovernance } from "../../../components/Governance";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -152,6 +153,18 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         <Link className="button ghost" href={L("/intelligence/guides")}>Try another guide</Link>
       </div>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome={`Help ${persona.plural.toLowerCase()} understand the journey, prepare expected evidence and avoid recurring mistakes.`}
+      audience={persona.audience}
+      nextAction={persona.nextAction}
+      stageIds={persona.steps.map((step) => step.stageId)}
+      stakeholderIds={persona.worksWith}
+      primaryLabel="Explore the relevant product"
+      secondaryLabel="Return to all guides"
+      secondaryHref="/intelligence/guides"
+    />
 
     <section className="section-pad other-roles">
       <span className="eyebrow">OTHER GUIDES</span>

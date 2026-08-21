@@ -3,6 +3,7 @@ import { DEFAULT_LOCALE, localePath, type Locale } from "../../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro } from "../../components/SiteShell";
+import { RouteGovernance } from "../../components/Governance";
 
 export const metadata: Metadata = {
   title: "Definitions & Glossary | REOS Intelligence",
@@ -68,6 +69,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <b>How to use these</b>
       <p>These definitions describe general market practice so you can keep reading. They are not legal definitions, and several terms carry a regulated meaning that differs by emirate. Confirm the meaning that applies to your case with the relevant authority or a qualified adviser.</p>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Understand recurring UAE property terms and see where each concept matters in the journey."
+      audience="Any participant encountering unfamiliar property, approval, registration or operations terminology."
+      nextAction="Open the relevant journey stage, resolve jurisdiction-specific meaning and verify regulated definitions with the authority."
+      primaryLabel="Ask REOS in context"
+      primaryHref="/assistant"
+      secondaryLabel="Explore the Property Journey"
+      secondaryHref="/property-journey"
+    />
   </Page>;
 }
 

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { RouteGrid } from "../../components/Routes";
 import { Page } from "../../components/SiteShell";
 import { getRouteUi } from "../../i18n/content";
+import { RouteGovernance } from "../../components/Governance";
 
 export const metadata: Metadata = {
   title: "Guides | REOS Intelligence",
@@ -26,6 +27,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <b>Written for a global reader</b>
       <p>These routes assume no prior knowledge of UAE property. Local terms — escrow, off-plan, snagging, service charge, owners&rsquo; association — are explained where they first appear rather than assumed.</p>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Choose a role-based route through the property journey and prepare for the evidence, decisions and handoffs ahead."
+      audience="Buyers, owners, developers, investors and every participating stakeholder group."
+      nextAction="Select the guide that matches your role, complete its practical next action and inspect the relevant REOS product when ready."
+      primaryLabel="Choose a guide"
+      primaryHref="/intelligence/guides"
+      secondaryLabel="Explore the Property Journey"
+      secondaryHref="/property-journey"
+    />
   </Page>;
 }
 

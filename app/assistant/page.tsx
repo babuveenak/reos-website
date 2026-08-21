@@ -9,6 +9,7 @@ import { getDict } from "../i18n/dictionary";
 import { newConversation } from "./contracts";
 import { mockAnswer, WORKED_EXAMPLES } from "./mock-ai";
 import { buildSnapshot } from "./snapshot";
+import { AssistantTrustContract, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "Ask About the UAE Property Journey | REOS Assistant",
@@ -59,6 +60,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         </div>
       </section>
 
+      <AssistantTrustContract />
+
       <section className="section-pad example-band ai-examples">
         <SectionIntro
           label={a.exampleLabel}
@@ -86,6 +89,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         </p>
         <p className="fineprint">{d.footer.fineprint}</p>
       </section>
+
+      <RouteGovernance
+        locale={locale}
+        businessOutcome="Receive a scoped answer with visible confidence, conditions, journey context and source attribution."
+        audience="Any visitor who needs help navigating the UAE property journey or understanding REOS products."
+        nextAction="Resolve any missing jurisdiction or case context, inspect the cited source and open the recommended canonical route."
+        primaryLabel="Ask with source context"
+        primaryHref="/assistant#ask-heading"
+        secondaryLabel="Explore Intelligence"
+        secondaryHref="/intelligence"
+      />
     </Page>
   );
 }

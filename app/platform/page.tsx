@@ -4,6 +4,7 @@ import { BeforeAfterWorkflow, PersonaProductDemo, PlatformHeroPreview, ProductWo
 import { Page, SectionIntro } from "../components/SiteShell";
 import { products } from "../data/products";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
+import { HowReosWorks, ProductMaturityBadge, ProductMaturityLegend } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "Property Workflow Automation Products | REOS Platform",
@@ -47,12 +48,13 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <Link className="button ghost" href="#product-experience">Explore the product <span>↓</span></Link>
         </div>
         <div className="sales-hero-proof" role="group" aria-label="REOS product roadmap">
-          <span><i>01</i><b>Title Deed Automation</b><small>First product · licensing preview</small></span>
-          <span><i>02</i><b>NOC Automation</b><small>Next product · in development</small></span>
+          {products.map((product) => <span key={product.slug}><i>{String(product.number).padStart(2, "0")}</i><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></span>)}
         </div>
       </div>
       <PlatformHeroPreview products={productAccess} />
     </section>
+
+    <HowReosWorks locale={locale} compact />
 
     <section className="sales-trust-strip" aria-label="REOS product principles">
       <span><b>ONE CASE STATE</b><small>Across evidence, actions and decisions</small></span>
@@ -147,13 +149,26 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <SectionIntro label="PRODUCT CATALOGUE" title={<>Start with one workflow.<br /><em>Expand through the suite.</em></>} copy="Each REOS product has a defined operational scope, participating stakeholders and its own licence-controlled access gateway." />
       <div className="platform-product-grid sales-product-grid">
         {productAccess.map((product) => <article key={product.slug} id={product.slug}>
-          <header><span>{String(product.number).padStart(2, "0")}</span><div><b>{product.status}</b><small>{product.availability}</small></div></header>
+          <header><span>{String(product.number).padStart(2, "0")}</span><div><ProductMaturityBadge maturity={product.maturity} /><small>{product.maturityNote}</small></div></header>
           <small>{product.category}</small><h3>{product.name}</h3><p>{product.summary}</p><blockquote>{product.outcome}</blockquote>
           <div className="platform-market-tags">{product.markets.map((market) => <span key={market}>{market}</span>)}</div>
           <dl><div><dt>Built for</dt><dd>{product.stakeholders.join(" · ")}</dd></div><div><dt>Product scope</dt><dd>{product.capabilities.join(" · ")}</dd></div></dl>
           <div className="sales-card-actions"><Link className="platform-product-access" href={product.accessHref}>View product gateway <span>↗</span></Link><Link className="platform-product-access" href={L("/demo")}>Request a demo <span>↗</span></Link></div>
         </article>)}
       </div>
+      <ProductMaturityLegend />
+    </section>
+
+    <section className="section-pad enterprise-confidence">
+      <div><span className="eyebrow">ENTERPRISE BUYING CONFIDENCE</span><h2>A controlled path<br /><em>from evaluation to rollout.</em></h2><p>REOS separates product demonstration, commercial access and production readiness so buyers can evaluate the platform without mistaking a preview for a live service.</p></div>
+      <ol>
+        <li><span>01</span><b>Workflow discovery</b><p>Confirm the process, jurisdiction, participants and business outcome.</p></li>
+        <li><span>02</span><b>Scope & maturity</b><p>Select the product, maturity path and qualified customer cohort.</p></li>
+        <li><span>03</span><b>Data & integration review</b><p>Assess evidence sources, official channels, identity, retention and system boundaries.</p></li>
+        <li><span>04</span><b>Controls & acceptance</b><p>Agree roles, audit requirements, success measures and authorized decisions.</p></li>
+        <li><span>05</span><b>Pilot or rollout</b><p>Deploy only within the agreed licence, product and operational scope.</p></li>
+      </ol>
+      <p className="enterprise-boundary"><b>Current website boundary:</b> product screens are illustrative previews; authentication, subscriptions and production integrations are not connected.</p>
     </section>
 
     <section className="sales-final-cta">

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
 import { StakeholdersHero, type StakeholderHeroGroup } from "../components/StakeholdersHero";
+import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "UAE Property Stakeholders | REOS",
@@ -36,7 +37,9 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <StakeholdersHero groups={heroGroups} />
     </section>
 
-    <section className="section-pad group-detail-band">
+    <HowReosWorks locale={locale} compact />
+
+    <section className="section-pad group-detail-band" id="stakeholder-directory">
       <SectionIntro
         label="12 STAKEHOLDER GROUPS"
         title={<>Every group in full,<br /><em>and when they enter.</em></>}
@@ -76,6 +79,18 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         })}
       </div>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Understand what each stakeholder controls, when it enters the journey and which handoffs depend on it."
+      audience="All twelve stakeholder groups and the organizations coordinating them."
+      nextAction="Select your stakeholder profile, inspect its mapped stage connections and continue to the product that supports the workflow."
+      stakeholderIds={groups.map((group) => group.id)}
+      primaryLabel="Explore the stakeholder map"
+      primaryHref="/stakeholders#stakeholder-directory"
+      secondaryLabel="Open the Journey × Stakeholder Explorer"
+      secondaryHref="/ecosystem"
+    />
 
     <section className="reos-opportunity">
       <span className="eyebrow">NOT SURE WHICH ONE IS YOU?</span>

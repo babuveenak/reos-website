@@ -5,6 +5,7 @@ import Link from "next/link";
 import { IntelligenceHeroMap, type IntelligenceDomain } from "../components/IntelligenceHeroMap";
 import { Page, SectionIntro } from "../components/SiteShell";
 import { authorities } from "../data/reos";
+import { HowReosWorks, IntelligenceGovernance, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "REOS Intelligence | Guides, Regulations, Processes & Glossary",
@@ -70,6 +71,10 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
       <IntelligenceHeroMap domains={intelligenceDomains} />
     </section>
+
+    <HowReosWorks locale={locale} compact />
+
+    <IntelligenceGovernance />
 
     <section className="section-pad" id="guides">
       <SectionIntro
@@ -169,6 +174,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <b>How to use this</b>
       <p>These explainers describe how things generally work. They are not legal, financial or tax advice, and they do not replace the official position of any authority. Requirements differ by emirate and change over time — confirm your specific case before acting.</p>
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome="Find knowledge that is connected to its source, jurisdiction, review state and place in the property journey."
+      audience="Property participants, analysts, governance teams and users preparing to run a REOS workflow."
+      nextAction="Choose an intelligence domain, resolve the applicable context and continue to the supported product only when the evidence is sufficient."
+      primaryLabel="Explore governed guides"
+      primaryHref="/intelligence/guides"
+      secondaryLabel="Ask the REOS Assistant"
+      secondaryHref="/assistant"
+    />
   </Page>;
 }
 

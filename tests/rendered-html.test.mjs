@@ -91,6 +91,59 @@ test("platform is a licensed product catalogue with separate access gateways", a
   }
 });
 
+test("critical governance uses one operating model and one maturity vocabulary", async () => {
+  const home = await (await render("/")).text();
+  assert.match(home, /REOS connects the people, evidence, approvals and workflows/);
+  assert.match(home, /HOW REOS WORKS/);
+  for (const step of ["Understand", "Map", "Prepare", "Execute", "Govern"]) assert.match(home, new RegExp(`>${step}<`));
+
+  const platform = await (await render("/platform")).text();
+  assert.match(platform, /Early Access/);
+  assert.match(platform, /Coming Soon/);
+  assert.match(platform, /ENTERPRISE BUYING CONFIDENCE/);
+  assert.doesNotMatch(platform, /Licensing preview|First product|Next product/);
+
+  for (const slug of ["title-deed-automation", "noc-automation"]) {
+    const gateway = await (await render(`/platform/products/${slug}/login`)).text();
+    assert.match(gateway, /Product maturity/);
+    assert.match(gateway, /Request product access/);
+  }
+});
+
+test("education route families expose outcome, audience, product and next action", async () => {
+  for (const path of [
+    "/property-journey",
+    "/property-journey/sales-transfer",
+    "/stakeholders",
+    "/stakeholders/developers",
+    "/ecosystem",
+    "/intelligence",
+    "/intelligence/guides",
+    "/intelligence/guides/buying",
+    "/intelligence/definitions-and-glossary",
+  ]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /BUSINESS OUTCOME/, `${path} missing business outcome`);
+    assert.match(html, /WHO THIS SERVES/, `${path} missing audience`);
+    assert.match(html, /RELEVANT REOS PRODUCT/, `${path} missing product connection`);
+    assert.match(html, /PRACTICAL NEXT ACTION/, `${path} missing next action`);
+  }
+});
+
+test("intelligence and assistant state their evidence governance contracts", async () => {
+  const intelligence = await (await render("/intelligence")).text();
+  assert.match(intelligence, /GOVERNED EVIDENCE LAYER/);
+  assert.match(intelligence, /Official source/);
+  assert.match(intelligence, /Jurisdiction/);
+  assert.match(intelligence, /Review state/);
+
+  const assistant = await (await render("/assistant")).text();
+  assert.match(assistant, /ASSISTANT TRUST CONTRACT/);
+  assert.match(assistant, /Sources attached/);
+  assert.match(assistant, /Confidence labelled/);
+  assert.match(assistant, /Refusal by design/);
+});
+
 test("the mobile menu is actually displayable", async () => {
   // A descendant selector meant to hide the desktop nav also hid the mobile
   // menu's own nav, so the panel never opened. Counting DOM nodes missed it.

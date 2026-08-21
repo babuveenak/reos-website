@@ -8,6 +8,7 @@ import { stages } from "../../data/journey";
 import { stakeholderDetailById } from "../../data/stakeholderDetails";
 import { getDict } from "../../i18n/dictionary";
 import { relationshipFor, relationshipLevelLabels } from "../../data/relationships";
+import { RouteGovernance } from "../../components/Governance";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -119,6 +120,18 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         </article>
       )}
     </section>
+
+    <RouteGovernance
+      locale={locale}
+      businessOutcome={`Give ${group.name} a clear view of responsibilities, decisions, dependencies and the next controlled handoff.`}
+      audience={group.name}
+      nextAction="Select a mapped stage connection, confirm the evidence and authority context, then inspect the relevant REOS workflow product."
+      stageIds={entryStages.map((stage) => stage.id)}
+      stakeholderIds={[group.id]}
+      primaryLabel="Explore the relevant product"
+      secondaryLabel="Open this stakeholder in the ecosystem map"
+      secondaryHref={`/ecosystem?view=stakeholder&stakeholder=${group.id}`}
+    />
   </Page>;
 }
 
