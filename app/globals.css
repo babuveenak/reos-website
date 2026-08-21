@@ -2132,7 +2132,7 @@ html[data-theme="dark"] .journey-hero-preview>p,html[data-theme="dark"] .journey
 .stakeholders-hero p{max-width:680px; margin:0}
 .stakeholders-explorer{min-width:0; display:grid; gap:1rem; position:relative; z-index:2}
 .stakeholder-map-frame{
-  position:relative; width:100%; aspect-ratio:1672/941; isolation:isolate;
+  position:relative; width:100%; aspect-ratio:1658/949; isolation:isolate;
   animation:stakeholder-foundation-in .8s ease both;
 }
 .stakeholder-district-image{display:block; width:100%; height:100%; object-fit:contain}
@@ -2178,9 +2178,19 @@ html[data-theme="dark"] .journey-hero-preview>p,html[data-theme="dark"] .journey
 .stakeholder-hotspot[data-group="facility-community-operators"] .stakeholder-label{width:180px}
 .stakeholder-hotspot:is(:hover,:focus-visible,.is-active) .stakeholder-label{border-color:#9B7133; background:#FFFDF8; color:#1D1B19}
 .stakeholder-hotspot.label-below .stakeholder-label{left:50%; top:calc(100% + .08rem); transform:translateX(-50%)}
-.stakeholder-hotspot.label-above .stakeholder-label{left:50%; bottom:calc(100% + .08rem); transform:translateX(-50%)}
+.stakeholder-hotspot.label-above .stakeholder-label{left:50%; bottom:calc(72% + .08rem); transform:translateX(-50%)}
+.stakeholder-hotspot.label-above-left .stakeholder-label{right:calc(50% + .25rem); bottom:calc(72% + .08rem)}
 .stakeholder-hotspot.label-left .stakeholder-label{right:calc(100% - .25rem); top:50%; transform:translateY(-50%)}
 .stakeholder-hotspot.label-right .stakeholder-label{left:calc(100% - .25rem); top:50%; transform:translateY(-50%)}
+.stakeholder-center-label{
+  position:absolute; left:50%; top:50%; z-index:3; transform:translate(-50%,-50%);
+  min-width:clamp(92px,8.5vw,142px); padding:.65rem .8rem; border:1px solid rgba(155,113,51,.36);
+  border-radius:999px; background:rgba(255,253,248,.88); color:#1D1B19;
+  box-shadow:0 8px 22px rgba(95,64,26,.1); text-align:center; pointer-events:none;
+}
+.stakeholder-center-label b{display:block; font-family:var(--serif); color:#76501B; font-size:clamp(1rem,1.25vw,1.55rem); letter-spacing:.16em; line-height:1}
+.stakeholder-center-label span{display:block; margin-top:.32rem; font-size:clamp(.42rem,.42vw,.56rem); font-weight:650; letter-spacing:.14em}
+html[data-theme="dark"] .stakeholder-center-label{background:rgba(22,21,27,.92); color:var(--ivory); border-color:var(--gold-dim)}
 .stakeholder-preview-panel{
   min-height:190px; padding:1.25rem 1.35rem; border:1px solid rgba(155,113,51,.24);
   border-radius:.85rem; background:rgba(255,253,248,.9); color:#1D1B19;

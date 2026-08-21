@@ -129,10 +129,29 @@ test("stakeholders shows all 12 canonical groups in frequency order", async () =
 
 test("stakeholders hero exposes exactly 12 interactive architectural groups", async () => {
   const html = await (await render("/stakeholders")).text();
-  assert.match(html, /stakeholders-connected-district-v1\.png/);
+  assert.match(html, /stakeholders-connected-district-v2\.png/);
   assert.equal((html.match(/Select to view details\./g) ?? []).length, 12);
   assert.match(html, /href="\/stakeholders\/banks-financial"/);
   assert.doesNotMatch(html, /12\+ STAKEHOLDER GROUPS/);
+
+  const ring = html.match(/<div class="stakeholder-hotspots".*?<\/div><\/div>/s)?.[0] ?? "";
+  const groups = [...ring.matchAll(/data-group="([^"]+)" data-ring-position="(\d+)" data-label-placement="([^"]+)"/g)]
+    .map(([, id, position, placement]) => ({ id, position: Number(position), placement }));
+  assert.deepEqual(groups, [
+    { id: "landowners-investors", position: 1, placement: "above" },
+    { id: "developers", position: 2, placement: "above" },
+    { id: "consultants-designers", position: 3, placement: "above" },
+    { id: "authorities-regulators", position: 4, placement: "above" },
+    { id: "utility-providers", position: 5, placement: "above" },
+    { id: "contractors", position: 6, placement: "below" },
+    { id: "suppliers-vendors", position: 7, placement: "below" },
+    { id: "brokers-agencies", position: 8, placement: "below" },
+    { id: "banks-financial", position: 9, placement: "below" },
+    { id: "property-owners", position: 10, placement: "below" },
+    { id: "residents-tenants", position: 11, placement: "above-left" },
+    { id: "facility-community-operators", position: 12, placement: "above" },
+  ]);
+  assert.match(html, /REOS<\/b><span>OPERATING SYSTEM<\/span>/);
 });
 
 test("property journey hero exposes exactly seven interactive architectural stages", async () => {

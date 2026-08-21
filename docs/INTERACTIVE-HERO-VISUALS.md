@@ -18,3 +18,17 @@ responsive and sourced from the canonical site data.
 
 These placements are represented by `data-label-placement` on each desktop
 hotspot and guarded by the rendered HTML test suite.
+
+## Stakeholders ring order and label placement
+
+- The outer ring runs clockwise from 01 through 12. The architectural
+  environments follow the same order; labels must never be reassigned to an
+  environment that represents a different stakeholder.
+- Labels 01–05 and 12 sit above their platforms. Labels 06–10 sit below their
+  platforms. Label 11 sits above-left of its platform.
+- The central platform carries a coded `REOS` / `OPERATING SYSTEM` label to
+  make clear that REOS connects all 12 stakeholder groups.
+- The generated foundation remains free of baked-in words and numbers.
+
+Ring position and label placement are exposed as `data-ring-position` and
+`data-label-placement` attributes and guarded by the rendered HTML test suite.

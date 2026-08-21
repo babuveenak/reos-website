@@ -17,24 +17,24 @@ export type StakeholderHeroGroup = {
 type VisualPosition = {
   x: number;
   y: number;
-  label: "above" | "below" | "left" | "right";
+  label: "above" | "above-left" | "below" | "left" | "right";
 };
 
 // Positions describe only the generated, text-free architectural foundation.
 // Stakeholder names and route data always come from the canonical groups source.
 const VISUAL_POSITIONS: VisualPosition[] = [
-  { x: 23, y: 18, label: "below" },
-  { x: 40, y: 15, label: "below" },
-  { x: 57, y: 14, label: "below" },
-  { x: 74, y: 18, label: "below" },
-  { x: 86, y: 40, label: "left" },
-  { x: 82, y: 62, label: "left" },
-  { x: 29, y: 82, label: "above" },
-  { x: 47, y: 83, label: "above" },
-  { x: 63, y: 83, label: "above" },
-  { x: 78, y: 83, label: "above" },
-  { x: 18, y: 62, label: "right" },
-  { x: 14, y: 41, label: "right" },
+  { x: 23, y: 18, label: "above" },
+  { x: 40, y: 15, label: "above" },
+  { x: 57, y: 14, label: "above" },
+  { x: 74, y: 18, label: "above" },
+  { x: 86, y: 40, label: "above" },
+  { x: 82, y: 58, label: "below" },
+  { x: 78, y: 83, label: "below" },
+  { x: 63, y: 83, label: "below" },
+  { x: 47, y: 83, label: "below" },
+  { x: 29, y: 82, label: "below" },
+  { x: 18, y: 62, label: "above-left" },
+  { x: 14, y: 41, label: "above" },
 ];
 
 function positionStyle(position: VisualPosition) {
@@ -65,10 +65,10 @@ export function StakeholdersHero({ groups }: { groups: StakeholderHeroGroup[] })
       <div className="stakeholder-map-frame">
         <Image
           className="stakeholder-district-image"
-          src="/images/stakeholders-connected-district-v1.png"
+          src="/images/stakeholders-connected-district-v2.png"
           alt=""
-          width={1672}
-          height={941}
+          width={1658}
+          height={949}
           sizes="(max-width: 900px) 100vw, 58vw"
           preload
         />
@@ -96,6 +96,11 @@ export function StakeholdersHero({ groups }: { groups: StakeholderHeroGroup[] })
           })}
         </svg>
 
+        <div className="stakeholder-center-label" role="note" aria-label="REOS connects all 12 stakeholder groups">
+          <b>REOS</b>
+          <span>OPERATING SYSTEM</span>
+        </div>
+
         <div className="stakeholder-hotspots" aria-label="Choose a stakeholder group">
           {groups.map((group, index) => {
             const position = VISUAL_POSITIONS[index];
@@ -107,6 +112,8 @@ export function StakeholdersHero({ groups }: { groups: StakeholderHeroGroup[] })
                 type="button"
                 className={`stakeholder-hotspot label-${position.label}${isActive ? " is-active" : ""}${isDimmed ? " is-dimmed" : ""}`}
                 data-group={group.id}
+                data-ring-position={index + 1}
+                data-label-placement={position.label}
                 style={positionStyle(position)}
                 aria-label={`${group.number} ${group.name}. Select to view details.`}
                 aria-pressed={selectedId === group.id}
