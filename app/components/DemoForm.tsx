@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { personas } from "../data/personas";
+import { products } from "../data/products";
 import { BOOKING_URL, CONTACT_EMAIL, CONTACT_PHONE, ENQUIRY_SUBJECT } from "../data/site";
 
 const interests = [
+  ...products.map((product) => product.name),
+  "Full REOS product suite",
   ...personas.map((p) => `${p.name} journey`),
-  "Full REOS platform",
 ];
 
 /**
@@ -75,7 +77,7 @@ export function DemoForm() {
 
       <label>
         <span>I am interested in</span>
-        <select name="interest" defaultValue="Full REOS platform">
+        <select name="interest" defaultValue="Title Deed Automation">
           {interests.map((x) => <option key={x}>{x}</option>)}
         </select>
       </label>

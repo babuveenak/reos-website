@@ -64,7 +64,7 @@ test("the demo CTA appears only on the platform page", async () => {
 
 test("platform is a licensed product catalogue with separate access gateways", async () => {
   const html = await (await render("/platform")).text();
-  assert.match(html, /Digital products/);
+  assert.match(html, /Automate property workflows/);
   assert.match(html, /Title Deed Automation/);
   assert.match(html, /NOC Automation/);
   assert.match(html, /B2B/);
@@ -72,6 +72,12 @@ test("platform is a licensed product catalogue with separate access gateways", a
   assert.match(html, /B2C/);
   assert.match(html, /href="\/platform\/products\/title-deed-automation\/login"/);
   assert.match(html, /href="\/platform\/products\/noc-automation\/login"/);
+  assert.match(html, /Illustrative product preview/i);
+  assert.match(html, /Before REOS/);
+  assert.match(html, /With REOS/);
+  assert.match(html, /AI-assisted/);
+  assert.match(html, /Request a demo/);
+  assert.match(html, /Official systems remain authoritative/i);
   assert.doesNotMatch(html, /Eight modules/);
 
   for (const slug of ["title-deed-automation", "noc-automation"]) {
