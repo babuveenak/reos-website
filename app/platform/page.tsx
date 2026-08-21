@@ -1,83 +1,116 @@
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
-import { getModules } from "../i18n/content";
-import { layers } from "../data/journey";
+import { PlatformProductMap } from "../components/PlatformProductMap";
+import { Page, SectionIntro } from "../components/SiteShell";
+import { products } from "../data/products";
 
 export const metadata: Metadata = {
-  title: "The Execution Layer for the Property Journey | REOS Platform",
-  description: "How REOS moves from explaining the UAE property journey to running it: knowledge, discovery and execution layers, and the eight modules beneath them.",
+  title: "Licensed Digital Products for the Property Ecosystem | REOS Platform",
+  description: "Explore REOS digital products for developers, authorities, agencies, owners and residents, beginning with Title Deed Automation and NOC Automation.",
 };
+
+const stakeholderGroups = [
+  "Landowners & Investors", "Developers", "Consultants & Designers", "Authorities & Regulators",
+  "Utility Providers", "Contractors", "Suppliers & Vendors", "Brokers & Agencies",
+  "Banks & Financial Institutions", "Property Owners", "Residents & Tenants", "Facility & Community Operators",
+];
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const L = (path: string) => localePath(locale, path);
-  const modules = getModules(locale);
+  const productAccess = products.map((product) => ({
+    ...product,
+    accessHref: L(`/platform/products/${product.slug}/login`),
+  }));
+
   return <Page className="inner-page" locale={locale}>
-    <section className="inner-hero">
-      <span className="eyebrow">REOS PLATFORM</span>
-      <h1>The execution layer<br /><em>for the property journey.</em></h1>
-      <p>Understanding the journey is the first problem. Running it is the second. REOS is built in three layers so each is useful on its own, and each makes the next one possible.</p>
-    </section>
-
-    <section className="section-pad atmos atmos-rays">
-      <SectionIntro label="THREE LAYERS" title={<>Understand it. Find your part.<br /><em>Then run the work.</em></>} />
-      <div className="layer-grid">
-        {layers.map((layer, index) => (
-          <article key={layer.id}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h3>{layer.name}</h3>
-            <b>{layer.claim}</b>
-            <p>{layer.copy}</p>
-          </article>
-        ))}
+    <section className="inner-hero inner-hero-no-photo platform-products-hero">
+      <div className="platform-products-copy">
+        <span className="eyebrow">REOS PRODUCT PLATFORM</span>
+        <h1>Digital products<br /><em>for the property ecosystem.</em></h1>
+        <p>Learn how UAE property works. Adopt the connected REOS operating model. Then subscribe to licensed digital products that automate real work for businesses, government entities and customers.</p>
+        <div className="hero-actions">
+          <Link className="button gold" href="#product-catalogue">Explore products <span>↓</span></Link>
+          <Link className="button ghost" href={L("/demo")}>Book a product demo</Link>
+        </div>
       </div>
+      <PlatformProductMap products={productAccess} />
     </section>
 
-    <section className="section-pad module-band">
+    <section className="platform-commercial-path" aria-label="REOS commercial journey">
+      <article><span>01</span><div><b>Educate</b><p>Make the property journey, stakeholders, rules and dependencies understandable.</p></div></article>
+      <article><span>02</span><div><b>Adopt</b><p>Use the shared REOS model to align teams, responsibilities, documents and handoffs.</p></div></article>
+      <article><span>03</span><div><b>Subscribe & operate</b><p>License the REOS products that automate the workflows your organization needs.</p></div></article>
+    </section>
+
+    <section className="section-pad platform-catalogue" id="product-catalogue">
       <SectionIntro
-        label="PLATFORM MODULES"
-        title={<>Eight modules.<br /><em>Labelled honestly.</em></>}
-        copy="Validated means researched and built. To be validated means designed and partially proven. Future capability means architected but not yet delivered. Nothing here is described as finished when it is not."
+        label="PRODUCT CATALOGUE"
+        title={<>One platform.<br /><em>A growing product suite.</em></>}
+        copy="Each product solves a defined property workflow, serves the stakeholder groups involved in it and opens through its own licensed access gateway."
       />
-      <div className="module-grid">
-        {modules.map((module, index) => (
-          <article key={module.id} id={module.id}>
-            <header><span>{String(index + 1).padStart(2, "0")}</span><StatusTag status={module.status} /></header>
-            <h3>{module.name}</h3>
-            <p>{module.copy}</p>
+      <div className="platform-product-grid">
+        {productAccess.map((product) => (
+          <article key={product.slug} id={product.slug}>
+            <header>
+              <span>{String(product.number).padStart(2, "0")}</span>
+              <div><b>{product.status}</b><small>{product.availability}</small></div>
+            </header>
+            <small>{product.category}</small>
+            <h3>{product.name}</h3>
+            <p>{product.summary}</p>
+            <blockquote>{product.outcome}</blockquote>
+            <div className="platform-market-tags">{product.markets.map((market) => <span key={market}>{market}</span>)}</div>
+            <dl>
+              <div><dt>Built for</dt><dd>{product.stakeholders.join(" · ")}</dd></div>
+              <div><dt>Product scope</dt><dd>{product.capabilities.join(" · ")}</dd></div>
+            </dl>
+            <Link className="platform-product-access" href={product.accessHref}>
+              Open {product.name} sign-in <span>↗</span>
+            </Link>
           </article>
         ))}
+        <article className="platform-product-future">
+          <header><span>+</span><div><b>Product roadmap</b><small>Designed to expand</small></div></header>
+          <small>FUTURE PRODUCTS</small>
+          <h3>More workflows will join the catalogue.</h3>
+          <p>New REOS products can be added for any journey stage or stakeholder relationship without changing the access model.</p>
+          <div className="platform-future-list"><span>Approvals</span><span>Handover</span><span>Leasing</span><span>Community operations</span><span>Customer services</span></div>
+        </article>
       </div>
     </section>
 
-    <section className="section-pad">
-      <SectionIntro label="WHAT THE LABELS MEAN" title={<>Four labels.<br /><em>Used the same way everywhere.</em></>} />
-      <dl className="status-key">
-        <div><dt><span className="status status-validated">Validated</span></dt><dd>Researched, sourced and reflected in the current model.</dd></div>
-        <div><dt><span className="status status-to-be-validated">To Be Validated</span></dt><dd>Designed or partially proven, still requiring verification before it can be treated as complete.</dd></div>
-        <div><dt><span className="status status-future-reos-capability">Future REOS Capability</span></dt><dd>Architected as part of the roadmap, not yet delivered as a live capability.</dd></div>
-        <div><dt><span className="status status-illustrative">Illustrative</span></dt><dd>Used to explain the model or the experience, not a verified operational claim.</dd></div>
-      </dl>
-    </section>
-
-    <section className="section-pad principle-band">
-      <SectionIntro label="OPERATING PRINCIPLES" title={<>What REOS<br /><em>deliberately does not do.</em></>} />
-      <div className="principle-grid">
-        <article><b>01</b><h3>It is not the system of record</h3><p>Authorities, registries, banks and escrow trustees remain authoritative for their own decisions and records. REOS coordinates around them.</p></article>
-        <article><b>02</b><h3>It does not issue or execute</h3><p>No approval, registration, transaction or payment is performed by REOS. Binding actions return to the official channel or the regulated provider.</p></article>
-        <article><b>03</b><h3>It does not generalise across emirates</h3><p>Requirements are held per jurisdiction. Guidance for Dubai is never presented as guidance for the UAE.</p></article>
-        <article><b>04</b><h3>It does not assert without a source</h3><p>Operative claims carry their source, the issuing authority and the date they were last checked, so a reader can verify rather than trust.</p></article>
+    <section className="section-pad platform-audiences">
+      <SectionIntro
+        label="B2B · B2G · B2C"
+        title={<>Products for all twelve<br /><em>property stakeholder groups.</em></>}
+        copy="A product may serve one stakeholder, connect several organizations, or coordinate an end-to-end workflow across business, government and customer users."
+      />
+      <div className="platform-stakeholder-grid">
+        {stakeholderGroups.map((group, index) => <span key={group}><i>{String(index + 1).padStart(2, "0")}</i>{group}</span>)}
       </div>
     </section>
 
-    <section className="reos-opportunity">
-      <span className="eyebrow">SEE IT ON YOUR PROJECT</span>
-      <h2>Bring a project.<br /><em>We will map it.</em></h2>
-      <p>Walk through your emirate, asset type and delivery route against the connected model, and see where the dependencies, approvals and handoffs actually sit.</p>
+    <section className="section-pad platform-licensing">
+      <div>
+        <span className="eyebrow">PRODUCT ACCESS & LICENSING</span>
+        <h2>One REOS relationship.<br /><em>Product-specific access.</em></h2>
+        <p>Each subscribed product has its own sign-in destination. Access is intended to be controlled by organization, product licence, user role and entitlement—so customers see only the services they have purchased.</p>
+      </div>
+      <ol>
+        <li><span>01</span><div><b>Choose a product</b><p>Select the workflow that matches your operational need.</p></div></li>
+        <li><span>02</span><div><b>Configure the licence</b><p>Define the subscribing organization, users, roles and product scope.</p></div></li>
+        <li><span>03</span><div><b>Enter the product</b><p>Use the dedicated sign-in gateway for that licensed REOS service.</p></div></li>
+      </ol>
+    </section>
+
+    <section className="reos-opportunity platform-sales-cta">
+      <span className="eyebrow">START WITH A PRODUCT</span>
+      <h2>See the workflow.<br /><em>Then discuss the licence.</em></h2>
+      <p>Start with Title Deed Automation or review the NOC Automation roadmap. REOS can map the product to your organization, users and stakeholder relationships.</p>
       <div className="hero-actions">
-        <Link className="button gold" href={L("/demo")}>Book a demo <span>↗</span></Link>
-        <Link className="button ghost" href={L("/property-journey")}>Explore the journey</Link>
+        <Link className="button gold" href={L("/demo")}>Book a product demo <span>↗</span></Link>
+        <Link className="button ghost" href={L("/ecosystem")}>Explore the ecosystem</Link>
       </div>
     </section>
   </Page>;

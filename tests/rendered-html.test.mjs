@@ -62,6 +62,29 @@ test("the demo CTA appears only on the platform page", async () => {
   assert.match(await (await render("/platform")).text(), /href="\/demo"/);
 });
 
+test("platform is a licensed product catalogue with separate access gateways", async () => {
+  const html = await (await render("/platform")).text();
+  assert.match(html, /Digital products/);
+  assert.match(html, /Title Deed Automation/);
+  assert.match(html, /NOC Automation/);
+  assert.match(html, /B2B/);
+  assert.match(html, /B2G/);
+  assert.match(html, /B2C/);
+  assert.match(html, /href="\/platform\/products\/title-deed-automation\/login"/);
+  assert.match(html, /href="\/platform\/products\/noc-automation\/login"/);
+  assert.doesNotMatch(html, /Eight modules/);
+
+  for (const slug of ["title-deed-automation", "noc-automation"]) {
+    const gateway = await render(`/platform/products/${slug}/login`);
+    assert.equal(gateway.status, 200, `${slug} gateway must resolve`);
+    const gatewayHtml = await gateway.text();
+    assert.match(gatewayHtml, /PRODUCT ACCESS GATEWAY/);
+    assert.match(gatewayHtml, /active licence/);
+    assert.match(gatewayHtml, /Product authentication and subscription entitlements are not connected/);
+    assert.match(gatewayHtml, /href="\/platform#product-catalogue"/);
+  }
+});
+
 test("the mobile menu is actually displayable", async () => {
   // A descendant selector meant to hide the desktop nav also hid the mobile
   // menu's own nav, so the panel never opened. Counting DOM nodes missed it.

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
 import { DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
-import { getModules } from "../i18n/content";
+import { products } from "../data/products";
 import { Logo } from "./Logo";
 import { PreferencesControls } from "./PreferencesControls";
 import { AssistantDock } from "./AssistantDock";
@@ -44,7 +44,7 @@ export function Header({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
 /** Footer architecture aligned to the frozen primary IA — REOS IA Freeze
  *  v1.0, 2026-08-19: EXPLORE (the five nav destinations, plus About and
  *  Authorities), INTELLIGENCE (its six categories) and PLATFORM (its
- *  modules). Glossary is deliberately NOT a standalone footer column —
+ *  licensed product catalogue). Glossary is deliberately NOT a standalone footer column —
  *  it sits inside INTELLIGENCE as Definitions & Glossary. */
 export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -79,8 +79,8 @@ export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <div className="footer-group">
           <span className="footer-group-heading">{d.footer.platformHeading}</span>
           <div className="footer-subnav">
-            {getModules(locale).map((module) => (
-              <Link key={module.id} href={L(`/platform#${module.id}`)}>{module.name}</Link>
+            {products.map((product) => (
+              <Link key={product.slug} href={L(`/platform#${product.slug}`)}>{product.name}</Link>
             ))}
           </div>
         </div>
