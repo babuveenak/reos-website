@@ -142,6 +142,8 @@ test("property journey hero exposes exactly seven interactive architectural stag
   assert.match(html, /href="\/property-journey\/construction-delivery"/);
   assert.match(html, /Construction and sales run in parallel/);
   assert.doesNotMatch(html, /property-journey-lifecycle-v2\.png/);
+  assert.match(html, /data-stage="land-vision" data-label-placement="above"/);
+  assert.match(html, /data-stage="asset-growth-intelligence" data-label-placement="above"/);
 });
 
 test("stage 6 is Living & Operations everywhere it appears", async () => {

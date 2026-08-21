@@ -23,13 +23,13 @@ type VisualPosition = {
 };
 
 const VISUAL_POSITIONS: VisualPosition[] = [
-  { x: 9, y: 52, label: "right" },
+  { x: 9, y: 52, label: "above" },
   { x: 27, y: 52, label: "below" },
   { x: 42, y: 49, label: "above" },
   { x: 59, y: 29, label: "above" },
   { x: 58, y: 67, label: "below" },
   { x: 78, y: 53, label: "below" },
-  { x: 92, y: 50, label: "left" },
+  { x: 92, y: 50, label: "above" },
 ];
 
 const ROUTE_EDGES: [number, number][] = [
@@ -120,6 +120,7 @@ export function PropertyJourneyHero({ stages }: { stages: JourneyHeroStage[] }) 
                 type="button"
                 className={`journey-hero-hotspot label-${position.label}${isActive ? " is-active" : ""}${isConcurrent ? " is-concurrent" : ""}${isDimmed ? " is-dimmed" : ""}`}
                 data-stage={stage.id}
+                data-label-placement={position.label}
                 style={positionStyle(position)}
                 aria-label={`${stage.number} ${stage.name}. Select to view stage details.`}
                 aria-pressed={selectedId === stage.id}
