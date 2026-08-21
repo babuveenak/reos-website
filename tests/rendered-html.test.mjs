@@ -272,6 +272,53 @@ test("every canonical stakeholder group page resolves", async () => {
   }
 });
 
+test("Journey × Stakeholder Explorer exposes all three shared-data views", async () => {
+  const html = await (await render("/ecosystem")).text();
+  assert.match(html, /Journey View/);
+  assert.match(html, /Stakeholder View/);
+  assert.match(html, /Full Map/);
+  assert.match(html, /Seven stages\. Twelve groups/);
+  assert.match(html, /Twelve stakeholder groups mapped against seven property journey stages/);
+  assert.match(html, /data-mapped-relationships="30"/, "the explorer must expose the 30 canonical relationships");
+  assert.match(html, /Filter relationship level/);
+  assert.match(html, /Share view/);
+  assert.match(html, /Reset view/);
+});
+
+test("canonical relationship pages explain the selected intersection", async () => {
+  const path = "/property-journey/authorities-approvals/stakeholders/authorities-regulators";
+  const response = await render(path);
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /Authorities &(amp;)? Regulators/);
+  assert.match(html, /in Authorities &(amp;)? Approvals/);
+  assert.match(html, /ROLE IN THIS STAGE/);
+  assert.match(html, /RESPONSIBILITIES/);
+  assert.match(html, /PROCESSES/);
+  assert.match(html, /DOCUMENTS/);
+  assert.match(html, /Open in interactive map/);
+  assert.match(html, /view=journey(&amp;|&)stage=authorities-approvals/);
+});
+
+test("stakeholder-first relationship routes redirect to the canonical stage-first URL", async () => {
+  const response = await render("/stakeholders/authorities-regulators/journey/authorities-approvals");
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("location"), "/property-journey/authorities-approvals/stakeholders/authorities-regulators");
+});
+
+test("stage and stakeholder pages expose reciprocal relationship navigation", async () => {
+  const stage = await (await render("/property-journey/construction-delivery")).text();
+  assert.match(stage, /Stakeholders[\s\S]*in this stage/);
+  assert.match(stage, /href="\/property-journey\/construction-delivery\/stakeholders\/contractors"/);
+  assert.match(stage, /view=journey(&amp;|&)stage=construction-delivery/);
+
+  const stakeholder = await (await render("/stakeholders/developers")).text();
+  assert.match(stakeholder, /JOURNEY PARTICIPATION/);
+  assert.equal((stakeholder.match(/class="is-(?:linked|unlinked)"/g) ?? []).length, 7, "stakeholder participation must always show all seven stages");
+  assert.match(stakeholder, /href="\/property-journey\/planning-design\/stakeholders\/developers"/);
+  assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
+});
+
 test("renders core routes", async () => {
   for (const path of [
     "/property-journey", "/property-journey/sales-transfer", "/stakeholders", "/stakeholders/developers",

@@ -7,6 +7,7 @@ import { groupById, groups } from "../../data/ecosystem";
 import { stages } from "../../data/journey";
 import { stakeholderDetailById } from "../../data/stakeholderDetails";
 import { getDict } from "../../i18n/dictionary";
+import { relationshipFor, relationshipLevelLabels } from "../../data/relationships";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -54,18 +55,33 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
     </section>
 
     <section className="journey-timeline section-pad">
+      <span className="eyebrow">JOURNEY PARTICIPATION</span>
       <div className="timeline-header">
         <span>01</span>
         <h2>Role in the<br /><em>property journey.</em></h2>
       </div>
       <p className="rail-callout">{detail.roleInJourney}</p>
-      <div className="mini-stage-rail">
-        {entryStages.map((stage) => (
-          <Link href={L(`/property-journey/${stage.id}`)} key={stage.id}>
-            <b>{String(stage.number).padStart(2, "0")}</b><span>{stage.name}</span><small>{stage.phase}</small>
-          </Link>
-        ))}
+      <div className="stakeholder-participation-grid" aria-label={`Journey participation for ${group.name}`}>
+        {stages.map((stage) => {
+          const relationship = relationshipFor(stage.id, group.id);
+          return relationship ? (
+            <Link href={L(relationship.detailRoute)} key={stage.id} className="is-linked">
+              <b>{String(stage.number).padStart(2, "0")}</b>
+              <span>{stage.name}</span>
+              <small>{relationshipLevelLabels[relationship.relationshipLevel]}</small>
+              <p>{relationship.summary}</p>
+              <i>Explore connection ↗</i>
+            </Link>
+          ) : (
+            <article key={stage.id} className="is-unlinked" aria-label={`${stage.name}: no mapped participation`}>
+              <b>{String(stage.number).padStart(2, "0")}</b>
+              <span>{stage.name}</span>
+              <small>No mapped participation</small>
+            </article>
+          );
+        })}
       </div>
+      <Link className="text-link" href={L(`/ecosystem?view=stakeholder&stakeholder=${group.id}`)}>Open this stakeholder in the interactive map <span>→</span></Link>
     </section>
 
     <section className="journey-grid section-pad">

@@ -1,5 +1,5 @@
 import { getStages, getPersonas } from "../../i18n/content";
-import { DEFAULT_LOCALE, type Locale } from "../../i18n/config";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -10,6 +10,7 @@ import { getDict } from "../../i18n/dictionary";
 import { withTerms } from "../../components/Term";
 import { groupById } from "../../data/ecosystem";
 import { stageById, stages } from "../../data/journey";
+import { relationshipLevelLabels, relationshipsByStage } from "../../data/relationships";
 
 import { stageById as detailById } from "../../data/reos";
 
@@ -40,7 +41,9 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
   const parallel = stage.runsWith.map((id) => all.find((s) => s.id === id)).filter(Boolean) as typeof all;
   const details = stage.detailStageIds.map((id) => detailById[id]).filter(Boolean);
   const relevantPersonas = getPersonas(locale).filter((p) => p.steps.some((s) => s.stageId === stage.id));
+  const stageRelationships = relationshipsByStage(stage.id);
   const d = getDict(locale);
+  const L = (path: string) => localePath(locale, path);
 
   return <Page className="inner-page stage-page" locale={locale}>
     <nav className="crumbs" aria-label="Breadcrumb">
@@ -151,6 +154,25 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
           </div>
         )}
       </aside>
+    </section>
+
+    <section className="stage-relationship-section section-pad">
+      <div className="timeline-header">
+        <span>{String(stage.number).padStart(2, "0")}</span>
+        <h2>Stakeholders<br /><em>in this stage.</em></h2>
+      </div>
+      <p className="rail-callout">Select a relationship to see how the group participates, what it controls, and which processes, documents and dependencies are involved.</p>
+      <div className="stage-relationship-cards">
+        {stageRelationships.map((relationship) => {
+          const group = groupById[relationship.stakeholderId];
+          return <Link href={L(relationship.detailRoute)} key={relationship.id}>
+            <span>{String(group.number).padStart(2, "0")}</span>
+            <div><small>{relationshipLevelLabels[relationship.relationshipLevel]}</small><b>{group.name}</b><p>{relationship.role}</p></div>
+            <i aria-hidden="true">↗</i>
+          </Link>;
+        })}
+      </div>
+      <Link className="text-link" href={L(`/ecosystem?view=journey&stage=${stage.id}`)}>Open this stage in the interactive map <span>→</span></Link>
     </section>
 
     {/* Ask in place, seeded with this stage so the answer already knows where

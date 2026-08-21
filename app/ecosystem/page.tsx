@@ -1,7 +1,7 @@
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EcosystemMap } from "../components/Ecosystem";
+import { JourneyStakeholderExplorer } from "../components/JourneyStakeholderExplorer";
 import { Page, SectionIntro } from "../components/SiteShell";
 
 export const metadata: Metadata = {
@@ -28,16 +28,15 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
 
     <section className="section-pad">
       <SectionIntro
-        label="INTERACTIVE MAP"
-        title={<>Four clusters.<br /><em>One regulatory rail.</em></>}
-        copy="Select any group to see what it controls, which participants it covers and where it enters the journey."
+        label="JOURNEY × STAKEHOLDER EXPLORER"
+        title={<>Seven stages. Twelve groups.<br /><em>Every connection explained.</em></>}
+        copy="Start with a journey stage, a stakeholder group or the complete matrix. Select an intersection to understand the relationship, then open its contextual detail page."
       />
       <p className="rail-callout">
-        Authorities are shown as a rail rather than a cluster because approvals, registrations
-        and permits gate the journey for everyone else. They are compulsory and external, where
-        every other participant is appointed and commercial.
+        The map answers what is connected. The relationship panel explains how it is connected.
+        Contextual pages then show the processes, documents, responsibilities and dependencies.
       </p>
-      <EcosystemMap />
+      <JourneyStakeholderExplorer pathPrefix={locale === DEFAULT_LOCALE ? "" : `/${locale}`} />
     </section>
 
     <section className="reos-opportunity">

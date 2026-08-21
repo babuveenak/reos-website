@@ -6,6 +6,7 @@ import { orientation, routes } from "./data/routes";
 import { lifecycleStages } from "./data/reos";
 import { SITE_URL } from "./data/site";
 import { LOCALES, localePath } from "./i18n/config";
+import { approvedRelationships } from "./data/relationships";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entry = (path: string, priority: number): MetadataRoute.Sitemap[number] =>
@@ -32,7 +33,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...lifecycleStages.map((s) => entry(`/lifecycle/${s.id}`, 0.7)),
     ...journeys.map((j) => entry(`/journeys/${j.slug}`, 0.5)),
   ];
-  return LOCALES.flatMap((l) =>
+  const localizedEntries = LOCALES.flatMap((l) =>
     base.map((e) => ({ ...e, url: `${SITE_URL}${localePath(l, new URL(e.url).pathname)}` })),
   );
+  const relationshipEntries = approvedRelationships.map((relationship) =>
+    entry(relationship.detailRoute, 0.72),
+  );
+  return [...localizedEntries, ...relationshipEntries];
 }
