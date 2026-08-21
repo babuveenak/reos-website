@@ -127,6 +127,14 @@ test("stakeholders shows all 12 canonical groups in frequency order", async () =
   assert.doesNotMatch(html, /Bankers & Financial|Bankers &amp; Financial/);
 });
 
+test("stakeholders hero exposes exactly 12 interactive architectural groups", async () => {
+  const html = await (await render("/stakeholders")).text();
+  assert.match(html, /stakeholders-connected-district-v1\.png/);
+  assert.equal((html.match(/Select to view details\./g) ?? []).length, 12);
+  assert.match(html, /href="\/stakeholders\/banks-financial"/);
+  assert.doesNotMatch(html, /12\+ STAKEHOLDER GROUPS/);
+});
+
 test("stage 6 is Living & Operations everywhere it appears", async () => {
   const home = await (await render("/")).text();
   assert.match(home, /Living & Operations|Living &amp; Operations/);

@@ -3,6 +3,7 @@ import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
+import { StakeholdersHero, type StakeholderHeroGroup } from "../components/StakeholdersHero";
 
 export const metadata: Metadata = {
   title: "UAE Property Stakeholders | REOS",
@@ -12,12 +13,27 @@ export const metadata: Metadata = {
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const L = (path: string) => localePath(locale, path);
   const stages = getStages(locale);
+  const groups = getGroups(locale);
   const clusterById = Object.fromEntries(getClusters(locale).map((c) => [c.id, c]));
+  const heroGroups: StakeholderHeroGroup[] = groups.map((group) => ({
+    id: group.id,
+    number: String(group.number).padStart(2, "0"),
+    name: group.name,
+    overview: group.controls,
+    participants: group.members,
+    stages: stages
+      .filter((stage) => stage.groupIds.includes(group.id))
+      .map((stage) => ({ number: String(stage.number).padStart(2, "0"), name: stage.short })),
+    href: L(`/stakeholders/${group.id}`),
+  }));
   return <Page className="inner-page" locale={locale}>
-    <section className="inner-hero">
-      <span className="eyebrow">STAKEHOLDERS</span>
-      <h1>UAE property<br /><em>stakeholders.</em></h1>
-      <p>Who is involved in the UAE property journey? Explore the 12 stakeholder groups participating across it — their responsibilities, decisions, documents, approvals and dependencies.</p>
+    <section className="inner-hero inner-hero-no-photo stakeholders-hero">
+      <div className="stakeholders-hero-copy">
+        <span className="eyebrow">STAKEHOLDERS</span>
+        <h1>UAE property<br /><em>stakeholders.</em></h1>
+        <p>Who is involved in the UAE property journey? Explore the 12 stakeholder groups participating across it — their responsibilities, decisions, documents, approvals and dependencies.</p>
+      </div>
+      <StakeholdersHero groups={heroGroups} />
     </section>
 
     <section className="section-pad group-detail-band">
@@ -27,7 +43,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         copy="Select a group to see its role in the journey, key responsibilities, decisions, documents, approvals and who it works with."
       />
       <div className="group-list">
-        {getGroups(locale).map((group) => {
+        {groups.map((group) => {
           const entryStages = stages.filter((stage) => stage.groupIds.includes(group.id));
           const cluster = clusterById[group.cluster];
           return (
