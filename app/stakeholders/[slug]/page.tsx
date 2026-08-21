@@ -6,6 +6,7 @@ import { Page, StatusTag } from "../../components/SiteShell";
 import { groupById, groups } from "../../data/ecosystem";
 import { stages } from "../../data/journey";
 import { stakeholderDetailById } from "../../data/stakeholderDetails";
+import { getDict } from "../../i18n/dictionary";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -27,9 +28,17 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
   const detail = stakeholderDetailById[slug];
   if (!group || !detail) notFound();
   const L = (path: string) => localePath(locale, path);
+  const d = getDict(locale);
   const entryStages = stages.filter((stage) => stage.groupIds.includes(group.id));
 
   return <Page className="inner-page journey-page" locale={locale}>
+    <nav className="crumbs" aria-label={d.nav.breadcrumb}>
+      <Link className="crumb-back" href={L("/stakeholders")}>
+        <span aria-hidden="true">←</span> {d.nav.backToStakeholders}
+      </Link>
+      <span aria-hidden="true">/</span>
+      <b>{group.name}</b>
+    </nav>
     <section className="journey-hero">
       <div>
         <span className="eyebrow">STAKEHOLDER {String(group.number).padStart(2, "0")} OF 12</span>

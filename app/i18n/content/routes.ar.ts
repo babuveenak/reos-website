@@ -80,6 +80,13 @@ export const routeUiAr = {
   more: "5 إضافية",
   pending: "هذه الرحلة قيد النشر",
   pendingCopy: "المسار جزء من النموذج، لكن محتواه لم يُوثَّق ويُراجع بعد. ننشره حين يكون مسندًا بمصادره، لا قبل ذلك.",
+  availableNow: "المتاح الآن",
+  availableCopy: "يمكنك الآن استخدام ملف صاحب المصلحة المرتبط والمراحل المنشورة لفهم موضع هذا المسار، بينما يستمر توثيق الدليل الكامل ومراجعته.",
+  stakeholderProfile: "ملف صاحب المصلحة",
+  relevantStages: "المراحل ذات الصلة",
+  openProfile: "فتح الملف",
+  seeJourney: "عرض رحلة العقار كاملة",
+  tryAnotherGuide: "جرّب دليلًا آخر",
 };
 
 export const routeUiEn = {
@@ -92,4 +99,11 @@ export const routeUiEn = {
   more: "5 MORE",
   pending: "This journey is being published",
   pendingCopy: "The route is part of the model, but its content is still being written and verified. We publish it when it is sourced, not before.",
+  availableNow: "AVAILABLE NOW",
+  availableCopy: "Use the connected stakeholder profile and published journey stages to understand where this route sits while the full guide is sourced and reviewed.",
+  stakeholderProfile: "Stakeholder profile",
+  relevantStages: "Relevant journey stages",
+  openProfile: "Open profile",
+  seeJourney: "See the full property journey",
+  tryAnotherGuide: "Try another guide",
 };

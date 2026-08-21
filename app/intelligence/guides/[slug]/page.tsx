@@ -1,15 +1,14 @@
-import { getPersonas, getStage } from "../../../i18n/content";
-import { DEFAULT_LOCALE, type Locale } from "../../../i18n/config";
+import { getGroups, getPersonas, getRoutes, getRouteUi, getStage, getStages } from "../../../i18n/content";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../../../i18n/config";
+import { getDict } from "../../../i18n/dictionary";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Page, StatusTag } from "../../../components/SiteShell";
 import { withTerms } from "../../../components/Term";
-import { groupById } from "../../../data/ecosystem";
 
 import { personaBySlug, personas } from "../../../data/personas";
 import { allRouteSlugs, contentSlug, resolveRoute } from "../../../data/routes";
-import { getRouteUi } from "../../../i18n/content";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -39,21 +38,31 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
   const { slug } = await params;
   const all = getPersonas(locale);
   const route = resolveRoute(slug);
-  // Aliases resolve to the canonical route, so old URLs keep working.
+  const L = (path: string) => localePath(locale, path);
+  const d = getDict(locale);
+
+  // Historical aliases remain valid bookmarks, but only the canonical route
+  // is rendered and indexed. This avoids two public URLs carrying one guide.
+  if (route && slug !== route.slug) {
+    permanentRedirect(L(`/intelligence/guides/${route.slug}`));
+  }
+
   const persona = route ? all.find((p) => p.slug === contentSlug(route)) : all.find((p) => p.slug === slug);
 
   if (!persona) {
     if (!route) notFound();
-    return <PendingRoute route={route} locale={locale} />;
+    const localizedRoute = getRoutes(locale).find((item) => item.slug === route.slug) ?? route;
+    return <PendingRoute route={localizedRoute} locale={locale} />;
   }
 
   const others = all.filter((p) => p.slug !== persona.slug).slice(0, 3);
+  const localizedGroupById = Object.fromEntries(getGroups(locale).map((group) => [group.id, group]));
 
   return <Page className="inner-page persona-page" locale={locale}>
-    <nav className="crumbs" aria-label="Breadcrumb">
-      <Link href="/intelligence">Intelligence</Link>
-      <span aria-hidden="true">/</span>
-      <Link href="/intelligence/guides">Guides</Link>
+    <nav className="crumbs" aria-label={d.nav.breadcrumb}>
+      <Link className="crumb-back" href={L("/intelligence/guides")}>
+        <span aria-hidden="true">←</span> {d.nav.backToGuides}
+      </Link>
       <span aria-hidden="true">/</span>
       <b>{persona.name}</b>
     </nav>
@@ -63,7 +72,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         <span className="eyebrow">{persona.name.toUpperCase()} JOURNEY</span>
         <h1>{persona.headline}</h1>
         <p>{persona.promise}</p>
-        <StatusTag status={persona.status} />
+        <StatusTag status={persona.status} locale={locale} />
       </div>
       <aside className="persona-meta">
         <small>WHO THIS IS FOR</small>
@@ -97,7 +106,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
                 <h2>{step.title}</h2>
                 <p>{withTerms(step.detail)}</p>
                 {stage && (
-                  <Link className="step-stage" href={`/property-journey/${stage.id}`}>
+                  <Link className="step-stage" href={L(`/property-journey/${stage.id}`)}>
                     <span>STAGE {String(stage.number).padStart(2, "0")}</span>
                     <b>{stage.name}</b>
                     <i>→</i>
@@ -116,7 +125,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         <span className="eyebrow">WHO YOU WORK WITH</span>
         <ul className="link-list">
           {persona.worksWith.map((id) => (
-            <li key={id}><Link href={`/stakeholders/${id}`}>{groupById[id]?.name}</Link></li>
+            <li key={id}><Link href={L(`/stakeholders/${id}`)}>{localizedGroupById[id]?.name}</Link></li>
           ))}
         </ul>
       </article>
@@ -139,8 +148,8 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
       <h2>{persona.plural} see<br /><em>the whole journey.</em></h2>
       <p>{persona.reosHelp}</p>
       <div className="hero-actions">
-        <Link className="button gold" href="/property-journey">See the full journey <span>↗</span></Link>
-        <Link className="button ghost" href="/intelligence/guides">Try another guide</Link>
+        <Link className="button gold" href={L("/property-journey")}>See the full journey <span>↗</span></Link>
+        <Link className="button ghost" href={L("/intelligence/guides")}>Try another guide</Link>
       </div>
     </section>
 
@@ -148,7 +157,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
       <span className="eyebrow">OTHER GUIDES</span>
       <div className="role-links">
         {others.map((other) => (
-          <Link key={other.slug} href={`/intelligence/guides/${other.slug}`}>
+          <Link key={other.slug} href={L(`/intelligence/guides/${resolveRoute(other.slug)?.slug ?? other.slug}`)}>
             <b>{other.name}</b>
             <span>{other.card}</span>
             <i>→</i>
@@ -163,10 +172,17 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
  *  Shown rather than hidden: removing it would misrepresent the ecosystem. */
 function PendingRoute({ route, locale }: { route: NonNullable<ReturnType<typeof resolveRoute>>; locale: Locale }) {
   const ui = getRouteUi(locale);
-  const L = (p: string) => (locale === DEFAULT_LOCALE ? p : `/ar${p}`);
+  const d = getDict(locale);
+  const L = (p: string) => localePath(locale, p);
+  const relatedGroup = getGroups(locale).find((group) => group.number === route.taxonomyGroup);
+  const relevantStages = relatedGroup
+    ? getStages(locale).filter((stage) => stage.groupIds.includes(relatedGroup.id))
+    : [];
   return <Page className="inner-page persona-page" locale={locale}>
-    <nav className="crumbs" aria-label="Breadcrumb">
-      <Link href={L("/intelligence/guides")}>Guides</Link>
+    <nav className="crumbs" aria-label={d.nav.breadcrumb}>
+      <Link className="crumb-back" href={L("/intelligence/guides")}>
+        <span aria-hidden="true">←</span> {d.nav.backToGuides}
+      </Link>
       <span aria-hidden="true">/</span>
       <b>{route.title}</b>
     </nav>
@@ -175,6 +191,7 @@ function PendingRoute({ route, locale }: { route: NonNullable<ReturnType<typeof 
         <span className="eyebrow">{route.ctaLabel}</span>
         <h1>{route.title}</h1>
         <p>{route.sub}</p>
+        <StatusTag status="To Be Validated" locale={locale} />
       </div>
     </section>
     <section className="section-pad">
@@ -186,9 +203,32 @@ function PendingRoute({ route, locale }: { route: NonNullable<ReturnType<typeof 
             <li key={step} style={{ ["--i" as string]: i }}><span>{step}</span></li>
           ))}
         </ol>
+        <div className="pending-resources">
+          <div>
+            <span className="eyebrow">{ui.availableNow}</span>
+            <p>{ui.availableCopy}</p>
+          </div>
+          {relatedGroup && (
+            <article>
+              <small>{ui.stakeholderProfile}</small>
+              <b>{relatedGroup.name}</b>
+              <Link className="text-link" href={L(`/stakeholders/${relatedGroup.id}`)}>{ui.openProfile} →</Link>
+            </article>
+          )}
+          {relevantStages.length > 0 && (
+            <article>
+              <small>{ui.relevantStages}</small>
+              <div className="pending-stage-links">
+                {relevantStages.map((stage) => (
+                  <Link href={L(`/property-journey/${stage.id}`)} key={stage.id}>{stage.name}</Link>
+                ))}
+              </div>
+            </article>
+          )}
+        </div>
         <div className="hero-actions">
-          <Link className="button gold" href={L("/property-journey")}>See the full journey <span>↗</span></Link>
-          <Link className="button ghost" href={L("/intelligence/guides")}>Try another guide</Link>
+          <Link className="button gold" href={L("/property-journey")}>{ui.seeJourney} <span>↗</span></Link>
+          <Link className="button ghost" href={L("/intelligence/guides")}>{ui.tryAnotherGuide}</Link>
         </div>
       </div>
     </section>

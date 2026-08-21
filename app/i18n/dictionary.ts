@@ -27,6 +27,8 @@ const en = {
     mobile: "Mobile navigation",
     open: "Open navigation",
     breadcrumb: "Breadcrumb",
+    backToStakeholders: "Back to all stakeholders",
+    backToGuides: "Back to all guides",
   },
   /** AI Assistant interface strings. Phase 1A. */
   assistant: {
@@ -312,6 +314,8 @@ const ar: Dict = {
     mobile: "تنقل الهاتف",
     open: "فتح القائمة",
     breadcrumb: "مسار التنقل",
+    backToStakeholders: "العودة إلى جميع أصحاب المصلحة",
+    backToGuides: "العودة إلى جميع الأدلة",
   },
   assistant: {
     eyebrow: "اسأل المنظومة العقارية",

@@ -149,10 +149,36 @@ test("the guides page (former /roles) shows every guide in frequency order", asy
 test("every guide link resolves", async () => {
   const slugs = ["buying","developing","investing","selling","financing","design-engineering",
     "building","legal-compliance","managing","utilities","regulators","specialist-services",
-    "new-to-uae","professional-services"];
+    "new-to-uae"];
   for (const slug of slugs) {
     assert.equal((await render(`/intelligence/guides/${slug}`)).status, 200, `/intelligence/guides/${slug}`);
   }
+});
+
+test("detail pages provide a clear contextual back link", async () => {
+  const stakeholder = await (await render("/stakeholders/developers")).text();
+  assert.match(stakeholder, /href="\/stakeholders"[^>]*>.*Back to all stakeholders/s);
+
+  const guide = await (await render("/intelligence/guides/buying")).text();
+  assert.match(guide, /href="\/intelligence\/guides"[^>]*>.*Back to all guides/s);
+
+  const arabic = await (await render("/ar/intelligence/guides/buying")).text();
+  assert.match(arabic, /href="\/ar\/intelligence\/guides"/);
+  assert.match(arabic, /العودة إلى جميع الأدلة/);
+});
+
+test("unfinished guides expose useful published context without claiming validation", async () => {
+  const html = await (await render("/intelligence/guides/utilities")).text();
+  assert.match(html, /To Be Validated/i);
+  assert.match(html, /AVAILABLE NOW/);
+  assert.match(html, /href="\/stakeholders\/utility-providers"/);
+  assert.match(html, /href="\/property-journey\/authorities-approvals"/);
+});
+
+test("retired guide aliases redirect to their canonical route", async () => {
+  const response = await render("/intelligence/guides/professional-services");
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("location"), "/intelligence/guides/design-engineering");
 });
 
 test("retired routes redirect forward instead of 404ing", async () => {

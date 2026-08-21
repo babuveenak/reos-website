@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { journeys } from "./data/phase1";
 import { stages } from "./data/journey";
 import { groups } from "./data/ecosystem";
-import { personas } from "./data/personas";
+import { orientation, routes } from "./data/routes";
 import { lifecycleStages } from "./data/reos";
 import { SITE_URL } from "./data/site";
 import { LOCALES, localePath } from "./i18n/config";
@@ -27,7 +27,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/demo", 0.6),
     ...stages.map((s) => entry(`/property-journey/${s.id}`, 0.85)),
     ...groups.map((g) => entry(`/stakeholders/${g.id}`, 0.85)),
-    ...personas.map((p) => entry(`/intelligence/guides/${p.slug}`, 0.8)),
+    ...routes.map((route) => entry(`/intelligence/guides/${route.slug}`, 0.8)),
+    entry(`/intelligence/guides/${orientation.slug}`, 0.8),
     ...lifecycleStages.map((s) => entry(`/lifecycle/${s.id}`, 0.7)),
     ...journeys.map((j) => entry(`/journeys/${j.slug}`, 0.5)),
   ];
