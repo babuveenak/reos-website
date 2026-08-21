@@ -2,6 +2,7 @@ import { getPersonas, getStages, getTerms, getInsightCategories } from "../i18n/
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { IntelligenceHeroMap, type IntelligenceDomain } from "../components/IntelligenceHeroMap";
 import { Page, SectionIntro } from "../components/SiteShell";
 import { authorities } from "../data/reos";
 
@@ -27,12 +28,47 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const categories = getInsightCategories(locale);
   const regulation = categories.find((c) => c.id === "regulation");
   const authorityProcesses = categories.find((c) => c.id === "authority-processes");
+  const intelligenceDomains: IntelligenceDomain[] = [
+    {
+      id: "guides", number: 1, name: "Guides", short: "guides", status: "Published",
+      description: "Role-based guidance that explains the sequence, documents and recurring mistakes across the UAE property journey.",
+      href: L("/intelligence/guides"),
+    },
+    {
+      id: "regulations", number: 2, name: "Regulations", short: "regulations", status: "In development",
+      description: regulation?.copy ?? "Regulation explainers in plain language, connected to their official sources.",
+      href: L("/intelligence#regulations"),
+    },
+    {
+      id: "processes", number: 3, name: "Processes", short: "processes", status: `${stages.length} stages mapped`,
+      description: "What happens at each stage, who participates, which documents matter and where jurisdiction changes the route.",
+      href: L("/intelligence#processes"),
+    },
+    {
+      id: "authority-information", number: 4, name: "Authority Information", short: "authority information", status: "Official channels mapped",
+      description: authorityProcesses?.copy ?? "Which authority governs a requirement, which channel handles it and what each submission needs.",
+      href: L("/intelligence#authority-information"),
+    },
+    {
+      id: "definitions-and-glossary", number: 5, name: "Definitions & Glossary", short: "the glossary", status: `${terms.length} terms defined`,
+      description: "The recurring vocabulary of UAE property, defined once in plain language and linked wherever it appears.",
+      href: L("/intelligence/definitions-and-glossary"),
+    },
+    {
+      id: "knowledge-graph", number: 6, name: "Knowledge Graph", short: "the knowledge graph", status: "Future REOS capability",
+      description: "The connected model linking stages, stakeholders, documents, approvals and dependencies instead of treating them as separate lists.",
+      href: L("/intelligence#knowledge-graph"),
+    },
+  ];
 
   return <Page className="inner-page" locale={locale}>
-    <section className="inner-hero">
-      <span className="eyebrow">INTELLIGENCE</span>
-      <h1>REOS<br /><em>intelligence.</em></h1>
-      <p>What knowledge supports the UAE property ecosystem? Guides, regulations, processes, authority information, definitions and the knowledge graph — organised in one place instead of scattered across government portals, developer procedures and industry practice.</p>
+    <section className="inner-hero inner-hero-no-photo intelligence-hero">
+      <div className="intelligence-hero-copy">
+        <span className="eyebrow">INTELLIGENCE</span>
+        <h1>REOS<br /><em>intelligence.</em></h1>
+        <p>What knowledge supports the UAE property ecosystem? Guides, regulations, processes, authority information, definitions and the knowledge graph — organised in one place instead of scattered across government portals, developer procedures and industry practice.</p>
+      </div>
+      <IntelligenceHeroMap domains={intelligenceDomains} />
     </section>
 
     <section className="section-pad" id="guides">

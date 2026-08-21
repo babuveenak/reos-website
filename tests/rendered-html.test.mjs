@@ -165,6 +165,26 @@ test("property journey hero exposes exactly seven interactive architectural stag
   assert.match(html, /data-stage="asset-growth-intelligence" data-label-placement="above"/);
 });
 
+test("intelligence hero exposes six coded knowledge domains over a text-free foundation", async () => {
+  const html = await (await render("/intelligence")).text();
+  assert.match(html, /intelligence-knowledge-foundation-v1\.jpg/);
+  assert.match(html, /REOS Intelligence knowledge map/);
+  assert.equal((html.match(/Select to preview intelligence domain\./g) ?? []).length, 6);
+  for (const label of [
+    "Guides",
+    "Regulations",
+    "Processes",
+    "Authority Information",
+    "Definitions &amp; Glossary",
+    "Knowledge Graph",
+  ]) {
+    assert.match(html, new RegExp(`>${label}<`), `${label} knowledge domain missing`);
+  }
+  assert.match(html, /CONNECTED KNOWLEDGE LAYER/);
+  assert.match(html, /href="\/intelligence\/guides"/);
+  assert.match(html, /href="\/intelligence\/definitions-and-glossary"/);
+});
+
 test("stage 6 is Living & Operations everywhere it appears", async () => {
   const home = await (await render("/")).text();
   assert.match(home, /Living & Operations|Living &amp; Operations/);
