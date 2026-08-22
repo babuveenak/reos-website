@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFile } from "node:fs/promises";
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -16,6 +17,54 @@ test("renders the REOS homepage", async () => {
   assert.match(html, /From land to living/);
   assert.match(html, /Start from/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
+});
+
+test("enterprise remediation makes the operating-system and licensed-product proposition explicit", async () => {
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const dictionary = await readFile(new URL("../app/i18n/dictionary.ts", import.meta.url), "utf8");
+  assert.match(dictionary, /The operating system/);
+  assert.match(dictionary, /for the UAE property journey/);
+  assert.match(dictionary, /governed, licensed REOS products/);
+  assert.match(source, /Explore licensed REOS products/);
+  assert.match(source, /home-product-proof/);
+  assert.match(source, /ProductMaturityBadge/);
+});
+
+test("demo delivery contract confirms only acknowledged submissions", async () => {
+  const form = await readFile(new URL("../app/components/DemoForm.tsx", import.meta.url), "utf8");
+  const route = await readFile(new URL("../app/api/demo/route.ts", import.meta.url), "utf8");
+  assert.match(form, /name="email" type="email" required/);
+  assert.match(form, /name="company" required/);
+  assert.match(form, /Request not submitted/);
+  assert.match(form, /REQUEST DELIVERED/);
+  assert.match(form, /REOS product and evaluation owner/);
+  assert.match(route, /delivery_not_configured/);
+  assert.match(route, /delivery_failed/);
+  assert.match(route, /response\.ok/);
+  assert.match(route, /crypto\.randomUUID/);
+});
+
+test("product and evaluation routes preserve buyer context", async () => {
+  const gateway = await readFile(new URL("../app/components/ProductLoginView.tsx", import.meta.url), "utf8");
+  const evaluation = await readFile(new URL("../app/platform/evaluation/page.tsx", import.meta.url), "utf8");
+  assert.match(gateway, /\?product=/);
+  assert.match(gateway, /Evaluate this product/);
+  assert.match(gateway, /Licensed-user support/);
+  assert.match(evaluation, /Selected product:/);
+  assert.match(evaluation, /Pilot planning/);
+});
+
+test("trust and assistant expose inspectable evidence states and verification paths", async () => {
+  const trust = await readFile(new URL("../app/trust-centre/page.tsx", import.meta.url), "utf8");
+  const assistant = await readFile(new URL("../app/components/Knowledge.tsx", import.meta.url), "utf8");
+  assert.match(trust, /EVIDENCE REGISTER/);
+  assert.match(trust, /OPERATIONAL ASSURANCE/);
+  assert.match(trust, /Not production claims/);
+  assert.match(assistant, /Illustrative preview/);
+  assert.match(assistant, /Confidence describes evidence coverage/);
+  assert.match(assistant, /Unresolved — confirm before acting/);
+  assert.match(assistant, /ai-inline-citation/);
+  assert.match(assistant, /Verify before acting/);
 });
 
 test("the homepage hero shows every canonical stage, once each", async () => {
@@ -91,6 +140,52 @@ test("platform is a licensed product catalogue with separate access gateways", a
   }
 });
 
+test("platform creates transformation urgency without changing the frozen operating architecture", async () => {
+  const html = await (await render("/platform")).text();
+  assert.match(html, /TRANSFORMATION OPPORTUNITY/);
+  assert.match(html, /The problem isn(?:&#x27;|')t one approval/);
+  assert.match(html, /It(?:&#x27;|')s the operating model around it/);
+  for (const currentState of ["Different spreadsheets", "Email chains", "Disconnected handoffs", "Unknown ownership", "Missing evidence", "Late-stage surprises", "Status chasing", "Siloed stakeholders", "Passive documents", "Process knowledge trapped in people"]) {
+    assert.match(html, new RegExp(currentState), `${currentState} must remain in the current-state comparison`);
+  }
+  for (const targetState of ["One operating model", "One case state", "One evidence chain", "One accountability path", "Connected stakeholders", "Connected workflow", "Earlier readiness insights", "Governed decisions", "Shared visibility", "Orchestrated lifecycle"]) {
+    assert.match(html, new RegExp(targetState), `${targetState} must remain in the target-state comparison`);
+  }
+  for (const outcome of ["Clear Accountability", "Operational Transparency", "Earlier Readiness", "Governed Execution", "Shared Understanding", "Audit Confidence"]) {
+    assert.match(html, new RegExp(outcome), `${outcome} must remain visible to executive buyers`);
+  }
+  for (const stakeholder of ["Landowners &amp; Investors", "Developers", "Consultants &amp; Designers", "Authorities &amp; Regulators", "Utility Providers", "Contractors", "Suppliers &amp; Vendors", "Brokers &amp; Agencies", "Banks &amp; Financial Institutions", "Property Owners", "Residents &amp; Tenants", "Facility &amp; Community Operators"]) {
+    assert.match(html, new RegExp(`>${stakeholder}<`), `${stakeholder} needs a transformation value lens`);
+  }
+  assert.match(html, /The connective operating layer/);
+  for (const step of ["Understand", "Map", "Prepare", "Operate", "Govern"]) assert.match(html, new RegExp(`>${step}<`));
+  const visibleText = html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ");
+  assert.doesNotMatch(visibleText, /\bROI\b|\b\d+%\b/i, "transformation value must not depend on unsupported ROI claims");
+});
+
+test("final Platform optimization closes the remaining executive findings", async () => {
+  const html = await (await render("/platform")).text();
+  assert.match(html, /REOS is the UAE real estate operating system/);
+  assert.match(html, /licensed workflows are REOS products/);
+  for (const layer of ["Property Journey", "Stakeholders", "Intelligence &amp; evidence", "Governed workflow &amp; orchestration", "Licensed REOS products", "Operational outcomes", "Official systems &amp; authorized decisions"]) assert.match(html, new RegExp(layer));
+  assert.match(html, /REOS coordinates the operational work\. Authorized people and official systems retain their required authority/);
+  assert.match(html, /How much of this operating model sounds familiar/);
+  assert.match(html, /0(?:<!-- -->)? of (?:<!-- -->)?10(?:<!-- -->)? conditions selected/);
+  assert.match(html, /Select the conditions that reflect the current operating environment/);
+  assert.match(html, /href="\/demo"[^>]*>Request a scoped evaluation/);
+  assert.match(html, /href="#reos-operating-model"[^>]*>See how REOS connects the work/);
+  const unchecked = html.match(/type="checkbox"/g) ?? [];
+  assert.equal(unchecked.length, 10, "the optional reflection must expose ten native checkboxes");
+  assert.doesNotMatch(html, /type="checkbox"[^>]*checked/, "the self-reflection must start with no selections");
+  for (const question of ["Who owns the next action, and why?", "What is the current case state across participating teams?", "What is likely to block the next critical gate?", "Which evidence and authority support this decision?", "Are all participants working from the same lifecycle context?", "Can the decision history and supporting evidence be reviewed?"]) assert.match(html, new RegExp(question.replace("?", "\\?")));
+  assert.equal((html.match(/EXECUTIVE QUESTION ENABLED/g) ?? []).length, 12, "six visible outcome prompts are emitted in both the HTML and hydration payload");
+  assert.equal((html.match(/Why this matters/g) ?? []).length, 12, "every canonical stakeholder retains its P2 business consequence in the accessible HTML");
+
+  const assessmentSource = await readFile(new URL("../app/components/ExecutiveSelfAssessment.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(assessmentSource, /localStorage|sessionStorage|fetch\(|navigator\.sendBeacon|dataLayer|gtag|posthog/i, "assessment data must remain in page memory and must not be transmitted");
+  assert.doesNotMatch(assessmentSource, /maturity|ROI|\d+%/i, "assessment language must remain non-diagnostic and claim-safe");
+});
+
 test("critical governance uses one operating model and one maturity vocabulary", async () => {
   const home = await (await render("/")).text();
   assert.match(home, /REOS connects the people, evidence, approvals and workflows/);
@@ -108,6 +203,48 @@ test("critical governance uses one operating model and one maturity vocabulary",
     assert.match(gateway, /Product maturity/);
     assert.match(gateway, /Request product access/);
   }
+});
+
+test("P1 enterprise buying routes expose assurance, procurement and product proof without changing maturity", async () => {
+  const trust = await (await render("/trust-centre")).text();
+  assert.match(trust, /REOS ENTERPRISE TRUST CENTRE/);
+  assert.match(trust, /Website evidence/);
+  assert.match(trust, /Pilot requirement/);
+  assert.match(trust, /Deployment-specific/);
+  assert.match(trust, /No implied certification/);
+  assert.match(trust, /AUTHORITATIVE SYSTEMS/);
+
+  const evaluation = await (await render("/platform/evaluation")).text();
+  for (const gate of ["Qualify", "Scope", "Pilot", "Accept", "Roll out"]) assert.match(evaluation, new RegExp(`>${gate}<`));
+  for (const criterion of ["Workflow", "Access", "Evidence", "Audit", "Integration", "Operations", "Commercial"]) assert.match(evaluation, new RegExp(`>${criterion}<`));
+  assert.match(evaluation, /Title Deed Automation/);
+  assert.match(evaluation, /NOC Automation/);
+  assert.match(evaluation, /Early Access/);
+  assert.match(evaluation, /Coming Soon/);
+
+  const platform = await (await render("/platform")).text();
+  assert.match(platform, /PRODUCT COMPARISON/);
+  assert.match(platform, /Workflow outcome/);
+  assert.match(platform, /Primary buyer/);
+  assert.match(platform, /Proof during evaluation/);
+  assert.match(platform, /Authority boundary/);
+  assert.match(platform, /href="\/trust-centre"/);
+  assert.match(platform, /href="\/platform\/evaluation"/);
+});
+
+test("P1 conversion path qualifies the requested enterprise conversation", async () => {
+  const demo = await (await render("/demo")).text();
+  assert.match(demo, /Product walkthrough/);
+  assert.match(demo, /Workflow assessment/);
+  assert.match(demo, /Pilot planning/);
+  assert.match(demo, /Decision timeline/);
+  assert.match(demo, /Workflow outcome/);
+  assert.match(demo, /href="\/trust-centre"/);
+  assert.match(demo, /href="\/platform\/evaluation"/);
+
+  const ecosystem = await (await render("/ecosystem")).text();
+  assert.match(ecosystem, /Open Journey View/);
+  assert.match(ecosystem, /Open Stakeholder View/);
 });
 
 test("education route families expose outcome, audience, product and next action", async () => {

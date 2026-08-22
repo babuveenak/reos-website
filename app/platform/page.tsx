@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BeforeAfterWorkflow, PersonaProductDemo, PlatformHeroPreview, ProductWorkflowDemo } from "../components/PlatformProductExperience";
+import { PersonaProductDemo, PlatformHeroPreview, ProductWorkflowDemo } from "../components/PlatformProductExperience";
 import { Page, SectionIntro } from "../components/SiteShell";
 import { products } from "../data/products";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import { HowReosWorks, ProductMaturityBadge, ProductMaturityLegend } from "../components/Governance";
+import { EnterpriseAssurancePreview } from "../components/EnterpriseReadiness";
+import { TransformationOpportunity } from "../components/TransformationOpportunity";
+import { executiveOutcomes } from "../data/transformation";
 
 export const metadata: Metadata = {
-  title: "Property Workflow Automation Products | REOS Platform",
-  description: "See how REOS products coordinate property cases, evidence, approvals and stakeholder handoffs—starting with Title Deed Automation and NOC Automation.",
+  title: "Property Transformation & Workflow Platform | REOS",
+  description: "See how REOS connects property stakeholders, evidence, accountability and workflow through one operating model, then explore licensed workflow products.",
 };
 
 const stakeholderGroups = [
@@ -42,10 +45,10 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="sales-hero-copy">
         <span className="eyebrow">REOS PRODUCT PLATFORM · B2B · B2G · B2C</span>
         <h1>Automate property workflows.<br /><em>Keep every party aligned.</em></h1>
-        <p>REOS turns fragmented, multi-party property processes into licensed digital products—with one case state for the workflow, evidence, approvals, ownership and audit history.</p>
+        <p><b>REOS is the UAE real estate operating system</b> that connects the Property Journey, participating Stakeholders, case evidence, responsibilities and licensed workflows through one governed operating model. Those licensed workflows are REOS products; official systems remain authoritative.</p>
         <div className="hero-actions">
           <Link className="button gold" href={L("/demo")}>Request a demo <span>↗</span></Link>
-          <Link className="button ghost" href="#product-experience">Explore the product <span>↓</span></Link>
+          <Link className="button ghost" href="#transformation-opportunity">Why change now? <span>↓</span></Link>
         </div>
         <div className="sales-hero-proof" role="group" aria-label="REOS product roadmap">
           {products.map((product) => <span key={product.slug}><i>{String(product.number).padStart(2, "0")}</i><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></span>)}
@@ -54,7 +57,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <PlatformHeroPreview products={productAccess} />
     </section>
 
-    <HowReosWorks locale={locale} compact />
+    <HowReosWorks locale={locale} compact architecture />
 
     <section className="sales-trust-strip" aria-label="REOS product principles">
       <span><b>ONE CASE STATE</b><small>Across evidence, actions and decisions</small></span>
@@ -63,10 +66,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <span><b>OFFICIAL SYSTEMS REMAIN AUTHORITATIVE</b><small>REOS coordinates the operational work</small></span>
     </section>
 
-    <section className="section-pad sales-problem">
-      <SectionIntro label="THE OPERATING PROBLEM" title={<>The delay is rarely<br /><em>one missing form.</em></>} copy="Property work slows when evidence, responsibility and decisions are distributed across many parties without one shared view of what is ready, what is blocked and who acts next." />
-      <BeforeAfterWorkflow />
-    </section>
+    <TransformationOpportunity locale={locale} />
 
     <section className="section-pad sales-solution">
       <div className="sales-solution-copy">
@@ -101,13 +101,10 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
     </section>
 
-    <section className="sales-outcomes">
-      <div><span className="eyebrow">BUSINESS VALUE</span><h2>Move from process chasing<br /><em>to operational control.</em></h2><p>REOS is designed to reduce avoidable uncertainty in complex workflows—not by replacing required authority, but by making the work around it visible, structured and accountable.</p></div>
+    <section className="sales-outcomes" aria-labelledby="operational-outcomes-title">
+      <div><span className="eyebrow">EXECUTIVE BUSINESS OUTCOMES</span><h2 id="operational-outcomes-title">What changes<br /><em>operationally?</em></h2><p>REOS is designed to reduce avoidable uncertainty in complex workflows—not by replacing required authority, but by making the work around it visible, structured and accountable.</p></div>
       <div className="sales-outcome-grid">
-        <article><span>01</span><h3>Clear accountability</h3><p>Every active action has an owner, reason and visible next handoff.</p></article>
-        <article><span>02</span><h3>Earlier readiness</h3><p>Surface missing evidence and prerequisites before they become late-stage blockers.</p></article>
-        <article><span>03</span><h3>Fewer blind spots</h3><p>See case status and dependencies across teams, organizations and customer touchpoints.</p></article>
-        <article><span>04</span><h3>Traceable decisions</h3><p>Keep evidence, reviews, clarifications and versions connected to the case history.</p></article>
+        {executiveOutcomes.map(([number, title, copy, question]) => <article key={title}><span>{number}</span><h3>{title}</h3><p>{copy}</p><small>EXECUTIVE QUESTION ENABLED</small><blockquote>{question}</blockquote></article>)}
       </div>
     </section>
 
@@ -152,11 +149,19 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <header><span>{String(product.number).padStart(2, "0")}</span><div><ProductMaturityBadge maturity={product.maturity} /><small>{product.maturityNote}</small></div></header>
           <small>{product.category}</small><h3>{product.name}</h3><p>{product.summary}</p><blockquote>{product.outcome}</blockquote>
           <div className="platform-market-tags">{product.markets.map((market) => <span key={market}>{market}</span>)}</div>
-          <dl><div><dt>Built for</dt><dd>{product.stakeholders.join(" · ")}</dd></div><div><dt>Product scope</dt><dd>{product.capabilities.join(" · ")}</dd></div></dl>
+          <dl><div><dt>Primary buyer</dt><dd>{product.primaryBuyer}</dd></div><div><dt>Built for</dt><dd>{product.stakeholders.join(" · ")}</dd></div><div><dt>Product scope</dt><dd>{product.capabilities.join(" · ")}</dd></div></dl>
           <div className="sales-card-actions"><Link className="platform-product-access" href={product.accessHref}>View product gateway <span>↗</span></Link><Link className="platform-product-access" href={L("/demo")}>Request a demo <span>↗</span></Link></div>
         </article>)}
       </div>
       <ProductMaturityLegend />
+    </section>
+
+    <section className="section-pad product-comparison-section">
+      <SectionIntro label="PRODUCT COMPARISON" title={<>Choose by workflow outcome.<br /><em>Evaluate by proof.</em></>} copy="The comparison keeps product maturity, buyer, outcome and authority boundary together so a catalogue choice cannot be mistaken for production readiness." />
+      <div className="product-comparison-table">
+        <table><thead><tr><th scope="col">Product</th><th scope="col">Workflow outcome</th><th scope="col">Primary buyer</th><th scope="col">Proof during evaluation</th><th scope="col">Authority boundary</th></tr></thead><tbody>{products.map((product) => <tr key={product.slug}><th scope="row"><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></th><td>{product.workflowResult}</td><td>{product.primaryBuyer}</td><td>{product.evaluationProof.join(" · ")}</td><td>{product.deploymentBoundary}</td></tr>)}</tbody></table>
+      </div>
+      <Link className="text-link product-comparison-action" href={L("/platform/evaluation")}>See the enterprise evaluation process <span>↗</span></Link>
     </section>
 
     <section className="section-pad enterprise-confidence">
@@ -169,12 +174,15 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <li><span>05</span><b>Pilot or rollout</b><p>Deploy only within the agreed licence, product and operational scope.</p></li>
       </ol>
       <p className="enterprise-boundary"><b>Current website boundary:</b> product screens are illustrative previews; authentication, subscriptions and production integrations are not connected.</p>
+      <div className="enterprise-confidence-actions"><Link className="button gold" href={L("/platform/evaluation")}>Plan an evaluation <span>↗</span></Link><Link className="button ghost" href={L("/trust-centre")}>Review enterprise controls</Link></div>
     </section>
+
+    <EnterpriseAssurancePreview locale={locale} />
 
     <section className="sales-final-cta">
       <span className="eyebrow">SEE REOS IN YOUR WORKFLOW</span><h2>Bring us the process<br /><em>your team is chasing today.</em></h2>
       <p>We’ll show how REOS can structure the case, evidence, responsibilities and handoffs—and discuss the right product and licence scope for your organization.</p>
-      <div className="hero-actions"><Link className="button gold" href={L("/demo")}>Request a product demo <span>↗</span></Link><Link className="button ghost" href={L("/ecosystem")}>Explore the operating model</Link></div>
+      <div className="hero-actions"><Link className="button gold" href={L("/demo")}>Request a scoped evaluation <span>↗</span></Link><Link className="button ghost" href={L("/platform/evaluation")}>See the buying process</Link></div>
     </section>
   </Page>;
 }

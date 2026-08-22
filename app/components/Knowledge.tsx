@@ -22,7 +22,7 @@ import type {
   Source,
   SuggestedQuestion,
 } from "../assistant/contracts";
-import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
+import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
 import { StatusTag } from "./SiteShell";
 
@@ -35,10 +35,10 @@ export function SourceList({ sources, locale = DEFAULT_LOCALE }: { sources: Sour
     <section className="ai-sources" aria-label={d.sourcesLabel}>
       <h3>{d.sourcesLabel}</h3>
       <ul>
-        {sources.map((source) => (
-          <li key={source.id}>
+        {sources.map((source, index) => (
+          <li key={source.id} id={`source-${source.id}`}>
             <div className="ai-source-head">
-              <b>{source.authority}</b>
+              <b><span className="ai-source-number">[{index + 1}]</span> {source.authority}</b>
               <StatusTag status={source.status} locale={locale} />
             </div>
             <p className="ai-source-title">{source.title}</p>
@@ -49,6 +49,8 @@ export function SourceList({ sources, locale = DEFAULT_LOCALE }: { sources: Sour
               {source.locator && (
                 <div><dt>{d.sectionLabel}</dt><dd>{source.locator}</dd></div>
               )}
+              <div><dt>Evidence type</dt><dd>{source.epistemicType.replaceAll("-", " ")}</dd></div>
+              {source.effectiveFrom && <div><dt>Effective from</dt><dd>{source.effectiveFrom}</dd></div>}
               <div>
                 <dt>{d.lastVerifiedLabel}</dt>
                 {/* Never invent a date. An honest gap is the credibility signal. */}
@@ -226,6 +228,14 @@ export function AnswerCard({
   onAsk?: (question: string) => void;
 }) {
   const d = getDict(locale).assistant;
+  const L = (path: string) => localePath(locale, path);
+  const jurisdictions = [...new Set(response.sources.map((source) => source.jurisdiction).filter(Boolean))];
+  const unresolvedJurisdiction = response.conditions.some((condition) => condition.unresolved && condition.label.toLowerCase().includes("jurisdiction"));
+  const confidenceBasis = response.confidence === "high"
+    ? "Broad relevant source coverage with the material context resolved. Verify the cited authority before acting."
+    : response.confidence === "medium"
+      ? "Some relevant source and context coverage is present; material details may still require verification."
+      : "Evidence or context is limited or unresolved. Do not rely on this answer as an action decision.";
   return (
     <article className={`ai-answer${response.refusal ? " is-refusal" : ""}`}>
       <header className="ai-answer-head">
@@ -234,13 +244,16 @@ export function AnswerCard({
         <span className="ai-confidence">{d.confidenceLabel}: {d.confidence[response.confidence]}</span>
       </header>
 
-      <p className="ai-answer-text">{response.answer}</p>
+      <div className="ai-trust-state" aria-label="Answer trust state"><div><span>Answer state</span><b>{response.status === "Illustrative" ? "Illustrative preview" : response.status}</b></div><div><span>Jurisdiction</span><b>{unresolvedJurisdiction ? "Unresolved — confirm before acting" : jurisdictions.length ? jurisdictions.join(" · ") : "Not established from cited evidence"}</b></div><div><span>Confidence basis</span><b>{confidenceBasis}</b></div><p>Confidence describes evidence coverage and resolved context. It is not approval, legal certainty or prediction accuracy.</p></div>
+
+      <p className="ai-answer-text">{response.answer} {response.sources.map((source, index) => <a className="ai-inline-citation" href={`#source-${source.id}`} key={source.id} aria-label={`Source ${index + 1}: ${source.title}`}>[{index + 1}]</a>)}</p>
 
       {response.journey && <JourneyTrail journey={response.journey} locale={locale} />}
       <ConditionList conditions={response.conditions} locale={locale} />
       <ActivityList activities={response.activities} locale={locale} />
       <ApprovalList approvals={response.approvals} locale={locale} />
       <SourceList sources={response.sources} locale={locale} />
+      <section className="ai-verification-path" aria-label="Verification path"><h3>Verify before acting</h3>{response.sources.length ? <p>Open the cited official source, confirm the jurisdiction and applicable date, then verify any binding interpretation with the relevant authority or qualified adviser.</p> : <p>No supporting source is attached. Treat this response as orientation only and resolve the authority and evidence before acting.</p>}<Link href={L("/intelligence")}>Review REOS evidence governance <span aria-hidden="true">→</span></Link></section>
 
       {response.navigationActions.length > 0 && (
         <p className="ai-actions">

@@ -13,6 +13,10 @@ export type ReosProduct = {
   markets: ProductMarket[];
   stakeholders: string[];
   capabilities: string[];
+  primaryBuyer: string;
+  workflowResult: string;
+  evaluationProof: string[];
+  deploymentBoundary: string;
 };
 
 /**
@@ -33,6 +37,10 @@ export const products: ReosProduct[] = [
     markets: ["B2B", "B2G", "B2C"],
     stakeholders: ["Developers", "Authorities & Regulators", "Brokers & Agencies", "Banks & Financial Institutions", "Property Owners", "Landowners & Investors"],
     capabilities: ["Case intake", "Document readiness", "Approval routing", "Status visibility", "Audit trail"],
+    primaryBuyer: "Registration, conveyancing and transformation leaders",
+    workflowResult: "Move an eligible case from intake to registration-ready evidence with visible ownership, exceptions and decision history.",
+    evaluationProof: ["Configured case states", "Evidence completeness", "Role handoffs", "Exception traceability"],
+    deploymentBoundary: "REOS coordinates readiness and workflow evidence; the relevant land registry remains authoritative for title issuance.",
   },
   {
     slug: "noc-automation",
@@ -46,6 +54,10 @@ export const products: ReosProduct[] = [
     markets: ["B2B", "B2G", "B2C"],
     stakeholders: ["Developers", "Authorities & Regulators", "Utility Providers", "Consultants & Designers", "Contractors", "Property Owners"],
     capabilities: ["NOC type selection", "Prerequisite checks", "Submission workflow", "Clarification handling", "Expiry tracking"],
+    primaryBuyer: "Development, approvals and customer operations leaders",
+    workflowResult: "Route each NOC through its correct prerequisites, issuer, clarifications and expiry controls without flattening distinct processes.",
+    evaluationProof: ["NOC classification", "Prerequisite rules", "Issuer routing", "Clarification history"],
+    deploymentBoundary: "REOS coordinates the request and evidence; the authorized issuer remains responsible for the official NOC decision.",
   },
 ];
 

@@ -20,6 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/stakeholders", 0.9),
     entry("/ecosystem", 0.9),
     entry("/platform", 0.8),
+    entry("/platform/evaluation", 0.76),
+    entry("/trust-centre", 0.76),
     entry("/intelligence", 0.8),
     entry("/intelligence/definitions-and-glossary", 0.75),
     entry("/authorities", 0.8),

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HOW_REOS_WORKS, REOS_VALUE_PROPOSITION, productMaturityDefinitions, productsForContext } from "../data/governance";
 import type { ProductMaturity, ReosProduct } from "../data/products";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
+import { OperatingModelExplorer } from "./OperatingModelExplorer";
 
 const copy = {
   en: {
@@ -22,9 +23,9 @@ export function ProductMaturityBadge({ maturity }: { maturity: ProductMaturity }
   return <span className={`product-maturity maturity-${maturity.toLowerCase().replaceAll(" ", "-")}`}>{maturity}</span>;
 }
 
-export function HowReosWorks({ locale = DEFAULT_LOCALE, compact = false }: { locale?: Locale; compact?: boolean }) {
+export function HowReosWorks({ locale = DEFAULT_LOCALE, compact = false, architecture = false }: { locale?: Locale; compact?: boolean; architecture?: boolean }) {
   const t = copy[locale];
-  return <section className={`governance-how${compact ? " is-compact" : ""}`} aria-label={t.how}>
+  return <section className={`governance-how${compact ? " is-compact" : ""}${architecture ? " has-architecture" : ""}`} aria-label={t.how}>
     <div className="governance-how-intro">
       <span className="eyebrow">{t.how}</span>
       <h2>{t.howTitle}</h2>
@@ -34,6 +35,7 @@ export function HowReosWorks({ locale = DEFAULT_LOCALE, compact = false }: { loc
     <ol className="governance-how-steps">
       {HOW_REOS_WORKS.map((step) => <li key={step.name}><span>{step.number}</span><div><b>{step.name}</b><p>{step.copy}</p></div></li>)}
     </ol>
+    {architecture ? <OperatingModelExplorer /> : null}
   </section>;
 }
 

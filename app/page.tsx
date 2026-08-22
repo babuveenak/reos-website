@@ -9,8 +9,9 @@ import { JourneyIntelligence } from "./components/JourneyStory";
 import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
-import { HowReosWorks, RouteGovernance } from "./components/Governance";
+import { HowReosWorks, ProductMaturityBadge, RouteGovernance } from "./components/Governance";
 import { REOS_VALUE_PROPOSITION } from "./data/governance";
+import { products } from "./data/products";
 
 import { authorities } from "./data/reos";
 
@@ -30,8 +31,12 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <p>{REOS_VALUE_PROPOSITION}</p>
         <p className="hero-benefit">{d.home.benefit}</p>
         <div className="hero-actions">
-          <Link className="button gold" href={`${L("/")}#start`}>{d.home.ctaStart} <span>↗</span></Link>
-          <Link className="button ghost" href={L("/ecosystem")}>{d.home.ctaEcosystem}</Link>
+          <Link className="button gold" href={L("/platform")}>Explore licensed REOS products <span>↗</span></Link>
+          <Link className="button ghost" href={`${L("/")}#start`}>{d.home.ctaStart}</Link>
+        </div>
+        <div className="home-product-proof" aria-label="REOS licensed product availability">
+          <small>LICENSED PRODUCT MODEL</small>
+          {products.map((product) => <Link key={product.slug} href={L(`/platform/${product.slug}/login`)}><span>{String(product.number).padStart(2, "0")} · {product.name}</span><ProductMaturityBadge maturity={product.maturity} /></Link>)}
         </div>
       </div>
       <div className="hero-visual"><JourneyFlow locale={locale} /></div>

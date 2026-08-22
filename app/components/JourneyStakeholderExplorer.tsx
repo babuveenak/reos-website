@@ -206,6 +206,11 @@ export function JourneyStakeholderExplorer({ pathPrefix = "" }: { pathPrefix?: s
           </button>
         ))}
       </div>
+      <div className="explorer-mobile-shortcuts" aria-label="Mobile explorer shortcuts">
+        <span>Choose a guided mobile view</span>
+        <button type="button" onClick={() => setMode("journey")} aria-pressed={mode === "journey"}>Open Journey View</button>
+        <button type="button" onClick={() => setMode("stakeholder")} aria-pressed={mode === "stakeholder"}>Open Stakeholder View</button>
+      </div>
 
       <div className="explorer-toolbar">
         <label className="explorer-search">
@@ -282,7 +287,7 @@ export function JourneyStakeholderExplorer({ pathPrefix = "" }: { pathPrefix?: s
       {mode === "map" && (
         <section id="explorer-map" role="tabpanel" className="explorer-view full-map-view">
           <header className="explorer-instruction"><span>↗</span><div><b>Select any active intersection</b><p>The matrix shows participation; the panel explains it.</p></div></header>
-          <p className="map-mobile-guide">The full matrix is available on larger screens. On this device, use Journey View or Stakeholder View for the same relationships.</p>
+          <div className="map-mobile-guide"><p>The full matrix is available on larger screens. Choose a guided view for the same relationships without horizontal diagram hunting.</p><div><button type="button" onClick={() => setMode("journey")}>Open Journey View</button><button type="button" onClick={() => setMode("stakeholder")}>Open Stakeholder View</button></div></div>
           <div className="relationship-matrix-wrap">
             <table className="relationship-matrix">
               <caption className="sr-only">Twelve stakeholder groups mapped against seven property journey stages</caption>

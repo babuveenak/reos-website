@@ -82,6 +82,8 @@ export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
             {products.map((product) => (
               <Link key={product.slug} href={L(`/platform#${product.slug}`)}>{product.name}</Link>
             ))}
+            <Link href={L("/platform/evaluation")}>Enterprise evaluation</Link>
+            <Link href={L("/trust-centre")}>Trust Centre</Link>
           </div>
         </div>
       </div>

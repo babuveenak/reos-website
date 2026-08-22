@@ -1,0 +1,1855 @@
+ChatGPT said:
+Absolutely. For REOS only, I would make the prompt much more implementation-focused and remove the generic multi-domain abstraction. The important thing is that it should clearly define AI Assistant + LLM provider management + dynamic CMS + Knowledge/RAG + document governance + admin + Arabic/English + future API/MCP, while keeping Azure OpenAI replaceable.
+
+REOS — MASTER AI ASSISTANT, KNOWLEDGE ENGINE & ADMIN PLATFORM
+PROJECT CONTEXT
+You are working on an existing REOS — Real Estate Operating System / Property Ecosystem Platform.
+
+REOS is intended to become an end-to-end Property Development Ecosystem Knowledge, Discovery and AI Intelligence Platform.
+
+The platform must educate visitors about the complete property development lifecycle and provide an intelligent AI Assistant through:
+
+Text
+Voice
+English
+Arabic
+The AI must understand the different property ecosystem stakeholders, their journeys, relationships, processes, documents, regulations, authorities, services and lifecycle stages.
+
+The platform must also be designed for future expansion into:
+
+API access
+External applications
+Partner websites
+MCP
+External AI agents
+However, MCP and public ecosystem APIs are future capabilities and should not be over-engineered in V1.
+
+1. MOST IMPORTANT PRODUCT PRINCIPLE
+Do NOT build a simple chatbot.
+
+Do NOT build a generic ChatGPT wrapper.
+
+Do NOT build a basic FAQ search.
+
+Build:
+
+A Property Ecosystem AI Assistant powered by a governed Property Knowledge Engine, structured domain knowledge, document repository, hybrid retrieval, contextual intelligence and an administrator-controlled knowledge platform.
+
+The AI Assistant is the intelligent front door to REOS.
+
+The Knowledge Engine is the intelligence foundation.
+
+The Admin Platform is the operational control center.
+
+The LLM provider is replaceable infrastructure.
+
+2. CORE REOS ARCHITECTURE
+The target architecture is:
+
+                         REOS PLATFORM
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+        ▼                     ▼                     ▼
+  AI ASSISTANT          WEBSITE / CMS       ADMIN PLATFORM
+        │                     │                     │
+        │               Dynamic Content       AI Configuration
+        │               Images / Media        Knowledge Management
+        │               Navigation            Documents
+        │               SEO                   Sources
+        │                                      Versions
+        │                                      Analytics
+        │
+        ▼
+ CONVERSATION ENGINE
+        │
+ ┌──────┼────────┬─────────┬────────────┐
+ ▼      ▼        ▼         ▼            ▼
+Language Persona Intent  Journey   Jurisdiction
+        │
+        ▼
+ PROPERTY KNOWLEDGE ENGINE
+        │
+ ┌──────┼───────────────┬────────────────┐
+ ▼      ▼               ▼                ▼
+Structured          Documents         Website
+Knowledge             / RAG            Content
+ │                      │                │
+ └──────────────────────┼────────────────┘
+                        ▼
+                 HYBRID RETRIEVAL
+                        │
+                 SOURCE VALIDATION
+                        │
+                 GROUNDED LLM
+                        │
+              ┌─────────┼─────────┐
+              ▼         ▼         ▼
+           Answer    Sources    Next Step
+                        │
+                        ▼
+                 Navigation / Tools
+                        │
+                        ▼
+                  Future API / MCP
+
+3. LLM PROVIDER REQUIREMENT
+The initial implementation will use:
+
+Azure OpenAI API
+
+However:
+
+REOS must remain LLM-agnostic.
+
+Do not hard-code Azure OpenAI throughout the application.
+
+Create an LLM abstraction/provider layer.
+
+Conceptually:
+
+AI Assistant
+      ↓
+LLM Provider Interface
+      ↓
+┌───────────────┬────────────────┬─────────────────┐
+│ Azure OpenAI  │ Open Source     │ Future Provider │
+│ Initial       │ Future          │ Future          │
+└───────────────┴────────────────┴─────────────────┘
+
+The application should be able to change the underlying model without redesigning:
+
+Conversation Engine
+Knowledge Engine
+RAG
+Context
+UI
+Database
+Admin
+Voice architecture
+4. LLM PROVIDER ABSTRACTION
+Create a provider abstraction such as:
+
+interface LLMProvider {
+  generate();
+  stream();
+  embed();
+}
+
+The exact implementation may differ, but the architectural principle must remain.
+
+Initial provider:
+
+Azure OpenAI
+
+Future providers may include:
+
+Open-source models
+Other commercial models
+Self-hosted models
+
+Do not make the rest of the application dependent on Azure-specific SDK calls.
+
+Provider-specific code must remain isolated.
+
+5. AI PROVIDER ADMIN MANAGEMENT
+Create an AI Configuration section inside the REOS Admin platform.
+
+Authorized administrators should be able to manage:
+
+AI provider
+Provider status
+Model
+Embedding model
+API credentials
+AI configuration
+Model parameters where appropriate
+Fallback provider/model
+Speech-to-text provider
+Text-to-speech provider
+Provider health/status
+The Admin should be able to configure which provider/model is active without changing application code.
+
+6. API KEY SECURITY
+API keys and credentials are highly sensitive.
+
+They must:
+
+Never be exposed to the browser
+Never be included in client-side JavaScript
+Never be returned through public APIs
+Never be displayed in plain text after saving
+Be encrypted at rest
+Be decrypted only server-side when required
+Be protected through RBAC
+Be audited where appropriate
+Be stored separately from normal content data
+Be managed securely through environment/secret infrastructure where appropriate
+The Admin UI may display:
+
+Azure OpenAI
+API Key: ************
+Status: Connected
+Last verified: [date]
+
+Never display the actual secret after it has been stored.
+
+7. AI ASSISTANT
+Create a persistent REOS AI Assistant.
+
+Suggested working name:
+
+REOS Property Journey Assistant
+
+The final branding can be changed later.
+
+The Assistant must support:
+
+Text
+Natural-language questions.
+
+Voice
+Natural speech through microphone.
+
+Languages
+English and Arabic.
+
+Both text and voice must use the same:
+
+Conversation engine
+Context
+Persona
+Intent
+Knowledge engine
+Retrieval
+Source validation
+Security
+Tool layer
+Do not create separate AI logic for voice.
+
+8. HOMEPAGE AI EXPERIENCE
+Create a prominent homepage experience:
+
+Ask Anything About the Property Journey
+Suggested description:
+
+From buying and investing to developing, financing, constructing, selling, managing and owning property — ask the REOS AI Assistant.
+
+Provide:
+
+Ask by Voice
+Type Your Question
+Suggested prompts:
+
+I want to buy a property in Dubai. Where do I start?
+How do I become a property developer?
+What happens after land acquisition?
+Who is involved in property development?
+I'm an international investor. What should I know?
+Show me the complete developer journey.
+9. ENGLISH AND ARABIC
+English and Arabic are first-class languages.
+
+Support:
+
+English text
+Arabic text
+English voice
+Arabic voice
+Arabic RTL
+Arabic terminology
+Arabic search
+Arabic document retrieval
+Cross-language retrieval
+Language switching during conversation
+Do not create separate English and Arabic knowledge engines.
+
+Use one canonical Property Knowledge Model.
+
+Example:
+
+Arabic Question
+      ↓
+Language Detection
+      ↓
+Canonical Intent / Context
+      ↓
+Cross-Language Retrieval
+      ↓
+Grounded Knowledge
+      ↓
+Arabic Answer
+
+If the user switches from Arabic to English, preserve all previous context.
+
+10. PERSONA ENGINE
+The AI must understand who the visitor is.
+
+REOS must use the 12 stakeholder groups defined by the approved REOS research dataset.
+
+Do not invent or replace the approved stakeholder taxonomy.
+
+A visitor may have:
+
+Primary persona
+Secondary persona
+Examples:
+
+Buyer + Investor
+Developer + Investor
+Owner + Landlord
+Banker + Investor
+
+Do not force the visitor to select a persona at the beginning.
+
+Infer persona naturally.
+
+If confidence is low and persona materially affects the answer, ask a clarifying question.
+
+11. CONVERSATION CONTEXT
+Maintain structured conversation context.
+
+Example:
+
+{
+  "language": "en",
+  "persona": "property_buyer",
+  "secondary_persona": "investor",
+  "location": "Dubai",
+  "jurisdiction": "UAE",
+  "objective": "purchase_property",
+  "journey": "buyer_journey",
+  "lifecycle_stage": "acquisition",
+  "intent": "understand_process"
+}
+
+The user must not need to repeat established information.
+
+Distinguish between:
+
+User-confirmed information
+Inferred information
+Retrieved information
+System-derived information
+Do not treat uncertain inference as confirmed fact.
+
+12. INTENT ENGINE
+The AI must detect user intent.
+
+Supported intents should include:
+
+Learn
+Understand
+Discover
+Search
+Navigate
+Compare
+Plan
+Verify
+Identify authority
+Understand regulation
+Understand process
+Understand document
+Understand cost
+Understand timeline
+Find service
+Find product
+Explore journey
+FAQ
+Recommend
+Take action
+The intent taxonomy should be configurable from the REOS domain configuration.
+
+13. JOURNEY ENGINE
+The AI must identify the relevant property journey.
+
+Examples include:
+
+Buyer Journey
+Discover → Search → Shortlist → Evaluate → Finance → Purchase → Registration → Handover → Ownership
+
+Developer Journey
+Opportunity → Land → Feasibility → Funding → Development → Construction → Sales → Handover → Post-development
+
+Investor Journey
+Opportunity → Research → Analysis → Due Diligence → Investment → Monitoring → Exit
+
+Banker Journey
+Opportunity → Due Diligence → Financing → Approval → Monitoring → Disbursement → Completion
+
+The final journey definitions must be based on the approved REOS research dataset.
+
+Do not invent conflicting journey models.
+
+14. PROPERTY DEVELOPMENT LIFECYCLE
+REOS must maintain a canonical property development lifecycle.
+
+Conceptually:
+
+PRE-DEVELOPMENT
+Opportunity
+→ Market Research
+→ Land
+→ Due Diligence
+→ Feasibility
+→ Financial Model
+→ Funding
+→ Acquisition
+→ Development Strategy
+
+DEVELOPMENT
+Concept
+→ Planning
+→ Design
+→ Consultants
+→ Approvals
+→ Procurement
+→ Construction
+→ Project Management
+→ Marketing
+→ Sales
+
+COMPLETION
+Completion
+→ Inspection
+→ Certification
+→ Snagging
+→ Handover
+→ Registration
+
+POST-DEVELOPMENT
+Ownership
+→ Property Management
+→ Facility Management
+→ Leasing
+→ Asset Management
+→ Resale
+→ Investment / Exit
+
+The approved research remains authoritative.
+
+15. JURISDICTION ENGINE
+Jurisdiction is critical for regulatory information.
+
+The AI must distinguish between:
+
+Dubai
+Abu Dhabi
+Other UAE emirates
+GCC
+Other countries
+If regulatory information is requested and jurisdiction is unclear, ask.
+
+Never guess a jurisdiction-specific regulation.
+
+16. PROPERTY KNOWLEDGE ENGINE
+This is the core intellectual property of REOS.
+
+The Knowledge Engine must understand:
+
+Stakeholders
+Personas
+Journeys
+Lifecycle
+Lifecycle stages
+Processes
+Sub-processes
+Authorities
+Regulations
+Documents
+Services
+Products
+Organisations
+Locations
+Jurisdictions
+Relationships
+FAQs
+Terminology
+17. RELATIONSHIP ENGINE
+The platform must understand relationships.
+
+Examples:
+
+Developer
+→ develops
+→ Project
+
+Project
+→ located_in
+→ Location
+
+Project
+→ requires
+→ Authority Approval
+
+Authority Approval
+→ issued_by
+→ Authority
+
+Project
+→ designed_by
+→ Consultant
+
+Project
+→ constructed_by
+→ Contractor
+
+Buyer
+→ purchases
+→ Unit
+
+Unit
+→ belongs_to
+→ Project
+
+Use structured relationships rather than duplicating information.
+
+The architecture should support future knowledge graph capabilities.
+
+18. DOCUMENT & KNOWLEDGE REPOSITORY
+The platform must have a proper document repository.
+
+Support:
+
+PDF
+DOCX
+XLSX
+PPTX
+CSV
+HTML
+Web pages
+Research documents
+Regulations
+Government publications
+Industry reports
+FAQs
+Images
+Scanned documents requiring OCR
+Do NOT treat the vector database as the document repository.
+
+19. DOCUMENT INGESTION PIPELINE
+Implement:
+
+UPLOAD
+ ↓
+FILE DETECTION
+ ↓
+TEXT EXTRACTION
+ ↓
+OCR IF REQUIRED
+ ↓
+STRUCTURE DETECTION
+ ↓
+CLASSIFICATION
+ ↓
+CHUNKING
+ ↓
+METADATA ENRICHMENT
+ ↓
+ENTITY / RELATIONSHIP EXTRACTION
+ ↓
+EMBEDDING
+ ↓
+INDEXING
+ ↓
+KNOWLEDGE REPOSITORY
+
+The pipeline should be asynchronous for larger documents.
+
+20. DOCUMENT METADATA
+Every document should support:
+
+Document ID
+Title
+Document Type
+Language
+Source
+Source URL
+Authority
+Organisation
+Jurisdiction
+Stakeholder
+Lifecycle Stage
+Journey
+Topic
+Published Date
+Effective Date
+Last Verified Date
+Version
+Status
+Confidentiality
+Access Level
+Review Date
+
+21. KNOWLEDGE STATUS
+Every knowledge item/document must have a controlled lifecycle:
+
+Draft
+ ↓
+Under Review
+ ↓
+Approved
+ ↓
+Published
+ ↓
+Deprecated
+ ↓
+Archived
+
+Only approved/public knowledge should be used in public AI answers.
+
+22. REGULATORY AND GOVERNMENT UPDATE WORKFLOW
+This is a critical REOS requirement.
+
+UAE government authorities may change:
+
+Policies
+Regulations
+Requirements
+Processes
+Fees
+Forms
+Procedures
+Deadlines
+Official guidance
+REOS Admin must allow an authorized administrator to upload revised information.
+
+Workflow:
+
+ADMIN UPLOADS REVISED DOCUMENT
+              ↓
+       DOCUMENT PROCESSING
+              ↓
+        METADATA ASSIGNMENT
+              ↓
+        VERSION IDENTIFICATION
+              ↓
+          ADMIN REVIEW
+              ↓
+          ADMIN APPROVAL
+              ↓
+       KNOWLEDGE RE-INDEXING
+              ↓
+       NEW VERSION ACTIVE
+              ↓
+        AI USES NEW VERSION
+
+Do NOT automatically activate uploaded information.
+
+The administrator must be able to review and approve it.
+
+23. DOCUMENT VERSIONING
+Maintain document history.
+
+Example:
+
+Regulation
+│
+├── Version 1 — Archived
+├── Version 2 — Archived
+└── Version 3 — Current / Approved
+
+The system must preserve:
+
+Previous versions
+Current version
+Effective date
+Upload date
+Approval date
+Approved by
+Source
+Verification date
+The AI should prioritize the latest approved and effective version.
+
+24. SOURCE GOVERNANCE
+For factual and regulatory answers, source priority should generally be:
+
+1. Official Government Authority
+2. Official Regulation / Legal Source
+3. Approved Primary Source
+4. Approved Research
+5. Approved Industry Source
+6. REOS Educational Content
+
+The exact priority may vary by knowledge type.
+
+The AI must identify sources for important factual answers.
+
+25. DOCUMENT REPOSITORY VS SEARCH INDEX
+Maintain a clear separation:
+
+ORIGINAL DOCUMENT
+      ↓
+OBJECT STORAGE
+      ↓
+DOCUMENT METADATA
+      ↓
+EXTRACTED CONTENT
+      ↓
+DOCUMENT CHUNKS
+      ↓
+EMBEDDINGS
+      ↓
+SEARCH INDEX
+
+The system must always be able to trace:
+
+AI Answer
+ ↓
+Retrieved Chunk
+ ↓
+Knowledge Item
+ ↓
+Document
+ ↓
+Original Source
+
+26. HYBRID RETRIEVAL
+Do not use vector search alone.
+
+Use:
+
+Semantic Search
+For meaning.
+
+Keyword Search
+For exact terminology, authority names, regulation numbers and phrases.
+
+Metadata Filtering
+Filter by:
+
+Language
+Stakeholder
+Persona
+Journey
+Lifecycle
+Jurisdiction
+Authority
+Document type
+Date
+Status
+Structured Database Queries
+For known entities and relationships.
+
+Relationship Retrieval
+For cross-stakeholder questions.
+
+Future knowledge graph capabilities may be added later.
+
+27. KNOWLEDGE ORCHESTRATOR
+Create a Knowledge Orchestrator responsible for determining:
+
+What the visitor is asking
+What context is relevant
+Which knowledge sources are needed
+Which retrieval methods should be used
+Which sources are authoritative
+Whether sufficient evidence exists
+Whether the AI can safely answer
+The orchestrator may combine:
+
+Structured Knowledge
++
+Database Queries
++
+Keyword Search
++
+Semantic Search
++
+Document Retrieval
++
+Relationships
++
+Approved External Sources
+
+28. AI RESPONSE PIPELINE
+Use the following conceptual pipeline:
+
+USER
+ ↓
+Language Detection
+ ↓
+Context Analysis
+ ↓
+Persona Detection
+ ↓
+Intent Detection
+ ↓
+Journey Detection
+ ↓
+Lifecycle Detection
+ ↓
+Jurisdiction Detection
+ ↓
+Entity Extraction
+ ↓
+Knowledge Orchestration
+ ↓
+Hybrid Retrieval
+ ↓
+Source Validation
+ ↓
+Grounded LLM
+ ↓
+Answer
+ ↓
+Sources
+ ↓
+Next Step
+ ↓
+Optional Navigation / Action
+
+Not every question needs every stage.
+
+The system should dynamically determine what is necessary.
+
+29. AI RESPONSE BEHAVIOUR
+The AI should:
+
+Understand the visitor.
+Understand the question.
+Identify relevant context.
+Identify the journey.
+Identify the lifecycle stage.
+Retrieve relevant knowledge.
+Validate sources.
+Answer clearly.
+Explain the visitor's position where useful.
+Suggest the logical next step where useful.
+The AI should guide users rather than merely return search results.
+
+30. PERSONA-AWARE ANSWERS
+The same question can produce different answers.
+
+Example:
+
+What happens after construction?
+
+Buyer
+Explain:
+
+Inspection → Handover → Registration → Occupancy
+
+Developer
+Explain:
+
+Completion → Certification → Handover → Defects → Closeout
+
+Contractor
+Explain:
+
+Testing → Snagging → Documentation → Handover
+
+Banker
+Explain:
+
+Completion monitoring → Financing conditions → Disbursement implications
+
+Use the user's established context.
+
+31. JOURNEY-AWARE ANSWERS
+Where appropriate, structure answers around:
+
+Explain
+What is happening.
+
+Locate
+Where the user is in the journey.
+
+Connect
+Who else is involved.
+
+Guide
+What happens next.
+
+Do not force this structure for simple questions where it would make the response unnecessarily complicated.
+
+32. HALLUCINATION PREVENTION
+The AI must never invent:
+
+Laws
+Regulations
+Fees
+Authorities
+Government requirements
+Official processes
+Deadlines
+Documents
+Companies
+Statistics
+If verified knowledge is insufficient:
+
+I don't have enough verified information to answer that accurately.
+
+Then ask for missing context or provide the appropriate authoritative source.
+
+33. REGULATORY QUESTIONS
+If the visitor asks:
+
+What does the law say?
+
+The AI must determine:
+
+Jurisdiction
+Subject
+Relevant authority
+Relevant regulation
+Effective date
+Current status
+The AI must cite the relevant approved source.
+
+Never provide a legal/regulatory claim without adequate evidence.
+
+34. WEBSITE CONTENT MANAGEMENT
+Create a dynamic content management capability in Admin.
+
+Administrators should be able to manage:
+
+Homepage content
+Page content
+Section content
+Headings
+Text
+Images
+Videos
+FAQs
+CTAs
+Navigation
+SEO metadata
+Arabic content
+English content
+Banners
+Content ordering
+Visibility
+Publishing status
+Routine website content changes should NOT require code changes.
+
+35. DYNAMIC WEBSITE CONTENT
+Website content should be separated from application code where appropriate.
+
+Use structured content records.
+
+Example:
+
+Content
+├── Content ID
+├── Page
+├── Section
+├── Key
+├── Language
+├── Value
+├── Media
+├── Status
+├── Version
+├── Published Date
+└── Updated Date
+
+The exact implementation may differ based on the existing REOS application.
+
+Do not rebuild the existing website unnecessarily.
+
+36. MEDIA / IMAGE MANAGEMENT
+Admin should be able to:
+
+Upload images
+Replace images
+Manage image metadata
+Manage alt text
+Assign images to pages/sections
+Publish/unpublish media
+Retain previous versions where appropriate
+Image changes should not require developer intervention.
+
+37. CONTENT VERSIONING
+Important content should support:
+
+Draft
+ ↓
+Review
+ ↓
+Approved
+ ↓
+Published
+ ↓
+Archived
+
+Maintain version history for critical content.
+
+Administrators should be able to see:
+
+Current version
+Previous version
+Updated date
+Updated by
+Published date
+38. ADMIN PLATFORM
+Create a centralized REOS Admin section.
+
+The Admin should include at minimum:
+
+Dashboard
+Analytics
+Website Content
+Media
+AI Configuration
+Knowledge
+Documents
+Sources
+Regulations
+Authorities
+Stakeholders
+Personas
+Journeys
+Lifecycle
+Processes
+Services
+Products
+AI Conversations
+Knowledge Gaps
+System Settings
+Audit Logs
+
+Only expose sections that are actually required for the current implementation.
+
+Do not create unnecessary complexity.
+
+39. ADMIN RBAC
+Implement role-based access control.
+
+Example roles:
+
+Super Admin
+Content Admin
+Knowledge Admin
+AI Admin
+Analytics Admin
+Reviewer
+
+Permissions should be configurable.
+
+For example:
+
+AI Admin
+→ Manage AI provider configuration
+
+Content Admin
+→ Manage website content
+
+Knowledge Admin
+→ Manage documents and knowledge
+
+Reviewer
+→ Approve content/knowledge
+
+Never allow ordinary content administrators to access API secrets unless explicitly authorized.
+
+40. KNOWLEDGE ADMINISTRATION
+Authorized administrators must be able to:
+
+Upload documents
+Add web sources
+Add knowledge
+Edit knowledge
+Review knowledge
+Approve knowledge
+Deprecate knowledge
+Archive knowledge
+Manage document versions
+Assign metadata
+Manage authorities
+Manage regulations
+Manage relationships
+Review source quality
+41. KNOWLEDGE GAP ENGINE
+Track questions the AI cannot confidently answer.
+
+Example:
+
+Question:
+What happens after X?
+
+Frequency:
+42
+
+Confidence:
+Low
+
+Knowledge Status:
+Missing
+
+Recommended Action:
+Create/update knowledge
+
+Admin should have a dashboard showing:
+
+Most unanswered questions
+Low-confidence questions
+Missing knowledge
+Frequently requested topics
+Source problems
+Outdated knowledge
+This becomes the continuous improvement engine for REOS.
+
+42. AI CONVERSATION ANALYTICS
+Track privacy-conscious analytics such as:
+
+Questions
+Languages
+Personas
+Intents
+Journeys
+Lifecycle stages
+Voice/text usage
+Knowledge usage
+Sources used
+Unanswered questions
+Knowledge gaps
+Navigation actions
+Product/service interest
+Do not unnecessarily store sensitive personal information.
+
+43. WEBSITE ANALYTICS
+The Admin dashboard should provide useful website analytics, depending on the existing analytics infrastructure.
+
+Potential metrics:
+
+Visitors
+Page views
+Popular pages
+Search activity
+AI usage
+AI questions
+Popular journeys
+Popular stakeholders
+Language usage
+Conversion events
+Navigation events
+Use privacy-conscious analytics.
+
+44. PRODUCT DISCOVERY
+The AI should recommend REOS products/services only when relevant.
+
+Example:
+
+User:
+
+Is there a digital platform that can help me manage this process?
+
+AI:
+
+There is a REOS solution relevant to this workflow. Would you like to explore it?
+
+Provide:
+
+Learn More
+Book a Demo
+Explore Product
+Do not turn every educational interaction into a sales pitch.
+
+45. WEBSITE NAVIGATION THROUGH AI
+The Assistant should eventually be capable of returning structured navigation actions.
+
+Examples:
+
+Show Developer Journey
+Open Construction Stage
+Open Approval Knowledge
+Show Relevant Authority
+Open Product Page
+
+The AI response can contain:
+
+{
+  "type": "navigation",
+  "route": "/developer-journey",
+  "label": "Open Developer Journey"
+}
+
+Natural-language responses remain primary.
+
+Structured actions allow the UI to react appropriately.
+
+46. VOICE ARCHITECTURE
+Voice must use the same conversation engine.
+
+Microphone
+ ↓
+Speech-to-Text
+ ↓
+Language Detection
+ ↓
+Conversation Engine
+ ↓
+Knowledge Retrieval
+ ↓
+Grounded AI
+ ↓
+Text-to-Speech
+ ↓
+Voice Output
+
+Arabic:
+
+Arabic Speech
+ ↓
+Arabic STT
+ ↓
+Canonical Context
+ ↓
+Knowledge Retrieval
+ ↓
+Arabic Response
+ ↓
+Arabic TTS
+
+Do not create a separate Arabic AI system.
+
+47. SECURITY
+Implement:
+
+Authentication
+RBAC
+Public/private document classification
+Secure document access
+API authentication
+Rate limiting
+Prompt injection protection
+Retrieval filtering
+Tool permissions
+Audit logs
+Secret management
+Input validation
+Secure storage
+Data retention policies
+Never expose private documents through public AI responses.
+
+48. PROMPT INJECTION PROTECTION
+Treat uploaded documents and external website content as untrusted information.
+
+Retrieved content must never override system instructions.
+
+Maintain a clear separation between:
+
+System Instructions
+User Input
+REOS Configuration
+Retrieved Knowledge
+External Content
+Tool Results
+
+Retrieved documents are evidence, not instructions.
+
+49. TOOL / ACTION ARCHITECTURE
+The Assistant may eventually use tools such as:
+
+Search Knowledge
+Search Documents
+Get Stakeholder
+Get Journey
+Get Lifecycle Stage
+Get Process
+Get Authority
+Get Regulation
+Find Service
+Find Product
+Search Website
+Navigate
+
+Tools must be:
+
+Explicitly defined
+Permission controlled
+Validated
+Audited
+Server-side where appropriate
+The AI must never have unrestricted access to application functionality.
+
+50. API-FIRST DESIGN
+The website UI must not become the source of truth for knowledge.
+
+Create service boundaries around:
+
+Knowledge
+Stakeholders
+Personas
+Journeys
+Lifecycle
+Lifecycle Stages
+Processes
+Authorities
+Regulations
+Documents
+Sources
+Services
+Products
+Relationships
+
+The exact APIs do not all need to be publicly exposed in V1.
+
+Design the internal architecture so they can become available later.
+
+51. FUTURE MCP
+MCP is a future integration layer.
+
+Do not make public MCP a V1 requirement.
+
+However, design the Knowledge Services so future MCP tools can expose capabilities such as:
+
+search_knowledge
+get_stakeholder
+get_journey
+get_lifecycle
+get_lifecycle_stage
+get_process
+get_authority
+get_regulation
+get_document
+get_service
+get_product
+
+MCP must consume the same governed REOS knowledge.
+
+Do not create a separate MCP knowledge base.
+
+52. DATA MODEL
+Design normalized entities for at least:
+
+User
+AdminUser
+Role
+Permission
+
+Persona
+Stakeholder
+
+Lifecycle
+LifecycleStage
+
+Journey
+JourneyStage
+
+Process
+SubProcess
+
+Authority
+Regulation
+Jurisdiction
+
+Document
+DocumentVersion
+DocumentChunk
+
+KnowledgeItem
+KnowledgeSource
+Source
+
+Organisation
+Location
+
+Service
+Product
+
+Relationship
+FAQ
+Terminology
+
+Content
+ContentVersion
+Media
+MediaVersion
+
+Conversation
+ConversationMessage
+ConversationContext
+
+AIInteraction
+AIProvider
+AIModel
+AIConfiguration
+
+KnowledgeGap
+Feedback
+
+AuditLog
+
+Reuse existing REOS data models where appropriate.
+
+Do not duplicate existing entities.
+
+53. DOCUMENT STORAGE
+Actual documents must be stored separately from extracted content and vector indexes.
+
+Conceptually:
+
+Original Document
+       ↓
+Object Storage
+       ↓
+Document Metadata
+       ↓
+Extracted Content
+       ↓
+Chunks
+       ↓
+Embeddings
+       ↓
+Search Index
+
+The original source must always remain accessible to authorized administrators.
+
+54. DATABASE PRINCIPLE
+PostgreSQL should remain the system of record where appropriate.
+
+Use PostgreSQL for:
+
+Structured knowledge
+Configuration
+Content
+Metadata
+Conversations
+Admin
+Permissions
+Relationships
+Audit logs
+Use vector/semantic search capabilities as an additional retrieval mechanism.
+
+Do not introduce multiple databases without a clear architectural reason.
+
+55. EXISTING TECHNOLOGY
+The existing REOS project may use:
+
+Next.js
+React
+TypeScript
+PostgreSQL
+Neon
+Vercel
+GitHub
+Continue using the existing technology where appropriate.
+
+Do not rewrite the project unnecessarily.
+
+First inspect what already exists.
+
+56. IMPLEMENTATION RULE
+Before writing production code:
+
+STEP 1 — INSPECT
+Inspect the entire existing repository.
+
+Understand:
+
+Next.js version
+React version
+TypeScript configuration
+PostgreSQL setup
+Neon configuration
+Vercel configuration
+Existing authentication
+Existing Admin
+Existing data models
+Existing APIs
+Existing pages
+Existing components
+Existing navigation
+Existing deployment
+Existing environment variables
+Existing AI functionality
+STEP 2 — ASSESS
+Produce an architecture assessment.
+
+Identify:
+
+What already exists
+What can be reused
+What should be modified
+What is missing
+What should not be changed
+STEP 3 — DESIGN
+Produce:
+
+AI Assistant architecture
+LLM provider abstraction
+Admin architecture
+CMS/content architecture
+Knowledge Engine architecture
+Document repository architecture
+RAG/retrieval architecture
+Database schema
+Security architecture
+API boundaries
+Future MCP boundary
+Implementation phases
+STEP 4 — IMPLEMENT
+Only after the architecture is understood should production implementation begin.
+
+Do not overwrite or break existing REOS functionality.
+
+57. MVP REQUIREMENTS
+The first production phase should include:
+
+AI
+AI Assistant
+Text
+English
+Arabic
+Persona detection
+Intent detection
+Journey detection
+Lifecycle detection
+Jurisdiction detection
+Conversation context
+RAG
+Structured knowledge
+Source citations
+Next-step guidance
+Knowledge
+PostgreSQL structured knowledge
+PDF ingestion
+Document repository
+Hybrid search
+Metadata filtering
+Document versioning
+Source governance
+Approved knowledge workflow
+Admin
+Admin authentication
+RBAC
+AI configuration
+Secure API key management
+Website content management
+Media management
+Document upload
+Knowledge management
+Source management
+Version management
+Analytics
+Knowledge gaps
+Website
+Dynamic content
+Dynamic images
+AI Assistant interface
+Basic AI navigation
+English/Arabic content support
+58. VOICE MVP
+Voice should be implemented if the selected speech services are ready and compatible with the architecture.
+
+If voice services are not ready:
+
+Build the voice interface and provider abstraction without redesigning the AI engine later.
+
+Voice must plug into the existing conversation pipeline.
+
+59. DO NOT OVER-ENGINEER V1
+Do NOT immediately implement:
+
+Full enterprise knowledge graph
+Complex multi-agent system
+Agent-to-agent communication
+Public MCP server
+Large microservice architecture
+Multiple databases without justification
+Fully autonomous AI agents
+Complex workflow automation
+Build clean boundaries.
+
+Implement progressively.
+
+60. REOS ACCEPTANCE TEST — BUYER
+Visitor:
+
+I want to buy a flat in Dubai.
+
+AI:
+
+Are you buying it to live in or as an investment?
+
+Visitor:
+
+Investment.
+
+AI identifies:
+
+Primary Persona = Buyer
+Secondary Persona = Investor
+Location = Dubai
+Intent = Purchase
+
+Visitor:
+
+I live in India.
+
+AI identifies:
+
+International Buyer / Investor
+
+Visitor:
+
+What should I do first?
+
+The AI must use all established context.
+
+The visitor must NOT repeat previous information.
+
+61. REOS ACCEPTANCE TEST — DEVELOPER
+Visitor:
+
+I want to become a developer.
+
+AI:
+
+Are you already operating a development company or exploring your first project?
+
+Visitor:
+
+My first project.
+
+AI identifies:
+
+Persona = Aspiring Developer
+Journey = Developer Journey
+Lifecycle = Pre-development
+
+Visitor:
+
+I don't have land.
+
+The AI should guide the user toward the relevant land/pre-development stage.
+
+62. REOS ACCEPTANCE TEST — ARABIC
+Visitor:
+
+أريد شراء شقة في دبي، من أين أبدأ؟
+
+The AI must:
+
+Detect Arabic
+Detect Dubai
+Identify buyer context
+Identify acquisition intent
+Retrieve relevant knowledge
+Respond in Arabic
+Maintain Arabic context
+Visitor:
+
+What about financing?
+
+The AI must understand that the question refers to the previously established Dubai property purchase.
+
+63. REOS ACCEPTANCE TEST — PERSONA CONTEXT
+Visitor:
+
+What happens after construction?
+
+If the visitor is a buyer:
+
+Provide the buyer perspective.
+
+If the visitor is a developer:
+
+Provide the developer perspective.
+
+If the visitor is a contractor:
+
+Provide the contractor perspective.
+
+If the visitor is a banker:
+
+Provide the banker perspective.
+
+Do not return a generic answer when sufficient context exists.
+
+64. REOS ACCEPTANCE TEST — REGULATION
+Visitor:
+
+What does the law say?
+
+The AI must determine:
+
+Jurisdiction
+Topic
+Authority
+Applicable regulation
+Current approved source
+Effective date
+If necessary, ask for clarification.
+
+Never invent a legal/regulatory answer.
+
+65. REOS ACCEPTANCE TEST — DOCUMENT UPDATE
+Administrator uploads:
+
+New Government Regulation.pdf
+
+The system must:
+
+Upload
+ ↓
+Extract
+ ↓
+Classify
+ ↓
+Assign metadata
+ ↓
+Identify version
+ ↓
+Show review status
+ ↓
+Administrator approves
+ ↓
+Index
+ ↓
+Publish
+ ↓
+AI retrieves new approved version
+
+The previous version must remain available for audit/history.
+
+66. REOS ACCEPTANCE TEST — LLM CHANGE
+Administrator changes:
+
+Current Provider:
+Azure OpenAI
+
+Current Model:
+Model A
+
+to:
+
+Provider:
+Future Open Source Provider
+
+Model:
+Model B
+
+The AI Assistant should continue operating without redesigning the application.
+
+The provider-specific implementation should remain isolated.
+
+67. REOS ACCEPTANCE TEST — WEBSITE CONTENT
+Administrator changes:
+
+Homepage Hero Title
+
+The updated content should appear on the website without requiring a developer to modify source code.
+
+The system should preserve appropriate content version history.
+
+68. REOS SUCCESS CRITERIA
+REOS is successful when a visitor can arrive with little or no knowledge of the property ecosystem and say:
+
+"This is my situation. Help me understand what I need to do."
+
+The AI should understand:
+
+WHO I AM
+
+WHAT I WANT
+
+WHERE I AM
+
+WHICH PROPERTY JOURNEY I AM ON
+
+WHERE I AM IN THE LIFECYCLE
+
+WHO ELSE IS INVOLVED
+
+WHAT INFORMATION I NEED
+
+WHAT DOCUMENTS ARE RELEVANT
+
+WHICH REGULATIONS OR AUTHORITIES MAY APPLY
+
+WHAT I SHOULD DO NEXT
+
+And it should answer using trusted, approved REOS knowledge.
+
+69. FINAL REOS PRODUCT DEFINITION
+REOS should ultimately become:
+
+ONE PROPERTY ECOSYSTEM AI ASSISTANT
+serving
+
+12 STAKEHOLDER GROUPS
+across
+
+THE COMPLETE PROPERTY DEVELOPMENT LIFECYCLE
+powered by
+
+ONE GOVERNED PROPERTY KNOWLEDGE ENGINE
+connected to
+
+ONE DOCUMENT & KNOWLEDGE REPOSITORY
+managed through
+
+ONE ADMINISTRATION PLATFORM
+and eventually exposed through
+
+WEBSITE + API + MCP + EXTERNAL AI ECOSYSTEMS
+with:
+
+AZURE OPENAI AS THE INITIAL LLM PROVIDER
+but:
+
+WITHOUT HARD-CODING REOS TO AZURE OPENAI
+The fundamental REOS architecture is:
+
+                 REOS
+                  │
+        ┌─────────┼─────────┐
+        ▼         ▼         ▼
+    WEBSITE       AI       ADMIN
+       │          │          │
+    CMS/Media   Assistant   Control
+                  │          │
+                  ▼          │
+             CONTEXT ENGINE  │
+                  │          │
+                  ▼          │
+          PROPERTY KNOWLEDGE │
+               ENGINE        │
+                  │          │
+        ┌─────────┼──────────┤
+        ▼         ▼          ▼
+   STRUCTURED   DOCUMENTS   SOURCES
+   KNOWLEDGE      /RAG
+        │         │
+        └────┬────┘
+             ▼
+       HYBRID RETRIEVAL
+             │
+       SOURCE VALIDATION
+             │
+        LLM ABSTRACTION
+             │
+       ┌─────┴─────┐
+       ▼           ▼
+  Azure OpenAI  Future LLM
+       │
+       ▼
+ GROUNDED RESPONSE
+       │
+  ┌────┼─────┐
+  ▼    ▼     ▼
+Answer Sources Next Step
+       │
+       ▼
+ Navigation / Tools
+       │
+       ▼
+ Future API / MCP
+
+CORE PRINCIPLE
+Do not build a chatbot. Build the AI intelligence layer of REOS.
+
+Do not hard-code the LLM. Make Azure OpenAI the first provider.
+
+Do not hard-code website content. Make the website administratively manageable.
+
+Do not treat uploaded documents as immediately trusted. Use review, approval and versioning.
+
+Do not treat the vector database as the source of truth. Preserve original documents and trace every important AI answer back to its source.
+
+Do not let the AI invent regulatory information. Use governed, approved and current knowledge.
+
+Build the architecture once, then continuously improve REOS through its Admin, Knowledge and AI management capabilities.

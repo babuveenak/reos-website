@@ -42,6 +42,8 @@
     "db",
     "drizzle",
     "examples",
+    "output",
+    "tmp",
     "worker",
     "vite.config.ts",
     "drizzle.config.ts"
