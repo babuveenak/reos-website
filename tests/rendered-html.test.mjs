@@ -29,33 +29,34 @@ test("Home explains the journey while Platform owns the licensed-product proposi
   assert.match(home, /REOS maps the UAE property journey/);
   assert.doesNotMatch(home, /Explore licensed REOS products|home-product-grid|ProductMaturityBadge|Request a Demo/);
   assert.doesNotMatch(home, /apply it through governed, licensed REOS products/);
-  assert.match(platform, /REOS PRODUCT PLATFORM/);
-  assert.match(platform, /sales-hero-proof/);
+  assert.match(platform, /REOS PROPERTY OPERATING SYSTEM/);
+  assert.match(platform, /Request Title Deed Demo/);
   assert.match(platform, /ProductMaturityBadge/);
 });
 
 test("Platform commercial redesign sells governed products without overstating planned capabilities", async () => {
   const source = await readFile(new URL("../app/platform/page.tsx", import.meta.url), "utf8");
   const experience = await readFile(new URL("../app/components/PlatformProductExperience.tsx", import.meta.url), "utf8");
+  const lifecycle = await readFile(new URL("../app/components/PlatformLifecycleExplorer.tsx", import.meta.url), "utf8");
   const productData = await readFile(new URL("../app/data/products.ts", import.meta.url), "utf8");
   assert.match(source, /The Operating System/);
-  assert.match(source, /for Property Development/);
-  for (const stage of ["Plot", "Project", "Unit", "Sales", "Handover", "Title Deed", "NOC", "Resale", "Cancellation", "Operations"]) assert.match(source, new RegExp(`"${stage}"`));
+  assert.match(source, /for Modern Property Development/);
+  for (const stage of ["Plot", "Project", "Unit", "Sales", "Handover", "Title Deed", "NOC", "Resale", "Cancellation", "Operations"]) assert.match(lifecycle, new RegExp(`name: "${stage}"`));
   for (const product of ["Title Deed Automation", "NOC Automation"]) assert.match(productData, new RegExp(product));
-  for (const product of ["Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Hub"]) assert.match(source, new RegExp(product));
-  assert.match(source, /Two products have published maturity states/);
+  for (const product of ["Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Layer"]) assert.match(source, new RegExp(product));
+  assert.match(source, /Five planned capabilities/);
   assert.match(source, /Planned capability; scope, integrations and availability require validation/);
   assert.equal((source.match(/ProductMaturityBadge maturity="Coming Soon"/g) ?? []).length, 1, "one mapped planned-product template governs all four planned capabilities");
   assert.match(source, /BeforeAfterWorkflow/);
   assert.match(source, /PlatformScreenGallery/);
   assert.match(source, /GOVERNANCE ENGINE/);
   assert.match(source, /MEASURABLE BUSINESS VALUE/);
-  assert.match(source, /Traditional Property Operations/);
+  assert.match(source, /FROM FRAGMENTATION TO CONTROL/);
   assert.match(source, /href=\{L\("\/trust-centre"\)\}/);
   assert.match(source, /href=\{L\("\/platform\/evaluation"\)\}/);
   assert.doesNotMatch(source, /TransformationOpportunity|HowReosWorks|EnterpriseAssurancePreview|ExecutiveSelfAssessment/);
   for (const screen of ["Title Deed", "NOC", "Unit Cancellation", "Workflow Approval", "Customer Journey", "Governance Monitoring"]) assert.match(experience, new RegExp(screen));
-  assert.match(experience, /Concept preview only\. Scope, integration and availability require validation/);
+  assert.match(experience, /Concept Experience only\. Scope, integration and availability require validation/);
 });
 
 test("approved homepage simplification removes duplicated depth and uses canonical product evidence", async () => {
@@ -158,25 +159,22 @@ test("the demo CTA belongs to Platform while educational routes remain focused",
     const html = await (await render(path)).text();
     assert.doesNotMatch(html, /href="\/demo"/, `${path} should not link to the demo`);
   }
-  assert.match(await (await render("/platform")).text(), /href="\/demo"/);
+  assert.match(await (await render("/platform")).text(), /href="\/demo(?:\?|\")/);
 });
 
 test("platform is a licensed product catalogue with separate access gateways", async () => {
   const html = await (await render("/platform")).text();
-  assert.match(html, /Automate property workflows/);
+  assert.match(html, /Connect property workflows/);
   assert.match(html, /Title Deed Automation/);
   assert.match(html, /NOC Automation/);
-  assert.match(html, /B2B/);
-  assert.match(html, /B2G/);
-  assert.match(html, /B2C/);
   assert.match(html, /href="\/platform\/products\/title-deed-automation\/login"/);
-  assert.match(html, /href="\/platform\/products\/noc-automation\/login"/);
+  assert.doesNotMatch(html, /href="\/platform\/products\/noc-automation\/login"/, "Coming Soon capability must not expose login from Platform");
   assert.match(html, /Illustrative product preview/i);
   assert.match(html, /Before REOS/);
   assert.match(html, /With REOS/);
   assert.match(html, /AI-assisted/);
-  assert.match(html, /Request a demo/);
-  assert.match(html, /official systems retain their required authority/i);
+  assert.match(html, /Request Title Deed Demo/);
+  assert.match(html, /official systems and authorized people retain authority/i);
   assert.doesNotMatch(html, /Eight modules/);
 
   for (const slug of ["title-deed-automation", "noc-automation"]) {
@@ -192,8 +190,8 @@ test("platform is a licensed product catalogue with separate access gateways", a
 
 test("platform creates transformation urgency without changing the frozen operating architecture", async () => {
   const html = await (await render("/platform")).text();
-  assert.match(html, /Traditional Property Operations/);
-  for (const currentState of ["Email chains", "Excel trackers", "Manual approvals", "Missing visibility", "Disconnected systems", "Delayed NOCs", "Delayed title deeds", "Customer frustration"]) assert.match(html, new RegExp(currentState, "i"));
+  assert.match(html, /FROM FRAGMENTATION TO CONTROL/);
+  for (const currentState of ["Scattered evidence", "Unclear ownership", "Late exceptions", "Fragmented history"]) assert.match(html, new RegExp(currentState, "i"));
   assert.match(html, /One Workflow/);
   assert.match(html, /One Truth/);
   assert.match(html, /Before REOS/);
@@ -205,12 +203,12 @@ test("platform creates transformation urgency without changing the frozen operat
 test("final Platform optimization closes the remaining executive findings", async () => {
   const html = await (await render("/platform")).text();
   assert.match(html, /The Operating System/);
-  assert.match(html, /for Property Development/);
-  for (const product of ["Title Deed Automation", "NOC Automation", "Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Hub"]) assert.match(html, new RegExp(product));
+  assert.match(html, /for Modern Property Development/);
+  for (const product of ["Title Deed Automation", "NOC Automation", "Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Layer"]) assert.match(html, new RegExp(product));
   assert.match(html, /PLATFORM EXPERIENCE/);
   assert.match(html, /GOVERNANCE ENGINE/);
   assert.match(html, /MEASURABLE BUSINESS VALUE/);
-  assert.match(html, /href="\/demo"/);
+  assert.match(html, /href="\/demo(?:\?|\")/);
 });
 
 test("critical governance uses one operating model and one maturity vocabulary", async () => {

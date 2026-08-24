@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReosProduct } from "../data/products";
 import { ProductMaturityBadge } from "./Governance";
+import { platformScreenEvent } from "./PlatformLifecycleExplorer";
 
 type ProductAccess = ReosProduct & { accessHref: string };
 
@@ -167,6 +168,7 @@ function ProductDashboard({ preview, product }: { preview: ProductPreview; produ
                 ))}
               </div>
               <aside className="sales-next-action"><small>RECOMMENDED NEXT ACTION</small><p>{preview.nextAction}</p><button type="button">Prepare request <span>→</span></button></aside>
+              <div className="sales-case-activity"><span><small>RECENT ACTIVITY</small><b>Evidence review updated</b></span><span><small>AUDIT HISTORY</small><b>Owner and change recorded</b></span></div>
             </section>
           </div>
         </main>
@@ -213,24 +215,33 @@ export function BeforeAfterWorkflow() {
 }
 
 const screenViews = {
-  title: { label: "Title Deed", maturity: "Early Access", title: "Registration readiness", copy: "Track party, property and evidence checks before a case progresses.", metric: "4 of 6 checks ready", rows: [["Party identity & authority", "Verified", "Registration team"], ["Property record", "Verified", "Registration team"], ["Seller authority evidence", "Action required", "Case owner"]] },
-  noc: { label: "NOC", maturity: "Coming Soon", title: "Clearance coordination", copy: "Resolve the issuer, prerequisites and supporting evidence in one case context.", metric: "5 of 7 checks ready", rows: [["NOC type & purpose", "Confirmed", "Approvals team"], ["Issuer & jurisdiction", "Resolved", "Approvals team"], ["Supporting drawing", "Revision needed", "Consultant"]] },
+  title: { label: "Title Deed", maturity: "Early Access", title: "Registration readiness", copy: "Track party, property and evidence checks before a case progresses.", metric: "Evidence review", rows: [["Party identity & authority", "Verified", "Registration team"], ["Property record", "Verified", "Registration team"], ["Seller authority evidence", "Action required", "Case owner"]] },
+  noc: { label: "NOC", maturity: "Concept Experience · Coming Soon", title: "Clearance coordination", copy: "Resolve the issuer, prerequisites and supporting evidence in one case context.", metric: "Concept workflow", rows: [["NOC type & purpose", "Confirmed", "Approvals team"], ["Issuer & jurisdiction", "Resolved", "Approvals team"], ["Supporting drawing", "Revision needed", "Consultant"]] },
   cancellation: { label: "Unit Cancellation", maturity: "Concept · Coming Soon", title: "Controlled cancellation case", copy: "Illustrative concept for approval, refund evidence and inventory-release coordination.", metric: "Concept workflow", rows: [["Cancellation request", "Captured", "Customer operations"], ["Commercial review", "Pending", "Finance"], ["Inventory release", "Blocked", "Authorized owner"]] },
-  approval: { label: "Workflow Approval", maturity: "Illustrative pattern", title: "Decision workspace", copy: "Review the action, evidence, authority and downstream consequence together.", metric: "2 decisions pending", rows: [["Evidence completeness", "Ready", "Reviewer"], ["Authority boundary", "Confirmed", "Process owner"], ["Approval decision", "Pending", "Authorized approver"]] },
+  approval: { label: "Workflow Approval", maturity: "Concept Experience · Coming Soon", title: "Decision workspace", copy: "Review the action, evidence, authority and downstream consequence together.", metric: "Concept workflow", rows: [["Evidence completeness", "Ready", "Reviewer"], ["Authority boundary", "Confirmed", "Process owner"], ["Approval decision", "Pending", "Authorized approver"]] },
   customer: { label: "Customer Journey", maturity: "Concept · Coming Soon", title: "Handover visibility", copy: "Illustrative concept for inspections, snagging, acceptance and key release.", metric: "3 of 5 gates ready", rows: [["Inspection", "Scheduled", "Handover team"], ["Snag resolution", "In progress", "Contractor"], ["Customer acceptance", "Waiting", "Property owner"]] },
-  governance: { label: "Governance Monitoring", maturity: "Illustrative pattern", title: "Operational control view", copy: "See case state, ownership, exceptions and boundary-sensitive actions across the workflow.", metric: "3 exceptions need review", rows: [["Cases waiting on evidence", "Watch", "Operations"], ["Overdue handoffs", "Review", "Process owner"], ["Authority decisions", "External boundary", "Executive"]] },
+  governance: { label: "Governance Monitoring", maturity: "Concept Experience · Coming Soon", title: "Operational control view", copy: "See case state, ownership, exceptions and boundary-sensitive actions across the workflow.", metric: "Concept workflow", rows: [["Cases waiting on evidence", "Watch", "Operations"], ["Overdue handoffs", "Review", "Process owner"], ["Authority decisions", "External boundary", "Executive"]] },
 } as const;
 
 export function PlatformScreenGallery() {
   const [screen, setScreen] = useState<keyof typeof screenViews>("title");
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    function selectRequestedScreen(event: Event) {
+      const key = (event as CustomEvent).detail as keyof typeof screenViews;
+      if (key in screenViews) { setScreen(key); requestAnimationFrame(() => headingRef.current?.focus()); }
+    }
+    window.addEventListener(platformScreenEvent, selectRequestedScreen);
+    return () => window.removeEventListener(platformScreenEvent, selectRequestedScreen);
+  }, []);
   const view = screenViews[screen];
-  return <div className="platform-screen-gallery">
+  return <div className="platform-screen-gallery" id="platform-screen-gallery">
     <div className="platform-screen-tabs" role="tablist" aria-label="Select an illustrative REOS platform screen">
       {(Object.keys(screenViews) as Array<keyof typeof screenViews>).map((key) => <button key={key} type="button" role="tab" aria-selected={screen === key} className={screen === key ? "is-active" : ""} onClick={() => setScreen(key)}>{screenViews[key].label}</button>)}
     </div>
     <div className="platform-screen-frame" key={screen} aria-live="polite">
       <header><span><b>REOS</b><small>Illustrative product preview</small></span><i>{view.maturity}</i></header>
-      <div className="platform-screen-body"><nav aria-label="Illustrative screen navigation"><span className="is-active">Overview</span><span>Cases</span><span>Evidence</span><span>Decisions</span><span>Audit</span></nav><main><div className="platform-screen-heading"><div><small>{view.label.toUpperCase()}</small><h3>{view.title}</h3><p>{view.copy}</p></div><strong>{view.metric}</strong></div><div className="platform-screen-kpis" aria-label="Illustrative workflow indicators"><span><small>Current status</small><b>{view.rows[0][1]}</b></span><span><small>Workflow stage</small><b>Evidence review</b></span><span><small>Approver</small><b>{view.rows[0][2]}</b></span><span><small>Open tasks</small><b>03</b></span></div><section>{view.rows.map(([item, state, owner], index) => <article key={item}><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b><i>{state}</i><small>{owner}</small></article>)}</section><div className="platform-screen-audit"><div><small>WORKFLOW TIMELINE</small><ol><li className="is-complete">Case opened</li><li className="is-complete">Evidence assembled</li><li>Approval review</li><li>Outcome recorded</li></ol></div><div><small>RECENT ACTIVITY</small><p><b>09:42</b> Evidence check updated</p><p><b>09:18</b> Review assigned</p><p><b>08:55</b> Supporting document received</p></div></div><aside><small>PRODUCT BOUNDARY</small><p>{view.maturity.includes("Concept") ? "Concept preview only. Scope, integration and availability require validation." : "REOS coordinates work and evidence; authorized people and official systems retain decision authority."}</p></aside></main></div>
+      <div className="platform-screen-body"><nav aria-label="Illustrative screen navigation"><span className="is-active">Overview</span><span>Cases</span><span>Evidence</span><span>Decisions</span><span>Audit</span></nav><main><div className="platform-screen-heading"><div><small>{view.label.toUpperCase()}</small><h3 ref={headingRef} tabIndex={-1}>{view.title}</h3><p>{view.copy}</p></div><strong>{view.metric}</strong></div><div className="platform-screen-kpis" aria-label="Illustrative workflow indicators"><span><small>Current status</small><b>{view.rows[0][1]}</b></span><span><small>Workflow stage</small><b>Evidence review</b></span><span><small>Responsible role</small><b>{view.rows[0][2]}</b></span><span><small>Data state</small><b>Demonstration only</b></span></div><section>{view.rows.map(([item, state, owner], index) => <article key={item}><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b><i>{state}</i><small>{owner}</small></article>)}</section><div className="platform-screen-audit"><div><small>WORKFLOW TIMELINE</small><ol><li className="is-complete">Case opened</li><li className="is-complete">Evidence assembled</li><li>Approval review</li><li>Outcome recorded</li></ol></div><div><small>RECENT ACTIVITY · ILLUSTRATIVE</small><p><b>01</b> Evidence check updated</p><p><b>02</b> Review assigned</p><p><b>03</b> Supporting document received</p></div></div><aside><small>PRODUCT BOUNDARY</small><p>{view.maturity.includes("Concept") ? "Concept Experience only. Scope, integration and availability require validation; this is not a live operational product." : "REOS coordinates work and evidence; authorized people and official systems retain decision authority."}</p></aside></main></div>
     </div>
   </div>;
 }
