@@ -34,6 +34,29 @@ test("Home explains the journey while Platform owns the licensed-product proposi
   assert.match(platform, /ProductMaturityBadge/);
 });
 
+test("Platform commercial redesign sells governed products without overstating planned capabilities", async () => {
+  const source = await readFile(new URL("../app/platform/page.tsx", import.meta.url), "utf8");
+  const experience = await readFile(new URL("../app/components/PlatformProductExperience.tsx", import.meta.url), "utf8");
+  const productData = await readFile(new URL("../app/data/products.ts", import.meta.url), "utf8");
+  assert.match(source, /The Operating System/);
+  assert.match(source, /for Modern Property Development/);
+  for (const stage of ["Plot", "Project", "Unit", "Sales", "Handover", "Title Deed", "NOC", "Resale", "Cancellation", "Operations"]) assert.match(source, new RegExp(`"${stage}"`));
+  for (const product of ["Title Deed Automation", "NOC Automation"]) assert.match(productData, new RegExp(product));
+  for (const product of ["Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Layer"]) assert.match(source, new RegExp(product));
+  assert.match(source, /Two products have published maturity states/);
+  assert.match(source, /Planned capability; scope, integrations and availability require validation/);
+  assert.equal((source.match(/ProductMaturityBadge maturity="Coming Soon"/g) ?? []).length, 1, "one mapped planned-product template governs all four planned capabilities");
+  assert.match(source, /BeforeAfterWorkflow/);
+  assert.match(source, /PlatformScreenGallery/);
+  assert.match(source, /GOVERNANCE ENGINE/);
+  assert.match(source, /BUSINESS OUTCOMES/);
+  assert.match(source, /href=\{L\("\/trust-centre"\)\}/);
+  assert.match(source, /href=\{L\("\/platform\/evaluation"\)\}/);
+  assert.doesNotMatch(source, /TransformationOpportunity|HowReosWorks|EnterpriseAssurancePreview|ExecutiveSelfAssessment/);
+  for (const screen of ["Title Deed", "NOC", "Unit Cancellation", "Workflow Approval", "Customer Journey", "Governance Monitoring"]) assert.match(experience, new RegExp(screen));
+  assert.match(experience, /Concept preview only\. Scope, integration and availability require validation/);
+});
+
 test("approved homepage simplification removes duplicated depth and uses canonical product evidence", async () => {
   const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
 
@@ -162,7 +185,7 @@ test("platform is a licensed product catalogue with separate access gateways", a
     assert.match(gatewayHtml, /PRODUCT ACCESS GATEWAY/);
     assert.match(gatewayHtml, /active licence/);
     assert.match(gatewayHtml, /Product authentication and subscription entitlements are not connected/);
-    assert.match(gatewayHtml, /href="\/platform#product-catalogue"/);
+    assert.match(gatewayHtml, /href="\/platform#product-suite"/);
   }
 });
 

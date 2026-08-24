@@ -15,7 +15,7 @@ export function ProductLoginView({ locale = DEFAULT_LOCALE, slug }: { locale?: L
   return <Page className="product-login-page" locale={locale}>
     <section className="product-login-shell">
       <div className="product-login-context">
-        <Link className="context-back-link" href={L("/platform#product-catalogue")}>← Back to REOS products</Link>
+        <Link className="context-back-link" href={L("/platform#product-suite")}>← Back to REOS products</Link>
         <span className="eyebrow">REOS LICENSED PRODUCT {String(product.number).padStart(2, "0")}</span>
         <h1>{product.name}</h1>
         <p>{product.outcome}</p>

@@ -1,189 +1,58 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PersonaProductDemo, PlatformHeroPreview, ProductWorkflowDemo } from "../components/PlatformProductExperience";
+import { BeforeAfterWorkflow, PlatformHeroPreview, PlatformScreenGallery, ProductWorkflowDemo } from "../components/PlatformProductExperience";
 import { Page, SectionIntro } from "../components/SiteShell";
 import { products } from "../data/products";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
-import { HowReosWorks, ProductMaturityBadge, ProductMaturityLegend } from "../components/Governance";
-import { EnterpriseAssurancePreview } from "../components/EnterpriseReadiness";
-import { TransformationOpportunity } from "../components/TransformationOpportunity";
-import { executiveOutcomes } from "../data/transformation";
+import { ProductMaturityBadge, ProductMaturityLegend } from "../components/Governance";
 
-export const metadata: Metadata = {
-  title: "Property Transformation & Workflow Platform | REOS",
-  description: "See how REOS connects property stakeholders, evidence, accountability and workflow through one operating model, then explore licensed workflow products.",
-};
+export const metadata: Metadata = { title: "Property Workflow Products & Operating System | REOS", description: "Explore governed REOS property workflow products across the development lifecycle." };
 
-const stakeholderGroups = [
-  "Landowners & Investors", "Developers", "Consultants & Designers", "Authorities & Regulators",
-  "Utility Providers", "Contractors", "Suppliers & Vendors", "Brokers & Agencies",
-  "Banks & Financial Institutions", "Property Owners", "Residents & Tenants", "Facility & Community Operators",
-];
+const lifecycle = [
+  ["01", "Plot", "Development", "Establish land and ownership context", "Land and authority records"], ["02", "Project", "Development", "Coordinate readiness and approvals", "Project and planning systems"],
+  ["03", "Unit", "Development", "Create the controlled unit record", "Development systems"], ["04", "Sales", "Commercial", "Connect buyer, unit, terms and evidence", "CRM and sales systems"],
+  ["05", "Handover", "Customer operations", "Prepare inspection, evidence and acceptance", "Handover systems"], ["06", "Title Deed", "Registration", "Prepare registration-ready evidence", "Authorized registry"],
+  ["07", "NOC", "Approvals", "Resolve prerequisites and issuer requirements", "Authorized issuer"], ["08", "Resale", "Transactions", "Coordinate ownership and clearance readiness", "Transaction systems"],
+  ["09", "Cancellation", "Commercial governance", "Control approvals, refunds and inventory release", "Finance and sales systems"], ["10", "Operations", "Community operations", "Connect service, occupancy and asset context", "Property systems"],
+] as const;
 
-const capabilities = [
-  ["01", "Case orchestration", "Turn a multi-party process into a controlled sequence of states, owners, actions and handoffs."],
-  ["02", "Evidence readiness", "Know which documents are required, current, verified, missing or blocking the next step."],
-  ["03", "Stakeholder workspace", "Give each participant the right case context without losing one shared operational record."],
-  ["04", "Rules-aware routing", "Apply the selected process, jurisdiction, issuer and prerequisites to the work in front of the team."],
-  ["05", "Approvals & dependencies", "Connect clarifications, clearances, decisions and downstream work to the case that caused them."],
-  ["06", "Audit & control", "Preserve ownership, timestamps, evidence versions and decision history for later review."],
-];
+const plannedProducts = [
+  ["03", "Unit Cancellation", "Sales & inventory", "Control cancellation requests, approvals, refund evidence, inventory release and decision history.", "Developers · Finance · Sales operations"],
+  ["04", "Customer Handover", "Customer operations", "Coordinate inspections, snagging, handover evidence, customer acceptance and key release.", "Developers · Owners · Community operators"],
+  ["05", "AI Document Intelligence", "Evidence readiness", "Planned document classification, extraction, completeness review and exception guidance within governed workflows.", "Operations · Reviewers · Compliance teams"],
+  ["06", "Enterprise Integration Layer", "Orchestration", "Planned adapters and workflow orchestration across approved enterprise and authority boundaries.", "Enterprise IT · Operations · Authorized parties"],
+] as const;
 
-const useCases = [
-  ["Developers", "Coordinate registration, NOC and handover workflows across internal teams, consultants and external parties."],
-  ["Agencies & brokers", "See case readiness, outstanding customer evidence and the next party responsible for progression."],
-  ["Authorities & regulated providers", "Receive more structured submissions and keep clarifications connected to the original request."],
-  ["Owners & residents", "Understand what is required, what has been submitted and what must happen before the next milestone."],
-];
+const stakeholderValue = [
+  ["Developers", "Fragmented project-to-customer handoffs", "Coordinate lifecycle cases and evidence"], ["Authorities", "Unstructured or incomplete submissions", "Receive clearer, traceable case context"],
+  ["Agencies", "Limited transaction readiness visibility", "See requirements, status and next owner"], ["Property owners", "Unclear progress and responsibilities", "Follow a guided, visible case journey"],
+  ["Investors", "Portfolio information spread across teams", "Review governed operational context"], ["Banks", "Evidence and dependency uncertainty", "Understand case readiness and boundaries"],
+  ["Consultants", "Repeated clarification and document chasing", "Work from shared requirements and versions"], ["Contractors", "Disconnected approvals and delivery evidence", "Connect actions to the correct project context"],
+  ["Community operators", "Handover and service records arrive late", "Prepare operational context earlier"],
+] as const;
+
+const governance = [["01", "Permissions", "Role and organization boundaries"], ["02", "Workflow", "Defined states, owners and handoffs"], ["03", "Evidence", "Documents connected to each case"], ["04", "Approvals", "Authorized review and decision paths"], ["05", "Audit", "Versions, actions and history"], ["06", "Integration", "Explicit system and authority boundaries"], ["07", "Governance", "Maturity, scope and acceptance controls"]] as const;
+const outcomes = [["Clear accountability", "Every active action has an owner, reason and next handoff."], ["Operational visibility", "Participants see the same case state and dependencies."], ["Earlier readiness", "Missing evidence can surface before the next critical gate."], ["Governed execution", "Actions and decisions remain connected to their supporting context."], ["Connected lifecycle", "Products operate within one property journey rather than isolated screens."], ["Audit confidence", "Evidence, versions and decisions remain reviewable through workflow history."]] as const;
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const L = (path: string) => localePath(locale, path);
   const productAccess = products.map((product) => ({ ...product, accessHref: L(`/platform/products/${product.slug}/login`) }));
-
   return <Page className="inner-page" locale={locale}>
-    <section className="sales-hero">
-      <div className="sales-hero-copy">
-        <span className="eyebrow">REOS PRODUCT PLATFORM · B2B · B2G · B2C</span>
-        <h1>Automate property workflows.<br /><em>Keep every party aligned.</em></h1>
-        <p><b>REOS is the UAE real estate operating system</b> that connects the Property Journey, participating Stakeholders, case evidence, responsibilities and licensed workflows through one governed operating model. Those licensed workflows are REOS products; official systems remain authoritative.</p>
-        <div className="hero-actions">
-          <Link className="button gold" href={L("/demo")}>Request a demo <span>↗</span></Link>
-          <Link className="button ghost" href="#transformation-opportunity">Why change now? <span>↓</span></Link>
-        </div>
-        <div className="sales-hero-proof" role="group" aria-label="REOS product roadmap">
-          {products.map((product) => <span key={product.slug}><i>{String(product.number).padStart(2, "0")}</i><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></span>)}
-        </div>
-      </div>
-      <PlatformHeroPreview products={productAccess} />
-    </section>
+    <section className="sales-hero platform-commercial-hero"><div className="sales-hero-copy"><span className="eyebrow">REOS PRODUCT PLATFORM · B2B · B2G · B2C</span><h1>The Operating System<br /><em>for Modern Property Development.</em></h1><p>REOS connects property workflows, stakeholders, evidence and decisions across the development lifecycle—then applies that operating model through governed, licence-controlled products.</p><div className="hero-actions"><Link className="button gold" href={L("/demo")}>Request a demo <span>↗</span></Link><Link className="button ghost" href="#product-suite">Explore products <span>↓</span></Link></div><div className="sales-hero-proof" role="group" aria-label="Published REOS products">{products.map((product) => <span key={product.slug}><i>{String(product.number).padStart(2, "0")}</i><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></span>)}</div></div><PlatformHeroPreview products={productAccess} /></section>
 
-    <HowReosWorks locale={locale} compact architecture />
+    <section className="section-pad platform-lifecycle" id="lifecycle"><SectionIntro label="THE PROPERTY LIFECYCLE" title={<>One operating layer.<br /><em>Across the asset lifecycle.</em></>} copy="REOS products connect specific workflows to the wider property context. Expand a stage to see its operating responsibility and system boundary." /><div className="platform-lifecycle-flow" aria-label="Property lifecycle coverage">{lifecycle.map(([number, name, owner, workflow, system], index) => <details key={name} open={index === 5}><summary><span>{number}</span><b>{name}</b><i>+</i></summary><dl><div><dt>Function</dt><dd>{owner}</dd></div><div><dt>Workflow</dt><dd>{workflow}</dd></div><div><dt>Boundary</dt><dd>{system}</dd></div></dl></details>)}</div></section>
 
-    <section className="sales-trust-strip" aria-label="REOS product principles">
-      <span><b>ONE CASE STATE</b><small>Across evidence, actions and decisions</small></span>
-      <span><b>ROLE-BASED WORK</b><small>For every participating stakeholder</small></span>
-      <span><b>PRODUCT LICENSING</b><small>By organization, product and entitlement</small></span>
-      <span><b>OFFICIAL SYSTEMS REMAIN AUTHORITATIVE</b><small>REOS coordinates the operational work</small></span>
-    </section>
+    <section className="section-pad platform-suite" id="product-suite"><SectionIntro label="REOS PRODUCT SUITE" title={<>Start with the workflow.<br /><em>Expand through one platform.</em></>} copy="Two products have published maturity states. Four planned capabilities show the suite direction and are not represented as operationally available." /><div className="platform-suite-grid">{productAccess.map((product) => <article key={product.slug} id={product.slug} className="is-published"><header><span>{String(product.number).padStart(2, "0")}</span><ProductMaturityBadge maturity={product.maturity} /></header><small>{product.category}</small><h3>{product.name}</h3><p>{product.summary}</p><dl><div><dt>For</dt><dd>{product.primaryBuyer}</dd></div><div><dt>Outcome</dt><dd>{product.workflowResult}</dd></div></dl><div className="platform-suite-actions"><Link href={product.accessHref}>View product gateway <span>↗</span></Link><Link href={`${L("/demo")}?product=${product.slug}`}>Request demo</Link></div></article>)}{plannedProducts.map(([number, name, category, copy, audience]) => <article key={name} className="is-planned"><header><span>{number}</span><ProductMaturityBadge maturity="Coming Soon" /></header><small>{category}</small><h3>{name}</h3><p>{copy}</p><dl><div><dt>Designed for</dt><dd>{audience}</dd></div><div><dt>Boundary</dt><dd>Planned capability; scope, integrations and availability require validation.</dd></div></dl><div className="platform-suite-actions"><Link href={`${L("/demo")}?intent=${encodeURIComponent(`Discuss planned capability: ${name}`)}`}>Discuss the use case <span>↗</span></Link></div></article>)}</div><ProductMaturityLegend /></section>
 
-    <TransformationOpportunity locale={locale} />
+    <section className="section-pad platform-before-after"><SectionIntro label="WHY REOS" title={<>From fragmented coordination.<br /><em>To one controlled case state.</em></>} copy="Compare how the work around a property process changes when evidence, ownership and handoffs are connected." /><BeforeAfterWorkflow /></section>
+    <section className="section-pad sales-how" id="product-experience"><SectionIntro label="HOW THE PRODUCTS WORK" title={<>From case opened.<br /><em>To outcome prepared.</em></>} copy="Step through the two published workflows. REOS guides and records the work; authorized people and official systems retain their required authority." /><ProductWorkflowDemo /></section>
+    <section className="section-pad platform-screens"><SectionIntro label="PLATFORM EXPERIENCE" title={<>See the work.<br /><em>Not a decorative promise.</em></>} copy="Explore illustrative product screens for case coordination, workflow review and governance. Concept screens are explicitly separated from published product maturity." /><PlatformScreenGallery /></section>
 
-    <section className="section-pad sales-solution">
-      <div className="sales-solution-copy">
-        <span className="eyebrow">THE REOS PRODUCT MODEL</span>
-        <h2>One operating model.<br /><em>A product for each workflow.</em></h2>
-        <p>Every REOS product applies the same controlled operating model to a specific property workflow. That makes the suite consistent for users—and extensible as new processes are added.</p>
-        <Link className="text-link" href={L("/ecosystem")}>See the Journey × Stakeholder model <span>↗</span></Link>
-      </div>
-      <div className="sales-solution-stack" role="group" aria-label="REOS product operating model">
-        <span><i>05</i><b>Official channels & systems of record</b><small>Submit, receive and reconcile authoritative outcomes</small></span>
-        <span><i>04</i><b>Stakeholder handoffs</b><small>Owners, roles, clarifications and dependencies</small></span>
-        <span><i>03</i><b>Evidence & decisions</b><small>Documents, checks, versions and approvals</small></span>
-        <span><i>02</i><b>Guided workflow</b><small>States, actions, rules and next steps</small></span>
-        <span><i>01</i><b>Shared case record</b><small>The operational source of truth for the work</small></span>
-      </div>
-    </section>
+    <section className="section-pad platform-stakeholder-value"><SectionIntro label="WHO USES REOS" title={<>Different responsibilities.<br /><em>One operating context.</em></>} copy="Each participant receives the context required for their role while shared workflow and authority boundaries stay protected." /><div>{stakeholderValue.map(([name, problem, benefit], index) => <article key={name}><span>{String(index + 1).padStart(2, "0")}</span><h3>{name}</h3><small>Current friction</small><p>{problem}</p><small>REOS value</small><p>{benefit}</p></article>)}</div><Link className="text-link" href={L("/stakeholders")}>Explore all 12 stakeholder groups <span>↗</span></Link></section>
 
-    <section className="section-pad sales-how" id="product-experience">
-      <SectionIntro label="HOW IT WORKS" title={<>From case opened<br /><em>to outcome prepared.</em></>} copy="Select a product, then step through the workflow. The product guides the work while people and official systems retain their required authority." />
-      <ProductWorkflowDemo />
-    </section>
-
-    <section className="section-pad sales-experience">
-      <SectionIntro label="THE PRODUCT EXPERIENCE" title={<>One workflow.<br /><em>The right view for each role.</em></>} copy="Operations, reviewers and executives need different levels of detail. REOS gives each role the context it needs without creating separate versions of the truth." />
-      <PersonaProductDemo />
-    </section>
-
-    <section className="section-pad sales-capabilities">
-      <SectionIntro label="CORE CAPABILITIES" title={<>Built for real<br /><em>property operations.</em></>} copy="The product experience is designed around the controls that multi-party property workflows actually need—not a generic task list." />
-      <div className="sales-capability-grid">
-        {capabilities.map(([number, title, copy], index) => <details key={title} open={index === 0}><summary><span>{number}</span><b>{title}</b><i aria-hidden="true">+</i></summary><p>{copy}</p></details>)}
-      </div>
-    </section>
-
-    <section className="sales-outcomes" aria-labelledby="operational-outcomes-title">
-      <div><span className="eyebrow">EXECUTIVE BUSINESS OUTCOMES</span><h2 id="operational-outcomes-title">What changes<br /><em>operationally?</em></h2><p>REOS is designed to reduce avoidable uncertainty in complex workflows—not by replacing required authority, but by making the work around it visible, structured and accountable.</p></div>
-      <div className="sales-outcome-grid">
-        {executiveOutcomes.map(([number, title, copy, question]) => <article key={title}><span>{number}</span><h3>{title}</h3><p>{copy}</p><small>EXECUTIVE QUESTION ENABLED</small><blockquote>{question}</blockquote></article>)}
-      </div>
-    </section>
-
-    <section className="section-pad sales-ai">
-      <div className="sales-ai-copy">
-        <span className="eyebrow">AI & AUTOMATION</span><h2>AI-assisted.<br /><em>Workflow-governed.</em></h2>
-        <p>REOS can help teams detect missing evidence, summarize case context and propose the next action. Recommendations stay grounded in the workflow, applicable rules and the evidence attached to the case.</p>
-        <ul>
-          <li><i>01</i><span><b>AI suggests</b><small>Completeness checks, exceptions, summaries and next-action guidance.</small></span></li>
-          <li><i>02</i><span><b>Authorized users decide</b><small>People retain responsibility for reviews, submissions and approvals.</small></span></li>
-          <li><i>03</i><span><b>Evidence stays connected</b><small>Every recommendation can be reviewed against the case context that produced it.</small></span></li>
-        </ul>
-      </div>
-      <div className="sales-ai-panel" role="group" aria-label="Illustrative REOS AI assistant preview">
-        <header><span><b>REOS ASSIST</b><small>Case readiness copilot</small></span><i>AI</i></header>
-        <div className="sales-ai-query"><small>CASE TD-1048 · READINESS CHECK</small><p>Can this case progress to registration review?</p></div>
-        <div className="sales-ai-response"><span>RECOMMENDATION</span><h3>Resolve two evidence gaps first.</h3><p>The party and property checks are ready. Seller authority evidence and the current clearance remain outstanding.</p><ol><li><i>!</i><span>Request seller authority evidence</span></li><li><i>!</i><span>Attach current clearance / NOC</span></li><li><i>→</i><span>Re-run readiness check</span></li></ol></div>
-        <footer>Illustrative product preview · Final decisions remain with authorized users and official systems.</footer>
-      </div>
-    </section>
-
-    <section className="section-pad sales-use-cases">
-      <SectionIntro label="WHO IT SERVES" title={<>One connected workflow.<br /><em>Value for every participant.</em></>} copy="Products can support B2B, B2G and B2C interactions while tailoring access to the role, organization and licensed service." />
-      <div className="sales-use-case-grid">{useCases.map(([title, copy], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{copy}</p></article>)}</div>
-      <details className="sales-all-stakeholders"><summary>View all 12 stakeholder groups <span>+</span></summary><div>{stakeholderGroups.map((group, index) => <span key={group}><i>{String(index + 1).padStart(2, "0")}</i>{group}</span>)}</div></details>
-    </section>
-
-    <section className="section-pad sales-why">
-      <div><span className="eyebrow">WHY REOS</span><h2>More than workflow software.<br /><em>A property operating system.</em></h2></div>
-      <div className="sales-why-grid">
-        <article><b>Journey-aware</b><p>Every product sits within the seven-stage property lifecycle, not an isolated transaction screen.</p></article>
-        <article><b>Stakeholder-aware</b><p>The operating model recognizes all twelve groups and the different responsibilities between them.</p></article>
-        <article><b>Evidence-aware</b><p>Actions, decisions and approvals remain connected to the documents and rules that support them.</p></article>
-        <article><b>Commercially modular</b><p>Organizations license the products, roles and service scope they need as the suite grows.</p></article>
-      </div>
-    </section>
-
-    <section className="section-pad platform-catalogue" id="product-catalogue">
-      <SectionIntro label="PRODUCT CATALOGUE" title={<>Start with one workflow.<br /><em>Expand through the suite.</em></>} copy="Each REOS product has a defined operational scope, participating stakeholders and its own licence-controlled access gateway." />
-      <div className="platform-product-grid sales-product-grid">
-        {productAccess.map((product) => <article key={product.slug} id={product.slug}>
-          <header><span>{String(product.number).padStart(2, "0")}</span><div><ProductMaturityBadge maturity={product.maturity} /><small>{product.maturityNote}</small></div></header>
-          <small>{product.category}</small><h3>{product.name}</h3><p>{product.summary}</p><blockquote>{product.outcome}</blockquote>
-          <div className="platform-market-tags">{product.markets.map((market) => <span key={market}>{market}</span>)}</div>
-          <dl><div><dt>Primary buyer</dt><dd>{product.primaryBuyer}</dd></div><div><dt>Built for</dt><dd>{product.stakeholders.join(" · ")}</dd></div><div><dt>Product scope</dt><dd>{product.capabilities.join(" · ")}</dd></div></dl>
-          <div className="sales-card-actions"><Link className="platform-product-access" href={product.accessHref}>View product gateway <span>↗</span></Link><Link className="platform-product-access" href={L("/demo")}>Request a demo <span>↗</span></Link></div>
-        </article>)}
-      </div>
-      <ProductMaturityLegend />
-    </section>
-
-    <section className="section-pad product-comparison-section">
-      <SectionIntro label="PRODUCT COMPARISON" title={<>Choose by workflow outcome.<br /><em>Evaluate by proof.</em></>} copy="The comparison keeps product maturity, buyer, outcome and authority boundary together so a catalogue choice cannot be mistaken for production readiness." />
-      <div className="product-comparison-table">
-        <table><thead><tr><th scope="col">Product</th><th scope="col">Workflow outcome</th><th scope="col">Primary buyer</th><th scope="col">Proof during evaluation</th><th scope="col">Authority boundary</th></tr></thead><tbody>{products.map((product) => <tr key={product.slug}><th scope="row"><b>{product.name}</b><ProductMaturityBadge maturity={product.maturity} /></th><td>{product.workflowResult}</td><td>{product.primaryBuyer}</td><td>{product.evaluationProof.join(" · ")}</td><td>{product.deploymentBoundary}</td></tr>)}</tbody></table>
-      </div>
-      <Link className="text-link product-comparison-action" href={L("/platform/evaluation")}>See the enterprise evaluation process <span>↗</span></Link>
-    </section>
-
-    <section className="section-pad enterprise-confidence">
-      <div><span className="eyebrow">ENTERPRISE BUYING CONFIDENCE</span><h2>A controlled path<br /><em>from evaluation to rollout.</em></h2><p>REOS separates product demonstration, commercial access and production readiness so buyers can evaluate the platform without mistaking a preview for a live service.</p></div>
-      <ol>
-        <li><span>01</span><b>Workflow discovery</b><p>Confirm the process, jurisdiction, participants and business outcome.</p></li>
-        <li><span>02</span><b>Scope & maturity</b><p>Select the product, maturity path and qualified customer cohort.</p></li>
-        <li><span>03</span><b>Data & integration review</b><p>Assess evidence sources, official channels, identity, retention and system boundaries.</p></li>
-        <li><span>04</span><b>Controls & acceptance</b><p>Agree roles, audit requirements, success measures and authorized decisions.</p></li>
-        <li><span>05</span><b>Pilot or rollout</b><p>Deploy only within the agreed licence, product and operational scope.</p></li>
-      </ol>
-      <p className="enterprise-boundary"><b>Current website boundary:</b> product screens are illustrative previews; authentication, subscriptions and production integrations are not connected.</p>
-      <div className="enterprise-confidence-actions"><Link className="button gold" href={L("/platform/evaluation")}>Plan an evaluation <span>↗</span></Link><Link className="button ghost" href={L("/trust-centre")}>Review enterprise controls</Link></div>
-    </section>
-
-    <EnterpriseAssurancePreview locale={locale} />
-
-    <section className="sales-final-cta">
-      <span className="eyebrow">SEE REOS IN YOUR WORKFLOW</span><h2>Bring us the process<br /><em>your team is chasing today.</em></h2>
-      <p>We’ll show how REOS can structure the case, evidence, responsibilities and handoffs—and discuss the right product and licence scope for your organization.</p>
-      <div className="hero-actions"><Link className="button gold" href={L("/demo")}>Request a scoped evaluation <span>↗</span></Link><Link className="button ghost" href={L("/platform/evaluation")}>See the buying process</Link></div>
-    </section>
+    <section className="section-pad platform-governance-engine"><div><span className="eyebrow">GOVERNANCE ENGINE</span><h2>Control built into<br /><em>the operating model.</em></h2><p>REOS coordinates workflow and evidence within declared boundaries. It does not replace the decisions of authorities, authorized users or systems of record.</p><div className="hero-actions"><Link className="button gold" href={L("/trust-centre")}>Review the Trust Centre <span>↗</span></Link><Link className="button ghost" href={L("/platform/evaluation")}>Plan an evaluation</Link></div></div><div className="platform-governance-grid">{governance.map(([number, title, copy]) => <article key={title}><span>{number}</span><b>{title}</b><p>{copy}</p></article>)}</div></section>
+    <section className="section-pad platform-business-outcomes"><SectionIntro label="BUSINESS OUTCOMES" title={<>What changes<br /><em>operationally?</em></>} copy="REOS is designed to make complex property work more visible, structured and accountable without unsupported performance claims." /><div>{outcomes.map(([title, copy], index) => <article key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{copy}</p></article>)}</div></section>
+    <section className="sales-final-cta"><span className="eyebrow">SEE REOS IN YOUR WORKFLOW</span><h2>Bring the process.<br /><em>See the operating model.</em></h2><p>Choose a product walkthrough or bring a workflow for a scoped evaluation. We will clarify maturity, boundaries, evidence and the next decision before any pilot commitment.</p><div className="hero-actions"><Link className="button gold" href={L("/demo")}>Request a demo <span>↗</span></Link><Link className="button ghost" href={L("/platform/evaluation")}>Explore the evaluation path</Link></div></section>
   </Page>;
 }
 

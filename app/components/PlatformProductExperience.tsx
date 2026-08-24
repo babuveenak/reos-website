@@ -212,6 +212,29 @@ export function BeforeAfterWorkflow() {
   );
 }
 
+const screenViews = {
+  title: { label: "Title Deed", maturity: "Early Access", title: "Registration readiness", copy: "Track party, property and evidence checks before a case progresses.", metric: "4 of 6 checks ready", rows: [["Party identity & authority", "Verified", "Registration team"], ["Property record", "Verified", "Registration team"], ["Seller authority evidence", "Action required", "Case owner"]] },
+  noc: { label: "NOC", maturity: "Coming Soon", title: "Clearance coordination", copy: "Resolve the issuer, prerequisites and supporting evidence in one case context.", metric: "5 of 7 checks ready", rows: [["NOC type & purpose", "Confirmed", "Approvals team"], ["Issuer & jurisdiction", "Resolved", "Approvals team"], ["Supporting drawing", "Revision needed", "Consultant"]] },
+  cancellation: { label: "Unit Cancellation", maturity: "Concept · Coming Soon", title: "Controlled cancellation case", copy: "Illustrative concept for approval, refund evidence and inventory-release coordination.", metric: "Concept workflow", rows: [["Cancellation request", "Captured", "Customer operations"], ["Commercial review", "Pending", "Finance"], ["Inventory release", "Blocked", "Authorized owner"]] },
+  approval: { label: "Workflow Approval", maturity: "Illustrative pattern", title: "Decision workspace", copy: "Review the action, evidence, authority and downstream consequence together.", metric: "2 decisions pending", rows: [["Evidence completeness", "Ready", "Reviewer"], ["Authority boundary", "Confirmed", "Process owner"], ["Approval decision", "Pending", "Authorized approver"]] },
+  customer: { label: "Customer Journey", maturity: "Concept · Coming Soon", title: "Handover visibility", copy: "Illustrative concept for inspections, snagging, acceptance and key release.", metric: "3 of 5 gates ready", rows: [["Inspection", "Scheduled", "Handover team"], ["Snag resolution", "In progress", "Contractor"], ["Customer acceptance", "Waiting", "Property owner"]] },
+  governance: { label: "Governance Monitoring", maturity: "Illustrative pattern", title: "Operational control view", copy: "See case state, ownership, exceptions and boundary-sensitive actions across the workflow.", metric: "3 exceptions need review", rows: [["Cases waiting on evidence", "Watch", "Operations"], ["Overdue handoffs", "Review", "Process owner"], ["Authority decisions", "External boundary", "Executive"]] },
+} as const;
+
+export function PlatformScreenGallery() {
+  const [screen, setScreen] = useState<keyof typeof screenViews>("title");
+  const view = screenViews[screen];
+  return <div className="platform-screen-gallery">
+    <div className="platform-screen-tabs" role="tablist" aria-label="Select an illustrative REOS platform screen">
+      {(Object.keys(screenViews) as Array<keyof typeof screenViews>).map((key) => <button key={key} type="button" role="tab" aria-selected={screen === key} className={screen === key ? "is-active" : ""} onClick={() => setScreen(key)}>{screenViews[key].label}</button>)}
+    </div>
+    <div className="platform-screen-frame" key={screen} aria-live="polite">
+      <header><span><b>REOS</b><small>Illustrative product preview</small></span><i>{view.maturity}</i></header>
+      <div className="platform-screen-body"><nav aria-label="Illustrative screen navigation"><span className="is-active">Overview</span><span>Cases</span><span>Evidence</span><span>Decisions</span><span>Audit</span></nav><main><div className="platform-screen-heading"><div><small>{view.label.toUpperCase()}</small><h3>{view.title}</h3><p>{view.copy}</p></div><strong>{view.metric}</strong></div><section>{view.rows.map(([item, state, owner], index) => <article key={item}><span>{String(index + 1).padStart(2, "0")}</span><b>{item}</b><i>{state}</i><small>{owner}</small></article>)}</section><aside><small>PRODUCT BOUNDARY</small><p>{view.maturity.includes("Concept") ? "Concept preview only. Scope, integration and availability require validation." : "REOS coordinates work and evidence; authorized people and official systems retain decision authority."}</p></aside></main></div>
+    </div>
+  </div>;
+}
+
 export function ProductWorkflowDemo() {
   const [productKey, setProductKey] = useState<keyof typeof workflows>("title");
   const [step, setStep] = useState(0);
