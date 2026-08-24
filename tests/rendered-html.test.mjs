@@ -13,9 +13,9 @@ test("renders the REOS homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Understand the property journey/);
-  assert.match(html, /From land to living/);
-  assert.match(html, /Start from/);
+  assert.match(html, /The operating system/);
+  assert.match(html, /for the UAE property journey/);
+  assert.match(html, /Start my journey/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
@@ -39,17 +39,18 @@ test("Platform commercial redesign sells governed products without overstating p
   const experience = await readFile(new URL("../app/components/PlatformProductExperience.tsx", import.meta.url), "utf8");
   const productData = await readFile(new URL("../app/data/products.ts", import.meta.url), "utf8");
   assert.match(source, /The Operating System/);
-  assert.match(source, /for Modern Property Development/);
+  assert.match(source, /for Property Development/);
   for (const stage of ["Plot", "Project", "Unit", "Sales", "Handover", "Title Deed", "NOC", "Resale", "Cancellation", "Operations"]) assert.match(source, new RegExp(`"${stage}"`));
   for (const product of ["Title Deed Automation", "NOC Automation"]) assert.match(productData, new RegExp(product));
-  for (const product of ["Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Layer"]) assert.match(source, new RegExp(product));
+  for (const product of ["Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Hub"]) assert.match(source, new RegExp(product));
   assert.match(source, /Two products have published maturity states/);
   assert.match(source, /Planned capability; scope, integrations and availability require validation/);
   assert.equal((source.match(/ProductMaturityBadge maturity="Coming Soon"/g) ?? []).length, 1, "one mapped planned-product template governs all four planned capabilities");
   assert.match(source, /BeforeAfterWorkflow/);
   assert.match(source, /PlatformScreenGallery/);
   assert.match(source, /GOVERNANCE ENGINE/);
-  assert.match(source, /BUSINESS OUTCOMES/);
+  assert.match(source, /MEASURABLE BUSINESS VALUE/);
+  assert.match(source, /Traditional Property Operations/);
   assert.match(source, /href=\{L\("\/trust-centre"\)\}/);
   assert.match(source, /href=\{L\("\/platform\/evaluation"\)\}/);
   assert.doesNotMatch(source, /TransformationOpportunity|HowReosWorks|EnterpriseAssurancePreview|ExecutiveSelfAssessment/);
@@ -175,7 +176,7 @@ test("platform is a licensed product catalogue with separate access gateways", a
   assert.match(html, /With REOS/);
   assert.match(html, /AI-assisted/);
   assert.match(html, /Request a demo/);
-  assert.match(html, /Official systems remain authoritative/i);
+  assert.match(html, /official systems retain their required authority/i);
   assert.doesNotMatch(html, /Eight modules/);
 
   for (const slug of ["title-deed-automation", "noc-automation"]) {
@@ -191,48 +192,25 @@ test("platform is a licensed product catalogue with separate access gateways", a
 
 test("platform creates transformation urgency without changing the frozen operating architecture", async () => {
   const html = await (await render("/platform")).text();
-  assert.match(html, /TRANSFORMATION OPPORTUNITY/);
-  assert.match(html, /The problem isn(?:&#x27;|')t one approval/);
-  assert.match(html, /It(?:&#x27;|')s the operating model around it/);
-  for (const currentState of ["Different spreadsheets", "Email chains", "Disconnected handoffs", "Unknown ownership", "Missing evidence", "Late-stage surprises", "Status chasing", "Siloed stakeholders", "Passive documents", "Process knowledge trapped in people"]) {
-    assert.match(html, new RegExp(currentState), `${currentState} must remain in the current-state comparison`);
-  }
-  for (const targetState of ["One operating model", "One case state", "One evidence chain", "One accountability path", "Connected stakeholders", "Connected workflow", "Earlier readiness insights", "Governed decisions", "Shared visibility", "Orchestrated lifecycle"]) {
-    assert.match(html, new RegExp(targetState), `${targetState} must remain in the target-state comparison`);
-  }
-  for (const outcome of ["Clear Accountability", "Operational Transparency", "Earlier Readiness", "Governed Execution", "Shared Understanding", "Audit Confidence"]) {
-    assert.match(html, new RegExp(outcome), `${outcome} must remain visible to executive buyers`);
-  }
-  for (const stakeholder of ["Landowners &amp; Investors", "Developers", "Consultants &amp; Designers", "Authorities &amp; Regulators", "Utility Providers", "Contractors", "Suppliers &amp; Vendors", "Brokers &amp; Agencies", "Banks &amp; Financial Institutions", "Property Owners", "Residents &amp; Tenants", "Facility &amp; Community Operators"]) {
-    assert.match(html, new RegExp(`>${stakeholder}<`), `${stakeholder} needs a transformation value lens`);
-  }
-  assert.match(html, /The connective operating layer/);
-  for (const step of ["Understand", "Map", "Prepare", "Operate", "Govern"]) assert.match(html, new RegExp(`>${step}<`));
+  assert.match(html, /Traditional Property Operations/);
+  for (const currentState of ["Email chains", "Excel trackers", "Manual approvals", "Missing visibility", "Disconnected systems", "Delayed NOCs", "Delayed title deeds", "Customer frustration"]) assert.match(html, new RegExp(currentState, "i"));
+  assert.match(html, /One Workflow/);
+  assert.match(html, /One Truth/);
+  assert.match(html, /Before REOS/);
+  assert.match(html, /With REOS/);
   const visibleText = html.replace(/<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ");
   assert.doesNotMatch(visibleText, /\bROI\b|\b\d+%\b/i, "transformation value must not depend on unsupported ROI claims");
 });
 
 test("final Platform optimization closes the remaining executive findings", async () => {
   const html = await (await render("/platform")).text();
-  assert.match(html, /REOS is the UAE real estate operating system/);
-  assert.match(html, /licensed workflows are REOS products/);
-  for (const layer of ["Property Journey", "Stakeholders", "Intelligence &amp; evidence", "Governed workflow &amp; orchestration", "Licensed REOS products", "Operational outcomes", "Official systems &amp; authorized decisions"]) assert.match(html, new RegExp(layer));
-  assert.match(html, /REOS coordinates the operational work\. Authorized people and official systems retain their required authority/);
-  assert.match(html, /How much of this operating model sounds familiar/);
-  assert.match(html, /0(?:<!-- -->)? of (?:<!-- -->)?10(?:<!-- -->)? conditions selected/);
-  assert.match(html, /Select the conditions that reflect the current operating environment/);
-  assert.match(html, /href="\/demo"[^>]*>Request a scoped evaluation/);
-  assert.match(html, /href="#reos-operating-model"[^>]*>See how REOS connects the work/);
-  const unchecked = html.match(/type="checkbox"/g) ?? [];
-  assert.equal(unchecked.length, 10, "the optional reflection must expose ten native checkboxes");
-  assert.doesNotMatch(html, /type="checkbox"[^>]*checked/, "the self-reflection must start with no selections");
-  for (const question of ["Who owns the next action, and why?", "What is the current case state across participating teams?", "What is likely to block the next critical gate?", "Which evidence and authority support this decision?", "Are all participants working from the same lifecycle context?", "Can the decision history and supporting evidence be reviewed?"]) assert.match(html, new RegExp(question.replace("?", "\\?")));
-  assert.equal((html.match(/EXECUTIVE QUESTION ENABLED/g) ?? []).length, 12, "six visible outcome prompts are emitted in both the HTML and hydration payload");
-  assert.equal((html.match(/Why this matters/g) ?? []).length, 12, "every canonical stakeholder retains its P2 business consequence in the accessible HTML");
-
-  const assessmentSource = await readFile(new URL("../app/components/ExecutiveSelfAssessment.tsx", import.meta.url), "utf8");
-  assert.doesNotMatch(assessmentSource, /localStorage|sessionStorage|fetch\(|navigator\.sendBeacon|dataLayer|gtag|posthog/i, "assessment data must remain in page memory and must not be transmitted");
-  assert.doesNotMatch(assessmentSource, /maturity|ROI|\d+%/i, "assessment language must remain non-diagnostic and claim-safe");
+  assert.match(html, /The Operating System/);
+  assert.match(html, /for Property Development/);
+  for (const product of ["Title Deed Automation", "NOC Automation", "Unit Cancellation", "Customer Handover", "AI Document Intelligence", "Enterprise Integration Hub"]) assert.match(html, new RegExp(product));
+  assert.match(html, /PLATFORM EXPERIENCE/);
+  assert.match(html, /GOVERNANCE ENGINE/);
+  assert.match(html, /MEASURABLE BUSINESS VALUE/);
+  assert.match(html, /href="\/demo"/);
 });
 
 test("critical governance uses one operating model and one maturity vocabulary", async () => {
@@ -244,7 +222,7 @@ test("critical governance uses one operating model and one maturity vocabulary",
   const platform = await (await render("/platform")).text();
   assert.match(platform, /Early Access/);
   assert.match(platform, /Coming Soon/);
-  assert.match(platform, /ENTERPRISE BUYING CONFIDENCE/);
+  assert.match(platform, /GOVERNANCE ENGINE/);
   assert.doesNotMatch(platform, /Licensing preview|First product|Next product/);
 
   for (const slug of ["title-deed-automation", "noc-automation"]) {
@@ -272,11 +250,9 @@ test("P1 enterprise buying routes expose assurance, procurement and product proo
   assert.match(evaluation, /Coming Soon/);
 
   const platform = await (await render("/platform")).text();
-  assert.match(platform, /PRODUCT COMPARISON/);
-  assert.match(platform, /Workflow outcome/);
-  assert.match(platform, /Primary buyer/);
-  assert.match(platform, /Proof during evaluation/);
-  assert.match(platform, /Authority boundary/);
+  assert.match(platform, /REOS PLATFORM SUITE/);
+  assert.match(platform, /Capabilities/);
+  assert.match(platform, /Planned capability/);
   assert.match(platform, /href="\/trust-centre"/);
   assert.match(platform, /href="\/platform\/evaluation"/);
 });
@@ -353,10 +329,10 @@ test("the primary navigation is the five frozen items, in order", async () => {
 test("homepage routes into the journey, stakeholders and ecosystem", async () => {
   const html = await (await render()).text();
   assert.match(html, /href="\/property-journey"/);
-  assert.match(html, /href="\/intelligence\/guides\/buying"/);
-  assert.match(html, /href="\/intelligence\/definitions-and-glossary"/);
+  assert.match(html, /href="\/stakeholders"/);
+  assert.match(html, /href="\/intelligence"/);
+  assert.match(html, /href="\/platform"/);
   assert.match(html, /href="\/ecosystem"/);
-  assert.match(html, /Regulatory Rail/);
 });
 
 test("concurrency is stated, not flattened into a sequence", async () => {

@@ -22,7 +22,7 @@ async function open(width, height = 900) {
 
 const desktop = await open(1440, 1000);
 const page = desktop.page;
-assert.equal(await page.locator("h1").innerText(), "The Operating System\nfor Modern Property Development.");
+assert.equal(await page.locator("h1").innerText(), "The Operating System\nfor Property Development.");
 assert.equal(await page.locator("header nav[aria-label='Primary navigation'] a").count(), 5);
 assert.equal(await page.locator(".sales-hero-proof > span").count(), 2);
 assert.equal(await page.locator(".platform-lifecycle-flow > details").count(), 10);
@@ -30,9 +30,10 @@ assert.equal(await page.locator(".platform-suite-grid > article").count(), 6);
 assert.equal(await page.locator(".platform-suite-grid > .is-planned").count(), 4);
 assert.equal(await page.locator(".platform-suite-grid > .is-planned .maturity-coming-soon").count(), 4);
 assert.equal(await page.locator(".platform-screen-tabs > button").count(), 6);
-assert.equal(await page.locator(".platform-stakeholder-value article").count(), 9);
+assert.equal(await page.locator(".platform-fragmentation article").count(), 8);
+assert.equal(await page.locator(".platform-stakeholder-value article").count(), 10);
 assert.equal(await page.locator(".platform-governance-grid article").count(), 7);
-assert.equal(await page.locator(".platform-business-outcomes article").count(), 6);
+assert.equal(await page.locator(".platform-business-outcomes article").count(), 8);
 assert.ok(await page.getByRole("link", { name: /Request a demo/i }).count() > 0);
 
 await page.getByRole("tab", { name: "NOC Automation" }).first().click();

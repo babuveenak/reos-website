@@ -24,8 +24,10 @@ The Platform page was consolidated from a long framework-explanation page into a
 4. All four planned capabilities carry the explicit boundary: scope, integrations and availability require validation. They do not expose product login gateways.
 5. Interactive before/after workflow comparison.
 6. Interactive Title Deed and NOC workflow walkthroughs.
-7. Six-screen product gallery covering Title Deed, NOC, Unit Cancellation, Workflow Approval, Customer Journey and Governance Monitoring. Concept screens are labeled and separated from published maturity.
-8. Stakeholder value matrix, concise governance engine, business outcomes and final demo/evaluation conversion path.
+7. Six-screen product gallery covering Title Deed, NOC, Unit Cancellation, Workflow Approval, Customer Journey and Governance Monitoring. Each view now includes workflow status, approver context, KPI indicators, timeline and recent activity. Concept screens are labeled and separated from published maturity.
+8. Ten-role buyer-value matrix with current problem, REOS solution and business benefit.
+9. Eight-symptom fragmentation infographic and interactive traditional/REOS comparison.
+10. Concise seven-control governance engine, eight claim-safe business outcomes and final demo conversion path.
 
 ## Removed duplication
 
@@ -38,7 +40,7 @@ The Platform route no longer renders separate copies of the Transformation Oppor
 - ESLint: PASS — `pnpm lint`.
 - Full automated suite: PASS — 73 passed; 19 live-server-only Assistant tests skipped by their existing port guard.
 - Platform source contract: PASS — 42/42 rendered HTML tests.
-- Platform browser contract: PASS — hero, navigation, 10 lifecycle stages, 6 suite cards, 4 planned maturity labels, 6 screen tabs, 9 stakeholder value cards, 7 governance controls and 6 outcome cards.
+- Platform browser contract: PASS — hero, navigation, 10 lifecycle stages, 6 suite cards, 4 planned maturity labels, 8 fragmentation symptoms, 6 screen tabs, 10 buyer-value cards, 7 governance controls and 8 outcome cards.
 - Interactions: PASS — product switch, concept-screen boundary, governance screen and Before/With REOS comparison.
 - Responsive: PASS — 320, 390, 768, 1024 and 1440 px; no horizontal overflow.
 - Runtime: PASS — no console errors, page errors or Next.js error overlay.
