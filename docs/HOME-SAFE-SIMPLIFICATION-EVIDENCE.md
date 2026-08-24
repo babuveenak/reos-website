@@ -2,7 +2,7 @@
 
 Date: 24 August 2026  
 Scope: Canonical Home route `/` only  
-Decision status: Safe improvements implemented; disputed choices held for owner review
+Decision status: Safe improvements and owner-approved conflict decisions implemented
 
 ## Implemented safe improvements
 
@@ -13,18 +13,22 @@ Decision status: Safe improvements implemented; disputed choices held for owner 
 5. Reduced the closing section to one educational action and one product action.
 6. Added responsive one- and two-column pathway layouts, visible keyboard focus, restrained hover behavior and reduced-motion support.
 
-## Decisions deliberately not implemented
+## Owner decisions implemented in the second controlled wave
 
-The following remain visible and unchanged because they require an owner decision:
+- Targeted the requested 50–60% reduction from the original long-form Home by removing repeated deep content and keeping concise route previews.
+- Removed unverified `12+`, `150+` and `500+` scope claims. Home now derives only 7 canonical stages, 12 canonical stakeholder groups and 2 published products from source data.
+- Kept the compact Assistant on Home and the full Assistant at `/assistant`, with a direct link between them.
+- Replaced the eight conceptual module cards with two lightweight UI previews for Title Deed Automation and NOC Automation, including maturity and deployment boundaries.
+- Split governance destinations by responsibility: Ecosystem for relationships, Intelligence for evidence and sources, Trust Centre for assurance, and Evaluation for pilot and rollout governance.
+- Kept assessment contextual within Platform/Evaluation; no top-level navigation was created.
+- Represented all twelve stakeholder groups as concise, accessible gateways to their dedicated context.
+- Added `Request a Demo` on Home; the existing Demo form exposes the verified fallback email whenever online delivery is unavailable.
+- Preserved the five-item frozen navigation and the independent REOS brand direction.
+
+## Deliberately deferred
 
 - depth of the Home Journey map;
-- placement and treatment of the Assistant;
-- validity and prominence of headline statistics;
-- whether the eight-module model belongs on Home;
-- stakeholder/audience outcome prioritization;
-- Demo language and delivery model;
-- product-preview format;
-- five-item navigation and approved information architecture.
+- no Journey redesign was included in this wave.
 
 ## Automated evidence
 
@@ -37,8 +41,9 @@ The following remain visible and unchanged because they require an owner decisio
 ## Visual evidence
 
 - `output/evidence/home-safe-simplification/01-five-path-gateway-desktop.png`
-- `output/evidence/home-safe-simplification/02-home-desktop-full.png`
-- `output/evidence/home-safe-simplification/03-five-path-gateway-mobile.png`
+- `output/evidence/home-safe-simplification/02-product-previews-desktop.png`
+- `output/evidence/home-safe-simplification/03-home-desktop-full.png`
+- `output/evidence/home-safe-simplification/04-product-previews-mobile.png`
 
 ## Acceptance boundary
 

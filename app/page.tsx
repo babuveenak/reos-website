@@ -1,17 +1,15 @@
 import { DEFAULT_LOCALE, type Locale } from "./i18n/config";
 import { getDict } from "./i18n/dictionary";
-import { getFragments, getModules, getOutcomes, getStages, getGroups } from "./i18n/content";
+import { getFragments, getStages, getGroups } from "./i18n/content";
 import Link from "next/link";
-import { JourneyMap, PersonaQuickPick, TrackLegend } from "./components/Journey";
-import { JourneyFlow, JourneyStatsBar, JourneyMoments } from "./components/JourneyHero";
-import { Page, SectionIntro, StatusTag } from "./components/SiteShell";
+import { JourneyMap, TrackLegend } from "./components/Journey";
+import { JourneyFlow } from "./components/JourneyHero";
+import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
 import { HowReosWorks, ProductMaturityBadge } from "./components/Governance";
 import { REOS_VALUE_PROPOSITION } from "./data/governance";
 import { products } from "./data/products";
-
-import { authorities } from "./data/reos";
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -45,19 +43,16 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           <Link className="button gold" href={L("/platform")}>{locale === "ar" ? "استكشف منتجات REOS المرخّصة" : "Explore licensed REOS products"} <span>↗</span></Link>
           <Link className="button ghost" href={L("/property-journey")}>{d.home.ctaStart}</Link>
         </div>
-        <div className="home-product-proof" aria-label="REOS licensed product availability">
-          <small>LICENSED PRODUCT MODEL</small>
-          {products.map((product) => <Link key={product.slug} href={L(`/platform/products/${product.slug}/login`)}><span>{String(product.number).padStart(2, "0")} · {product.name}</span><ProductMaturityBadge maturity={product.maturity} /></Link>)}
-        </div>
       </div>
       <div className="hero-visual"><JourneyFlow locale={locale} /></div>
-      <JourneyStatsBar locale={locale} />
-      <PersonaQuickPick locale={locale} />
+      <dl className="home-canonical-scope" aria-label={locale === "ar" ? "نطاق REOS المعتمد" : "Canonical REOS scope"}>
+        <div><dt>{getStages(locale).length}</dt><dd>{d.home.statStages}</dd></div>
+        <div><dt>{getGroups(locale).length}</dt><dd>{d.home.statGroups}</dd></div>
+        <div><dt>{products.length}</dt><dd>{locale === "ar" ? "منتجان منشوران" : "Published products"}</dd></div>
+      </dl>
     </section>
 
     <HowReosWorks locale={locale} compact />
-
-    <JourneyMoments locale={locale} />
 
     {/* 02 — ASK. The assistant is the front door: a question before the reading. */}
     <section className="section-pad assistant-band" id="ask">
@@ -67,6 +62,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         copy={d.assistant.lede}
       />
       <Assistant snapshot={snapshot} locale={locale} variant="compact" />
+      <div className="band-cta"><Link className="text-link" href={L("/assistant")}>{locale === "ar" ? "افتح المساعد الكامل" : "Open the full Assistant"} <span>↗</span></Link></div>
     </section>
 
     {/* 03 — PROBLEM. One concise case for change. */}
@@ -110,49 +106,44 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <TrackLegend locale={locale} />
     </section>
 
-    {/* 06 — PLATFORM MODULES. Retained pending the product-model decision. */}
-    <section className="section-pad module-band" id="platform">
+    {/* 06 — TWO PUBLISHED PRODUCTS. Lightweight, honest UI previews. */}
+    <section className="section-pad home-products" id="platform">
       <SectionIntro
-        label={d.home.moduleLabel}
-        title={<>{d.home.moduleTitle}<br /><em>{d.home.moduleTitleEm}</em></>}
-        copy="Each module is labelled with what it is today. Validated means researched and built; designed means architected but not yet delivered. We would rather show the roadmap than imply a finished product."
+        label={locale === "ar" ? "منتجات REOS" : "LICENSED PRODUCT MODEL"}
+        title={locale === "ar" ? <>منتجان واضحان.<br /><em>وحدود جاهزية صريحة.</em></> : <>Two product experiences.<br /><em>Clear maturity boundaries.</em></>}
+        copy={locale === "ar" ? "هذه معاينات توضيحية خفيفة للمنتجات المنشورة. تعرض سير العمل المقصود دون الادعاء بأنها أنظمة تشغيلية حية." : "These lightweight previews show the intended workflow experience without presenting an illustrative interface as a live operational system."}
       />
-      <div className="module-grid">
-        {getModules(locale).map((module, index) => (
-          <article key={module.id}>
-            <header><span>{String(index + 1).padStart(2, "0")}</span><StatusTag status={module.status} locale={locale} /></header>
-            <h3>{module.name}</h3>
-            <p>{module.copy}</p>
-          </article>
-        ))}
-        <article className="module-roadmap">
-          <header><span>&mdash;</span></header>
-          <h3>{d.home.roadmapTitle}</h3>
-          <p>Further capabilities are added only once they are sourced, validated and connected to the lifecycle model — not before.</p>
-        </article>
+      <div className="home-product-grid">
+        {products.map((product) => <article key={product.slug} className="home-product-card">
+          <header><span>{String(product.number).padStart(2, "0")}</span><ProductMaturityBadge maturity={product.maturity} /></header>
+          <div className="home-product-heading"><small>{product.category}</small><h3>{product.name}</h3><p>{product.workflowResult}</p></div>
+          <div className="home-product-ui" aria-label={`${product.name} illustrative interface preview`}>
+            <div className="home-product-ui-bar"><i aria-hidden="true" /><b>ILLUSTRATIVE PRODUCT PREVIEW</b><span>{product.maturity}</span></div>
+            <div className="home-product-case"><small>CASE WORKFLOW</small><b>{product.capabilities[0]}</b><span>{product.capabilities[1]}</span></div>
+            <ol>{product.capabilities.slice(0, 4).map((capability, index) => <li key={capability} className={index === 0 ? "is-active" : undefined}><span>{String(index + 1).padStart(2, "0")}</span>{capability}</li>)}</ol>
+          </div>
+          <p className="home-product-boundary"><b>Boundary:</b> {product.deploymentBoundary}</p>
+          <Link className="text-link" href={L(`/platform/products/${product.slug}/login`)}>Explore {product.name} <span>↗</span></Link>
+        </article>)}
       </div>
+      <div className="home-product-actions"><Link className="button gold" href={L("/demo")}>{locale === "ar" ? "اطلب عرضاً توضيحياً" : "Request a Demo"} <span>↗</span></Link><Link className="button ghost" href={L("/platform/evaluation")}>{locale === "ar" ? "راجع مسار التقييم" : "Review the evaluation path"}</Link></div>
+      <nav className="home-governance-links" aria-label={locale === "ar" ? "مسؤوليات الحوكمة" : "Governance responsibilities"}>
+        <Link href={L("/ecosystem")}><b>Ecosystem</b><span>Relationships and accountability</span></Link>
+        <Link href={L("/intelligence")}><b>Intelligence</b><span>Evidence, authority and sources</span></Link>
+        <Link href={L("/trust-centre")}><b>Trust Centre</b><span>Security, data and assurance</span></Link>
+        <Link href={L("/platform/evaluation")}><b>Evaluation</b><span>Pilot, acceptance and rollout</span></Link>
+      </nav>
     </section>
 
-    {/* 07 — OUTCOMES. Retained pending the audience-priority decision. */}
-    <section className="section-pad outcome-band">
+    {/* 07 — ALL TWELVE STAKEHOLDERS, without twelve long sales narratives. */}
+    <section className="section-pad home-stakeholders">
       <SectionIntro
-        label={d.home.outcomeLabel}
-        title={<>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></>}
+        label={locale === "ar" ? "اثنتا عشرة مجموعة" : "TWELVE STAKEHOLDER GROUPS"}
+        title={locale === "ar" ? <>نموذج واحد مشترك.<br /><em>اثنتا عشرة وجهة نظر.</em></> : <>One shared operating model.<br /><em>Twelve points of view.</em></>}
+        copy={locale === "ar" ? "يصل كل طرف إلى سياقه الكامل دون تحويل الصفحة الرئيسية إلى اثنتي عشرة رحلة منفصلة." : "Every group has a clear route into its own responsibilities and relationships—without turning Home into twelve separate journeys."}
       />
-      <div className="outcome-grid">
-        {getOutcomes(locale).map((outcome) => (
-          <article key={outcome.audience}>
-            <small>{outcome.audience}</small>
-            <h3>{outcome.claim}</h3>
-            <p>{outcome.copy}</p>
-          </article>
-        ))}
-      </div>
-      <div className="coverage-strip">
-        <div><b>{getStages(locale).length}</b><span>{d.home.statStages}</span></div>
-        <div><b>{getGroups(locale).length}</b><span>{d.home.statGroups}</span></div>
-        <div><b>{authorities.length}</b><span>{d.home.statAuthorities}</span></div>
-        <div><b>7</b><span>{d.home.statEmirates}</span></div>
+      <div className="home-stakeholder-grid">
+        {getGroups(locale).map((group) => <Link key={group.id} href={L(`/stakeholders/${group.id}`)} aria-label={`${group.name}: ${locale === "ar" ? "استكشف المسؤوليات والعلاقات" : "explore responsibilities and relationships"}`}><span>{String(group.number).padStart(2, "0")}</span><h3>{group.name}</h3><i aria-hidden="true">↗</i></Link>)}
       </div>
     </section>
 
@@ -162,8 +153,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2>
       <p>{locale === "ar" ? "ابدأ برحلة العقار أو انتقل إلى المنتج الذي يدعم التنفيذ." : "Start with the Property Journey, or inspect the licensed product that supports execution."}</p>
       <div className="hero-actions">
-        <Link className="button gold" href={L("/property-journey")}>{d.home.closeCta} <span>↗</span></Link>
-        <Link className="button ghost" href={L("/platform")}>{locale === "ar" ? "استكشف منتجات REOS" : "Explore REOS products"}</Link>
+        <Link className="button gold" href={L("/demo")}>{locale === "ar" ? "اطلب عرضاً توضيحياً" : "Request a Demo"} <span>↗</span></Link>
+        <Link className="button ghost" href={L("/property-journey")}>{d.home.closeCta}</Link>
       </div>
       <p className="demo-note">REOS is an independent knowledge and navigation layer. It does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements differ by emirate and change over time — verify with the relevant authority before acting.</p>
     </section>

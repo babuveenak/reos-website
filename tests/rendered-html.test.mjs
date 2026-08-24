@@ -26,11 +26,11 @@ test("enterprise remediation makes the operating-system and licensed-product pro
   assert.match(dictionary, /for the UAE property journey/);
   assert.match(dictionary, /governed, licensed REOS products/);
   assert.match(source, /Explore licensed REOS products/);
-  assert.match(source, /home-product-proof/);
+  assert.match(source, /home-product-grid/);
   assert.match(source, /ProductMaturityBadge/);
 });
 
-test("safe homepage simplification removes duplicated deep content and preserves disputed sections", async () => {
+test("approved homepage simplification removes duplicated depth and uses canonical product evidence", async () => {
   const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
 
   // Deep content belongs to the existing dedicated routes, not a second copy on Home.
@@ -43,12 +43,18 @@ test("safe homepage simplification removes duplicated deep content and preserves
   assert.match(source, /home-pathway-grid/);
   assert.match(source, /platform\/products\/\$\{product\.slug\}\/login/);
 
-  // These remain intentionally unchanged until the owner resolves the recorded conflicts.
+  // Journey depth is the only explicitly deferred Home decision.
   assert.match(source, /<JourneyMap compact/);
   assert.match(source, /<Assistant .*variant="compact"/);
-  assert.match(source, /getModules\(locale\)/);
-  assert.match(source, /getOutcomes\(locale\)/);
-  assert.match(source, /coverage-strip/);
+  assert.match(source, /Open the full Assistant/);
+  for (const removed of ["JourneyStatsBar", "JourneyMoments", "PersonaQuickPick", "getModules", "getOutcomes", "coverage-strip"]) {
+    assert.doesNotMatch(source, new RegExp(removed), `${removed} must not remain on Home`);
+  }
+  assert.match(source, /home-canonical-scope/);
+  assert.match(source, /home-product-grid/);
+  assert.match(source, /ILLUSTRATIVE PRODUCT PREVIEW/);
+  assert.match(source, /home-stakeholder-grid/);
+  assert.match(source, /Request a Demo/);
 });
 
 test("demo delivery contract confirms only acknowledged submissions", async () => {
@@ -121,14 +127,14 @@ test("the homepage hero states concurrency instead of implying a queue", async (
   assert.match(ar, /يجري|بالتوازي/, "concurrency must be stated in Arabic too");
 });
 
-test("the demo CTA appears only on the platform page", async () => {
-  // The site is educational; a sales CTA in the page furniture undercuts that.
-  // It belongs where someone has actually asked about the product.
-  for (const path of ["/", "/property-journey", "/stakeholders", "/stakeholders/developers",
+test("the demo CTA appears on Home and Platform while educational routes remain focused", async () => {
+  for (const path of ["/property-journey", "/stakeholders", "/stakeholders/developers",
                       "/ecosystem", "/intelligence", "/about", "/intelligence/definitions-and-glossary"]) {
     const html = await (await render(path)).text();
     assert.doesNotMatch(html, /href="\/demo"/, `${path} should not link to the demo`);
   }
+  const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.match(home, /href=\{L\("\/demo"\)\}/);
   assert.match(await (await render("/platform")).text(), /href="\/demo"/);
 });
 
