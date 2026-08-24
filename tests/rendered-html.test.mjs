@@ -19,15 +19,19 @@ test("renders the REOS homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
-test("enterprise remediation makes the operating-system and licensed-product proposition explicit", async () => {
-  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+test("Home explains the journey while Platform owns the licensed-product proposition", async () => {
+  const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const platform = await readFile(new URL("../app/platform/page.tsx", import.meta.url), "utf8");
   const dictionary = await readFile(new URL("../app/i18n/dictionary.ts", import.meta.url), "utf8");
   assert.match(dictionary, /The operating system/);
   assert.match(dictionary, /for the UAE property journey/);
   assert.match(dictionary, /governed, licensed REOS products/);
-  assert.match(source, /Explore licensed REOS products/);
-  assert.match(source, /home-product-grid/);
-  assert.match(source, /ProductMaturityBadge/);
+  assert.match(home, /REOS maps the UAE property journey/);
+  assert.doesNotMatch(home, /Explore licensed REOS products|home-product-grid|ProductMaturityBadge|Request a Demo/);
+  assert.doesNotMatch(home, /apply it through governed, licensed REOS products/);
+  assert.match(platform, /REOS PRODUCT PLATFORM/);
+  assert.match(platform, /sales-hero-proof/);
+  assert.match(platform, /ProductMaturityBadge/);
 });
 
 test("approved homepage simplification removes duplicated depth and uses canonical product evidence", async () => {
@@ -41,7 +45,6 @@ test("approved homepage simplification removes duplicated depth and uses canonic
     assert.match(source, new RegExp(`"${route}"`), `${route} must remain a visual Home pathway`);
   }
   assert.match(source, /home-pathway-grid/);
-  assert.match(source, /platform\/products\/\$\{product\.slug\}\/login/);
 
   // Journey depth is the only explicitly deferred Home decision.
   assert.match(source, /<JourneyMap compact/);
@@ -51,10 +54,8 @@ test("approved homepage simplification removes duplicated depth and uses canonic
     assert.doesNotMatch(source, new RegExp(removed), `${removed} must not remain on Home`);
   }
   assert.match(source, /home-canonical-scope/);
-  assert.match(source, /home-product-grid/);
-  assert.match(source, /ILLUSTRATIVE PRODUCT PREVIEW/);
   assert.match(source, /home-stakeholder-grid/);
-  assert.match(source, /Request a Demo/);
+  assert.doesNotMatch(source, /home-product-grid|ILLUSTRATIVE PRODUCT PREVIEW|Request a Demo/);
 });
 
 test("demo delivery contract confirms only acknowledged submissions", async () => {
@@ -127,14 +128,12 @@ test("the homepage hero states concurrency instead of implying a queue", async (
   assert.match(ar, /يجري|بالتوازي/, "concurrency must be stated in Arabic too");
 });
 
-test("the demo CTA appears on Home and Platform while educational routes remain focused", async () => {
-  for (const path of ["/property-journey", "/stakeholders", "/stakeholders/developers",
+test("the demo CTA belongs to Platform while educational routes remain focused", async () => {
+  for (const path of ["/", "/property-journey", "/stakeholders", "/stakeholders/developers",
                       "/ecosystem", "/intelligence", "/about", "/intelligence/definitions-and-glossary"]) {
     const html = await (await render(path)).text();
     assert.doesNotMatch(html, /href="\/demo"/, `${path} should not link to the demo`);
   }
-  const home = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
-  assert.match(home, /href=\{L\("\/demo"\)\}/);
   assert.match(await (await render("/platform")).text(), /href="\/demo"/);
 });
 

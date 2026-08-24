@@ -33,25 +33,33 @@ for (const preserved of [".journey-map", ".assistant-band"]) {
   assert.ok(await desktop.page.locator(preserved).count() > 0, `${preserved} was a held conflict and must remain`);
 }
 assert.equal(await desktop.page.locator(".home-canonical-scope > div").count(), 3);
-assert.deepEqual(await desktop.page.locator(".home-canonical-scope dt").allInnerTexts(), ["7", "12", "2"]);
-assert.equal(await desktop.page.locator(".home-product-card").count(), 2);
-assert.equal(await desktop.page.locator(".home-product-ui").count(), 2);
+assert.deepEqual(await desktop.page.locator(".home-canonical-scope dt").allInnerTexts(), ["7", "12", "7"]);
+assert.equal(await desktop.page.locator(".home-product-card").count(), 0);
 assert.equal(await desktop.page.locator(".home-stakeholder-grid > a").count(), 12);
 assert.ok(await desktop.page.getByRole("link", { name: /Open the full Assistant/ }).count() > 0);
-assert.ok(await desktop.page.getByRole("link", { name: /Request a Demo/ }).count() > 0);
+assert.equal(await desktop.page.getByRole("link", { name: /Request a Demo/ }).count(), 0);
 await desktop.page.locator(".home-pathways").screenshot({ path: `${output}/01-five-path-gateway-desktop.png` });
-await desktop.page.locator(".home-products").screenshot({ path: `${output}/02-product-previews-desktop.png` });
-await desktop.page.screenshot({ path: `${output}/03-home-desktop-full.png`, fullPage: true });
+await desktop.page.locator(".hero-primary").screenshot({ path: `${output}/02-educational-hero-desktop.png` });
+await desktop.page.screenshot({ path: `${output}/03-educational-home-full.png`, fullPage: true });
 await desktop.context.close();
+
+const platformContext = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: "reduce" });
+const platform = await platformContext.newPage();
+const platformResponse = await platform.goto(`${baseURL}/platform`, { waitUntil: "networkidle" });
+assert.equal(platformResponse?.status(), 200);
+assert.equal(await platform.locator(".sales-hero-proof > span").count(), 2);
+assert.ok(await platform.getByRole("link", { name: /Request a demo/i }).count() > 0);
+await platform.locator(".sales-hero").screenshot({ path: `${output}/04-platform-product-ownership.png` });
+await platformContext.close();
 
 for (const width of [320, 390, 768, 1024]) {
   const mobile = await open(width, width < 500 ? 844 : 900);
   const overflow = await mobile.page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   assert.ok(overflow <= 1, `${width}px viewport has ${overflow}px horizontal overflow`);
-  if (width === 390) await mobile.page.locator(".home-products").screenshot({ path: `${output}/04-product-previews-mobile.png` });
+  if (width === 390) await mobile.page.locator(".hero-primary").screenshot({ path: `${output}/05-educational-hero-mobile.png` });
   await mobile.context.close();
 }
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();
-console.log("PASS: approved Home reduction, canonical figures, two product previews, twelve stakeholder routes, Assistant variants, Demo CTA, console health and 4 responsive breakpoints");
+console.log("PASS: educational Home, 7/12/7 canonical scope, twelve stakeholder routes, Assistant variants, product ownership on Platform, console health and 4 responsive breakpoints");

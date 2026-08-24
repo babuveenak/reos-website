@@ -7,9 +7,7 @@ import { JourneyFlow } from "./components/JourneyHero";
 import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
-import { HowReosWorks, ProductMaturityBadge } from "./components/Governance";
-import { REOS_VALUE_PROPOSITION } from "./data/governance";
-import { products } from "./data/products";
+import { HowReosWorks } from "./components/Governance";
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -19,13 +17,13 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     ["02", d.nav.stakeholders, "استكشف من يشارك وما الذي يملكه أو يقرره أو يسلّمه.", "/stakeholders"],
     ["03", d.nav.ecosystem, "شاهد أين تتقاطع المراحل والأطراف والمسؤوليات.", "/ecosystem"],
     ["04", d.nav.intelligence, "تحقق من الأدلة والجهات والاختصاصات ومصادر المعرفة.", "/intelligence"],
-    ["05", d.nav.platform, "استعرض منتجات REOS المرخّصة وحدود جاهزيتها.", "/platform"],
+    ["05", d.nav.platform, "شاهد كيف يطبّق REOS خريطة العملية من خلال نموذج تشغيل واحد.", "/platform"],
   ] : [
     ["01", d.nav.journey, "Follow seven connected stages from land through operations and investment.", "/property-journey"],
     ["02", d.nav.stakeholders, "See who participates and what each group owns, decides or delivers.", "/stakeholders"],
     ["03", d.nav.ecosystem, "Explore where stages, participants and responsibilities intersect.", "/ecosystem"],
     ["04", d.nav.intelligence, "Inspect evidence, authorities, jurisdictions and knowledge sources.", "/intelligence"],
-    ["05", d.nav.platform, "Review licensed REOS products and their current maturity boundaries.", "/platform"],
+    ["05", d.nav.platform, "See how REOS applies the mapped process through one operating model.", "/platform"],
   ];
   // Narrow, serialisable view of the content model for the client assistant.
   const snapshot = buildSnapshot(locale);
@@ -37,18 +35,18 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="hero-copy">
         <span className="eyebrow">{d.home.eyebrow}</span>
         <h1>{d.home.h1}<br /><em>{d.home.h1em}</em></h1>
-        <p>{REOS_VALUE_PROPOSITION}</p>
-        <p className="hero-benefit">{d.home.benefit}</p>
+        <p>{locale === "ar" ? "يرسم REOS رحلة العقار في دولة الإمارات—المراحل والأطراف والأدلة والموافقات والقرارات التي تربط الأرض بالحياة والاستثمار." : "REOS maps the UAE property journey—the stages, participants, evidence, approvals and decisions that connect land to living and investment."}</p>
+        <p className="hero-benefit">{locale === "ar" ? "افهم ما يحدث، ومن يشارك، وما الذي يأتي تالياً، وأين تتقاطع المسؤوليات والقرارات." : "Understand what happens, who participates, what comes next, and where responsibilities and decisions intersect."}</p>
         <div className="hero-actions">
-          <Link className="button gold" href={L("/platform")}>{locale === "ar" ? "استكشف منتجات REOS المرخّصة" : "Explore licensed REOS products"} <span>↗</span></Link>
-          <Link className="button ghost" href={L("/property-journey")}>{d.home.ctaStart}</Link>
+          <Link className="button gold" href={L("/property-journey")}>{d.home.ctaStart} <span>↗</span></Link>
+          <Link className="button ghost" href={L("/ecosystem")}>{locale === "ar" ? "استكشف المنظومة" : "Explore the ecosystem"}</Link>
         </div>
       </div>
       <div className="hero-visual"><JourneyFlow locale={locale} /></div>
       <dl className="home-canonical-scope" aria-label={locale === "ar" ? "نطاق REOS المعتمد" : "Canonical REOS scope"}>
         <div><dt>{getStages(locale).length}</dt><dd>{d.home.statStages}</dd></div>
         <div><dt>{getGroups(locale).length}</dt><dd>{d.home.statGroups}</dd></div>
-        <div><dt>{products.length}</dt><dd>{locale === "ar" ? "منتجان منشوران" : "Published products"}</dd></div>
+        <div><dt>7</dt><dd>{d.home.statEmirates}</dd></div>
       </dl>
     </section>
 
@@ -106,36 +104,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <TrackLegend locale={locale} />
     </section>
 
-    {/* 06 — TWO PUBLISHED PRODUCTS. Lightweight, honest UI previews. */}
-    <section className="section-pad home-products" id="platform">
-      <SectionIntro
-        label={locale === "ar" ? "منتجات REOS" : "LICENSED PRODUCT MODEL"}
-        title={locale === "ar" ? <>منتجان واضحان.<br /><em>وحدود جاهزية صريحة.</em></> : <>Two product experiences.<br /><em>Clear maturity boundaries.</em></>}
-        copy={locale === "ar" ? "هذه معاينات توضيحية خفيفة للمنتجات المنشورة. تعرض سير العمل المقصود دون الادعاء بأنها أنظمة تشغيلية حية." : "These lightweight previews show the intended workflow experience without presenting an illustrative interface as a live operational system."}
-      />
-      <div className="home-product-grid">
-        {products.map((product) => <article key={product.slug} className="home-product-card">
-          <header><span>{String(product.number).padStart(2, "0")}</span><ProductMaturityBadge maturity={product.maturity} /></header>
-          <div className="home-product-heading"><small>{product.category}</small><h3>{product.name}</h3><p>{product.workflowResult}</p></div>
-          <div className="home-product-ui" aria-label={`${product.name} illustrative interface preview`}>
-            <div className="home-product-ui-bar"><i aria-hidden="true" /><b>ILLUSTRATIVE PRODUCT PREVIEW</b><span>{product.maturity}</span></div>
-            <div className="home-product-case"><small>CASE WORKFLOW</small><b>{product.capabilities[0]}</b><span>{product.capabilities[1]}</span></div>
-            <ol>{product.capabilities.slice(0, 4).map((capability, index) => <li key={capability} className={index === 0 ? "is-active" : undefined}><span>{String(index + 1).padStart(2, "0")}</span>{capability}</li>)}</ol>
-          </div>
-          <p className="home-product-boundary"><b>Boundary:</b> {product.deploymentBoundary}</p>
-          <Link className="text-link" href={L(`/platform/products/${product.slug}/login`)}>Explore {product.name} <span>↗</span></Link>
-        </article>)}
-      </div>
-      <div className="home-product-actions"><Link className="button gold" href={L("/demo")}>{locale === "ar" ? "اطلب عرضاً توضيحياً" : "Request a Demo"} <span>↗</span></Link><Link className="button ghost" href={L("/platform/evaluation")}>{locale === "ar" ? "راجع مسار التقييم" : "Review the evaluation path"}</Link></div>
-      <nav className="home-governance-links" aria-label={locale === "ar" ? "مسؤوليات الحوكمة" : "Governance responsibilities"}>
-        <Link href={L("/ecosystem")}><b>Ecosystem</b><span>Relationships and accountability</span></Link>
-        <Link href={L("/intelligence")}><b>Intelligence</b><span>Evidence, authority and sources</span></Link>
-        <Link href={L("/trust-centre")}><b>Trust Centre</b><span>Security, data and assurance</span></Link>
-        <Link href={L("/platform/evaluation")}><b>Evaluation</b><span>Pilot, acceptance and rollout</span></Link>
-      </nav>
-    </section>
-
-    {/* 07 — ALL TWELVE STAKEHOLDERS, without twelve long sales narratives. */}
+    {/* 06 — ALL TWELVE STAKEHOLDERS, without twelve long sales narratives. */}
     <section className="section-pad home-stakeholders">
       <SectionIntro
         label={locale === "ar" ? "اثنتا عشرة مجموعة" : "TWELVE STAKEHOLDER GROUPS"}
@@ -151,10 +120,10 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     <section className="demo-band atmos atmos-city" id="start-reading">
       <span className="eyebrow">{d.home.closeLabel}</span>
       <h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2>
-      <p>{locale === "ar" ? "ابدأ برحلة العقار أو انتقل إلى المنتج الذي يدعم التنفيذ." : "Start with the Property Journey, or inspect the licensed product that supports execution."}</p>
+      <p>{locale === "ar" ? "ابدأ برحلة العقار، ثم استكشف الأطراف والعلاقات التي تحركها." : "Start with the Property Journey, then explore the participants and relationships that move it forward."}</p>
       <div className="hero-actions">
-        <Link className="button gold" href={L("/demo")}>{locale === "ar" ? "اطلب عرضاً توضيحياً" : "Request a Demo"} <span>↗</span></Link>
-        <Link className="button ghost" href={L("/property-journey")}>{d.home.closeCta}</Link>
+        <Link className="button gold" href={L("/property-journey")}>{d.home.closeCta} <span>↗</span></Link>
+        <Link className="button ghost" href={L("/ecosystem")}>{locale === "ar" ? "استكشف المنظومة" : "Explore the ecosystem"}</Link>
       </div>
       <p className="demo-note">REOS is an independent knowledge and navigation layer. It does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements differ by emirate and change over time — verify with the relevant authority before acting.</p>
     </section>

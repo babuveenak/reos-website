@@ -16,13 +16,12 @@ Decision status: Safe improvements and owner-approved conflict decisions impleme
 ## Owner decisions implemented in the second controlled wave
 
 - Targeted the requested 50–60% reduction from the original long-form Home by removing repeated deep content and keeping concise route previews.
-- Removed unverified `12+`, `150+` and `500+` scope claims. Home now derives only 7 canonical stages, 12 canonical stakeholder groups and 2 published products from source data.
+- Removed unverified `12+`, `150+` and `500+` scope claims. Home now shows only 7 canonical stages, 12 canonical stakeholder groups and the 7 UAE emirates.
 - Kept the compact Assistant on Home and the full Assistant at `/assistant`, with a direct link between them.
-- Replaced the eight conceptual module cards with two lightweight UI previews for Title Deed Automation and NOC Automation, including maturity and deployment boundaries.
-- Split governance destinations by responsibility: Ecosystem for relationships, Intelligence for evidence and sources, Trust Centre for assurance, and Evaluation for pilot and rollout governance.
+- Removed commercial product previews, maturity labels and Demo CTAs from Home. Platform exclusively owns the product roadmap, UI previews, catalogue, comparison, evaluation and conversion path.
 - Kept assessment contextual within Platform/Evaluation; no top-level navigation was created.
 - Represented all twelve stakeholder groups as concise, accessible gateways to their dedicated context.
-- Added `Request a Demo` on Home; the existing Demo form exposes the verified fallback email whenever online delivery is unavailable.
+- Kept `Request a Demo` under Platform; the existing Demo form exposes the verified fallback email whenever online delivery is unavailable.
 - Preserved the five-item frozen navigation and the independent REOS brand direction.
 
 ## Deliberately deferred
@@ -41,9 +40,10 @@ Decision status: Safe improvements and owner-approved conflict decisions impleme
 ## Visual evidence
 
 - `output/evidence/home-safe-simplification/01-five-path-gateway-desktop.png`
-- `output/evidence/home-safe-simplification/02-product-previews-desktop.png`
-- `output/evidence/home-safe-simplification/03-home-desktop-full.png`
-- `output/evidence/home-safe-simplification/04-product-previews-mobile.png`
+- `output/evidence/home-safe-simplification/02-educational-hero-desktop.png`
+- `output/evidence/home-safe-simplification/03-educational-home-full.png`
+- `output/evidence/home-safe-simplification/04-platform-product-ownership.png`
+- `output/evidence/home-safe-simplification/05-educational-hero-mobile.png`
 
 ## Acceptance boundary
 
