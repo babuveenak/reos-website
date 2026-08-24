@@ -30,6 +30,27 @@ test("enterprise remediation makes the operating-system and licensed-product pro
   assert.match(source, /ProductMaturityBadge/);
 });
 
+test("safe homepage simplification removes duplicated deep content and preserves disputed sections", async () => {
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+
+  // Deep content belongs to the existing dedicated routes, not a second copy on Home.
+  for (const duplicate of ["PersonaSelector", "EcosystemMap", "JourneyIntelligence", "RouteGovernance", "getLayers"]) {
+    assert.doesNotMatch(source, new RegExp(duplicate), `${duplicate} must not be rendered on Home`);
+  }
+  for (const route of ["/property-journey", "/stakeholders", "/ecosystem", "/intelligence", "/platform"]) {
+    assert.match(source, new RegExp(`"${route}"`), `${route} must remain a visual Home pathway`);
+  }
+  assert.match(source, /home-pathway-grid/);
+  assert.match(source, /platform\/products\/\$\{product\.slug\}\/login/);
+
+  // These remain intentionally unchanged until the owner resolves the recorded conflicts.
+  assert.match(source, /<JourneyMap compact/);
+  assert.match(source, /<Assistant .*variant="compact"/);
+  assert.match(source, /getModules\(locale\)/);
+  assert.match(source, /getOutcomes\(locale\)/);
+  assert.match(source, /coverage-strip/);
+});
+
 test("demo delivery contract confirms only acknowledged submissions", async () => {
   const form = await readFile(new URL("../app/components/DemoForm.tsx", import.meta.url), "utf8");
   const route = await readFile(new URL("../app/api/demo/route.ts", import.meta.url), "utf8");
