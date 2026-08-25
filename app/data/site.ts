@@ -2,8 +2,8 @@
  * Site-wide settings, configurable without touching code.
  *
  * Every value here reads from an environment variable first and falls back to
- * a sensible default. To change one in production, set it in the Vercel
- * project's Environment Variables and redeploy — no commit required. Locally,
+ * a sensible default. To change one in production, set it in the host's
+ * environment variables and redeploy — no code change required. Locally,
  * put it in `.env.local`. See `.env.example` for the full list.
  *
  * NOTE: this site is statically exported, so NEXT_PUBLIC_* values are inlined
@@ -19,7 +19,7 @@ export const CONTACT_EMAIL =
 
 /** Canonical origin, used for metadata and the sitemap. No trailing slash. */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://reos-website.vercel.app"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://reos-seven-gateway-private.aiworkingforme.chatgpt.site"
 ).replace(/\/$/, "");
 
 /** Optional. Shown alongside the email on the demo page when set. */
