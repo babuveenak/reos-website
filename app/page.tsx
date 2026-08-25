@@ -2,7 +2,6 @@ import { DEFAULT_LOCALE, type Locale } from "./i18n/config";
 import { getDict } from "./i18n/dictionary";
 import { getFragments, getStages, getGroups } from "./i18n/content";
 import Link from "next/link";
-import { JourneyMap, TrackLegend } from "./components/Journey";
 import { JourneyFlow } from "./components/JourneyHero";
 import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
@@ -87,29 +86,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       />
       <div className="home-pathway-grid">
         {pathways.map(([number, title, copy, path]) => <Link href={L(path)} key={path}><span>{number}</span><div><h3>{title}</h3><p>{copy}</p></div><i aria-hidden="true">↗</i></Link>)}
-      </div>
-    </section>
-
-    {/* 05 — THE JOURNEY MAP. Retained pending the Journey-depth decision. */}
-    <section className="section-pad journey-band" id="journey">
-      <SectionIntro
-        label={d.home.journeyLabel}
-        title={<>{d.home.journeyTitle}<br /><em>{d.home.journeyTitleEm}</em></>}
-        copy={d.home.journeyCopy}
-      />
-      <JourneyMap compact locale={locale} />
-      <TrackLegend locale={locale} />
-    </section>
-
-    {/* 06 — ALL TWELVE STAKEHOLDERS, without twelve long sales narratives. */}
-    <section className="section-pad home-stakeholders">
-      <SectionIntro
-        label={locale === "ar" ? "اثنتا عشرة مجموعة" : "TWELVE STAKEHOLDER GROUPS"}
-        title={locale === "ar" ? <>نموذج واحد مشترك.<br /><em>اثنتا عشرة وجهة نظر.</em></> : <>One shared operating model.<br /><em>Twelve points of view.</em></>}
-        copy={locale === "ar" ? "يصل كل طرف إلى سياقه الكامل دون تحويل الصفحة الرئيسية إلى اثنتي عشرة رحلة منفصلة." : "Every group has a clear route into its own responsibilities and relationships—without turning Home into twelve separate journeys."}
-      />
-      <div className="home-stakeholder-grid">
-        {getGroups(locale).map((group) => <Link key={group.id} href={L(`/stakeholders/${group.id}`)} aria-label={`${group.name}: ${locale === "ar" ? "استكشف المسؤوليات والعلاقات" : "explore responsibilities and relationships"}`}><span>{String(group.number).padStart(2, "0")}</span><h3>{group.name}</h3><i aria-hidden="true">↗</i></Link>)}
       </div>
     </section>
 

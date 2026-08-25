@@ -71,15 +71,12 @@ test("approved homepage simplification removes duplicated depth and uses canonic
   }
   assert.match(source, /home-pathway-grid/);
 
-  // Journey depth is the only explicitly deferred Home decision.
-  assert.match(source, /<JourneyMap compact/);
   assert.match(source, /<Assistant .*variant="compact"/);
   assert.match(source, /Open the full Assistant/);
-  for (const removed of ["JourneyStatsBar", "JourneyMoments", "PersonaQuickPick", "getModules", "getOutcomes", "coverage-strip"]) {
+  for (const removed of ["JourneyStatsBar", "JourneyMoments", "PersonaQuickPick", "JourneyMap", "TrackLegend", "home-stakeholder-grid", "home-stakeholders", "getModules", "getOutcomes", "coverage-strip"]) {
     assert.doesNotMatch(source, new RegExp(removed), `${removed} must not remain on Home`);
   }
   assert.match(source, /home-canonical-scope/);
-  assert.match(source, /home-stakeholder-grid/);
   assert.doesNotMatch(source, /home-product-grid|ILLUSTRATIVE PRODUCT PREVIEW|Request a Demo/);
 });
 
