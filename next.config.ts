@@ -40,6 +40,16 @@ const legacyRedirects = [
   ["/journey/property-management", "/property-journey/asset-growth-intelligence"],
   ["/journey/investment-resale", "/property-journey/asset-growth-intelligence"],
 
+  // Preserve bookmarks from the older process taxonomy while presenting the
+  // agreed seven lifecycle stages everywhere.
+  ["/gateway/feasibility", "/gateway/land-vision"],
+  ["/gateway/design", "/gateway/planning-design"],
+  ["/gateway/authority", "/gateway/authorities-approvals"],
+  ["/gateway/tendering", "/gateway/construction-delivery"],
+  ["/gateway/construction", "/gateway/construction-delivery"],
+  ["/gateway/handover", "/gateway/living-operations"],
+  ["/gateway/post-handover", "/gateway/asset-growth-intelligence"],
+
   // General wildcard: a safety net for any /journey/:stage or /roles/:slug
   // id not covered above (e.g. every /roles slug is unchanged, only the
   // parent segment moved).

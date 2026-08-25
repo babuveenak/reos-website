@@ -3030,3 +3030,10 @@ html[data-theme="light"] .sales-outcomes .eyebrow,html[data-theme="light"] .sale
 @media(max-width:1050px){.home-pathway-grid{grid-template-columns:repeat(2,1fr)}.home-pathway-grid>a{min-height:190px}.home-stakeholder-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.home .problem-band,.home .home-pathways,.home .journey-band,.home .home-stakeholders{padding-block:4rem}.home-canonical-scope{grid-template-columns:1fr}.home-canonical-scope>div{display:flex;align-items:center;gap:.7rem;border:0;border-bottom:1px solid rgba(155,113,51,.25)}.home-pathway-grid,.home-stakeholder-grid{grid-template-columns:1fr}.home-pathway-grid{margin-top:2rem}.home-pathway-grid>a{min-height:0;grid-template-columns:36px 1fr auto;grid-template-rows:auto;align-items:start}.home-pathway-grid h3{margin:0 0 .35rem}.home-stakeholder-grid>a{min-height:0}.trust-evidence-register,.operational-assurance-section{padding:4rem 1.2rem}.trust-evidence-row{grid-template-columns:1fr}.trust-evidence-row>*{border-width:0 0 1px}.operational-assurance-grid{grid-template-columns:1fr}.ai-trust-state>div{grid-template-columns:1fr}.demo-next-steps{padding:.8rem}}
 @media(prefers-reduced-motion:reduce){.home-pathway-grid>a{transition:none}.home-pathway-grid>a:hover,.home-pathway-grid>a:focus-visible{transform:none}}
+
+/* Seven-stage process: explicit activities and primary output on each stage. */
+.gateway-activities{margin-top:1.5rem;padding:1rem 1.1rem;border-left:2px solid var(--gate-accent);background:color-mix(in srgb,var(--gate-accent) 7%,transparent);display:grid;gap:.35rem;max-width:700px}
+.gateway-activities>span{font-size:.58rem;letter-spacing:.14em;color:var(--gate-accent)}
+.gateway-activities>p{margin:0;color:#b7c8c2!important;font-size:.78rem}
+.gateway-activities>strong{font-family:var(--serif);font-weight:400;color:var(--gps-ink)}
+@media(max-width:760px){.journey-copy span{display:block}.gateway-activities>p{font-size:.7rem}}

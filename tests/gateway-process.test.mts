@@ -13,12 +13,41 @@ import {
   uxSteps,
   validateGatewayModel,
 } from "../app/data/gateways.ts";
+import { stages } from "../app/data/journey.ts";
+
+const agreedStageNames = [
+  "Land & Vision",
+  "Planning & Design",
+  "Authorities & Approvals",
+  "Construction & Delivery",
+  "Sales & Transfer",
+  "Living & Operations",
+  "Asset Growth & Intelligence",
+];
+
+const agreedStageOutputs = [
+  "Opportunity identified",
+  "Approved design package",
+  "Permission to build",
+  "Physical asset completed",
+  "Property ownership transferred",
+  "Occupied and operational asset",
+  "Long-term value creation",
+];
 
 test("blueprint coverage is exact and fully linked", () => {
   const result = validateGatewayModel();
   assert.deepEqual(result.errors, []);
   assert.deepEqual(result.counts, { gateways:7, groups:12, cells:84, gatewaySteps:77, uxSteps:12, totalSteps:89 });
   assert.equal(new Set(allSteps.map((step) => step.id)).size, 89);
+});
+
+test("the process module follows the agreed seven-stage lifecycle", () => {
+  assert.deepEqual(gateways.map((stage) => stage.name), agreedStageNames);
+  assert.deepEqual(gateways.map((stage) => stage.primaryOutput), agreedStageOutputs);
+  assert.deepEqual(gateways.map((stage) => stage.name), stages.map((stage) => stage.name));
+  assert.deepEqual(gateways.map((stage) => stage.slug), stages.map((stage) => stage.id));
+  for (const stage of gateways) assert.ok(stage.activities.length >= 4, stage.name);
 });
 
 test("every matrix cell has the mandatory relationship record", () => {
