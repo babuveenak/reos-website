@@ -1,0 +1,15 @@
+.next/
+.vinext/
+.wrangler/
+dist/
+output/
+outputs/
+tmp/
+handover/
+Research and Documents/
+docs/
+tests/
+examples/
+*.docx
+*.zip
+*.log
