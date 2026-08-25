@@ -7,7 +7,6 @@ import { JourneyFlow } from "./components/JourneyHero";
 import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
-import { HowReosWorks } from "./components/Governance";
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -49,8 +48,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <div><dt>7</dt><dd>{d.home.statEmirates}</dd></div>
       </dl>
     </section>
-
-    <HowReosWorks locale={locale} compact />
 
     {/* 02 — ASK. The assistant is the front door: a question before the reading. */}
     <section className="section-pad assistant-band" id="ask">
@@ -114,18 +111,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="home-stakeholder-grid">
         {getGroups(locale).map((group) => <Link key={group.id} href={L(`/stakeholders/${group.id}`)} aria-label={`${group.name}: ${locale === "ar" ? "استكشف المسؤوليات والعلاقات" : "explore responsibilities and relationships"}`}><span>{String(group.number).padStart(2, "0")}</span><h3>{group.name}</h3><i aria-hidden="true">↗</i></Link>)}
       </div>
-    </section>
-
-    {/* 08 — ONE CLEAR CLOSE. */}
-    <section className="demo-band atmos atmos-city" id="start-reading">
-      <span className="eyebrow">{d.home.closeLabel}</span>
-      <h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2>
-      <p>{locale === "ar" ? "ابدأ برحلة العقار، ثم استكشف الأطراف والعلاقات التي تحركها." : "Start with the Property Journey, then explore the participants and relationships that move it forward."}</p>
-      <div className="hero-actions">
-        <Link className="button gold" href={L("/property-journey")}>{d.home.closeCta} <span>↗</span></Link>
-        <Link className="button ghost" href={L("/ecosystem")}>{locale === "ar" ? "استكشف المنظومة" : "Explore the ecosystem"}</Link>
-      </div>
-      <p className="demo-note">REOS is an independent knowledge and navigation layer. It does not issue approvals, execute transactions or replace legal, financial or regulated advice. Requirements differ by emirate and change over time — verify with the relevant authority before acting.</p>
     </section>
 
   </Page>;

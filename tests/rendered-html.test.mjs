@@ -159,7 +159,7 @@ test("the demo CTA belongs to Platform while educational routes remain focused",
     const html = await (await render(path)).text();
     assert.doesNotMatch(html, /href="\/demo"/, `${path} should not link to the demo`);
   }
-  assert.match(await (await render("/platform")).text(), /href="\/demo(?:\?|\")/);
+  assert.match(await (await render("/platform")).text(), /href="\/demo(?:\?|")/);
 });
 
 test("platform is a licensed product catalogue with separate access gateways", async () => {
@@ -208,14 +208,14 @@ test("final Platform optimization closes the remaining executive findings", asyn
   assert.match(html, /PLATFORM EXPERIENCE/);
   assert.match(html, /GOVERNANCE ENGINE/);
   assert.match(html, /MEASURABLE BUSINESS VALUE/);
-  assert.match(html, /href="\/demo(?:\?|\")/);
+  assert.match(html, /href="\/demo(?:\?|")/);
 });
 
-test("critical governance uses one operating model and one maturity vocabulary", async () => {
+test("homepage removes the requested promotional sections while Platform keeps the maturity vocabulary", async () => {
   const home = await (await render("/")).text();
-  assert.match(home, /REOS connects the people, evidence, approvals and workflows/);
-  assert.match(home, /HOW REOS WORKS/);
-  for (const step of ["Understand", "Map", "Prepare", "Execute", "Govern"]) assert.match(home, new RegExp(`>${step}<`));
+  assert.doesNotMatch(home, /HOW REOS WORKS/);
+  assert.doesNotMatch(home, /START ANYWHERE/);
+  assert.doesNotMatch(home, /From understanding to governed execution/);
 
   const platform = await (await render("/platform")).text();
   assert.match(platform, /Early Access/);
@@ -227,6 +227,36 @@ test("critical governance uses one operating model and one maturity vocabulary",
     const gateway = await (await render(`/platform/products/${slug}/login`)).text();
     assert.match(gateway, /Product maturity/);
     assert.match(gateway, /Request product access/);
+  }
+});
+
+test("compact footer exposes the four public website documents in both languages", async () => {
+  const home = await (await render("/")).text();
+  for (const [href, label] of [
+    ["/privacy-policy", "Privacy Policy"],
+    ["/cookie-policy", "Cookie Policy"],
+    ["/terms", "Terms"],
+    ["/sitemap", "Sitemap"],
+  ]) {
+    assert.match(home, new RegExp(`href="${href}"[^>]*>${label}<`));
+  }
+  assert.doesNotMatch(home, /class="footer-links"/);
+
+  for (const path of ["/privacy-policy", "/cookie-policy", "/terms", "/sitemap"]) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+  }
+  const privacy = await (await render("/privacy-policy")).text();
+  assert.match(privacy, /RESO/);
+  assert.match(privacy, /Federal Decree-Law No. 45 of 2021/);
+  const cookies = await (await render("/cookie-policy")).text();
+  assert.match(cookies, /reos-theme/);
+  assert.match(cookies, /does not intentionally set advertising or behavioural-analytics cookies/);
+
+  for (const path of ["/ar/privacy-policy", "/ar/cookie-policy", "/ar/terms", "/ar/sitemap"]) {
+    const html = await (await render(path)).text();
+    assert.match(html, /dir="rtl"/, `${path} must be RTL`);
+    assert.match(html, /سياسة|شروط|خريطة/, `${path} must contain Arabic public-document content`);
   }
 });
 
@@ -599,9 +629,10 @@ test("renders core routes", async () => {
   for (const path of [
     "/property-journey", "/property-journey/sales-transfer", "/stakeholders", "/stakeholders/developers",
     "/ecosystem", "/platform", "/intelligence", "/intelligence/guides", "/intelligence/definitions-and-glossary",
-    "/about", "/demo", "/authorities", "/lifecycle",
+    "/about", "/demo", "/authorities", "/lifecycle", "/privacy-policy", "/cookie-policy", "/terms", "/sitemap",
     "/ar", "/ar/property-journey", "/ar/stakeholders", "/ar/ecosystem",
     "/ar/intelligence", "/ar/intelligence/definitions-and-glossary", "/ar/platform",
+    "/ar/privacy-policy", "/ar/cookie-policy", "/ar/terms", "/ar/sitemap",
   ]) {
     const response = await render(path);
     assert.equal(response.status, 200, path);

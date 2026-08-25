@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import type { ContentStatus } from "../data/reos";
 import { DEFAULT_LOCALE, LOCALE_META, localePath, type Locale } from "../i18n/config";
 import { getDict } from "../i18n/dictionary";
-import { products } from "../data/products";
 import { Logo } from "./Logo";
 import { PreferencesControls } from "./PreferencesControls";
 import { AssistantDock } from "./AssistantDock";
@@ -41,53 +40,25 @@ export function Header({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   );
 }
 
-/** Footer architecture aligned to the frozen primary IA — REOS IA Freeze
- *  v1.0, 2026-08-19: EXPLORE (the five nav destinations, plus About and
- *  Authorities), INTELLIGENCE (its six categories) and PLATFORM (its
- *  licensed product catalogue). Glossary is deliberately NOT a standalone footer column —
- *  it sits inside INTELLIGENCE as Definitions & Glossary. */
 export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
   const L = (path: string) => localePath(locale, path);
   return (
     <footer className="site-footer">
-      <div><span className="eyebrow">{d.footer.eyebrow}</span><h2>{d.footer.headline}<br /><em>{d.footer.headlineEm}</em></h2></div>
-      <div className="footer-links">
-        <div className="footer-group">
-          <span className="footer-group-heading">{d.footer.exploreHeading}</span>
-          <div className="footer-subnav">
-            <Link href={L("/property-journey")}>{d.nav.journey}</Link>
-            <Link href={L("/stakeholders")}>{d.nav.stakeholders}</Link>
-            <Link href={L("/ecosystem")}>{d.nav.ecosystem}</Link>
-            <Link href={L("/intelligence")}>{d.nav.intelligence}</Link>
-            <Link href={L("/platform")}>{d.nav.platform}</Link>
-            <Link href={L("/authorities")}>{d.nav.authorities}</Link>
-            <Link href={L("/about")}>{d.nav.about}</Link>
-          </div>
-        </div>
-        <div className="footer-group">
-          <span className="footer-group-heading">{d.footer.intelligenceHeading}</span>
-          <div className="footer-subnav">
-            <Link href={L("/intelligence/guides")}>{d.footer.guides}</Link>
-            <Link href={L("/intelligence#regulations")}>{d.footer.regulations}</Link>
-            <Link href={L("/intelligence#processes")}>{d.footer.processes}</Link>
-            <Link href={L("/intelligence#authority-information")}>{d.footer.authorityInformation}</Link>
-            <Link href={L("/intelligence/definitions-and-glossary")}>{d.footer.definitionsGlossary}</Link>
-            <Link href={L("/intelligence#knowledge-graph")}>{d.footer.knowledgeGraph}</Link>
-          </div>
-        </div>
-        <div className="footer-group">
-          <span className="footer-group-heading">{d.footer.platformHeading}</span>
-          <div className="footer-subnav">
-            {products.map((product) => (
-              <Link key={product.slug} href={L(`/platform#${product.slug}`)}>{product.name}</Link>
-            ))}
-            <Link href={L("/platform/evaluation")}>Enterprise evaluation</Link>
-            <Link href={L("/trust-centre")}>Trust Centre</Link>
-          </div>
-        </div>
+      <div className="footer-summary">
+        <Link className="footer-brand" href={L("/")} aria-label={d.brand.home}>REOS</Link>
+        <p className="fineprint">{d.footer.fineprint}</p>
       </div>
-      <p className="fineprint">{d.footer.fineprint}</p>
+      <nav className="footer-legal" aria-label={d.footer.legalNavLabel}>
+        <Link href={L("/privacy-policy")}>{d.footer.privacyPolicy}</Link>
+        <Link href={L("/cookie-policy")}>{d.footer.cookiePolicy}</Link>
+        <Link href={L("/terms")}>{d.footer.terms}</Link>
+        <Link href={L("/sitemap")}>{d.footer.sitemap}</Link>
+      </nav>
+      <div className="footer-meta">
+        <span>© 2026 RESO. {d.footer.rightsReserved}</span>
+        <span>{d.footer.publicNotice}</span>
+      </div>
     </footer>
   );
 }
