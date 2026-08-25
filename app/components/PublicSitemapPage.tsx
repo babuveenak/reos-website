@@ -64,7 +64,7 @@ export function PublicSitemapPage({ locale = DEFAULT_LOCALE }: { locale?: Locale
           {groups.map((group) => (
             <section key={group.title}>
               <h2>{group.title}</h2>
-              <ul>{group.links.map(([label, path]) => <li key={path}><Link href={path === "/sitemap.xml" ? path : L(path)}>{label}<span aria-hidden="true">↗</span></Link></li>)}</ul>
+              <ul>{group.links.map(([label, path]) => <li key={path}>{path === "/sitemap.xml" ? <a href={path}>{label}<span aria-hidden="true">↗</span></a> : <Link href={L(path)}>{label}<span aria-hidden="true">↗</span></Link>}</li>)}</ul>
             </section>
           ))}
         </div>
