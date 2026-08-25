@@ -5,11 +5,11 @@ import {
   canCloseG7,
   canTransition,
   completenessForStep,
-  deliveryGroups,
   downstreamStepsToReopen,
   gateways,
   matrixCells,
   processSteps,
+  stakeholderGroups,
   uxSteps,
   validateGatewayModel,
 } from "../app/data/gateways.ts";
@@ -22,7 +22,7 @@ test("blueprint coverage is exact and fully linked", () => {
 });
 
 test("every matrix cell has the mandatory relationship record", () => {
-  assert.equal(matrixCells.length, gateways.length * deliveryGroups.length);
+  assert.equal(matrixCells.length, gateways.length * stakeholderGroups.length);
   for (const cell of matrixCells) {
     assert.ok(cell.stepIds.length > 0, cell.id);
     assert.ok(cell.inputIds.length > 0, cell.id);

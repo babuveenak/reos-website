@@ -7,7 +7,7 @@ import { lifecycleStages } from "./data/reos";
 import { SITE_URL } from "./data/site";
 import { LOCALES, localePath } from "./i18n/config";
 import { approvedRelationships } from "./data/relationships";
-import { allSteps, deliveryGroups, gateways } from "./data/gateways";
+import { allSteps, gateways, stakeholderGroups } from "./data/gateways";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entry = (path: string, priority: number): MetadataRoute.Sitemap[number] =>
@@ -47,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/documents", 0.76), entry("/evidence", 0.76), entry("/decisions", 0.76),
     entry("/user-happiness", 0.88), entry("/glossary", 0.7), entry("/search", 0.72),
     ...gateways.map((gateway) => entry(`/gateway/${gateway.slug}`, 0.9)),
-    ...deliveryGroups.map((group) => entry(`/groups/${group.id}`, 0.78)),
+    ...stakeholderGroups.map((group) => entry(`/groups/${group.displayId}`, 0.78)),
     ...allSteps.map((step) => entry(`/steps/${step.id}`, 0.74)),
   ];
   return [...localizedEntries, ...relationshipEntries, ...processEntries];

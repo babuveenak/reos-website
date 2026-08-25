@@ -6,7 +6,7 @@ import { SITE_URL } from "./data/site";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "REOS Seven-Gateway Development Platform", template: "%s" },
-  description: "Navigate seven controlled development gateways, twelve integrated delivery groups and every evidence-backed project decision.",
+  description: "Navigate seven controlled development gateways, twelve UAE property stakeholder groups and every evidence-backed project decision.",
   applicationName: "REOS",
   keywords: ["REOS", "UAE property development", "real estate operating system", "development lifecycle", "property approvals", "PropTech"],
   alternates: { canonical: "/" },

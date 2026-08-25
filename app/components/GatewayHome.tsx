@@ -15,7 +15,7 @@ export function GatewayHome() {
           <p>Seven controlled gateways connect opportunity to a performing asset—each with an owner, evidence and a clear decision.</p>
           <div className="gateway-actions">
             <Link href="/journey">Start the journey <span aria-hidden="true">→</span></Link>
-            <Link href="/roles">Find my role</Link>
+            <Link href="/roles">Explore stakeholders</Link>
           </div>
         </div>
 
@@ -38,7 +38,7 @@ export function GatewayHome() {
 
         <dl className="gateway-proof" aria-label="Process coverage">
           <div><dt>7</dt><dd>controlled gateways</dd></div>
-          <div><dt>12</dt><dd>integrated groups</dd></div>
+          <div><dt>12</dt><dd>stakeholder groups</dd></div>
           <div><dt>84</dt><dd>linked control cells</dd></div>
           <div><dt>∞</dt><dd>evidence traceability</dd></div>
         </dl>

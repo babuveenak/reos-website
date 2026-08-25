@@ -1,3 +1,5 @@
+import { groups as ecosystemGroups } from "./ecosystem.ts";
+
 export type GatewayId = "G1" | "G2" | "G3" | "G4" | "G5" | "G6" | "G7";
 export type GroupId = `GR${string}`;
 export type StepId = `${GatewayId}-S${string}` | `UX-S${string}`;
@@ -18,12 +20,15 @@ export interface Gateway {
   redFlags: string[];
 }
 
-export interface DeliveryGroup {
+export interface StakeholderGroup {
   id: GroupId;
+  displayId: `SG${string}`;
+  ecosystemId: string;
   name: string;
   stakeholders: string;
   controlledInformation: string;
   responsibility: string;
+  boundary?: string;
 }
 
 export interface ConfirmationRecord {
@@ -73,20 +78,37 @@ export interface MatrixCell {
   naReason: null;
 }
 
-export const deliveryGroups: DeliveryGroup[] = [
-  { id:"GR01", name:"Sponsor, strategy and benefits", stakeholders:"Sponsor, investment committee, development director", controlledInformation:"Mandate, objectives, business case, benefits register, decisions", responsibility:"Confirm strategic fit, funding authority and benefit ownership" },
-  { id:"GR02", name:"User, customer and stakeholder experience", stakeholders:"Users, buyers, occupants, community, customer care, accessibility representatives", controlledInformation:"Personas, journey maps, requirements, communications, feedback, complaints", responsibility:"Research needs, validate touchpoints, measure effort and close recovery actions" },
-  { id:"GR03", name:"PMO, gateway and information governance", stakeholders:"Project director, PMO, gateway manager, document controller", controlledInformation:"Gateway plan, RACI, evidence index, action and decision logs, baselines, audit trail", responsibility:"Control steps, versions, reviews, acceptance and gateway transitions" },
-  { id:"GR04", name:"Land, legal, title and compliance", stakeholders:"Landowner, legal counsel, surveyor, compliance officer", controlledInformation:"Title and land records, surveys, agreements, obligations, compliance register", responsibility:"Verify rights, boundaries, obligations and controlled legal acceptance" },
-  { id:"GR05", name:"Authorities, utilities and permits", stakeholders:"Authority liaison, regulators, municipalities, utility providers", controlledInformation:"Authority matrix, NOCs, permits, submissions, comments, conditions, expiry data", responsibility:"Verify the route, submit, close comments and track conditions" },
-  { id:"GR06", name:"Finance, cost and funding", stakeholders:"Finance, funder, cost consultant, development manager", controlledInformation:"Cost plans, revenue assumptions, cash flow, funding approvals, forecasts", responsibility:"Validate affordability, funding, sensitivities, changes and exposure" },
-  { id:"GR07", name:"Planning, logistics and controls", stakeholders:"Planner, logistics lead, project controls, delivery leads", controlledInformation:"Master programme, milestones, dependencies, logistics plans, progress data", responsibility:"Validate sequence, critical path, resources, progress and recovery" },
-  { id:"GR08", name:"Risk, assurance, HSE and sustainability", stakeholders:"Risk lead, independent reviewer, HSE, quality and sustainability leads", controlledInformation:"Risk and opportunity registers, assurance plans, HSE files, targets, audit findings", responsibility:"Identify, challenge, mitigate and accept residual exposure" },
-  { id:"GR09", name:"Design, BIM and technical integration", stakeholders:"Architects, engineers, BIM manager, specialists, operator representatives", controlledInformation:"Brief, models, drawings, calculations, specifications, interfaces, design-change log", responsibility:"Trace requirements, coordinate, verify, freeze and control technical information" },
-  { id:"GR10", name:"Commercial, procurement and contracts", stakeholders:"Commercial lead, procurement, bidders, contract administrator, legal counsel", controlledInformation:"Procurement strategy, tender pack, bids, evaluations, contract, changes, claims", responsibility:"Procure fairly, allocate risk, execute contracts and administer obligations" },
-  { id:"GR11", name:"Construction, quality and commissioning", stakeholders:"Contractor, subcontractors, supervision, quality and commissioning teams", controlledInformation:"Submittals, RFIs, ITPs, inspections, tests, progress, defects, commissioning records", responsibility:"Build safely, verify conformance, test systems and prove completion" },
-  { id:"GR12", name:"Operations, FM, handover and lifecycle performance", stakeholders:"Asset owner, operator, FM, customer care, warranty and service teams", controlledInformation:"Asset register, as-builts, O&M manuals, training, warranties, defects, KPIs", responsibility:"Accept usable asset data, operate, support users and feed lessons forward" },
-];
+const stakeholderInformation = [
+  "Land title, investment mandate, equity commitments, shareholder decisions and return objectives",
+  "Business case, development brief, project baseline, approvals, contracts, progress and handover obligations",
+  "Surveys, studies, designs, calculations, specifications, professional submissions and certifications",
+  "Registrations, licences, permits, NOCs, statutory decisions, conditions and compliance records",
+  "Capacity confirmations, corridor requirements, designs, NOCs, connection records and service activation",
+  "Methods, programmes, submittals, RFIs, inspections, tests, progress records, defects and completion evidence",
+  "Product data, samples, certifications, manufacturing records, delivery status, warranties and spares",
+  "Market evidence, listing and advertising permissions, buyer feedback, transaction records and communications",
+  "Finance approvals, valuations, security, escrow records, drawdowns, mortgages, payments and discharges",
+  "Reservations, sale agreements, payments, inspections, title, handover, defects and ownership records",
+  "Occupancy needs, accessibility requirements, tenancy records, service requests, feedback and complaints",
+  "Asset registers, as-builts, O&M information, training, warranties, service levels, defects and performance data",
+] as const;
+
+export const stakeholderGroups: StakeholderGroup[] = ecosystemGroups.map((group, index) => {
+  const sequence = String(index + 1).padStart(2, "0");
+  return {
+    id: `GR${sequence}` as GroupId,
+    displayId: `SG${sequence}` as `SG${string}`,
+    ecosystemId: group.id,
+    name: group.name,
+    stakeholders: group.members.join(", "),
+    controlledInformation: stakeholderInformation[index] ?? "Lifecycle records and evidence",
+    responsibility: group.controls.replace(/\.$/, ""),
+    boundary: group.boundary,
+  };
+});
+
+export const stakeholderGroupCode = (id: GroupId) => `SG${id.slice(2)}` as `SG${string}`;
+export const normalizeStakeholderGroupId = (value: string) => `GR${value.toUpperCase().replace(/^(SG|GR)/, "")}` as GroupId;
 
 const gatewayContent = [
   { id:"G1", slug:"feasibility", name:"Feasibility", question:"Should we invest more time and money in this opportunity?", purpose:"Test whether the opportunity is viable and choose an evidence-backed route.", landmark:"Parcel, compass and option blocks", accent:"#C9B458",
@@ -147,13 +169,21 @@ export const gateways: Gateway[] = gatewayContent.map((gateway) => ({
   inputs: [...gateway.inputs], outputs: [...gateway.outputs], exitCriteria: [...gateway.exit], redFlags: [...gateway.flags],
 }));
 
-const groupOwners: Record<GroupId, [string, string]> = Object.fromEntries(deliveryGroups.map((group) => [group.id, [group.stakeholders.split(",")[0], group.id === "GR03" ? "Development Director / Project Director" : "Gateway Manager / PMO"]]));
+const groupAccountableRoles: Record<GroupId, string> = {
+  GR01:"Landowner / Investment Committee", GR02:"Development Director / Project Sponsor",
+  GR03:"Lead Consultant / Developer", GR04:"Applicable Authority / Regulator",
+  GR05:"Utility Provider / Developer", GR06:"Main Contractor / Developer",
+  GR07:"Supplier Lead / Main Contractor", GR08:"Brokerage Principal / Developer",
+  GR09:"Financial Institution / Project Sponsor", GR10:"Property Owner / Developer",
+  GR11:"Property Operator / Community Manager", GR12:"Asset Owner / FM Lead",
+};
+const groupOwners: Record<GroupId, [string, string]> = Object.fromEntries(stakeholderGroups.map((group) => [group.id, [group.stakeholders.split(",")[0], groupAccountableRoles[group.id]]]));
 
 const matrixStepIndex: Record<GatewayId, number[]> = {
-  G1:[9,2,10,1,5,7,6,8,4,6,4,0], G2:[10,4,10,1,7,2,3,9,6,3,5,3],
-  G3:[10,1,10,0,0,7,6,7,9,9,7,7], G4:[10,3,10,1,3,8,8,7,5,11,8,3],
-  G5:[6,1,5,6,8,6,6,6,5,5,8,10], G6:[9,7,9,8,2,8,9,3,4,8,1,5],
-  G7:[10,6,9,7,3,8,7,10,9,8,2,4],
+  G1:[9,9,4,5,3,6,6,2,7,2,2,4], G2:[1,10,6,7,2,5,3,4,3,3,3,3],
+  G3:[3,10,9,0,5,7,8,1,7,1,1,7], G4:[10,11,7,3,3,8,7,3,8,3,3,3],
+  G5:[6,6,5,8,8,4,3,6,6,6,6,8], G6:[8,9,1,2,2,3,4,7,8,7,6,4],
+  G7:[10,9,3,9,4,7,5,6,8,6,6,4],
 };
 
 const previousStep = (gatewayIndex: number, stepIndex: number): StepId[] => {
@@ -165,13 +195,13 @@ const previousStep = (gatewayIndex: number, stepIndex: number): StepId[] => {
 export const processSteps: ProcessStep[] = gateways.flatMap((gateway, gatewayIndex) =>
   gatewayContent[gatewayIndex].titles.map((title, stepIndex) => {
     const id = gateway.steps[stepIndex];
-    const groupIds = deliveryGroups.filter((_, groupIndex) => matrixStepIndex[gateway.id][groupIndex] === stepIndex).map((group) => group.id);
-    const primaryGroup = groupIds[0] ?? "GR03";
+    const groupIds = stakeholderGroups.filter((_, groupIndex) => matrixStepIndex[gateway.id][groupIndex] === stepIndex).map((group) => group.id);
+    const primaryGroup = groupIds[0] ?? "GR02";
     const [responsibleOwner, accountableOwner] = groupOwners[primaryGroup];
     const dependencies = previousStep(gatewayIndex, stepIndex);
     const next = stepIndex < gateway.steps.length - 1 ? [gateway.steps[stepIndex + 1]] : gatewayIndex < gateways.length - 1 ? [gateways[gatewayIndex + 1].steps[0]] : [];
     return {
-      id, gatewayId:gateway.id, groupIds:groupIds.length ? groupIds : ["GR03"], title,
+      id, gatewayId:gateway.id, groupIds:groupIds.length ? groupIds : ["GR02"], title,
       purpose:`Produce and confirm the controlled outcome needed to ${title.toLowerCase()}.`,
       entryCriteria: dependencies.length ? dependencies.map((item) => `${item} output resolves to its current accepted version`) : ["Approved opportunity mandate is available"],
       inputIds: dependencies.length ? dependencies.map((item) => `DOC-${item}-V1`) : ["REQ-PROJECT-MANDATE"],
@@ -190,33 +220,33 @@ const uxTitles = [
 const uxGatewayIds: GatewayId[] = ["G1","G1","G2","G3","G4","G5","G6","G6","G7","G7","G7","G7"];
 export const uxSteps: ProcessStep[] = uxTitles.map((title,index) => {
   const id = `UX-S${pad(index+1)}` as StepId;
-  return { id, gatewayId:"UX", groupIds:["GR02","GR03"], title, purpose:`Execute and evidence the user-outcome control: ${title.toLowerCase()}.`, entryCriteria:index ? [`UX-S${pad(index)} is accepted`] : ["Project user segments are authorized"], inputIds:index ? [`DOC-UX-S${pad(index)}-V1`] : ["REQ-USER-OUTCOMES"], responsibleOwner:"User Experience / Customer Lead", accountableOwner:"Development Director / Asset Owner", reviewer:"Accessibility or service assurance reviewer", plannedDate:null, actualDate:null, outputIds:[`DOC-${id}-V1`], evidenceIds:[`EV-${id}`], confirmation:{prepare:{by:null,date:null},review:{by:null,date:null},accept:{by:null,date:null,decision:"Pending"}}, status:"Not started", reason:`Mandatory assurance step linked to ${uxGatewayIds[index]}; no live measurements loaded.`, conditions:[], dependencyIds:index ? [`UX-S${pad(index)}` as StepId] : [], nextStepIds:index<uxTitles.length-1 ? [`UX-S${pad(index+2)}` as StepId] : ["G1-S01"], version:1, auditHistory:[{event:"Blueprint record created",at:"Blueprint v2.0",by:"REOS process model"}] };
+  return { id, gatewayId:"UX", groupIds:["GR02","GR10","GR11","GR12"], title, purpose:`Execute and evidence the user-outcome control: ${title.toLowerCase()}.`, entryCriteria:index ? [`UX-S${pad(index)} is accepted`] : ["Project user segments are authorized"], inputIds:index ? [`DOC-UX-S${pad(index)}-V1`] : ["REQ-USER-OUTCOMES"], responsibleOwner:"Customer / Resident Experience Lead", accountableOwner:"Development Director / Asset Owner", reviewer:"Accessibility or service assurance reviewer", plannedDate:null, actualDate:null, outputIds:[`DOC-${id}-V1`], evidenceIds:[`EV-${id}`], confirmation:{prepare:{by:null,date:null},review:{by:null,date:null},accept:{by:null,date:null,decision:"Pending"}}, status:"Not started", reason:`Mandatory assurance step linked to ${uxGatewayIds[index]}; no live measurements loaded.`, conditions:[], dependencyIds:index ? [`UX-S${pad(index)}` as StepId] : [], nextStepIds:index<uxTitles.length-1 ? [`UX-S${pad(index+2)}` as StepId] : ["G1-S01"], version:1, auditHistory:[{event:"Blueprint record created",at:"Blueprint v2.0",by:"REOS process model"}] };
 });
 
 const matrixOutcomes: Record<GroupId,string[]> = {
-  GR01:["Approve mandate and options","Confirm strategic conditions","Approve design baseline","Authorize award","Govern material variance","Accept benefit readiness","Verify benefits and closeout"],
-  GR02:["Confirm user needs","Validate stakeholder pathway","Test journeys and accessibility","Contract service standards","Manage disruption and communications","Validate handover experience","Measure happiness and recovery"],
-  GR03:["Establish IDs and RACI","Control approval evidence","Freeze and version design","Audit tender decision","Control records and changes","Verify transfer baseline","Archive and loop lessons"],
-  GR04:["Verify title and rights","Confirm legal conditions","Trace land obligations","Allocate legal risk","Monitor compliance","Confirm transfer obligations","Close residual obligations"],
-  GR05:["Map approval route","Secure and track approvals","Verify design compliance","Include permit duties","Pass inspections and conditions","Secure completion clearances","Maintain operational compliance"],
-  GR06:["Validate business case","Price approval impacts","Control design to budget","Validate bid and award","Forecast cost and change","Confirm handover liabilities","Close final account and benefits"],
-  GR07:["Test master timeline","Integrate authority dates","Validate design and procurement path","Validate bidder programme","Verify progress and recovery","Coordinate transition dates","Close deferred obligations"],
-  GR08:["Establish risk profile","Assure statutory risks","Close design risks","Evaluate bidder controls","Assure HSE, quality and ESG","Accept residual safe-use risks","Verify performance and lessons"],
-  GR09:["Test options and capacity","Develop compliant basis","Coordinate and freeze design","Answer controlled queries","Control RFIs and as-builts","Accept verified asset information","Update lifecycle information"],
-  GR10:["Select procurement route","Plan approval obligations","Package scope and interfaces","Run fair tender and contract","Administer change and claims","Certify contractual completion","Settle and close contracts"],
-  GR11:["Advise buildability","Plan enabling constraints","Verify methods and commissioning","Validate delivery capability","Build, inspect and test","Demonstrate completion and train","Correct defects and deferred tests"],
-  GR12:["Define operating outcomes","Identify operating permits","Review maintainability","Specify O&M and warranty duties","Prepare mobilization and assets","Accept operations transfer","Operate, measure and improve"],
+  GR01:["Confirm land and investment mandate","Resolve ownership inputs for approvals","Endorse design against investment intent","Confirm funding and award parameters","Monitor capital, risk and material variance","Confirm ownership and investment handover","Review asset performance and investment outcomes"],
+  GR02:["Lead feasibility and the business case","Coordinate approvals and NOCs","Own the brief, design and budget baseline","Run procurement and authorize award","Govern delivery, change and reporting","Coordinate completion and stakeholder handover","Close obligations and feed lessons forward"],
+  GR03:["Test site, options and technical feasibility","Prepare and coordinate authority submissions","Develop, coordinate and certify the design","Issue tender information and evaluate bids","Review submittals, inspect and certify work","Verify testing, records and completion","Support defects, performance review and lessons"],
+  GR04:["Confirm planning and regulatory constraints","Review submissions and issue statutory decisions","Verify design compliance at required stages","Maintain applicable permit and licence conditions","Inspect works and enforce conditions","Issue completion and occupancy clearances","Maintain operational and property compliance"],
+  GR05:["Confirm capacity, corridors and connection constraints","Define NOCs, approvals and connection requirements","Review utility designs and interfaces","Confirm utility scope and provider obligations","Inspect interfaces and deliver connections","Activate services and close connection NOCs","Support service performance and modifications"],
+  GR06:["Advise buildability and delivery risk","Plan permit and enabling-work inputs","Review buildability, methods and commissioning","Bid, clarify scope and demonstrate capability","Build, inspect, test and report conformance","Complete defects, commissioning and handover","Rectify defects and close contractual obligations"],
+  GR07:["Advise availability, lead times and supply risk","Identify product approvals and certifications","Support specifications, samples and product data","Submit compliant offers, warranties and delivery plans","Manufacture, deliver and support quality testing","Transfer warranties, spares and product records","Fulfil warranty and replacement obligations"],
+  GR08:["Test market demand, pricing and product fit","Verify the marketing and sales permission route","Share buyer feedback and product requirements","Maintain compliant market representation","Communicate verified delivery status to the market","Coordinate buyer communications and handover appointments","Support leasing, resale and customer feedback"],
+  GR09:["Assess financeability, funding and the escrow route","Confirm regulatory and financial prerequisites","Review cost, valuation and drawdown assumptions","Validate funding conditions and award securities","Control drawdowns, valuations and escrow releases","Confirm completion-related finance and discharge actions","Close facilities, mortgages and escrow obligations"],
+  GR10:["Represent buyer and investor-owner expectations","Receive verified regulatory disclosure","Validate usability, value and end-user requirements","Receive committed specification and service obligations","Track progress and raise contractually relevant issues","Inspect and accept unit and ownership handover records","Confirm defect closure, services and ownership outcomes"],
+  GR11:["Inform intended use, access and amenity expectations","Understand occupancy and tenancy requirements","Validate accessibility, comfort and operational needs","Shape service and support requirements","Receive disruption and safety communications","Complete move-in readiness and orientation","Report experience issues and confirm service recovery"],
+  GR12:["Define whole-life operating and maintenance outcomes","Identify operating permits and service conditions","Review maintainability, access and asset information","Set FM mobilization, O&M and warranty requirements","Prepare operating systems, assets and teams","Accept asset data, training, keys and warranties","Operate the community, measure performance and return lessons"],
 };
 
-export const matrixCells: MatrixCell[] = deliveryGroups.flatMap((group, groupIndex) => gateways.map((gateway, gatewayIndex) => {
+export const matrixCells: MatrixCell[] = stakeholderGroups.flatMap((group, groupIndex) => gateways.map((gateway, gatewayIndex) => {
   const step = gateway.steps[matrixStepIndex[gateway.id][groupIndex]];
-  return { id:`${gateway.id}-${group.id}`, gatewayId:gateway.id, groupId:group.id, outcome:matrixOutcomes[group.id][gatewayIndex], stepIds:[step], responsibleRole:group.stakeholders.split(",")[0], accountableRole:"Development Director / Project Director", inputIds:[`REQ-${gateway.id}-${group.id}`], outputIds:[`DOC-${step}-V1`], evidenceIds:[`EV-${step}`], confirmationState:"Not started", condition:null, naReason:null };
+  return { id:`${gateway.id}-${group.id}`, gatewayId:gateway.id, groupId:group.id, outcome:matrixOutcomes[group.id][gatewayIndex], stepIds:[step], responsibleRole:group.stakeholders.split(",")[0], accountableRole:groupAccountableRoles[group.id], inputIds:[`REQ-${gateway.id}-${group.id}`], outputIds:[`DOC-${step}-V1`], evidenceIds:[`EV-${step}`], confirmationState:"Not started", condition:null, naReason:null };
 }));
 
 export const allSteps = [...processSteps, ...uxSteps];
 export const gatewayBySlug = Object.fromEntries(gateways.map((gateway) => [gateway.slug,gateway]));
 export const gatewayById = Object.fromEntries(gateways.map((gateway) => [gateway.id,gateway]));
-export const groupById = Object.fromEntries(deliveryGroups.map((group) => [group.id,group]));
+export const groupById = Object.fromEntries(stakeholderGroups.flatMap((group) => [[group.id,group], [group.displayId,group]]));
 export const stepById = Object.fromEntries(allSteps.map((step) => [step.id,step]));
 
 export const roles = [
@@ -235,12 +265,12 @@ export function completenessForStep(step: ProcessStep) {
 export function validateGatewayModel() {
   const errors:string[]=[];
   if(gateways.length!==7) errors.push("Gateway count must equal 7");
-  if(deliveryGroups.length!==12) errors.push("Delivery-group count must equal 12");
+  if(stakeholderGroups.length!==12) errors.push("Stakeholder-group count must equal 12");
   if(matrixCells.length!==84) errors.push("Matrix coverage must equal 84 cells");
   const ids=allSteps.map((step)=>step.id); if(new Set(ids).size!==ids.length) errors.push("Step IDs must be unique");
   for(const cell of matrixCells){ if(!gatewayById[cell.gatewayId]||!groupById[cell.groupId]||cell.stepIds.some((id)=>!stepById[id])) errors.push(`Broken matrix cell ${cell.id}`); }
   for(const step of allSteps){ if(step.responsibleOwner===step.confirmation.accept.by&&step.confirmation.accept.by) errors.push(`Self-acceptance ${step.id}`); }
-  return {errors,counts:{gateways:gateways.length,groups:deliveryGroups.length,cells:matrixCells.length,gatewaySteps:processSteps.length,uxSteps:uxSteps.length,totalSteps:allSteps.length}};
+  return {errors,counts:{gateways:gateways.length,groups:stakeholderGroups.length,cells:matrixCells.length,gatewaySteps:processSteps.length,uxSteps:uxSteps.length,totalSteps:allSteps.length}};
 }
 
 export function canTransition(step: ProcessStep, acceptedDocumentIds: Set<string>) {

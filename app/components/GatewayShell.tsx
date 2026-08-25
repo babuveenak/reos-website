@@ -5,7 +5,7 @@ import { GatewayPreferences } from "./GatewayPreferences";
 export function GatewayTopbar() {
   return <header className="gateway-topbar">
     <Link className="gateway-brand" href="/" aria-label="REOS gateway home"><span aria-hidden="true">R</span><strong>REOS</strong><small>Development GPS</small></Link>
-    <nav aria-label="Primary gateway navigation"><Link href="/journey">Journey</Link><Link href="/matrix">7 × 12 matrix</Link><Link href="/user-happiness">User happiness</Link><Link href="/roles">Roles</Link></nav>
+    <nav aria-label="Primary gateway navigation"><Link href="/journey">Journey</Link><Link href="/matrix">7 × 12 matrix</Link><Link href="/user-happiness">User happiness</Link><Link href="/roles">Stakeholders</Link></nav>
     <div className="gateway-tools"><GatewayPreferences /><Link className="gateway-search" href="/search">Find a step <span aria-hidden="true">⌘ K</span></Link></div>
   </header>;
 }
