@@ -19,7 +19,7 @@ export const CONTACT_EMAIL =
 
 /** Canonical origin, used for metadata and the sitemap. No trailing slash. */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL || "https://reos-seven-gateway-private.aiworkingforme.chatgpt.site"
+  process.env.NEXT_PUBLIC_SITE_URL || "https://reos-seven-gateway.vercel.app"
 ).replace(/\/$/, "");
 
 /** Optional. Shown alongside the email on the demo page when set. */
