@@ -22,10 +22,7 @@ import { legacyStakeholderToGroup } from "./app/data/stakeholderDetails";
  */
 const legacyRedirects = [
   // Whole-route renames.
-  ["/journey", "/property-journey"],
-  ["/roles", "/intelligence/guides"],
   ["/insights", "/intelligence"],
-  ["/glossary", "/intelligence/definitions-and-glossary"],
 
   // The real old 12-stage ids, ahead of the general /journey wildcard below
   // so each lands on its correct new stage rather than a 404. Where an old
@@ -46,8 +43,9 @@ const legacyRedirects = [
   // General wildcard: a safety net for any /journey/:stage or /roles/:slug
   // id not covered above (e.g. every /roles slug is unchanged, only the
   // parent segment moved).
-  ["/journey/:stage", "/property-journey/:stage"],
-  ["/roles/:slug", "/intelligence/guides/:slug"],
+  // /journey, /roles and /glossary now belong to the Seven-Gateway process
+  // product. Historical detail routes remain available under
+  // /property-journey and /intelligence/guides.
 
   // The eight legacy stakeholder ids (app/data/reos.ts, unchanged this
   // session), folded into the twelve canonical groups. Master developer and

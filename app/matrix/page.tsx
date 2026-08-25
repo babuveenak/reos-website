@@ -1,0 +1,5 @@
+import { Breadcrumbs, GatewayShell } from "../components/GatewayShell";
+import { MatrixExplorer } from "../components/MatrixExplorer";
+import { deliveryGroups, gateways, matrixCells } from "../data/gateways";
+export const metadata={title:"7 × 12 Control Matrix · REOS",description:"Inspect all 84 mandatory gateway and delivery-group connections."};
+export default function MatrixPage(){return <GatewayShell><div className="gateway-content gateway-content-wide"><Breadcrumbs items={[{label:"Home",href:"/"},{label:"7 × 12 matrix"}]}/><header className="gateway-page-head compact"><div><span className="gateway-kicker">84 MANDATORY CONNECTIONS</span><h1>The whole project.<br/><em>No orphan responsibility.</em></h1><p>Select any cell to trace its owner, input, output, evidence and controlled step.</p></div><div className="matrix-legend"><span><i/>Not started</span><span><i/>Non-color state marker</span><strong>All cells are template records—not live approvals.</strong></div></header><MatrixExplorer gateways={gateways} groups={deliveryGroups} cells={matrixCells}/></div></GatewayShell>}

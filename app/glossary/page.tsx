@@ -1,0 +1,4 @@
+import { Breadcrumbs, GatewayShell } from "../components/GatewayShell";
+import { glossary } from "../data/gateways";
+export const metadata={title:"Plain-Language Glossary · REOS"};
+export default function GlossaryPage(){return <GatewayShell><div className="gateway-content"><Breadcrumbs items={[{label:"Home",href:"/"},{label:"Glossary"}]}/><header className="gateway-page-head compact"><div><span className="gateway-kicker">PLAIN LANGUAGE FIRST</span><h1>Professional terms.<br/><em>Ordinary explanations.</em></h1><p>Authority, contract and legal meanings vary by jurisdiction and project. Verify the applicable local definition before acting.</p></div></header><section className="glossary-list"><dl>{glossary.map(([term,definition])=><div key={term}><dt>{term}</dt><dd>{definition}</dd></div>)}</dl></section></div></GatewayShell>}

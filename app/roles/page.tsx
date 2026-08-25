@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { Breadcrumbs, GatewayShell, StatusPill } from "../components/GatewayShell";
+import { roles } from "../data/gateways";
+export const metadata={title:"Roles and Decision Rights · REOS"};
+export default function RolesPage(){return <GatewayShell><div className="gateway-content"><Breadcrumbs items={[{label:"Home",href:"/"},{label:"Roles"}]}/><header className="gateway-page-head compact"><div><span className="gateway-kicker">FIND MY ROLE</span><h1>Know what you own.<br/><em>Know who confirms it.</em></h1><p>The producer of an item should not be its only approver. Statutory authority remains external to every internal gate.</p></div><StatusPill tone="warning">Maker-checker separation required</StatusPill></header><section className="roles-grid">{roles.map(([role,responsibility],index)=><article key={role}><span>{String(index+1).padStart(2,"0")}</span><h2>{role}</h2><p>{responsibility}.</p><Link href="/matrix">Trace this role in the matrix →</Link></article>)}</section></div></GatewayShell>}

@@ -11,6 +11,7 @@
     "start": "next start",
     "build:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "test": "npm run build",
+    "test:gateway": "node --experimental-strip-types --test tests/gateway-process.test.mts",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },

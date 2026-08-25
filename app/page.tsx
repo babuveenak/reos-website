@@ -8,6 +8,7 @@ import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
 import { buildSnapshot } from "./assistant/snapshot";
 import { HowReosWorks } from "./components/Governance";
+import { GatewayHome } from "./components/GatewayHome";
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -132,5 +133,5 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
 }
 
 export default function Home() {
-  return <View locale={DEFAULT_LOCALE} />;
+  return <GatewayHome />;
 }

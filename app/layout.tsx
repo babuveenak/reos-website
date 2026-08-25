@@ -5,13 +5,13 @@ import { SITE_URL } from "./data/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "REOS — Understand the UAE Property Journey", template: "%s" },
-  description: "Explore how property is planned, financed, designed, developed, built, sold, registered, handed over, managed and invested in across the UAE.",
+  title: { default: "REOS Seven-Gateway Development Platform", template: "%s" },
+  description: "Navigate seven controlled development gateways, twelve integrated delivery groups and every evidence-backed project decision.",
   applicationName: "REOS",
   keywords: ["REOS", "UAE property development", "real estate operating system", "development lifecycle", "property approvals", "PropTech"],
   alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: "REOS", title: "REOS — Understand the Property Journey", description: "The digital map of the UAE real estate ecosystem. Seven connected stages, twelve stakeholder groups, seven emirates.", images: [{ url: "/og.png", width: 1200, height: 630, alt: "REOS — Understand the Property Journey, from land to living" }] },
-  twitter: { card: "summary_large_image", title: "REOS — Understand the Property Journey", description: "The digital map of the UAE real estate ecosystem.", images: ["/og.png"] },
+  openGraph: { type: "website", siteName: "REOS", title: "REOS Seven-Gateway Development Platform", description: "See where the project is. Know what moves it forward.", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Seven isometric development gateways connected across the REOS project route" }] },
+  twitter: { card: "summary_large_image", title: "REOS Seven-Gateway Development Platform", description: "See where the project is. Know what moves it forward.", images: ["/og.png"] },
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
