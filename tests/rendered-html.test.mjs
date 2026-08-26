@@ -453,6 +453,9 @@ test("property journey remains educational while its seven-stage index is visual
   assert.match(html, /Property does not move through one process\. It moves through seven connected stages/);
   assert.equal((html.match(/class="stage-index-card"/g) ?? []).length, 7, "the canonical lifecycle must retain exactly seven visual cards");
   assert.equal((html.match(/class="stage-index-visual"/g) ?? []).length, 7, "every lifecycle stage needs a visual panel");
+  for (const id of ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"]) {
+    assert.match(html, new RegExp(`property-journey-stage-${id}-v1\\.jpg`), `${id} needs its own corresponding image`);
+  }
   assert.equal((html.match(/>Open stage</g) ?? []).length, 7, "every visual stage needs a direct educational route");
   assert.doesNotMatch(source, /HowReosWorks|RouteGovernance/);
   assert.doesNotMatch(html, /HOW REOS WORKS|licensed REOS workflow|Select a journey stage|See the connected ecosystem/i);

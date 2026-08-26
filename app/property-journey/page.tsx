@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PropertyJourneyHero, type JourneyHeroStage } from "../components/PropertyJourneyHero";
 import { Page, SectionIntro } from "../components/SiteShell";
+import { stageVisualById } from "../data/stageVisuals";
 
 export const metadata: Metadata = {
   title: "The UAE Property Journey, Mapped End to End | REOS",
@@ -46,12 +47,11 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="stage-index">
         {stages.map((stage) => (
           <Link key={stage.id} href={localePath(locale, `/property-journey/${stage.id}`)} className="stage-index-card">
-            <div className="stage-index-visual" aria-hidden="true">
+            <div className="stage-index-visual" data-stage={stage.id} aria-hidden="true">
               <Image
-                src="/images/property-journey-interactive-foundation-v1.png"
+                src={stageVisualById[stage.id]}
                 alt=""
-                width={1672}
-                height={941}
+                fill
                 sizes="(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 15vw"
               />
               <span className="stage-index-number">{String(stage.number).padStart(2, "0")}</span>

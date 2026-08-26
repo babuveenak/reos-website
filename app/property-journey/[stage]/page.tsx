@@ -13,6 +13,7 @@ import { stageById, stages } from "../../data/journey";
 import { relationshipLevelLabels, relationshipsByStage } from "../../data/relationships";
 import { LandVisionGuide } from "../../components/LandVisionGuide";
 import { StageVisualOverview } from "../../components/StageVisualOverview";
+import { stageVisualById } from "../../data/stageVisuals";
 
 type Props = { params: Promise<{ stage: string }> };
 
@@ -32,14 +33,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description: stage.summary,
       images: [{
-        url: "https://reos-website.vercel.app/images/property-journey-interactive-foundation-v1.png",
+        url: `https://reos-website.vercel.app${stageVisualById[stage.id]}`,
         alt: `${stage.name} within the seven-stage UAE property journey`,
       }],
     },
     twitter: {
       title,
       description: stage.summary,
-      images: ["https://reos-website.vercel.app/images/property-journey-interactive-foundation-v1.png"],
+      images: [`https://reos-website.vercel.app${stageVisualById[stage.id]}`],
     },
   };
 }
@@ -76,7 +77,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
       </div>
       <figure className="stage-hero-art" aria-hidden="true">
         <Image
-          src="/images/property-journey-interactive-foundation-v1.png"
+          src={stageVisualById[stage.id]}
           alt=""
           fill
           priority

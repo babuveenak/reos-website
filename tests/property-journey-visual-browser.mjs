@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { mkdir } from "node:fs/promises";
+import axe from "axe-core";
 import { chromium } from "playwright-core";
 
 const baseURL = process.env.BASE_URL ?? "http://localhost:3001";
@@ -33,8 +34,20 @@ assert.equal(await hero.locator(".journey-hero-hotspots button").count(), 7, "th
 assert.equal(await hero.locator('img[src*="property-journey-interactive-foundation-v1.png"]').count(), 1, "the approved hero image must remain");
 
 const cards = desktop.page.locator(".stage-index-card");
+const expectedStageVisuals = [
+  "property-journey-stage-land-vision-v1.jpg",
+  "property-journey-stage-planning-design-v1.jpg",
+  "property-journey-stage-authorities-approvals-v1.jpg",
+  "property-journey-stage-construction-delivery-v1.jpg",
+  "property-journey-stage-sales-transfer-v1.jpg",
+  "property-journey-stage-living-operations-v1.jpg",
+  "property-journey-stage-asset-growth-intelligence-v1.jpg",
+];
 assert.equal(await cards.count(), 7, "the stage index must show all seven stages");
 assert.equal(await desktop.page.locator(".stage-index-visual img").count(), 7, "every stage must have an architectural visual");
+const stageSources = await desktop.page.locator(".stage-index-visual img").evaluateAll((images) => images.map((image) => image.getAttribute("src") ?? ""));
+assert.equal(new Set(stageSources).size, 7, "every stage card must use a distinct image rather than a crop of the full journey");
+expectedStageVisuals.forEach((filename, index) => assert.match(stageSources[index], new RegExp(filename.replaceAll(".", "\\.")), `stage ${index + 1} must use its corresponding image`));
 assert.equal(await desktop.page.locator("h1").count(), 1, "the page must retain one primary heading");
 assert.deepEqual(await desktop.page.evaluate(() => {
   const ids = [...document.querySelectorAll("[id]")].map((element) => element.id);
@@ -56,8 +69,26 @@ assert.ok(await desktop.page.locator(".stage-index-visual").first().evaluate((el
   const pseudo = getComputedStyle(element, "::after");
   return parseFloat(pseudo.animationDuration) <= 0.01;
 }), "the route pulse must respect reduced-motion preferences");
+assert.ok(await desktop.page.locator(".stage-index-visual").first().evaluate((element) => {
+  const pseudo = getComputedStyle(element, "::after");
+  return parseFloat(pseudo.width) >= 10 && parseFloat(pseudo.opacity) === 1;
+}), "the light-mode stage marker must remain clearly visible");
+assert.ok(await desktop.page.locator(".stage-index-number").first().evaluate((element) => element.getBoundingClientRect().width >= 44), "stage numbers must use a prominent badge");
+await desktop.page.addScriptTag({ content: axe.source });
+const lightAccessibility = await desktop.page.evaluate(async () => window.axe.run(document.querySelector("#all-seven-stages"), {
+  runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
+}));
+assert.deepEqual(lightAccessibility.violations.filter(({ impact }) => impact === "critical" || impact === "serious").map(({ id }) => id), [], "the light-mode stage cards must pass WCAG A/AA");
 await cards.first().evaluate((element) => element.blur());
-await desktop.page.screenshot({ path: `${output}/property-journey-desktop.png`, fullPage: true });
+await desktop.page.screenshot({ path: `${output}/property-journey-light.png`, fullPage: true });
+await desktop.page.locator("#all-seven-stages").screenshot({ path: `${output}/stage-cards-light.png` });
+await desktop.page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+const darkAccessibility = await desktop.page.evaluate(async () => window.axe.run(document.querySelector("#all-seven-stages"), {
+  runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
+}));
+assert.deepEqual(darkAccessibility.violations.filter(({ impact }) => impact === "critical" || impact === "serious").map(({ id }) => id), [], "the dark-mode stage cards must pass WCAG A/AA");
+await desktop.page.screenshot({ path: `${output}/property-journey-dark.png`, fullPage: true });
+await desktop.page.locator("#all-seven-stages").screenshot({ path: `${output}/stage-cards-dark.png` });
 await desktop.context.close();
 
 for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]]) {
@@ -77,4 +108,4 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();
-console.log(`PASS: frozen hero, visual seven-stage route, educational scope, keyboard focus, reduced motion, responsive layout, overflow, console and screenshots (${output})`);
+console.log(`PASS: frozen hero, seven distinct stage images, visible number badges and markers, light/dark WCAG A/AA, educational scope, keyboard focus, reduced motion, responsive layout, overflow, console and screenshots (${output})`);
