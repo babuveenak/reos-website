@@ -1,11 +1,9 @@
-import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
+import { DEFAULT_LOCALE, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { EcosystemHeroMap } from "../components/EcosystemHeroMap";
 import { EcosystemInteractionProvider } from "../components/EcosystemInteractionContext";
 import { JourneyStakeholderExplorer } from "../components/JourneyStakeholderExplorer";
 import { Page, SectionIntro } from "../components/SiteShell";
-import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "The Connected Property Ecosystem | REOS",
@@ -21,7 +19,6 @@ export const metadata: Metadata = {
  * groups actually connect across the seven stages, not who they are.
  */
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
-  const L = (path: string) => localePath(locale, path);
   return <Page className="inner-page" locale={locale}>
     <EcosystemInteractionProvider>
       <section className="inner-hero inner-hero-no-photo ecosystem-hero">
@@ -32,8 +29,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         </div>
         <EcosystemHeroMap pathPrefix={locale === DEFAULT_LOCALE ? "" : `/${locale}`} />
       </section>
-
-      <HowReosWorks locale={locale} compact />
 
       <section id="ecosystem-detailed-map" className="section-pad ecosystem-detailed-map">
         <SectionIntro
@@ -48,27 +43,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <JourneyStakeholderExplorer pathPrefix={locale === DEFAULT_LOCALE ? "" : `/${locale}`} />
       </section>
     </EcosystemInteractionProvider>
-
-    <section className="reos-opportunity">
-      <span className="eyebrow">HOW REOS CONNECTS THEM</span>
-      <h2>Twelve groups.<br /><em>One shared picture.</em></h2>
-      <p>Each group holds part of the truth about a project — an approval, a payment, a certificate, a defect, a contract. REOS connects those parts so the state of a project can be read as a whole, while every official system remains the record of its own decisions.</p>
-      <div className="hero-actions">
-        <Link className="button gold" href={L("/property-journey")}>See where they enter the journey <span>↗</span></Link>
-        <Link className="button ghost" href={L("/stakeholders")}>Explore the full stakeholder directory</Link>
-      </div>
-    </section>
-
-    <RouteGovernance
-      locale={locale}
-      businessOutcome="Find the exact stage × stakeholder relationship causing an approval, evidence or responsibility dependency."
-      audience="Operations, transformation, governance and delivery teams across all twelve stakeholder groups."
-      nextAction="Select an intersection, review the contextual relationship, then inspect the product that can govern the workflow."
-      primaryLabel="Use the full relationship map"
-      primaryHref="/ecosystem#ecosystem-detailed-map"
-      secondaryLabel="Explore REOS products"
-      secondaryHref="/platform"
-    />
   </Page>;
 }
 

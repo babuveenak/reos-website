@@ -2762,7 +2762,7 @@ html[data-theme="light"] .inner-hero-arch{opacity:.7}
 .explorer-search{display:grid;gap:.35rem;flex:1 1 260px}
 .explorer-search>span{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
 .explorer-search input{height:48px;width:100%;border:1px solid var(--explorer-border);background:var(--explorer-surface);color:var(--ivory);padding:0 1rem;border-radius:0;font:400 .82rem var(--sans)}
-.explorer-toolbar>.button{min-width:auto;min-height:48px;padding:.8rem 1rem;cursor:pointer}
+.explorer-toolbar>.button{min-width:auto;min-height:48px;padding:.8rem 1rem;color:var(--ivory);cursor:pointer}
 .share-message{min-width:100%;min-height:1rem;color:var(--cyan);font-size:.66rem}
 .explorer-filters{position:relative;min-width:210px}
 .explorer-filters summary{height:48px;display:flex;align-items:center;padding:0 1rem;border:1px solid var(--explorer-border);background:var(--explorer-surface);cursor:pointer;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;list-style:none}
@@ -2839,6 +2839,7 @@ html[data-theme="light"] .js-explorer{--explorer-surface:rgba(255,255,255,.72);-
 html[data-theme="light"] .explorer-mode-tabs button,html[data-theme="light"] .explorer-stage-rail button,html[data-theme="light"] .explorer-stakeholder-grid button,html[data-theme="light"] .relationship-matrix-wrap,html[data-theme="light"] .relationship-legend>div,html[data-theme="light"] .relationship-panel-grid section,html[data-theme="light"] .relationship-more-grid section{background:#FFF}
 html[data-theme="light"] .explorer-mode-tabs button.is-active,html[data-theme="light"] .explorer-stage-rail button.is-selected,html[data-theme="light"] .explorer-stakeholder-grid button.is-selected{background:#F1E7D6}
 html[data-theme="light"] .explorer-search input,html[data-theme="light"] .explorer-filters summary,html[data-theme="light"] .active-filter-chips button{background:#FFF;color:#18171A}
+html[data-theme="light"] .level-lead{color:#6B4A16}html[data-theme="light"] .level-active{color:#176A6A}html[data-theme="light"] .level-supporting{color:#5E3F8A}html[data-theme="light"] .level-informed{color:#56515F}
 html[data-theme="light"] .relationship-summary,html[data-theme="light"] .relationship-panel p,html[data-theme="light"] .relationship-panel li{color:#4E4A50}
 html[data-theme="light"] .relationship-panel{background:linear-gradient(145deg,#F0E4D1,#FFF 45%);box-shadow:0 20px 55px rgba(64,48,24,.13)}
 html[data-theme="light"] .matrix-connection.level-supporting{box-shadow:inset 0 0 0 5px #FFF}

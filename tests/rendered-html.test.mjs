@@ -312,7 +312,6 @@ test("P1 conversion path qualifies the requested enterprise conversation", async
 
 test("commercially governed routes expose outcome, audience, product and next action", async () => {
   for (const path of [
-    "/ecosystem",
     "/intelligence",
     "/intelligence/guides",
     "/intelligence/guides/buying",
@@ -658,7 +657,14 @@ test("every canonical stakeholder group page resolves", async () => {
 });
 
 test("Journey × Stakeholder Explorer exposes all three shared-data views", async () => {
+  const source = await readFile(new URL("../app/ecosystem/page.tsx", import.meta.url), "utf8");
   const html = await (await render("/ecosystem")).text();
+  const mainMarkup = html.match(/<main class="inner-page">.*?<\/main>/s)?.[0] ?? "";
+  const main = mainMarkup.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+
+  assert.doesNotMatch(source, /HowReosWorks|RouteGovernance/);
+  assert.doesNotMatch(main, /HOW REOS WORKS|HOW REOS CONNECTS THEM|BUSINESS OUTCOME|WHO THIS SERVES|RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|Title Deed Automation|NOC Automation/);
+  assert.doesNotMatch(main, /class="reos-opportunity"/);
   assert.match(html, /Journey View/);
   assert.match(html, /Stakeholder View/);
   assert.match(html, /Full Map/);
