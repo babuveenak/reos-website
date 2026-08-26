@@ -92,6 +92,7 @@ await desktop.context.close();
 
 const dark = await open(1440, 1000);
 await dark.page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+await dark.page.waitForTimeout(400); // Let the intentional 250ms theme transition settle before measuring contrast.
 await dark.page.addScriptTag({ content: axe.source });
 await scan(dark.page, "dark");
 await dark.page.locator(".fragmented-journey").screenshot({ path: `${output}/fragmentation-dark.png` });
