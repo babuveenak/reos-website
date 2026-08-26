@@ -312,7 +312,6 @@ test("P1 conversion path qualifies the requested enterprise conversation", async
 
 test("governed detail routes expose outcome, audience, product and next action", async () => {
   for (const path of [
-    "/stakeholders",
     "/stakeholders/developers",
     "/ecosystem",
     "/intelligence",
@@ -405,6 +404,22 @@ test("stakeholders shows all 12 canonical groups in frequency order", async () =
   }
   assert.match(html, /Banks & Financial Institutions|Banks &amp; Financial Institutions/);
   assert.doesNotMatch(html, /Bankers & Financial|Bankers &amp; Financial/);
+});
+
+test("stakeholders stays educational and keeps only a compact personal-guide bridge", async () => {
+  const source = await readFile(new URL("../app/stakeholders/page.tsx", import.meta.url), "utf8");
+  const html = await (await render("/stakeholders")).text();
+  const mainMarkup = html.match(/<main class="inner-page">.*?<\/main>/s)?.[0] ?? "";
+  const main = mainMarkup.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "");
+
+  assert.doesNotMatch(source, /HowReosWorks|RouteGovernance/);
+  assert.doesNotMatch(main, /HOW REOS WORKS|BUSINESS OUTCOME|WHO THIS SERVES|RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|Title Deed Automation|NOC Automation/);
+  assert.doesNotMatch(main, /class="reos-opportunity"|Start with a guide|See how they connect/);
+  assert.equal((main.match(/class="group-card /g) ?? []).length, 12, "the focused page must retain all twelve stakeholder profiles");
+  assert.equal((main.match(/class="stakeholder-guide-bridge"/g) ?? []).length, 1, "the personal-journey distinction should remain compact and singular");
+  assert.match(main, /Looking for a personal journey\?/);
+  assert.match(main, /href="\/intelligence\/guides"/);
+  assert.match(main, /Before you act on this/);
 });
 
 test("stakeholders hero exposes exactly 12 interactive architectural groups", async () => {

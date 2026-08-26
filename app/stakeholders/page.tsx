@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
 import { StakeholdersHero, type StakeholderHeroGroup } from "../components/StakeholdersHero";
-import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "UAE Property Stakeholders | REOS",
@@ -36,8 +35,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </div>
       <StakeholdersHero groups={heroGroups} />
     </section>
-
-    <HowReosWorks locale={locale} compact />
 
     <section className="section-pad group-detail-band" id="stakeholder-directory">
       <SectionIntro
@@ -78,28 +75,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
           );
         })}
       </div>
-    </section>
-
-    <RouteGovernance
-      locale={locale}
-      businessOutcome="Understand what each stakeholder controls, when it enters the journey and which handoffs depend on it."
-      audience="All twelve stakeholder groups and the organizations coordinating them."
-      nextAction="Select your stakeholder profile, inspect its mapped stage connections and continue to the product that supports the workflow."
-      stakeholderIds={groups.map((group) => group.id)}
-      primaryLabel="Explore the stakeholder map"
-      primaryHref="/stakeholders#stakeholder-directory"
-      secondaryLabel="Open the Journey × Stakeholder Explorer"
-      secondaryHref="/ecosystem"
-    />
-
-    <section className="reos-opportunity">
-      <span className="eyebrow">NOT SURE WHICH ONE IS YOU?</span>
-      <h2>Start with a guide<br /><em>written for you instead.</em></h2>
-      <p>If you would rather read your own step-by-step journey — as a buyer, developer, investor or another everyday role — the guides walk through it in plain language.</p>
-      <div className="hero-actions">
-        <Link className="button gold" href={L("/intelligence/guides")}>Find your guide <span>↗</span></Link>
-        <Link className="button ghost" href={L("/ecosystem")}>See how they connect</Link>
-      </div>
+      <aside className="stakeholder-guide-bridge" aria-label={locale === "ar" ? "أدلة الرحلات الشخصية" : "Personal journey guides"}>
+        <p>
+          <strong>{locale === "ar" ? "هل تبحث عن رحلة شخصية؟" : "Looking for a personal journey?"}</strong>{" "}
+          {locale === "ar"
+            ? "تصفّح الأدلة خطوة بخطوة للشراء أو التطوير أو الاستثمار."
+            : "Browse step-by-step guides for buying, developing or investing."}
+        </p>
+        <Link className="text-link" href={L("/intelligence/guides")}>
+          {locale === "ar" ? "تصفّح الأدلة" : "Browse guides"} <span aria-hidden="true">↗</span>
+        </Link>
+      </aside>
     </section>
 
     <section className="integrity-strip">

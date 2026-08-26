@@ -1050,9 +1050,10 @@ html[data-theme="light"] .timeline-header>span{color:#76501C}
 .group-list{display:flex; flex-direction:column; gap:1rem}
 .group-card{border:1px solid var(--line); background:var(--panel); padding:1.5rem 1.6rem; scroll-margin-top:110px}
 .group-card header{display:grid; grid-template-columns:auto minmax(0,1fr) auto; gap:1.2rem; align-items:start; margin-bottom:.9rem}
-.group-num{font-family:var(--serif); font-size:2rem; color:var(--gold-dim); line-height:1}
+.group-num{font-family:var(--serif); font-size:2rem; color:var(--gold); line-height:1}
 .group-card header small{display:block; font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:.3rem}
 .group-card h3{color:var(--ivory); margin:0}
+html[data-theme="light"] .group-num{color:#76501C}
 .group-controls{margin:0 0 1.1rem; font-size:.94rem; line-height:1.62; color:var(--muted); max-width:78ch}
 .group-cols{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.4rem}
 .group-cols small{display:block; font-size:.55rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem}
@@ -1062,6 +1063,10 @@ html[data-theme="light"] .timeline-header>span{color:#76501C}
 .group-card.cluster-market{border-inline-start:2px solid var(--c-market)}
 .group-card.cluster-rail{border-inline-start:2px solid var(--gold)}
 .group-card.cluster-enablers{border-inline-start:2px dashed var(--c-enablers)}
+.stakeholder-guide-bridge{margin-top:2rem;padding:1.15rem 1.35rem;display:flex;align-items:center;justify-content:space-between;gap:1.25rem;border:1px solid var(--line);background:linear-gradient(110deg,rgba(200,164,93,.08),transparent);color:var(--muted)}
+.stakeholder-guide-bridge p{margin:0;font-size:.82rem;line-height:1.55}
+.stakeholder-guide-bridge strong{color:var(--ivory);font-weight:600}
+.stakeholder-guide-bridge .text-link{flex:0 0 auto}
 
 /* ---------- principles / prose ---------- */
 .principle-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--line); border:1px solid var(--line)}
@@ -1146,6 +1151,7 @@ html[data-theme="light"] .timeline-header>span{color:#76501C}
   .flow-step{gap:1rem; padding-bottom:1.8rem}
   .group-card header{grid-template-columns:auto minmax(0,1fr); gap:.8rem}
   .group-card header .status{grid-column:2}
+  .stakeholder-guide-bridge{align-items:flex-start;flex-direction:column;padding:1rem}
   .land-guide{padding-inline:1.2rem}
   .land-guide-intro h2{font-size:2.55rem}
   .land-guide-intro>p{font-size:1rem}
