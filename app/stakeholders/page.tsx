@@ -13,6 +13,24 @@ export const metadata: Metadata = {
   alternates: { canonical: "/stakeholders", languages: { en: "/stakeholders", ar: "/ar/stakeholders" } },
 };
 
+// Protected presentation data for the existing right-side hero. The complete
+// 84-intersection model is shown below the hero and on detail pages; this list
+// intentionally preserves the hero's established primary-entry highlights.
+const PRESERVED_HERO_STAGE_IDS: Record<string, string[]> = {
+  "landowners-investors": ["land-vision", "sales-transfer", "living-operations", "asset-growth-intelligence"],
+  developers: ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations"],
+  "consultants-designers": ["land-vision", "planning-design", "authorities-approvals", "construction-delivery"],
+  "authorities-regulators": ["authorities-approvals", "sales-transfer"],
+  "utility-providers": ["authorities-approvals", "living-operations"],
+  contractors: ["construction-delivery"],
+  "suppliers-vendors": ["construction-delivery"],
+  "brokers-agencies": ["sales-transfer", "asset-growth-intelligence"],
+  "banks-financial": ["land-vision", "construction-delivery", "sales-transfer", "asset-growth-intelligence"],
+  "property-owners": ["sales-transfer", "living-operations", "asset-growth-intelligence"],
+  "residents-tenants": ["living-operations", "asset-growth-intelligence"],
+  "facility-community-operators": ["living-operations", "asset-growth-intelligence"],
+};
+
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const L = (path: string) => localePath(locale, path);
   const stages = getStages(locale);
@@ -26,7 +44,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     overview: group.controls,
     participants: group.members,
     stages: stages
-      .filter((stage) => stage.groupIds.includes(group.id))
+      .filter((stage) => PRESERVED_HERO_STAGE_IDS[group.id]?.includes(stage.id))
       .map((stage) => ({ number: String(stage.number).padStart(2, "0"), name: stage.short })),
     href: L(`/stakeholders/${group.id}`),
   }));

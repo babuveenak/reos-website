@@ -42,7 +42,8 @@ export type BlueprintStep = {
 
 export type ParticipationState = {
   stageId: string;
-  state: "lead" | "participant" | "not-involved";
+  state: "lead" | "participant" | "informed";
+  relationshipLevel: "lead" | "active" | "supporting" | "informed";
   summary: string;
   evidence: EvidenceStatus;
 };
@@ -166,23 +167,39 @@ const dubaiInvestorSteps: BlueprintStep[] = [
   },
 ];
 
-const coverage = (isReference: boolean): JurisdictionCoverage[] => EMIRATES.map((emirate) => ({
+const coverage = (): JurisdictionCoverage[] => EMIRATES.map((emirate) => ({
   emirate: emirate.id,
   label: emirate.label,
-  state: emirate.id === "dubai" && isReference ? "reference" : emirate.id === "dubai" ? "structured-overview" : "not-yet-mapped",
-  missing: emirate.id === "dubai" && isReference ? [] : ["Sequenced authority blueprint", "Transaction-specific eligibility", "Official fee and service-time register", "Named portals and document rules"],
+  state: emirate.id === "dubai" ? "reference" : "not-yet-mapped",
+  missing: emirate.id === "dubai" ? [] : ["Sequenced authority blueprint", "Transaction-specific eligibility", "Official fee and service-time register", "Named portals and document rules"],
 }));
+
+const firstDecisionByStakeholder: Record<string, string> = {
+  "landowners-investors": "First choose whether the opportunity is land, a ready property or an off-plan unit. Then confirm the registry and planning route before commitment.",
+  developers: "First confirm control of the land, the development case and the competent planning authority before appointing the delivery team.",
+  "consultants-designers": "First confirm the valid site plan, authority branch, appointment scope and submission standard before design begins.",
+  "authorities-regulators": "First identify which statutory mandate applies to the plot, submission or transaction; one authority route must never be presented as universal.",
+  "utility-providers": "First confirm the plot, projected demand, network capacity and the authority channel through which the NOC or connection request must enter.",
+  contractors: "First confirm the approved design, permit conditions, appointment, access controls and inspection sequence before mobilising.",
+  "suppliers-vendors": "First confirm the approved specification, responsible contractor, product evidence and required conformity or authority review before supply.",
+  "brokers-agencies": "First confirm your instruction, licence scope, asset status and approved disclosure route before advertising or introducing a party.",
+  "banks-financial": "First identify whether the facility supports acquisition, off-plan purchase or development, then separate mortgage, escrow and drawdown controls.",
+  "property-owners": "First confirm the official title or provisional interest, handover status and the obligations attached to the unit, plot or jointly owned property.",
+  "residents-tenants": "First confirm whether you are buying, leasing or occupying, then use the official onboarding, contract and service channels for that route.",
+  "facility-community-operators": "First confirm the appointed operating scope, completion evidence, asset register, service obligations and authority conditions before mobilisation.",
+};
 
 const baseProfiles: StakeholderBlueprintProfile[] = groups.map((group) => ({
   stakeholderId: group.id,
   overview: group.controls,
   audience: group.members.slice(0, 4).join(", "),
-  firstDecision: group.id === "landowners-investors" ? "Decide whether you are buying land, a ready property or an off-plan unit, then confirm the ownership and registry route before commitment." : `Start by confirming which lifecycle stage requires ${group.short.toLowerCase()} input and which authority or counterparty owns the next decision.`,
-  coverage: coverage(group.id === "landowners-investors"),
+  firstDecision: firstDecisionByStakeholder[group.id] ?? `Start by confirming which lifecycle stage requires ${group.short.toLowerCase()} input and which authority or counterparty owns the next decision.`,
+  coverage: coverage(),
   participation: participationForStakeholder(group.id).map((item) => ({
     stageId: item.stageId,
     state: item.involvement,
-    summary: item.role ?? item.reasonNotInvolved ?? "Participation not yet described.",
+    relationshipLevel: item.relationshipLevel,
+    summary: item.role,
     evidence: item.evidence,
   })),
   steps: group.id === "landowners-investors" ? dubaiInvestorSteps : [],

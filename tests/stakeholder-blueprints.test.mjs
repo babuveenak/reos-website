@@ -12,8 +12,9 @@ async function render(path) {
 test("stakeholder participation has one guarded 12 × 7 source of truth", async () => {
   const source = await readFile(new URL("../app/data/stakeholderParticipation.ts", import.meta.url), "utf8");
   assert.match(source, /Expected 84 Journey × Stakeholder participation records/);
-  assert.match(source, /Missing non-participation reason/);
+  assert.match(source, /Incomplete seven-stage mapping/);
   assert.match(source, /Missing participation role/);
+  assert.doesNotMatch(source, /not-involved/, "no stakeholder-stage relationship may disappear from the public model");
   const journey = await readFile(new URL("../app/data/journey.ts", import.meta.url), "utf8");
   assert.equal((journey.match(/participatingStakeholderIds\(/g) ?? []).length, 7, "all seven stages must project participation from the shared matrix");
   const relationships = await readFile(new URL("../app/data/relationships.ts", import.meta.url), "utf8");
@@ -28,8 +29,7 @@ test("the preserved stakeholder hero leads into a richer twelve-group directory"
   assert.match(html, /UAE property/);
   assert.match(html, /Choose your role/);
   assert.equal((html.match(/stakeholder-profile-card/g) ?? []).length, 12);
-  assert.match(html, /Dubai reference/);
-  assert.match(html, /Lifecycle structure/);
+  assert.equal((html.match(/5 Dubai routes/g) ?? []).length, 12);
   assert.doesNotMatch(html, /From understanding to governed execution/);
   assert.doesNotMatch(html, /href="\/demo"/);
 });
@@ -39,11 +39,12 @@ test("Dubai Landowners reference renders source-led steps and a stakeholder visu
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /stakeholder-landowners-investors-hero-v1\.png/);
-  assert.match(html, /Sequenced blueprint/);
-  assert.equal((html.match(/class="blueprint-step"/g) ?? []).length, 10);
-  assert.match(html, /Official source/);
-  assert.match(html, /Property Sale Registration/);
-  assert.match(html, /Authority service estimates are not total commercial transaction durations/);
+  assert.match(html, /Interactive process map/);
+  assert.equal((html.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7);
+  assert.equal((html.match(/class="process-step lane-(?:you|delivery|authority|evidence)"/g) ?? []).length, 4);
+  assert.match(html, /Official sources/);
+  assert.match(html, /DLD — Property Status/);
+  assert.match(html, /An authority service estimate is not the total transaction duration/);
   assert.doesNotMatch(html, /class="status status-validated"/);
 });
 
@@ -62,7 +63,7 @@ test("Arabic stakeholder reference is RTL and flags source-language evidence", a
   const html = await response.text();
   assert.match(html, /dir="rtl"/);
   assert.match(html, /translation-notice/);
-  assert.match(html, /تظل الأدلة التنظيمية/);
+  assert.match(html, /تظل تفاصيل المصادر الرسمية/);
 });
 
 test("public footer displays REOS while temporary legal operator copy remains separate", async () => {

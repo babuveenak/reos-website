@@ -326,8 +326,8 @@ test("commercially governed routes expose outcome, audience, product and next ac
   }
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Lifecycle participation/);
-  assert.match(stakeholder, /Structured overview/);
+  assert.match(stakeholder, /Interactive process map/);
+  assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.doesNotMatch(stakeholder, /RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|href="\/demo"/, "stakeholder education must not become a product pitch");
 });
 
@@ -664,7 +664,7 @@ test("Journey × Stakeholder Explorer exposes all three shared-data views", asyn
   assert.match(html, /Full Map/);
   assert.match(html, /Seven stages\. Twelve groups/);
   assert.match(html, /Twelve stakeholder groups mapped against seven property journey stages/);
-  assert.match(html, /data-mapped-relationships="33"/, "the explorer must expose the participation-derived canonical relationships");
+  assert.match(html, /data-mapped-relationships="84"/, "the explorer must expose all 12 × 7 canonical relationships");
   assert.match(html, /Filter relationship level/);
   assert.match(html, /Share view/);
   assert.match(html, /Reset view/);
@@ -712,10 +712,29 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
   assert.match(stage, /view=journey(&amp;|&)stage=construction-delivery/);
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Lifecycle participation/);
-  assert.equal((stakeholder.match(/class="participation-(?:lead|participant|not-involved)"/g) ?? []).length, 7, "stakeholder participation must always show all seven explicit states");
-  assert.match(stakeholder, /href="\/property-journey\/planning-design\/stakeholders\/developers"/);
+  assert.match(stakeholder, /Interactive process map/);
+  assert.equal((stakeholder.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7, "stakeholder process map must show all seven relationship levels");
+  assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
+});
+
+test("all Dubai stakeholder authority routes expose a four-step sourced process", async () => {
+  const paths = [
+    "/stakeholders/landowners-investors",
+    "/stakeholders/developers/dubai/dm-mainland",
+    "/stakeholders/consultants-designers/dubai/dda-tecom",
+    "/stakeholders/contractors/dubai/trakhees-pcfc",
+    "/stakeholders/property-owners/dubai/financial-free-zone",
+  ];
+  for (const path of paths) {
+    const response = await render(path);
+    assert.equal(response.status, 200, path);
+    const html = await response.text();
+    assert.match(html, /Choose a stage\. Follow your route\./, path);
+    assert.equal((html.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7, `${path} must map seven stages`);
+    assert.equal((html.match(/class="process-step lane-(?:you|delivery|authority|evidence)"/g) ?? []).length, 4, `${path} must render four process steps for the selected stage`);
+    assert.match(html, /Official sources/);
+  }
 });
 
 test("renders core routes", async () => {

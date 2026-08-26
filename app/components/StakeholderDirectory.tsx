@@ -32,7 +32,7 @@ export function StakeholderDirectory({ groups, clusters, stages, profiles, local
     const matchesQuery = haystack.includes(query.trim().toLowerCase());
     const matchesCluster = cluster === "all" || group.cluster === cluster;
     const profile = profileById[group.id];
-    const matchesStage = stageId === "all" || profile?.participation.some((item) => item.stageId === stageId && item.state !== "not-involved");
+    const matchesStage = stageId === "all" || profile?.participation.some((item) => item.stageId === stageId);
     return matchesQuery && matchesCluster && matchesStage;
   });
 
@@ -48,19 +48,18 @@ export function StakeholderDirectory({ groups, clusters, stages, profiles, local
       {filtered.map((group) => {
         const profile = profileById[group.id];
         const participation = profile?.participation ?? [];
-        const involved = participation.filter((item) => item.state !== "not-involved");
+        const involved = participation;
         const lead = participation.filter((item) => item.state === "lead");
         const first = stages.find((stage) => stage.id === involved[0]?.stageId);
         const last = stages.findLast((stage) => involved.some((item) => item.stageId === stage.id));
-        const isReference = group.id === "landowners-investors";
         return <article key={group.id} className={`group-card stakeholder-profile-card cluster-${group.cluster}`}>
-          <header><span>{String(group.number).padStart(2, "0")}</span><div><small>{clusterById[group.cluster]?.name}</small><h3>{group.name}</h3></div><b className={`coverage-pill ${isReference ? "is-reference" : "is-overview"}`}>{isReference ? (ar ? "مرجع دبي" : "Dubai reference") : (ar ? "هيكل دورة الحياة" : "Lifecycle structure")}</b></header>
+          <header><span>{String(group.number).padStart(2, "0")}</span><div><small>{clusterById[group.cluster]?.name}</small><h3>{group.name}</h3></div><b className="coverage-pill is-reference">{ar ? "5 مسارات دبي" : "5 Dubai routes"}</b></header>
           <div className="stakeholder-profile-body">
             <section><small>{ar ? "من تشملهم المجموعة" : "Who this includes"}</small><p>{group.members.slice(0, 3).join(" · ")}{group.members.length > 3 ? ` +${group.members.length - 3}` : ""}</p></section>
             <section><small>{ar ? "نقطة البداية" : "Your starting point"}</small><p><b>{first ? `${String(first.number).padStart(2, "0")} ${first.name}` : (ar ? "حسب المشروع" : "Project-specific")}</b>{profile?.firstDecision}</p></section>
           </div>
           <div className="stakeholder-stage-rail" role="list" aria-label={ar ? `مشاركة ${group.name} عبر المراحل` : `${group.name} lifecycle participation`}>
-            {stages.map((stage) => { const item = participation.find((candidate) => candidate.stageId === stage.id); const state = item?.state ?? "not-involved"; const stateLabel = state === "lead" ? (ar ? "قيادة" : "Lead") : state === "participant" ? (ar ? "مشارك" : "Participant") : (ar ? "غير مشارك" : "Not involved"); return <span key={stage.id} role="listitem" className={`stage-state state-${state}`} title={`${stage.name}: ${stateLabel}`}><b>{String(stage.number).padStart(2, "0")}</b><i className="sr-only">{stage.name}: {stateLabel}</i></span>; })}
+            {stages.map((stage) => { const item = participation.find((candidate) => candidate.stageId === stage.id); const level = item?.relationshipLevel ?? "informed"; const stateLabel = level === "lead" ? (ar ? "قيادة" : "Lead") : level === "active" ? (ar ? "دور نشط" : "Active") : level === "supporting" ? (ar ? "دور داعم" : "Supporting") : (ar ? "على اطلاع" : "Informed"); return <span key={stage.id} role="listitem" className={`stage-state state-${level}`} title={`${stage.name}: ${stateLabel}`}><b>{String(stage.number).padStart(2, "0")}</b><i className="sr-only">{stage.name}: {stateLabel}</i></span>; })}
           </div>
           <footer><p><b>{involved.length}</b> {ar ? "مراحل مشاركة" : "participating stages"}<span>·</span><b>{lead.length}</b> {ar ? "مراحل قيادة" : "lead stages"}<span>·</span>{last ? `${ar ? "يمتد إلى" : "continues through"} ${String(last.number).padStart(2, "0")} ${last.name}` : (ar ? "حسب المشروع" : "Project-specific")}</p><Link href={L(scope.emirate === "dubai" && scope.track === "track-neutral" ? `/stakeholders/${group.id}` : `/stakeholders/${group.id}/${scope.emirate}${scope.emirate === "dubai" ? `/${scope.track}` : ""}`)}>{ar ? `افتح دورة حياة ${group.name}` : `Open ${group.name} lifecycle`} <span>→</span></Link></footer>
         </article>;

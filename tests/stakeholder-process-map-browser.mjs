@@ -1,0 +1,96 @@
+import assert from "node:assert/strict";
+import { mkdir } from "node:fs/promises";
+import axe from "axe-core";
+import { chromium } from "playwright-core";
+
+const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3000";
+const output = process.env.QA_OUTPUT ?? "/tmp/reos-stakeholder-process-map-qa";
+await mkdir(output, { recursive: true });
+
+const browser = await chromium.launch({
+  executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  headless: true,
+});
+const errors = [];
+
+async function open(path, width = 1440, height = 1000, reducedMotion = "reduce") {
+  const context = await browser.newContext({ viewport: { width, height }, reducedMotion });
+  const page = await context.newPage();
+  page.on("console", (message) => { if (message.type() === "error") errors.push(`${path} ${width}px: ${message.text()}`); });
+  page.on("pageerror", (error) => errors.push(`${path} ${width}px: ${error.message}`));
+  const response = await page.goto(`${baseURL}${path}`, { waitUntil: "networkidle" });
+  assert.equal(response?.status(), 200, `${path} must resolve`);
+  assert.equal(await page.locator('[data-nextjs-dialog], #webpack-dev-server-client-overlay').count(), 0, `${path} must not show an error overlay`);
+  return { context, page };
+}
+
+async function scan(page, label) {
+  await page.addScriptTag({ content: axe.source });
+  const result = await page.evaluate(async () => window.axe.run(document.querySelector(".stakeholder-process-map"), {
+    runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
+  }));
+  const serious = result.violations.filter(({ impact }) => impact === "critical" || impact === "serious");
+  assert.deepEqual(serious.map(({ id, nodes }) => ({ id, targets: nodes.map(({ target }) => target) })), [], `${label} must pass WCAG A/AA`);
+}
+
+const desktop = await open("/stakeholders/developers/dubai/dm-mainland");
+const map = desktop.page.locator(".stakeholder-process-map");
+assert.equal(await map.getByRole("tab").count(), 7, "the model must expose all seven lifecycle stages");
+assert.equal(await map.locator(".process-step").count(), 4, "the selected stage must show four process steps");
+assert.equal(await map.locator(".process-branch").count(), 3, "authority, people and official-source branches must remain visible");
+assert.match(await map.innerText(), /Dubai Land Department.*plot-specific planning authority/);
+assert.match(await map.innerText(), /DLD — Property Status/);
+assert.match(await map.innerText(), /Authority service estimate|No universal time published/i);
+assert.doesNotMatch(await map.innerText(), /Request a demo|Title Deed Automation|NOC Automation/);
+
+const tabs = map.getByRole("tab");
+await tabs.nth(1).focus();
+await tabs.nth(1).press("ArrowRight");
+await desktop.page.waitForFunction(() => document.querySelectorAll('[role="tab"]')[2]?.getAttribute("aria-selected") === "true");
+assert.equal(await tabs.nth(2).getAttribute("aria-selected"), "true", "arrow keys must move the active stage");
+assert.ok(await tabs.nth(2).evaluate((element) => element.matches(":focus-visible")), "keyboard-selected stage needs visible focus");
+assert.match(await map.locator(".process-role-card").innerText(), /Authorities & Approvals/);
+assert.equal(await map.locator(".process-step").count(), 4, "interaction must preserve the complete process flow");
+assert.match(await map.innerText(), /Dubai BPS integrated authority review/);
+
+await map.getByRole("tab", { name: /05 Sales & Transfer/ }).click();
+assert.match(await map.locator(".process-role-card").innerText(), /Registers the project and eligible sales/);
+assert.match(await map.innerText(), /Completed-sale service estimate: 25 minutes/);
+
+await scan(desktop.page, "light process map");
+await map.screenshot({ path: `${output}/developer-dm-light.png` });
+await desktop.page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+await desktop.page.waitForTimeout(350);
+await scan(desktop.page, "dark process map");
+await map.screenshot({ path: `${output}/developer-dm-dark.png` });
+await desktop.context.close();
+
+for (const [path, stageIndex, sourcePattern] of [
+  ["/stakeholders/landowners-investors", 0, /DLD — Property Status/],
+  ["/stakeholders/consultants-designers/dubai/dda-tecom", 1, /DDA — Site Plan Issuance/],
+  ["/stakeholders/contractors/dubai/trakhees-pcfc", 1, /PCFC \/ Trakhees — Unified Services|Trakhees — Blue Code/],
+  ["/stakeholders/property-owners/dubai/financial-free-zone", 0, /DIFC — Registrar of Real Property/],
+]) {
+  const view = await open(path, 1280, 900);
+  assert.equal(await view.page.locator(".process-stage-tab").count(), 7, `${path} must map all seven stages`);
+  await view.page.locator(".process-stage-tab").nth(stageIndex).click();
+  assert.equal(await view.page.locator(".process-step").count(), 4, `${path} must expose the selected four-step flow`);
+  assert.match(await view.page.locator(".stakeholder-process-map").innerText(), sourcePattern, `${path} must expose its official route source`);
+  await view.context.close();
+}
+
+for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]]) {
+  const view = await open("/stakeholders/banks-financial/dubai/dda-tecom", width, height);
+  const overflow = await view.page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  assert.ok(overflow <= 1, `${width}px viewport has ${overflow}px horizontal overflow`);
+  assert.equal(await view.page.locator(".process-stage-tab").count(), 7, `${width}px must retain seven stages`);
+  assert.equal(await view.page.locator(".process-step").count(), 4, `${width}px must retain four process steps`);
+  await view.page.locator(".process-stage-tab").nth(6).click();
+  assert.match(await view.page.locator(".process-role-card").innerText(), /Asset Growth & Intelligence/);
+  if (width === 390) await view.page.screenshot({ path: `${output}/bank-dda-mobile.png`, fullPage: true });
+  await view.context.close();
+}
+
+assert.deepEqual(errors, [], errors.join("\n"));
+await browser.close();
+console.log(`PASS: 84-intersection stakeholder model, five Dubai authority routes, persistent four-step interactions, keyboard tabs, light/dark WCAG A/AA, responsive overflow, console checks and screenshots (${output})`);
