@@ -27,7 +27,7 @@ async function open(path, width, height) {
 
 const landing = await open("/property-journey", 1440, 1000);
 assert.equal(await landing.page.locator(".journey-hero-hotspots button").count(), 7, "the frozen interactive landing map must retain seven stages");
-assert.equal(await landing.page.locator('img[src*="property-journey-interactive-foundation-v1.png"]').count(), 1, "the frozen landing image must remain");
+assert.equal(await landing.page.locator('.property-journey-hero img[src*="property-journey-interactive-foundation-v1.png"]').count(), 1, "the frozen hero image must remain");
 assert.equal(await landing.page.locator(".land-guide").count(), 0, "the stage guide must not alter the landing page");
 await landing.context.close();
 

@@ -310,9 +310,8 @@ test("P1 conversion path qualifies the requested enterprise conversation", async
   assert.match(ecosystem, /Open Stakeholder View/);
 });
 
-test("education route families expose outcome, audience, product and next action", async () => {
+test("governed detail routes expose outcome, audience, product and next action", async () => {
   for (const path of [
-    "/property-journey",
     "/property-journey/sales-transfer",
     "/stakeholders",
     "/stakeholders/developers",
@@ -445,6 +444,20 @@ test("property journey hero exposes exactly seven interactive architectural stag
   assert.doesNotMatch(html, /property-journey-lifecycle-v2\.png/);
   assert.match(html, /data-stage="land-vision" data-label-placement="above"/);
   assert.match(html, /data-stage="asset-growth-intelligence" data-label-placement="above"/);
+});
+
+test("property journey remains educational while its seven-stage index is visual", async () => {
+  const source = await readFile(new URL("../app/property-journey/page.tsx", import.meta.url), "utf8");
+  const html = await (await render("/property-journey")).text();
+
+  assert.match(html, /The UAE property journey,[\s\S]*mapped end to end\./);
+  assert.match(html, /Property does not move through one process\. It moves through seven connected stages/);
+  assert.equal((html.match(/class="stage-index-card"/g) ?? []).length, 7, "the canonical lifecycle must retain exactly seven visual cards");
+  assert.equal((html.match(/class="stage-index-visual"/g) ?? []).length, 7, "every lifecycle stage needs a visual panel");
+  assert.equal((html.match(/>Open stage</g) ?? []).length, 7, "every visual stage needs a direct educational route");
+  assert.doesNotMatch(source, /HowReosWorks|RouteGovernance/);
+  assert.doesNotMatch(html, /HOW REOS WORKS|licensed REOS workflow|Select a journey stage|See the connected ecosystem/i);
+  assert.match(html, /Before you act on this/);
 });
 
 test("Land & Vision adds a jurisdiction-first public guide without changing the journey landing page", async () => {

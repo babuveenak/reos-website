@@ -1,10 +1,10 @@
 import { getGroups, getStages } from "../i18n/content";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { PropertyJourneyHero, type JourneyHeroStage } from "../components/PropertyJourneyHero";
 import { Page, SectionIntro } from "../components/SiteShell";
-import { HowReosWorks, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "The UAE Property Journey, Mapped End to End | REOS",
@@ -37,8 +37,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <PropertyJourneyHero stages={heroStages} />
     </section>
 
-    <HowReosWorks locale={locale} compact />
-
     <section className="section-pad stage-index-band" id="all-seven-stages">
       <SectionIntro
         label="ALL SEVEN STAGES"
@@ -48,31 +46,29 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="stage-index">
         {stages.map((stage) => (
           <Link key={stage.id} href={localePath(locale, `/property-journey/${stage.id}`)} className="stage-index-card">
-            <header>
-              <span>{String(stage.number).padStart(2, "0")}</span>
-              <em>{stage.track}</em>
-            </header>
-            <h3>{stage.name}</h3>
-            <p>{stage.summary}</p>
-            <div className="chip-row">
-              {stage.groupIds.slice(0, 4).map((id) => <span key={id}>{groupNameById[id]}</span>)}
+            <div className="stage-index-visual" aria-hidden="true">
+              <Image
+                src="/images/property-journey-interactive-foundation-v1.png"
+                alt=""
+                width={1672}
+                height={941}
+                sizes="(max-width: 720px) 100vw, (max-width: 1180px) 50vw, 15vw"
+              />
+              <span className="stage-index-number">{String(stage.number).padStart(2, "0")}</span>
+            </div>
+            <div className="stage-index-content">
+              <small>{stage.track}</small>
+              <h3>{stage.name}</h3>
+              <p>{stage.summary}</p>
+              <span className="stage-index-open">
+                {locale === "ar" ? "افتح المرحلة" : "Open stage"}
+                <b aria-hidden="true">→</b>
+              </span>
             </div>
           </Link>
         ))}
       </div>
     </section>
-
-    <RouteGovernance
-      locale={locale}
-      businessOutcome="See how property moves from land and approvals to delivery, operations and asset growth without hiding the stages that run in parallel."
-      audience="Every stakeholder participating in the UAE property journey."
-      nextAction="Select the stage that matches your current work, then review its stakeholders, evidence, risks and relevant REOS products."
-      stageIds={stages.map((stage) => stage.id)}
-      primaryLabel="Select a journey stage"
-      primaryHref="/property-journey#all-seven-stages"
-      secondaryLabel="See the connected ecosystem"
-      secondaryHref="/ecosystem"
-    />
 
     <section className="integrity-strip">
       <b>Before you act on this</b>
