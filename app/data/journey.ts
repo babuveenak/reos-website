@@ -1,4 +1,5 @@
 import type { ContentStatus } from "./reos";
+import { participatingStakeholderIds } from "./stakeholderParticipation";
 
 /**
  * THE CANONICAL PROPERTY JOURNEY.
@@ -80,7 +81,7 @@ const raw: Omit<Stage, "number">[] = [
       "Run feasibility: development controls, a cost plan and a development programme, modelled against the capital that would be required",
       "Choose an ownership structure, often a special purpose vehicle, and obtain the licences and developer registration the activity requires",
     ],
-    groupIds: ["landowners-investors", "developers", "consultants-designers", "banks-financial"],
+    groupIds: participatingStakeholderIds("land-vision"),
     documents: ["Title deed or plot ownership evidence", "Site plan and survey", "Market and pricing study", "Cost plan and financial model", "Company formation and developer registration documents"],
     risks: [
       "Buying land whose permitted use will not support the intended project",
@@ -101,7 +102,7 @@ const raw: Omit<Stage, "number">[] = [
       "Coordinate architectural, structural and building-services design into one buildable package",
       "Resolve master-community requirements and fire and life-safety design intent before submission",
     ],
-    groupIds: ["developers", "consultants-designers"],
+    groupIds: participatingStakeholderIds("planning-design"),
     documents: ["Consultant appointment and scope", "Concept massing studies", "Coordinated architectural and engineering drawings", "Development control compliance record"],
     risks: [
       "Design frozen before the master community has commented",
@@ -121,7 +122,7 @@ const raw: Omit<Stage, "number">[] = [
       "Obtain the no-objection certificates utility, transport and civil defence bodies require",
       "Resolve fire and life-safety and infrastructure requirements, then obtain the building permit",
     ],
-    groupIds: ["authorities-regulators", "utility-providers", "developers", "consultants-designers"],
+    groupIds: participatingStakeholderIds("authorities-approvals"),
     documents: ["Authority submission package", "No-objection certificates from utility and transport bodies", "Civil defence fire and life-safety approval", "Building permit"],
     risks: [
       "Submitting to the wrong authority because the plot's jurisdiction was never resolved",
@@ -141,7 +142,7 @@ const raw: Omit<Stage, "number">[] = [
       "Inspect and test as work proceeds, and record what was inspected and by whom",
       "Certify genuine progress for payment, and draw construction finance down against that verified progress, not against claims",
     ],
-    groupIds: ["contractors", "suppliers-vendors", "consultants-designers", "developers", "banks-financial"],
+    groupIds: participatingStakeholderIds("construction-delivery"),
     documents: ["Main contract and subcontracts", "Contractor's all-risks and third-party insurance", "Inspection and test records", "Progress certificates and valuations", "Facility agreement and drawdown records"],
     risks: [
       "Progress claimed ahead of work actually completed",
@@ -161,7 +162,7 @@ const raw: Omit<Stage, "number">[] = [
       "Onboard buyers: take reservations, then issue the sale and purchase agreement, collecting every payment into escrow, never into the developer's own account",
       "Register each sale on the official register, which records the buyer against the specific unit and is what legally protects their interest",
     ],
-    groupIds: ["brokers-agencies", "property-owners", "authorities-regulators", "banks-financial", "developers"],
+    groupIds: participatingStakeholderIds("sales-transfer"),
     documents: ["Project registration certificate and escrow account agreement", "Advertising and listing permits", "Sale and purchase agreement", "Payment receipts showing escrow deposit", "Official sale registration record"],
     risks: [
       "Marketing or taking deposits before the project is registered and escrow is open",
@@ -181,7 +182,7 @@ const raw: Omit<Stage, "number">[] = [
       "Connect utilities, register occupants with the community, and establish the owners' association and the service charges that fund shared upkeep",
       "Set up how residents and tenants report faults and request services",
     ],
-    groupIds: ["property-owners", "residents-tenants", "facility-community-operators", "utility-providers", "developers"],
+    groupIds: participatingStakeholderIds("living-operations"),
     documents: ["Completion certificate and handover notice", "Unit inspection and snag list", "Utility connection applications", "Owners' association constitution and service charge schedule"],
     risks: [
       "Handover notices issued before completion approval is actually in hand",
@@ -202,7 +203,7 @@ const raw: Omit<Stage, "number">[] = [
       "Track income, cost and yield against the original investment case, using portfolio-level reporting and analytics",
       "Refinance, restructure or sell — clearing mortgages and community dues, then transferring title — or plan succession",
     ],
-    groupIds: ["property-owners", "banks-financial", "brokers-agencies", "facility-community-operators", "residents-tenants"],
+    groupIds: participatingStakeholderIds("asset-growth-intelligence"),
     documents: ["Maintenance plan and asset register", "Tenancy contract and registration", "Rent, cost and yield records", "Valuation and refinancing documents", "Mortgage settlement and transfer documents"],
     risks: [
       "Deferred maintenance that turns into capital expenditure",

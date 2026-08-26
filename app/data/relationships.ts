@@ -1,6 +1,7 @@
 import { groupById, groups } from "./ecosystem";
 import { stageById, stages } from "./journey";
 import { stakeholderDetailById } from "./stakeholderDetails";
+import { participationFor, type RelationshipLevel } from "./stakeholderParticipation";
 
 /**
  * Canonical Journey × Stakeholder relationship model.
@@ -10,7 +11,7 @@ import { stakeholderDetailById } from "./stakeholderDetails";
  * explorer views, previews and contextual routes consume these records so a
  * relationship can never exist in one view but disappear from another.
  */
-export type RelationshipLevel = "lead" | "active" | "supporting" | "informed";
+export type { RelationshipLevel } from "./stakeholderParticipation";
 export type RelationshipEditorialStatus = "approved" | "draft";
 export type RelationshipFlowType = "information" | "decision" | "document" | "approval" | "service" | "capital";
 
@@ -56,53 +57,6 @@ export const relationshipLevelDescriptions: Record<RelationshipLevel, string> = 
   active: "Performs material work or makes decisions in this stage.",
   supporting: "Provides an input, service or control the stage depends on.",
   informed: "Receives the stage output or must remain aware of its state.",
-};
-
-const levelByStage: Record<string, Record<string, RelationshipLevel>> = {
-  "land-vision": {
-    "landowners-investors": "lead",
-    developers: "lead",
-    "consultants-designers": "supporting",
-    "banks-financial": "supporting",
-  },
-  "planning-design": {
-    developers: "lead",
-    "consultants-designers": "lead",
-  },
-  "authorities-approvals": {
-    "authorities-regulators": "lead",
-    "utility-providers": "active",
-    developers: "active",
-    "consultants-designers": "active",
-  },
-  "construction-delivery": {
-    contractors: "lead",
-    "suppliers-vendors": "active",
-    "consultants-designers": "active",
-    developers: "lead",
-    "banks-financial": "active",
-  },
-  "sales-transfer": {
-    "brokers-agencies": "active",
-    "property-owners": "active",
-    "authorities-regulators": "lead",
-    "banks-financial": "active",
-    developers: "lead",
-  },
-  "living-operations": {
-    "property-owners": "active",
-    "residents-tenants": "active",
-    "facility-community-operators": "lead",
-    "utility-providers": "active",
-    developers: "active",
-  },
-  "asset-growth-intelligence": {
-    "property-owners": "lead",
-    "banks-financial": "active",
-    "brokers-agencies": "active",
-    "facility-community-operators": "active",
-    "residents-tenants": "informed",
-  },
 };
 
 const referenceId = (kind: string, owner: string, index: number) =>
@@ -172,7 +126,8 @@ export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] =
     const stakeholder = groupById[stakeholderId];
     const detail = stakeholderDetailById[stakeholderId];
     const canPublishDetail = detail?.status === "Validated";
-    const relationshipLevel = levelByStage[stage.id]?.[stakeholderId] ?? "active";
+    const participation = participationFor(stage.id, stakeholderId);
+    const relationshipLevel = participation?.relationshipLevel ?? "active";
     const stageProcessIds = relationshipProcesses
       .filter((item) => item.stageId === stage.id)
       .map((item) => item.id);
@@ -221,7 +176,7 @@ export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] =
       flowTypes,
       direction: "bidirectional" as const,
       detailRoute: `/property-journey/${stage.id}/stakeholders/${stakeholderId}`,
-      editorialStatus: "approved" as const,
+      editorialStatus: participation?.evidence === "unverified" ? "draft" as const : "approved" as const,
     };
   }),
 );
@@ -231,14 +186,14 @@ export const approvedRelationships = journeyStakeholderRelationships.filter(
 );
 
 export const relationshipById = Object.fromEntries(
-  approvedRelationships.map((relationship) => [relationship.id, relationship]),
+  journeyStakeholderRelationships.map((relationship) => [relationship.id, relationship]),
 );
 
 export const relationshipsByStage = (stageId: string) =>
-  approvedRelationships.filter((relationship) => relationship.stageId === stageId);
+  journeyStakeholderRelationships.filter((relationship) => relationship.stageId === stageId);
 
 export const relationshipsByStakeholder = (stakeholderId: string) =>
-  approvedRelationships.filter((relationship) => relationship.stakeholderId === stakeholderId);
+  journeyStakeholderRelationships.filter((relationship) => relationship.stakeholderId === stakeholderId);
 
 export const relationshipFor = (stageId: string, stakeholderId: string) =>
   relationshipById[`${stageId}--${stakeholderId}`];

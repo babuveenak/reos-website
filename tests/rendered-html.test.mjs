@@ -310,9 +310,8 @@ test("P1 conversion path qualifies the requested enterprise conversation", async
   assert.match(ecosystem, /Open Stakeholder View/);
 });
 
-test("governed detail routes expose outcome, audience, product and next action", async () => {
+test("commercially governed routes expose outcome, audience, product and next action", async () => {
   for (const path of [
-    "/stakeholders/developers",
     "/ecosystem",
     "/intelligence",
     "/intelligence/guides",
@@ -325,6 +324,11 @@ test("governed detail routes expose outcome, audience, product and next action",
     assert.match(html, /RELEVANT REOS PRODUCT/, `${path} missing product connection`);
     assert.match(html, /PRACTICAL NEXT ACTION/, `${path} missing next action`);
   }
+
+  const stakeholder = await (await render("/stakeholders/developers")).text();
+  assert.match(stakeholder, /Lifecycle participation/);
+  assert.match(stakeholder, /Structured overview/);
+  assert.doesNotMatch(stakeholder, /RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|href="\/demo"/, "stakeholder education must not become a product pitch");
 });
 
 test("intelligence and assistant state their evidence governance contracts", async () => {
@@ -660,7 +664,7 @@ test("Journey × Stakeholder Explorer exposes all three shared-data views", asyn
   assert.match(html, /Full Map/);
   assert.match(html, /Seven stages\. Twelve groups/);
   assert.match(html, /Twelve stakeholder groups mapped against seven property journey stages/);
-  assert.match(html, /data-mapped-relationships="30"/, "the explorer must expose the 30 canonical relationships");
+  assert.match(html, /data-mapped-relationships="33"/, "the explorer must expose the participation-derived canonical relationships");
   assert.match(html, /Filter relationship level/);
   assert.match(html, /Share view/);
   assert.match(html, /Reset view/);
@@ -708,8 +712,8 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
   assert.match(stage, /view=journey(&amp;|&)stage=construction-delivery/);
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /JOURNEY PARTICIPATION/);
-  assert.equal((stakeholder.match(/class="is-(?:linked|unlinked)"/g) ?? []).length, 7, "stakeholder participation must always show all seven stages");
+  assert.match(stakeholder, /Lifecycle participation/);
+  assert.equal((stakeholder.match(/class="participation-(?:lead|participant|not-involved)"/g) ?? []).length, 7, "stakeholder participation must always show all seven explicit states");
   assert.match(stakeholder, /href="\/property-journey\/planning-design\/stakeholders\/developers"/);
   assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
 });

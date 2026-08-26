@@ -2,19 +2,23 @@ import { getGroups, getClusters, getStages } from "../i18n/content";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Page, SectionIntro, StatusTag } from "../components/SiteShell";
+import { Page, SectionIntro } from "../components/SiteShell";
 import { StakeholdersHero, type StakeholderHeroGroup } from "../components/StakeholdersHero";
+import { StakeholderDirectory } from "../components/StakeholderDirectory";
+import { stakeholderBlueprintProfiles } from "../data/stakeholderBlueprints";
 
 export const metadata: Metadata = {
   title: "UAE Property Stakeholders | REOS",
   description: "The 12 stakeholder groups participating across the UAE property journey — what each controls, when they enter, and what they exchange with everyone else.",
+  alternates: { canonical: "/stakeholders", languages: { en: "/stakeholders", ar: "/ar/stakeholders" } },
 };
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const L = (path: string) => localePath(locale, path);
   const stages = getStages(locale);
   const groups = getGroups(locale);
-  const clusterById = Object.fromEntries(getClusters(locale).map((c) => [c.id, c]));
+  const clusters = getClusters(locale);
+  const directoryProfiles = stakeholderBlueprintProfiles.map(({ stakeholderId, firstDecision, participation }) => ({ stakeholderId, firstDecision, participation }));
   const heroGroups: StakeholderHeroGroup[] = groups.map((group) => ({
     id: group.id,
     number: String(group.number).padStart(2, "0"),
@@ -39,42 +43,10 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     <section className="section-pad group-detail-band" id="stakeholder-directory">
       <SectionIntro
         label="12 STAKEHOLDER GROUPS"
-        title={<>Every group in full,<br /><em>and when they enter.</em></>}
-        copy="Select a group to see its role in the journey, key responsibilities, decisions, documents, approvals and who it works with."
+        title={locale === "ar" ? <>اختر دورك.<br /><em>وشاهد دورة الحياة كاملة.</em></> : <>Choose your role.<br /><em>See the whole lifecycle.</em></>}
+        copy={locale === "ar" ? "ابحث عن مجموعتك، وشاهد نقطة البداية والمراحل التي تقودها أو تشارك فيها، ثم افتح مخططاً يميز بوضوح بين المصادر الرسمية وشرح REOS وما لم يتم التحقق منه بعد." : "Find your group, see where its journey starts and which stages it leads or participates in, then open a lifecycle blueprint that clearly separates official sources, REOS explanation and what is not yet verified."}
       />
-      <div className="group-list">
-        {groups.map((group) => {
-          const entryStages = stages.filter((stage) => stage.groupIds.includes(group.id));
-          const cluster = clusterById[group.cluster];
-          return (
-            <Link key={group.id} href={L(`/stakeholders/${group.id}`)} className={`group-card cluster-${group.cluster}`}>
-              <header>
-                <span className="group-num">{String(group.number).padStart(2, "0")}</span>
-                <div>
-                  <small>{cluster?.name}</small>
-                  <h3>{group.name}</h3>
-                </div>
-                <StatusTag status={group.status} locale={locale} />
-              </header>
-
-              <p className="group-controls">{group.controls}</p>
-
-              <div className="group-cols">
-                <div>
-                  <small>Participants</small>
-                  <div className="chip-row">{group.members.slice(0, 4).map((m) => <span key={m}>{m}</span>)}</div>
-                </div>
-                <div>
-                  <small>Enters the journey at</small>
-                  <div className="chip-row">
-                    {entryStages.map((stage) => <span key={stage.id}>{String(stage.number).padStart(2, "0")} {stage.short}</span>)}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
+      <StakeholderDirectory groups={groups} clusters={clusters} stages={stages} profiles={directoryProfiles} locale={locale} />
       <aside className="stakeholder-guide-bridge" aria-label={locale === "ar" ? "أدلة الرحلات الشخصية" : "Personal journey guides"}>
         <p>
           <strong>{locale === "ar" ? "هل تبحث عن رحلة شخصية؟" : "Looking for a personal journey?"}</strong>{" "}

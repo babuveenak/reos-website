@@ -56,7 +56,7 @@ export function Footer({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         <Link href={L("/sitemap")}>{d.footer.sitemap}</Link>
       </nav>
       <div className="footer-meta">
-        <span>© 2026 RESO. {d.footer.rightsReserved}</span>
+        <span>© 2026 REOS. {d.footer.rightsReserved}</span>
         <span>{d.footer.publicNotice}</span>
       </div>
     </footer>

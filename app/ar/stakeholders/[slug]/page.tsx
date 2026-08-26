@@ -1,12 +1,7 @@
-import { View, generateStaticParams, generateMetadata } from "../../../stakeholders/[slug]/page";
+import { notFound } from "next/navigation";
+import { StakeholderBlueprintPage } from "../../../components/StakeholderBlueprintPage";
+import { groups } from "../../../data/ecosystem";
 
-/** Arabic route. Renders the shared view with locale="ar"; content falls
- *  back to English per-field where a translation is not yet in place. */
-export { generateStaticParams };
-export { generateMetadata };
-
-type Props = { params: Promise<Record<string, string>> };
-export default function Page(props: Props) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return View({ ...(props as any), locale: "ar" });
-}
+type Props = { params: Promise<{ slug: string }> };
+export async function generateStaticParams() { return groups.map((group) => ({ slug: group.id })); }
+export default async function ArabicStakeholderLegacyRoute({ params }: Props) { const { slug } = await params; if (!groups.some((group) => group.id === slug)) notFound(); return <StakeholderBlueprintPage stakeholderId={slug} emirate="dubai" track="track-neutral" locale="ar" />; }

@@ -53,7 +53,7 @@ export function PreferencesControls({ locale = "en" }: { locale?: Locale }) {
     localStorage.setItem("reos-language", v);
     const here = window.location.pathname;
     const bare = here === "/ar" || here.startsWith("/ar/") ? here.slice(3) || "/" : here;
-    window.location.href = localePath(v as Locale, bare) + window.location.hash;
+    window.location.href = localePath(v as Locale, bare) + window.location.search + window.location.hash;
   }
 
   const t = LABELS[locale as Language] ?? LABELS.en;
