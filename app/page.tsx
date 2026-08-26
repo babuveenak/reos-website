@@ -5,8 +5,15 @@ import Link from "next/link";
 import { JourneyFlow } from "./components/JourneyHero";
 import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
-import { FragmentedJourney } from "./components/FragmentedJourney";
+import { FragmentedJourney, type FragmentStakeholderStages } from "./components/FragmentedJourney";
 import { buildSnapshot } from "./assistant/snapshot";
+import { relationshipsByStakeholder } from "./data/relationships";
+
+const fragmentStakeholderIds = ["developers", "consultants-designers", "authorities-regulators", "contractors", "banks-financial", "property-owners"] as const;
+const fragmentStakeholderStages = Object.fromEntries(fragmentStakeholderIds.map((stakeholderId) => [
+  stakeholderId,
+  relationshipsByStakeholder(stakeholderId).map((relationship) => relationship.stageId),
+])) as FragmentStakeholderStages;
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
@@ -67,7 +74,7 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
         title={<>{d.home.problemTitle}<br /><em>{d.home.problemTitleEm}</em></>}
         copy={d.home.problemCopy}
       />
-      <FragmentedJourney locale={locale} />
+      <FragmentedJourney locale={locale} stakeholderStages={fragmentStakeholderStages} />
     </section>
 
     {/* 04 — FIVE GUIDED PATHS. Dedicated pages carry the depth. */}
