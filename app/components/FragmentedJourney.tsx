@@ -30,8 +30,12 @@ const stageIds = ["land-vision", "planning-design", "authorities-approvals", "co
 
 const copy = {
   en: {
-    stages: ["Land", "Design", "Approvals", "Build", "Sales", "Living", "Growth"],
+    stages: ["Land & Vision", "Planning & Design", "Authorities & Approvals", "Construction & Delivery", "Sales & Transfer", "Living & Operations", "Asset Growth & Intelligence"],
     property: "One property journey",
+    routeFlow: "Information, evidence and decisions move between stages — some stages overlap",
+    touchpoint: "touchpoint",
+    touchpoints: "touchpoints",
+    active: "Connected",
     instruction: "Select a fracture to reveal its effect",
     actorInstruction: "Select a participant to trace every lifecycle stage in which they are involved",
     issues: [
@@ -42,8 +46,12 @@ const copy = {
     ],
   },
   ar: {
-    stages: ["الأرض", "التصميم", "الموافقات", "البناء", "المبيعات", "السكن", "النمو"],
+    stages: ["الأرض والرؤية", "التخطيط والتصميم", "الجهات والموافقات", "البناء والتسليم", "المبيعات ونقل الملكية", "السكن والتشغيل", "نمو الأصول والذكاء"],
     property: "رحلة عقار واحدة",
+    routeFlow: "تنتقل المعلومات والأدلة والقرارات بين المراحل — وقد تتداخل بعض المراحل",
+    touchpoint: "نقطة اتصال",
+    touchpoints: "نقاط اتصال",
+    active: "متصل",
     instruction: "اختر نقطة انقطاع لتكشف أثرها",
     actorInstruction: "اختر أحد المشاركين لتتبع كل مرحلة من دورة الحياة يشارك فيها",
     issues: [
@@ -75,6 +83,8 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
   const [active, setActive] = useState<FragmentMode>("visibility");
   const [activeActor, setActiveActor] = useState<StakeholderId>("developers");
   const [connections, setConnections] = useState<ConnectionPath[]>([]);
+  const [actorLeadPath, setActorLeadPath] = useState("");
+  const [actorRailPath, setActorRailPath] = useState("");
   const [dependencyPath, setDependencyPath] = useState("");
   const [canvasSize, setCanvasSize] = useState({ width: 1200, height: 560 });
   const canvasRef = useRef<HTMLDivElement>(null);
@@ -96,22 +106,36 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
       const startX = actorBounds.left - bounds.left + actorBounds.width / 2;
       const startY = actorAboveRoute ? actorBounds.bottom - bounds.top : actorBounds.top - bounds.top;
 
-      const nextConnections = activeStages.flatMap((stageId) => {
+      const stagePoints = activeStages.flatMap((stageId) => {
         const node = canvas.querySelector<HTMLElement>(`[data-stage-anchor="${stageId}"]`);
         if (!node) return [];
         const nodeBounds = node.getBoundingClientRect();
         const endX = nodeBounds.left - bounds.left + nodeBounds.width / 2;
         const endY = nodeBounds.top - bounds.top + nodeBounds.height / 2;
-        const curve = Math.max(38, Math.abs(endY - startY) * .48);
-        const controlY = actorAboveRoute ? startY + curve : startY - curve;
-        return [{
+        return [{ stageId, endX, endY }];
+      });
+
+      if (stagePoints.length > 0) {
+        const routeY = stagePoints[0].endY;
+        const busY = routeY + (actorAboveRoute ? -64 : 72);
+        const minX = Math.min(...stagePoints.map(({ endX }) => endX));
+        const maxX = Math.max(...stagePoints.map(({ endX }) => endX));
+        const leadX = (minX + maxX) / 2;
+        const controlY = startY + (busY - startY) * .55;
+        setActorLeadPath(`M ${startX.toFixed(1)} ${startY.toFixed(1)} C ${startX.toFixed(1)} ${controlY.toFixed(1)}, ${leadX.toFixed(1)} ${controlY.toFixed(1)}, ${leadX.toFixed(1)} ${busY.toFixed(1)}`);
+        setActorRailPath(`M ${minX.toFixed(1)} ${busY.toFixed(1)} L ${maxX.toFixed(1)} ${busY.toFixed(1)}`);
+        setConnections(stagePoints.map(({ stageId, endX, endY }) => ({
           actorId: activeActor,
           stageId,
-          d: `M ${startX.toFixed(1)} ${startY.toFixed(1)} C ${startX.toFixed(1)} ${controlY.toFixed(1)}, ${endX.toFixed(1)} ${controlY.toFixed(1)}, ${endX.toFixed(1)} ${endY.toFixed(1)}`,
+          d: `M ${endX.toFixed(1)} ${busY.toFixed(1)} L ${endX.toFixed(1)} ${endY.toFixed(1)}`,
           endX,
           endY,
-        }];
-      });
+        })));
+      } else {
+        setActorLeadPath("");
+        setActorRailPath("");
+        setConnections([]);
+      }
 
       const dependencyNodes = ["planning-design", "sales-transfer"].map((stageId) =>
         canvas.querySelector<HTMLElement>(`[data-stage-anchor="${stageId}"]`)?.getBoundingClientRect());
@@ -121,7 +145,6 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
         : "";
 
       setCanvasSize({ width: bounds.width, height: bounds.height });
-      setConnections(nextConnections);
       setDependencyPath(dependency);
     };
 
@@ -131,10 +154,16 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
     return () => observer.disconnect();
   }, [activeActor, activeStages]);
 
+  const selectedActor = stakeholders.find(({ id }) => id === activeActor) ?? stakeholders[0];
+  const firstActiveStage = content.stages[stageIds.indexOf(activeStages[0])];
+  const lastActiveStage = content.stages[stageIds.indexOf(activeStages[activeStages.length - 1])];
+
   return <div className={`fragmented-journey mode-${active}`}>
     <div ref={canvasRef} className="fragmented-journey-canvas" id="fragmented-journey-visual" role="group" aria-label={`${content.property}. ${selected.detail}`}>
       <svg className="fragment-connection-field" viewBox={`0 0 ${canvasSize.width} ${canvasSize.height}`} preserveAspectRatio="none" aria-hidden="true">
-        {connections.map((connection) => <path key={`${connection.actorId}-${connection.stageId}`} data-actor-id={connection.actorId} data-stage-id={connection.stageId} data-end-x={connection.endX.toFixed(1)} data-end-y={connection.endY.toFixed(1)} d={connection.d} />)}
+        {actorLeadPath ? <path className="fragment-actor-lead" d={actorLeadPath} /> : null}
+        {actorRailPath ? <path className="fragment-actor-rail" d={actorRailPath} /> : null}
+        {connections.map((connection) => <path className="fragment-actor-branch" key={`${connection.actorId}-${connection.stageId}`} data-actor-id={connection.actorId} data-stage-id={connection.stageId} data-end-x={connection.endX.toFixed(1)} data-end-y={connection.endY.toFixed(1)} d={connection.d} />)}
         {dependencyPath ? <path className="fragment-dependency-arc" d={dependencyPath} /> : null}
       </svg>
 
@@ -152,16 +181,26 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
         })}
       </div>
 
-      <ol className="fragment-route">
+      <div className="fragment-route-heading" aria-hidden="true"><span />{content.routeFlow}<span /></div>
+
+      <ol className="fragment-route" aria-label={content.routeFlow}>
         {content.stages.map((stage, index) => {
           const stageId = stageIds[index];
           const isConnected = activeStages.includes(stageId);
+          const nextStageId = stageIds[index + 1];
+          const isActiveHandoff = isConnected && Boolean(nextStageId && activeStages.includes(nextStageId));
           return <li className={isConnected ? "is-connected" : ""} key={stageId}>
-            <Link href={localized(`/property-journey/${stageId}`)} aria-label={`${String(index + 1).padStart(2, "0")} ${stage}`}><i data-stage-anchor={stageId}>{String(index + 1).padStart(2, "0")}</i><span>{stage}</span></Link>
-            {index < content.stages.length - 1 ? <b aria-hidden="true" /> : null}
+            <Link href={localized(`/property-journey/${stageId}`)} aria-label={`${String(index + 1).padStart(2, "0")} ${stage}${isConnected ? `, ${content.active}` : ""}`}><i data-stage-anchor={stageId}>{String(index + 1).padStart(2, "0")}</i><span>{stage}</span><small>{isConnected ? content.active : ""}</small></Link>
+            {index < content.stages.length - 1 ? <b className={`fragment-stage-handoff${isActiveHandoff ? " is-active-flow" : ""}`} aria-hidden="true"><i /><i /></b> : null}
           </li>;
         })}
       </ol>
+
+      <div className="fragment-actor-summary" aria-live="polite">
+        <b>{selectedActor[locale]}</b>
+        <span>{activeStages.length} {activeStages.length === 1 ? content.touchpoint : content.touchpoints}</span>
+        <small>{firstActiveStage}{firstActiveStage !== lastActiveStage ? ` → ${lastActiveStage}` : ""}</small>
+      </div>
 
       <div className="fragment-knowledge-fog" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
       <div className="fragment-delay-pulse" aria-hidden="true"><span>!</span></div>

@@ -22,12 +22,12 @@ const browser = await chromium.launch({
 });
 const errors = [];
 
-async function open(width, height) {
+async function open(width, height, path = "/") {
   const context = await browser.newContext({ viewport: { width, height }, reducedMotion: "reduce" });
   const page = await context.newPage();
   page.on("console", (message) => { if (message.type() === "error") errors.push(`${width}px: ${message.text()}`); });
   page.on("pageerror", (error) => errors.push(`${width}px: ${error.message}`));
-  const response = await page.goto(`${baseURL}/`, { waitUntil: "networkidle" });
+  const response = await page.goto(`${baseURL}${path}`, { waitUntil: "networkidle" });
   assert.equal(response?.status(), 200, "the original REOS home page must resolve");
   assert.equal(await page.locator('[data-nextjs-dialog], #webpack-dev-server-client-overlay').count(), 0, "the home page must not show an error overlay");
   await page.locator(".fragmented-journey").scrollIntoViewIfNeeded();
@@ -42,6 +42,23 @@ assert.equal(await actorButtons.locator("svg[data-icon]").count(), 6, "every sta
 const icons = await actorButtons.locator("svg[data-icon]").evaluateAll((nodes) => nodes.map((node) => node.dataset.icon));
 assert.equal(new Set(icons).size, 6, "stakeholders must not reuse one generic icon");
 assert.equal(await canvas.locator(".fragment-route a").count(), 7, "all seven stage nodes must be navigable");
+assert.equal(await canvas.locator(".fragment-stage-handoff").count(), 6, "the lifecycle must show all six stage-to-stage handoffs");
+assert.equal(await canvas.locator(".fragment-stage-handoff > i").count(), 12, "each handoff needs visible forward and return data movement");
+assert.match(await canvas.locator(".fragment-route-heading").innerText(), /Information, evidence and decisions move between stages.*some stages overlap/i);
+assert.deepEqual((await canvas.locator(".fragment-route a > span").allInnerTexts()).map((label) => label.toLowerCase()), [
+  "land & vision",
+  "planning & design",
+  "authorities & approvals",
+  "construction & delivery",
+  "sales & transfer",
+  "living & operations",
+  "asset growth & intelligence",
+]);
+const stageNodeSizes = await canvas.locator(".fragment-route [data-stage-anchor]").evaluateAll((nodes) => nodes.map((node) => {
+  const bounds = node.getBoundingClientRect();
+  return { width: bounds.width, height: bounds.height };
+}));
+for (const size of stageNodeSizes) assert.ok(size.width >= 54 && size.height >= 54, `stage node is still too small: ${JSON.stringify(size)}`);
 
 for (const [actorId, stageIds] of Object.entries(expected)) {
   const actor = canvas.locator(`[data-actor-id="${actorId}"]`).filter({ has: desktop.page.locator("svg") });
@@ -52,6 +69,12 @@ for (const [actorId, stageIds] of Object.entries(expected)) {
   assert.equal(await actorButtons.evaluateAll((buttons) => buttons.filter((button) => button.getAttribute("aria-pressed") === "true").length), 1, "only one stakeholder may be active");
   const connected = await canvas.locator(".fragment-route li.is-connected [data-stage-anchor]").evaluateAll((nodes) => nodes.map((node) => node.dataset.stageAnchor));
   assert.deepEqual(connected, stageIds, `${actorId}: highlighted stages must match the approved relationship model`);
+  assert.equal(await canvas.locator(".fragment-actor-lead").count(), 1, `${actorId}: one lead must connect the participant to its touchpoint rail`);
+  assert.equal(await canvas.locator(".fragment-actor-rail").count(), 1, `${actorId}: one shared rail must replace overlapping participant curves`);
+  const canonicalOrder = ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"];
+  const adjacentTouchpoints = canonicalOrder.slice(0, -1).filter((stageId, index) => stageIds.includes(stageId) && stageIds.includes(canonicalOrder[index + 1])).length;
+  assert.equal(await canvas.locator(".fragment-stage-handoff.is-active-flow").count(), adjacentTouchpoints, `${actorId}: only adjacent selected-stage handoffs should be emphasized`);
+  assert.match(await canvas.locator(".fragment-actor-summary").innerText(), new RegExp(`${stageIds.length} touchpoint`, "i"), `${actorId}: the selected touchpoint count must be visible`);
   const geometry = await canvas.evaluate((element, id) => {
     const bounds = element.getBoundingClientRect();
     return [...element.querySelectorAll(`.fragment-connection-field path[data-actor-id="${id}"]`)].map((path) => {
@@ -107,6 +130,13 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
   if (width === 390) await view.page.locator(".fragmented-journey").screenshot({ path: `${output}/fragmentation-mobile.png` });
   await view.context.close();
 }
+
+const arabic = await open(1024, 900, "/ar");
+assert.equal(await arabic.page.locator("html[dir=rtl]").count(), 1, "the Arabic lifecycle must remain RTL");
+assert.equal(await arabic.page.locator(".fragment-stage-handoff").count(), 6, "Arabic must retain all six stage handoffs");
+assert.match(await arabic.page.locator(".fragment-route-heading").innerText(), /المعلومات والأدلة والقرارات/);
+await arabic.page.locator(".fragmented-journey").screenshot({ path: `${output}/fragmentation-arabic.png` });
+await arabic.context.close();
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();

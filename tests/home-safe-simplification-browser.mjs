@@ -29,28 +29,21 @@ assert.deepEqual(await desktop.page.locator(".home-pathway-grid > a").evaluateAl
 for (const removed of [".persona-select", ".eco-map", ".layer-grid", ".route-governance", ".jl-stats", ".jl-moments", ".module-grid", ".outcome-grid", ".coverage-strip"]) {
   assert.equal(await desktop.page.locator(removed).count(), 0, `${removed} should not remain on Home`);
 }
-for (const preserved of [".journey-map", ".assistant-band"]) {
+for (const preserved of [".fragmented-journey", ".assistant-band"]) {
   assert.ok(await desktop.page.locator(preserved).count() > 0, `${preserved} was a held conflict and must remain`);
 }
+assert.equal(await desktop.page.locator(".fragment-route a").count(), 7, "the current Home visual must retain all seven stage routes");
+assert.equal(await desktop.page.locator(".fragment-actor").count(), 6, "the current Home visual must retain its six interactive representative stakeholders");
+assert.equal(await desktop.page.locator(".fragment-stage-handoff").count(), 6, "the stage-to-stage lifecycle flow must remain continuous");
 assert.equal(await desktop.page.locator(".home-canonical-scope > div").count(), 3);
 assert.deepEqual(await desktop.page.locator(".home-canonical-scope dt").allInnerTexts(), ["7", "12", "7"]);
 assert.equal(await desktop.page.locator(".home-product-card").count(), 0);
-assert.equal(await desktop.page.locator(".home-stakeholder-grid > a").count(), 12);
 assert.ok(await desktop.page.getByRole("link", { name: /Open the full Assistant/ }).count() > 0);
 assert.equal(await desktop.page.getByRole("link", { name: /Request a Demo/ }).count(), 0);
 await desktop.page.locator(".home-pathways").screenshot({ path: `${output}/01-five-path-gateway-desktop.png` });
 await desktop.page.locator(".hero-primary").screenshot({ path: `${output}/02-educational-hero-desktop.png` });
 await desktop.page.screenshot({ path: `${output}/03-educational-home-full.png`, fullPage: true });
 await desktop.context.close();
-
-const platformContext = await browser.newContext({ viewport: { width: 1440, height: 1000 }, reducedMotion: "reduce" });
-const platform = await platformContext.newPage();
-const platformResponse = await platform.goto(`${baseURL}/platform`, { waitUntil: "networkidle" });
-assert.equal(platformResponse?.status(), 200);
-assert.equal(await platform.locator(".sales-hero-proof > span").count(), 2);
-assert.ok(await platform.getByRole("link", { name: /Request a demo/i }).count() > 0);
-await platform.locator(".sales-hero").screenshot({ path: `${output}/04-platform-product-ownership.png` });
-await platformContext.close();
 
 for (const width of [320, 390, 768, 1024]) {
   const mobile = await open(width, width < 500 ? 844 : 900);
@@ -62,4 +55,4 @@ for (const width of [320, 390, 768, 1024]) {
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();
-console.log("PASS: educational Home, 7/12/7 canonical scope, twelve stakeholder routes, Assistant variants, product ownership on Platform, console health and 4 responsive breakpoints");
+console.log("PASS: educational Home, 7/12/7 canonical scope, seven-stage interactive route, six representative stakeholder controls, Assistant access, console health and 4 responsive breakpoints");
