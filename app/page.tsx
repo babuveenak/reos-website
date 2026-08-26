@@ -1,10 +1,11 @@
 import { DEFAULT_LOCALE, type Locale } from "./i18n/config";
 import { getDict } from "./i18n/dictionary";
-import { getFragments, getStages, getGroups } from "./i18n/content";
+import { getStages, getGroups } from "./i18n/content";
 import Link from "next/link";
 import { JourneyFlow } from "./components/JourneyHero";
 import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
+import { FragmentedJourney } from "./components/FragmentedJourney";
 import { buildSnapshot } from "./assistant/snapshot";
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
@@ -59,22 +60,14 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <div className="band-cta"><Link className="text-link" href={L("/assistant")}>{locale === "ar" ? "افتح المساعد الكامل" : "Open the full Assistant"} <span>↗</span></Link></div>
     </section>
 
-    {/* 03 — PROBLEM. One concise case for change. */}
+    {/* 03 — PROBLEM. One connected journey experienced through disconnected views. */}
     <section className="section-pad problem-band" id="problem">
       <SectionIntro
         label={d.home.problemLabel}
         title={<>{d.home.problemTitle}<br /><em>{d.home.problemTitleEm}</em></>}
         copy={d.home.problemCopy}
       />
-      <div className="fragment-cards">
-        {getFragments(locale).map((item, index) => (
-          <article key={item.title}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h3>{item.title}</h3>
-            <p>{item.detail}</p>
-          </article>
-        ))}
-      </div>
+      <FragmentedJourney locale={locale} />
     </section>
 
     {/* 04 — FIVE GUIDED PATHS. Dedicated pages carry the depth. */}

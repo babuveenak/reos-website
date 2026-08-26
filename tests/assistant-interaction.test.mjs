@@ -365,6 +365,31 @@ test("the sticky composer actually covers the text scrolling under it", opts, as
   });
 });
 
+/* ── the homepage fragmentation model is visual and genuinely interactive ─ */
+
+test("the fragmentation visual exposes four selectable journey failures", opts, async () => {
+  await withPage("/", async (page) => {
+    const controls = page.locator(".fragment-mode-controls button");
+    assert.equal(await controls.count(), 4, "the visual must expose all four fractures");
+
+    const expected = [
+      ["No shared view", "mode-visibility", "different piece"],
+      ["Unclear next step", "mode-sequence", "visible route"],
+      ["Hidden dependencies", "mode-dependency", "unseen prerequisite"],
+      ["Hard-to-find rules", "mode-knowledge", "governing their part"],
+    ];
+
+    for (const [label, mode, readout] of expected) {
+      const control = page.getByRole("button", { name: new RegExp(label) });
+      await control.click();
+      assert.equal(await control.getAttribute("aria-pressed"), "true", `${label}: selection is not exposed`);
+      assert.equal(await page.locator('.fragment-mode-controls button[aria-pressed="true"]').count(), 1);
+      assert.match(await page.locator(".fragmented-journey").getAttribute("class"), new RegExp(mode));
+      assert.match(await page.locator(".fragment-mode-readout").innerText(), new RegExp(readout));
+    }
+  });
+});
+
 /* ── no layout overflow at any breakpoint, either direction ──────────────── */
 
 test("no horizontal overflow on any breakpoint or locale", opts, async () => {

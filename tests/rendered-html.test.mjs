@@ -61,6 +61,8 @@ test("Platform commercial redesign sells governed products without overstating p
 
 test("approved homepage simplification removes duplicated depth and uses canonical product evidence", async () => {
   const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const fragmentation = await readFile(new URL("../app/components/FragmentedJourney.tsx", import.meta.url), "utf8");
+  const styles = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
 
   // Deep content belongs to the existing dedicated routes, not a second copy on Home.
   for (const duplicate of ["PersonaSelector", "EcosystemMap", "JourneyIntelligence", "RouteGovernance", "getLayers"]) {
@@ -78,6 +80,17 @@ test("approved homepage simplification removes duplicated depth and uses canonic
   }
   assert.match(source, /home-canonical-scope/);
   assert.doesNotMatch(source, /home-product-grid|ILLUSTRATIVE PRODUCT PREVIEW|Request a Demo/);
+
+  // Fragmentation is explained as a visual, people-centred journey—not a second text-card grid.
+  assert.match(source, /<FragmentedJourney locale=\{locale\}/);
+  assert.doesNotMatch(source, /fragment-cards|getFragments/);
+  for (const message of ["No shared view", "Unclear next step", "Hidden dependencies", "Hard-to-find rules"]) {
+    assert.match(fragmentation, new RegExp(message));
+  }
+  assert.match(fragmentation, /aria-pressed=\{active === issue\.id\}/);
+  assert.match(fragmentation, /role="group" aria-label=\{content\.instruction\}/);
+  assert.match(fragmentation, /aria-live="polite"/);
+  assert.match(styles, /prefers-reduced-motion:reduce[^}]*fragment-/);
 });
 
 test("demo delivery contract confirms only acknowledged submissions", async () => {
