@@ -34,6 +34,7 @@ for (const preserved of [".fragmented-journey", ".assistant-band"]) {
 }
 assert.equal(await desktop.page.locator(".fragment-route a").count(), 7, "the current Home visual must retain all seven stage routes");
 assert.equal(await desktop.page.locator(".fragment-actor").count(), 6, "the current Home visual must retain its six interactive representative stakeholders");
+assert.equal(await desktop.page.locator(".fragment-ambient-link").count(), 6, "every representative stakeholder must retain a subtle connection to the journey");
 assert.equal(await desktop.page.locator(".fragment-stage-handoff").count(), 6, "the stage-to-stage lifecycle flow must remain continuous");
 assert.equal(await desktop.page.locator(".home-canonical-scope > div").count(), 3);
 assert.deepEqual(await desktop.page.locator(".home-canonical-scope dt").allInnerTexts(), ["7", "12", "7"]);

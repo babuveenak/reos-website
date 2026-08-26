@@ -22,8 +22,8 @@ const browser = await chromium.launch({
 });
 const errors = [];
 
-async function open(width, height, path = "/") {
-  const context = await browser.newContext({ viewport: { width, height }, reducedMotion: "reduce" });
+async function open(width, height, path = "/", reducedMotion = "reduce") {
+  const context = await browser.newContext({ viewport: { width, height }, reducedMotion });
   const page = await context.newPage();
   page.on("console", (message) => { if (message.type() === "error") errors.push(`${width}px: ${message.text()}`); });
   page.on("pageerror", (error) => errors.push(`${width}px: ${error.message}`));
@@ -44,6 +44,18 @@ assert.equal(new Set(icons).size, 6, "stakeholders must not reuse one generic ic
 assert.equal(await canvas.locator(".fragment-route a").count(), 7, "all seven stage nodes must be navigable");
 assert.equal(await canvas.locator(".fragment-stage-handoff").count(), 6, "the lifecycle must show all six stage-to-stage handoffs");
 assert.equal(await canvas.locator(".fragment-stage-handoff > i").count(), 12, "each handoff needs visible forward and return data movement");
+const handoffColors = await canvas.locator(".fragment-stage-handoff").first().locator("i").evaluateAll((packets) => packets.map((packet) => getComputedStyle(packet).backgroundColor));
+assert.notEqual(handoffColors[0], handoffColors[1], "each stage handoff must retain distinct gold and teal data-flow markers");
+assert.equal(await canvas.locator(".fragment-ambient-link").count(), 6, "each floating stakeholder needs a persistent subtle connection to the journey");
+const ambientGeometry = await canvas.locator(".fragment-ambient-link").evaluateAll((paths) => paths.map((path) => ({
+  actorId: path.dataset.ambientActorId,
+  stageId: path.dataset.stageId,
+  length: path.getTotalLength(),
+})));
+for (const connection of ambientGeometry) {
+  assert.ok(expected[connection.actorId].includes(connection.stageId), `${connection.actorId}: ambient link must land on a canonical stakeholder stage`);
+  assert.ok(connection.length > 60, `${connection.actorId}: ambient connection must visibly reach the journey`);
+}
 assert.match(await canvas.locator(".fragment-route-heading").innerText(), /Information, evidence and decisions move between stages.*some stages overlap/i);
 assert.deepEqual((await canvas.locator(".fragment-route a > span").allInnerTexts()).map((label) => label.toLowerCase()), [
   "land & vision",
@@ -61,7 +73,7 @@ const stageNodeSizes = await canvas.locator(".fragment-route [data-stage-anchor]
 for (const size of stageNodeSizes) assert.ok(size.width >= 54 && size.height >= 54, `stage node is still too small: ${JSON.stringify(size)}`);
 
 for (const [actorId, stageIds] of Object.entries(expected)) {
-  const actor = canvas.locator(`[data-actor-id="${actorId}"]`).filter({ has: desktop.page.locator("svg") });
+  const actor = canvas.locator(`button.fragment-actor[data-actor-id="${actorId}"]`);
   await actor.click();
   await desktop.page.waitForFunction(([id, count]) => document.querySelectorAll(`.fragment-connection-field path[data-actor-id="${id}"]`).length === count, [actorId, stageIds.length]);
   assert.equal(await actor.getAttribute("aria-pressed"), "true", `${actorId}: the selected state must be exposed`);
@@ -71,6 +83,9 @@ for (const [actorId, stageIds] of Object.entries(expected)) {
   assert.deepEqual(connected, stageIds, `${actorId}: highlighted stages must match the approved relationship model`);
   assert.equal(await canvas.locator(".fragment-actor-lead").count(), 1, `${actorId}: one lead must connect the participant to its touchpoint rail`);
   assert.equal(await canvas.locator(".fragment-actor-rail").count(), 1, `${actorId}: one shared rail must replace overlapping participant curves`);
+  const selectedTraceLengths = await canvas.locator(".fragment-actor-lead, .fragment-actor-rail").evaluateAll((paths) => paths.map((path) => path.getTotalLength()));
+  assert.ok(selectedTraceLengths[0] > 60, `${actorId}: selected stakeholder lead must remain visibly connected`);
+  assert.ok(selectedTraceLengths[1] >= 47, `${actorId}: selected touchpoint rail must remain visible, including a single-stage route`);
   const canonicalOrder = ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"];
   const adjacentTouchpoints = canonicalOrder.slice(0, -1).filter((stageId, index) => stageIds.includes(stageId) && stageIds.includes(canonicalOrder[index + 1])).length;
   assert.equal(await canvas.locator(".fragment-stage-handoff.is-active-flow").count(), adjacentTouchpoints, `${actorId}: only adjacent selected-stage handoffs should be emphasized`);
@@ -113,6 +128,55 @@ await scan(desktop.page, "light");
 await desktop.page.locator(".fragmented-journey").screenshot({ path: `${output}/fragmentation-light.png` });
 await desktop.context.close();
 
+const motion = await open(1440, 1000, "/", "no-preference");
+const motionCanvas = motion.page.locator(".fragmented-journey-canvas");
+const motionPackets = await motionCanvas.locator(".fragment-stage-handoff").first().locator("i").evaluateAll((packets) => packets.map((packet) => {
+  const style = getComputedStyle(packet);
+  return { name: style.animationName, state: style.animationPlayState };
+}));
+assert.deepEqual(motionPackets, [
+  { name: "fragment-data-forward", state: "running" },
+  { name: "fragment-data-return", state: "running" },
+], "gold and teal stage data-flow markers must keep moving in both directions");
+for (let pass = 0; pass < 2; pass += 1) {
+  for (const [actorId, stageIds] of Object.entries(expected)) {
+    const actor = motionCanvas.locator(`button.fragment-actor[data-actor-id="${actorId}"]`);
+    await actor.hover();
+    await motion.page.waitForFunction(([id, count]) => document.querySelectorAll(`.fragment-connection-field path[data-actor-id="${id}"]`).length === count, [actorId, stageIds.length]);
+    const trace = await motionCanvas.evaluate((element, id) => {
+      const bounds = element.getBoundingClientRect();
+      const button = element.querySelector(`button.fragment-actor[data-actor-id="${id}"]`);
+      const buttonBounds = button.getBoundingClientRect();
+      const actorAboveRoute = buttonBounds.top < bounds.top + bounds.height / 2;
+      const expectedStart = {
+        x: buttonBounds.left - bounds.left + buttonBounds.width / 2,
+        y: actorAboveRoute ? buttonBounds.bottom - bounds.top : buttonBounds.top - bounds.top,
+      };
+      const lead = element.querySelector(".fragment-actor-lead");
+      const rail = element.querySelector(".fragment-actor-rail");
+      const actualStart = lead.getPointAtLength(0);
+      const style = getComputedStyle(lead);
+      return {
+        ambientCount: element.querySelectorAll(".fragment-ambient-link").length,
+        leadLength: lead.getTotalLength(),
+        railLength: rail.getTotalLength(),
+        startDeltaX: Math.abs(expectedStart.x - actualStart.x),
+        startDeltaY: Math.abs(expectedStart.y - actualStart.y),
+        animationName: style.animationName,
+        animationState: style.animationPlayState,
+      };
+    }, actorId);
+    assert.equal(trace.ambientCount, 6, `${actorId}: ambient stakeholder connections must survive repeated pointer movement`);
+    assert.ok(trace.leadLength > 60, `${actorId}: selected trace must not collapse after hover`);
+    assert.ok(trace.railLength >= 47, `${actorId}: selected rail must not collapse after hover`);
+    assert.ok(trace.startDeltaX <= 1.5 && trace.startDeltaY <= 1.5, `${actorId}: selected trace must start at the stakeholder card, not another SVG path`);
+    assert.equal(trace.animationName, "fragment-current", `${actorId}: selected data trace must remain animated`);
+    assert.equal(trace.animationState, "running", `${actorId}: selected data trace animation must remain active`);
+  }
+}
+await motionCanvas.screenshot({ path: `${output}/fragmentation-hover-persistence.png` });
+await motion.context.close();
+
 const dark = await open(1440, 1000);
 await dark.page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
 await dark.page.waitForTimeout(400); // Let the intentional 250ms theme transition settle before measuring contrast.
@@ -140,4 +204,4 @@ await arabic.context.close();
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();
-console.log(`PASS: canonical stakeholder mappings, exact line endpoints, six distinct icons, mouse/keyboard interaction, seven stage links, light/dark WCAG A/AA, reduced motion, four responsive widths, overflow, console and screenshots (${output})`);
+console.log(`PASS: canonical stakeholder mappings, persistent ambient and selected traces through repeated hover, exact line endpoints, six distinct icons, mouse/keyboard interaction, seven stage links, light/dark WCAG A/AA, reduced motion, four responsive widths, overflow, console and screenshots (${output})`);

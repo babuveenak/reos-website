@@ -17,6 +17,13 @@ type ConnectionPath = {
   endY: number;
 };
 
+type AmbientConnectionPath = {
+  actorId: StakeholderId;
+  stageId: string;
+  tone: "gold" | "teal";
+  d: string;
+};
+
 const stakeholders: { id: StakeholderId; en: string; ar: string }[] = [
   { id: "developers", en: "Developer", ar: "المطوّر" },
   { id: "consultants-designers", en: "Consultant", ar: "الاستشاري" },
@@ -83,6 +90,7 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
   const [active, setActive] = useState<FragmentMode>("visibility");
   const [activeActor, setActiveActor] = useState<StakeholderId>("developers");
   const [connections, setConnections] = useState<ConnectionPath[]>([]);
+  const [ambientConnections, setAmbientConnections] = useState<AmbientConnectionPath[]>([]);
   const [actorLeadPath, setActorLeadPath] = useState("");
   const [actorRailPath, setActorRailPath] = useState("");
   const [dependencyPath, setDependencyPath] = useState("");
@@ -99,12 +107,41 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
 
     const measure = () => {
       const bounds = canvas.getBoundingClientRect();
-      const actor = canvas.querySelector<HTMLElement>(`[data-actor-id="${activeActor}"]`);
+      const actor = canvas.querySelector<HTMLButtonElement>(`button.fragment-actor[data-actor-id="${activeActor}"]`);
       if (!actor || bounds.width === 0 || bounds.height === 0) return;
       const actorBounds = actor.getBoundingClientRect();
       const actorAboveRoute = actorBounds.top < bounds.top + bounds.height / 2;
       const startX = actorBounds.left - bounds.left + actorBounds.width / 2;
       const startY = actorAboveRoute ? actorBounds.bottom - bounds.top : actorBounds.top - bounds.top;
+
+      const nextAmbientConnections = stakeholders.flatMap((stakeholder, index) => {
+        const stakeholderButton = canvas.querySelector<HTMLButtonElement>(`button.fragment-actor[data-actor-id="${stakeholder.id}"]`);
+        if (!stakeholderButton) return [];
+        const stakeholderBounds = stakeholderButton.getBoundingClientRect();
+        const stakeholderX = stakeholderBounds.left - bounds.left + stakeholderBounds.width / 2;
+        const candidateStages = stakeholderStages[stakeholder.id].flatMap((stageId) => {
+          const node = canvas.querySelector<HTMLElement>(`[data-stage-anchor="${stageId}"]`);
+          if (!node) return [];
+          const nodeBounds = node.getBoundingClientRect();
+          return [{
+            stageId,
+            endX: nodeBounds.left - bounds.left + nodeBounds.width / 2,
+            endY: nodeBounds.top - bounds.top + nodeBounds.height / 2,
+          }];
+        });
+        const closestStage = candidateStages.sort((a, b) => Math.abs(a.endX - stakeholderX) - Math.abs(b.endX - stakeholderX))[0];
+        if (!closestStage) return [];
+        const aboveRoute = stakeholderBounds.top < bounds.top + bounds.height / 2;
+        const stakeholderY = aboveRoute ? stakeholderBounds.bottom - bounds.top : stakeholderBounds.top - bounds.top;
+        const controlY = stakeholderY + (closestStage.endY - stakeholderY) * .52;
+        return [{
+          actorId: stakeholder.id,
+          stageId: closestStage.stageId,
+          tone: index % 2 === 0 ? "gold" as const : "teal" as const,
+          d: `M ${stakeholderX.toFixed(1)} ${stakeholderY.toFixed(1)} C ${stakeholderX.toFixed(1)} ${controlY.toFixed(1)}, ${closestStage.endX.toFixed(1)} ${controlY.toFixed(1)}, ${closestStage.endX.toFixed(1)} ${closestStage.endY.toFixed(1)}`,
+        }];
+      });
+      setAmbientConnections(nextAmbientConnections);
 
       const stagePoints = activeStages.flatMap((stageId) => {
         const node = canvas.querySelector<HTMLElement>(`[data-stage-anchor="${stageId}"]`);
@@ -123,7 +160,9 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
         const leadX = (minX + maxX) / 2;
         const controlY = startY + (busY - startY) * .55;
         setActorLeadPath(`M ${startX.toFixed(1)} ${startY.toFixed(1)} C ${startX.toFixed(1)} ${controlY.toFixed(1)}, ${leadX.toFixed(1)} ${controlY.toFixed(1)}, ${leadX.toFixed(1)} ${busY.toFixed(1)}`);
-        setActorRailPath(`M ${minX.toFixed(1)} ${busY.toFixed(1)} L ${maxX.toFixed(1)} ${busY.toFixed(1)}`);
+        const railStartX = minX === maxX ? Math.max(16, minX - 24) : minX;
+        const railEndX = minX === maxX ? Math.min(bounds.width - 16, maxX + 24) : maxX;
+        setActorRailPath(`M ${railStartX.toFixed(1)} ${busY.toFixed(1)} L ${railEndX.toFixed(1)} ${busY.toFixed(1)}`);
         setConnections(stagePoints.map(({ stageId, endX, endY }) => ({
           actorId: activeActor,
           stageId,
@@ -152,7 +191,7 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
     const observer = new ResizeObserver(measure);
     observer.observe(canvas);
     return () => observer.disconnect();
-  }, [activeActor, activeStages]);
+  }, [activeActor, activeStages, stakeholderStages]);
 
   const selectedActor = stakeholders.find(({ id }) => id === activeActor) ?? stakeholders[0];
   const firstActiveStage = content.stages[stageIds.indexOf(activeStages[0])];
@@ -161,6 +200,7 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
   return <div className={`fragmented-journey mode-${active}`}>
     <div ref={canvasRef} className="fragmented-journey-canvas" id="fragmented-journey-visual" role="group" aria-label={`${content.property}. ${selected.detail}`}>
       <svg className="fragment-connection-field" viewBox={`0 0 ${canvasSize.width} ${canvasSize.height}`} preserveAspectRatio="none" aria-hidden="true">
+        {ambientConnections.map((connection) => <path className={`fragment-ambient-link${connection.actorId === activeActor ? " is-selected-origin" : ""}`} key={`ambient-${connection.actorId}`} data-ambient-actor-id={connection.actorId} data-stage-id={connection.stageId} data-tone={connection.tone} d={connection.d} />)}
         {actorLeadPath ? <path className="fragment-actor-lead" d={actorLeadPath} /> : null}
         {actorRailPath ? <path className="fragment-actor-rail" d={actorRailPath} /> : null}
         {connections.map((connection) => <path className="fragment-actor-branch" key={`${connection.actorId}-${connection.stageId}`} data-actor-id={connection.actorId} data-stage-id={connection.stageId} data-end-x={connection.endX.toFixed(1)} data-end-y={connection.endY.toFixed(1)} d={connection.d} />)}
