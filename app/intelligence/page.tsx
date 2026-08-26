@@ -1,11 +1,10 @@
-import { getPersonas, getStages, getTerms, getInsightCategories } from "../i18n/content";
+import { getPersonas, getTerms, getInsightCategories } from "../i18n/content";
 import { DEFAULT_LOCALE, localePath, type Locale } from "../i18n/config";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { IntelligenceHeroMap, type IntelligenceDomain } from "../components/IntelligenceHeroMap";
-import { Page, SectionIntro } from "../components/SiteShell";
+import { IntelligenceWorkspaces } from "../components/IntelligenceWorkspaces";
+import { Page } from "../components/SiteShell";
 import { authorities } from "../data/reos";
-import { HowReosWorks, IntelligenceGovernance, RouteGovernance } from "../components/Governance";
 
 export const metadata: Metadata = {
   title: "REOS Intelligence | Guides, Regulations, Processes & Glossary",
@@ -24,7 +23,6 @@ export const metadata: Metadata = {
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const L = (path: string) => localePath(locale, path);
   const personas = getPersonas(locale);
-  const stages = getStages(locale);
   const terms = getTerms(locale);
   const categories = getInsightCategories(locale);
   const regulation = categories.find((c) => c.id === "regulation");
@@ -38,17 +36,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     {
       id: "regulations", number: 2, name: "Regulations", short: "regulations", status: "In development",
       description: regulation?.copy ?? "Regulation explainers in plain language, connected to their official sources.",
-      href: L("/intelligence#regulations"),
+      href: L("/intelligence#evidence-pathway"),
     },
     {
-      id: "processes", number: 3, name: "Processes", short: "processes", status: `${stages.length} stages mapped`,
+      id: "processes", number: 3, name: "Processes", short: "processes", status: "7 stages mapped",
       description: "What happens at each stage, who participates, which documents matter and where jurisdiction changes the route.",
-      href: L("/intelligence#processes"),
+      href: L("/property-journey"),
     },
     {
       id: "authority-information", number: 4, name: "Authority Information", short: "authority information", status: "Official channels mapped",
       description: authorityProcesses?.copy ?? "Which authority governs a requirement, which channel handles it and what each submission needs.",
-      href: L("/intelligence#authority-information"),
+      href: L("/intelligence#authority-explorer"),
     },
     {
       id: "definitions-and-glossary", number: 5, name: "Definitions & Glossary", short: "the glossary", status: `${terms.length} terms defined`,
@@ -58,9 +56,18 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
     {
       id: "knowledge-graph", number: 6, name: "Knowledge Graph", short: "the knowledge graph", status: "Future REOS capability",
       description: "The connected model linking stages, stakeholders, documents, approvals and dependencies instead of treating them as separate lists.",
-      href: L("/intelligence#knowledge-graph"),
     },
   ];
+  const guideOptions = personas.map((persona) => ({
+    slug: persona.slug,
+    name: persona.name,
+    card: persona.card,
+    stageCount: new Set(persona.steps.map((step) => step.stageId)).size,
+    stepCount: persona.steps.length,
+    href: L(`/intelligence/guides/${persona.slug}`),
+  }));
+  const authorityOptions = authorities.map(({ id, name, jurisdiction, role, status, sourceUrl }) => ({ id, name, jurisdiction, role, status, sourceUrl }));
+  const termOptions = terms.map(({ id, term, short, jurisdictional }) => ({ id, term, short, jurisdictional: Boolean(jurisdictional) }));
 
   return <Page className="inner-page" locale={locale}>
     <section className="inner-hero inner-hero-no-photo intelligence-hero">
@@ -72,119 +79,19 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       <IntelligenceHeroMap domains={intelligenceDomains} />
     </section>
 
-    <HowReosWorks locale={locale} compact />
-
-    <IntelligenceGovernance />
-
-    <section className="section-pad" id="guides">
-      <SectionIntro
-        label="01 · GUIDES"
-        title={<>Guides by<br /><em>who you are.</em></>}
-        copy="Each guide explains the full sequence for that everyday role, the documents involved and the mistakes that recur."
-      />
-      <div className="insight-grid">
-        {personas.map((persona) => (
-          <Link key={persona.slug} href={L(`/intelligence/guides/${persona.slug}`)} className="insight-card">
-            <small>{persona.name}</small>
-            <h3>{persona.headline}</h3>
-            <p>{persona.promise}</p>
-            <i>Read the guide →</i>
-          </Link>
-        ))}
-      </div>
-      <p className="rail-callout">Not sure which guide fits? <Link href={L("/intelligence/guides")}>See every guide →</Link></p>
-    </section>
-
-    <section className="section-pad" id="regulations">
-      <SectionIntro
-        label="02 · REGULATIONS"
-        title={<>What the rules<br /><em>actually require.</em></>}
-        copy={regulation?.copy ?? "Regulation explainers, written in plain language and linked to the official source."}
-      />
-      <div className="topic-grid">
-        <article>
-          <h3>{regulation?.name ?? "Regulation explainers"}</h3>
-          <p>{regulation?.copy}</p>
-          <span className="status status-to-be-validated">In development</span>
-        </article>
-      </div>
-    </section>
-
-    <section className="section-pad" id="processes">
-      <SectionIntro
-        label="03 · PROCESSES"
-        title={<>Guides by<br /><em>what happens when.</em></>}
-        copy="Every stage of the journey explained: what takes place, who is involved, which documents matter and what changes between emirates."
-      />
-      <div className="stage-index">
-        {stages.map((stage) => (
-          <Link key={stage.id} href={L(`/property-journey/${stage.id}`)} className="stage-index-card">
-            <header><span>{String(stage.number).padStart(2, "0")}</span><em>{stage.track}</em></header>
-            <h3>{stage.name}</h3>
-            <p>{stage.summary}</p>
-          </Link>
-        ))}
-      </div>
-    </section>
-
-    <section className="section-pad" id="authority-information">
-      <SectionIntro
-        label="04 · AUTHORITY INFORMATION"
-        title={<>Who governs what,<br /><em>and through which channel.</em></>}
-        copy={authorityProcesses?.copy ?? "Which authority handles a submission, and what it needs."}
-      />
-      <div className="topic-grid">
-        {authorities.slice(0, 6).map((authority) => (
-          <article key={authority.id}>
-            <h3>{authority.name}</h3>
-            <p>{authority.role}</p>
-            <span className="status">{authority.jurisdiction}</span>
-          </article>
-        ))}
-      </div>
-      <p className="rail-callout"><Link href={L("/authorities")}>See every authority →</Link></p>
-    </section>
-
-    <section className="section-pad" id="definitions-and-glossary">
-      <SectionIntro
-        label="05 · DEFINITIONS & GLOSSARY"
-        title={<>The terms,<br /><em>in plain language.</em></>}
-        copy="UAE property has its own vocabulary. These are the terms that recur across the journey, defined once and linked everywhere they appear."
-      />
-      <p className="rail-callout"><b>{terms.length} terms defined.</b> <Link href={L("/intelligence/definitions-and-glossary")}>Open the glossary →</Link></p>
-    </section>
-
-    <section className="section-pad" id="knowledge-graph">
-      <SectionIntro
-        label="06 · KNOWLEDGE GRAPH"
-        title={<>How everything<br /><em>connects.</em></>}
-        copy="The stages, stakeholders, documents and dependencies described across this site are one connected graph rather than separate lists. A dedicated explorer for it is not yet built."
-      />
-      <div className="topic-grid">
-        <article>
-          <h3>Knowledge graph explorer</h3>
-          <p>Today, the assistant&rsquo;s own graph visual is the closest preview of this — see how a question resolves through the journey and its twelve stakeholder groups.</p>
-          <span className="status status-future-reos-capability">Future REOS capability</span>
-        </article>
-      </div>
-      <p className="rail-callout"><Link href={L("/assistant")}>See the assistant&rsquo;s graph →</Link></p>
-    </section>
+    <IntelligenceWorkspaces
+      locale={locale}
+      guides={guideOptions}
+      authorities={authorityOptions}
+      terms={termOptions}
+      glossaryHref={L("/intelligence/definitions-and-glossary")}
+    />
 
     <section className="integrity-strip">
       <b>How to use this</b>
       <p>These explainers describe how things generally work. They are not legal, financial or tax advice, and they do not replace the official position of any authority. Requirements differ by emirate and change over time — confirm your specific case before acting.</p>
     </section>
 
-    <RouteGovernance
-      locale={locale}
-      businessOutcome="Find knowledge that is connected to its source, jurisdiction, review state and place in the property journey."
-      audience="Property participants, analysts, governance teams and users preparing to run a REOS workflow."
-      nextAction="Choose an intelligence domain, resolve the applicable context and continue to the supported product only when the evidence is sufficient."
-      primaryLabel="Explore governed guides"
-      primaryHref="/intelligence/guides"
-      secondaryLabel="Ask the REOS Assistant"
-      secondaryHref="/assistant"
-    />
   </Page>;
 }
 

@@ -11,7 +11,7 @@ export type IntelligenceDomain = {
   short: string;
   description: string;
   status: string;
-  href: string;
+  href?: string;
 };
 
 type DomainPoint = { x: number; y: number; label: "above" | "below" | "left" | "right" };
@@ -136,7 +136,9 @@ export function IntelligenceHeroMap({ domains }: { domains: IntelligenceDomain[]
             <small>INTELLIGENCE DOMAIN {String(activeDomain.number).padStart(2, "0")} · {activeDomain.status}</small>
             <h2>{activeDomain.name}</h2>
             <p>{activeDomain.description}</p>
-            <Link className="text-link" href={activeDomain.href}>Explore {activeDomain.short} ↗</Link>
+            {activeDomain.href
+              ? <Link className="text-link" href={activeDomain.href}>Explore {activeDomain.short} ↗</Link>
+              : <span className="intelligence-preview-prompt">No public explorer is published yet.</span>}
           </>
         ) : (
           <>
