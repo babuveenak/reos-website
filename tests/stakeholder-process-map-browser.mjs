@@ -95,6 +95,7 @@ for (const slug of [
   const visual = view.page.locator(".stakeholder-blueprint-visual");
   assert.equal(await visual.count(), 1, `${slug} needs one hero visual`);
   assert.ok(await visual.locator("img").evaluate((image) => image.complete && image.naturalWidth >= 800), `${slug} responsive hero asset must load at a suitable desktop width`);
+  assert.equal(await view.page.locator(".stakeholder-start").count(), 0, `${slug} must not render the generic starting-point section`);
   assert.doesNotMatch(await view.page.locator("main").innerText(), /Start by confirming which lifecycle stage requires|transaction-level authority research for this stakeholder is not yet complete/);
   await view.context.close();
 }

@@ -61,6 +61,7 @@ test("all twelve stakeholder heroes use a role-specific 3D visual and no generic
     const html = await response.text();
     assert.match(html, new RegExp(`stakeholder-${slug}-hero-v1\\.${extension}`), `${slug} needs its own hero asset`);
     assert.match(html, /stakeholder-blueprint-visual/, `${slug} needs the interactive visual frame`);
+    assert.doesNotMatch(html, /stakeholder-start|Where you start|Lifecycle coverage|نقطة البداية|تغطية دورة الحياة/);
     assert.doesNotMatch(html, /Start by confirming which lifecycle stage requires|transaction-level authority research for this stakeholder is not yet complete/);
   }
 });
@@ -80,7 +81,7 @@ test("Arabic stakeholder reference is RTL and flags source-language evidence", a
   const html = await response.text();
   assert.match(html, /dir="rtl"/);
   assert.match(html, /translation-notice/);
-  assert.match(html, /تظل تفاصيل المصادر الرسمية/);
+  assert.match(html, /النسخة العربية ترجمة عمل قيد المراجعة/);
 });
 
 test("public footer displays REOS while temporary legal operator copy remains separate", async () => {

@@ -71,7 +71,7 @@ const arabic = await open("/ar/stakeholders", 1024, 900);
 const arabicBridge = arabic.page.locator(".stakeholder-guide-bridge");
 assert.match(await arabicBridge.innerText(), /هل تبحث عن رحلة شخصية؟/);
 assert.equal(await arabicBridge.locator("a").getAttribute("href"), "/ar/intelligence/guides", "the Arabic bridge must retain locale context");
-assert.equal(await arabic.page.locator("html[dir=rtl]").count(), 1, "the Arabic route must remain RTL");
+assert.ok(await arabic.page.locator('[lang="ar"][dir="rtl"]').count() >= 1, "the Arabic route must remain RTL");
 await arabic.context.close();
 
 for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]]) {

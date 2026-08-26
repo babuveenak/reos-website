@@ -17,8 +17,6 @@ const COPY = {
     scope: "Jurisdiction scope",
     checked: "Sources checked 26 August 2026",
     sourceLed: "Official sources · REOS role mapping",
-    where: "Where you start",
-    translation: "Official source details remain in source-language English pending human-reviewed Arabic publication.",
     unmapped: "Not yet mapped",
     noDubai: "Dubai facts are not shown in this jurisdiction view.",
     missing: "What is still missing",
@@ -32,8 +30,6 @@ const COPY = {
     scope: "نطاق الاختصاص",
     checked: "تم التحقق من المصادر في 26 أغسطس 2026",
     sourceLed: "مصادر رسمية · خريطة أدوار REOS",
-    where: "نقطة البداية",
-    translation: "تظل تفاصيل المصادر الرسمية باللغة الإنجليزية إلى حين نشر ترجمة عربية خضعت للمراجعة البشرية.",
     unmapped: "لم يتم التخطيط بعد",
     noDubai: "لا يتم عرض حقائق دبي في هذا النطاق.",
     missing: "ما الذي لا يزال مفقوداً",
@@ -80,12 +76,6 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
         {isDubai && <p className="track-note">{selectedTrack.note}</p>}
       </div>
       <StakeholderHeroVisual stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} caption={c.visualCaption} locale={locale} />
-    </section>
-
-    <section className="stakeholder-start section-pad">
-      <span className="eyebrow">01 · {c.where}</span>
-      <div><h2>{profile.firstDecision}</h2>{locale === "ar" && isDubai && <p className="translation-warning">{c.translation}</p>}</div>
-      <aside><small>{locale === "ar" ? "تغطية دورة الحياة" : "Lifecycle coverage"}</small><b>{isDubai ? (locale === "ar" ? "7 من 7 مراحل" : "7 of 7 stages") : c.unmapped}</b></aside>
     </section>
 
     {isDubai
