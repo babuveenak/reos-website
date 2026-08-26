@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useId } from "react";
 import { findTerm, terms } from "../data/glossary";
 
 /**
@@ -42,9 +43,10 @@ export function withTerms(text: string) {
 }
 
 export function Term({ children, of }: { children?: React.ReactNode; of: string }) {
+  const instanceId = useId().replaceAll(":", "");
   const term = findTerm(of);
   if (!term) return <>{children ?? of}</>;
-  const describedById = `gloss-${term.id}`;
+  const describedById = `gloss-${term.id}-${instanceId}`;
 
   return (
     <span className="term-wrap">

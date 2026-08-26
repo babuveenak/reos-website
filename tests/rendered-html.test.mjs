@@ -312,7 +312,6 @@ test("P1 conversion path qualifies the requested enterprise conversation", async
 
 test("governed detail routes expose outcome, audience, product and next action", async () => {
   for (const path of [
-    "/property-journey/sales-transfer",
     "/stakeholders",
     "/stakeholders/developers",
     "/ecosystem",
@@ -458,6 +457,37 @@ test("property journey remains educational while its seven-stage index is visual
   assert.doesNotMatch(source, /HowReosWorks|RouteGovernance/);
   assert.doesNotMatch(html, /HOW REOS WORKS|licensed REOS workflow|Select a journey stage|See the connected ecosystem/i);
   assert.match(html, /Before you act on this/);
+});
+
+test("all seven stage pages use the visual educational template without product promotion", async () => {
+  const ids = [
+    "land-vision",
+    "planning-design",
+    "authorities-approvals",
+    "construction-delivery",
+    "sales-transfer",
+    "living-operations",
+    "asset-growth-intelligence",
+  ];
+
+  for (const id of ids) {
+    const html = await (await render(`/property-journey/${id}`)).text();
+    assert.match(html, new RegExp(`class="stage-hero stage-hero-visual" data-stage="${id}"`));
+    assert.match(html, /class="stage-route-overview"/);
+    assert.equal((html.match(/aria-current="step"/g) ?? []).length, 1, `${id} must identify one current stage`);
+    assert.equal((html.match(/class="stage-process-flow"/g) ?? []).length, 1, `${id} needs one visual process`);
+    assert.equal((html.match(/<details/g) ?? []).length >= 4, true, `${id} needs four explorable process moves`);
+    assert.match(html, /stage-evidence-map/);
+    assert.match(html, /stage-guardrail-map/);
+    assert.match(html, /Official authorities and authorized decision-makers retain registration, approval and legal authority/);
+    assert.doesNotMatch(html, /RELEVANT REOS PRODUCT|Explore the relevant product|class="route-governance"/i);
+  }
+
+  const land = await (await render("/property-journey/land-vision")).text();
+  assert.match(land, /Developers, development investors, landowners and anyone acquiring land/);
+  assert.match(land, /land-guide/);
+  const sales = await (await render("/property-journey/sales-transfer")).text();
+  assert.match(sales, /end customer or unit investor buying an apartment, villa or townhouse/i);
 });
 
 test("Land & Vision adds a jurisdiction-first public guide without changing the journey landing page", async () => {
