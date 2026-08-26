@@ -12,6 +12,7 @@ import { groupById } from "../../data/ecosystem";
 import { stageById, stages } from "../../data/journey";
 import { relationshipLevelLabels, relationshipsByStage } from "../../data/relationships";
 import { RouteGovernance } from "../../components/Governance";
+import { LandVisionGuide } from "../../components/LandVisionGuide";
 
 import { stageById as detailById } from "../../data/reos";
 
@@ -93,6 +94,13 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
       </div>
     </section>
 
+    {stage.id === "land-vision" && (
+      <LandVisionGuide
+        locale={locale}
+        salesTransferHref={L("/property-journey/sales-transfer")}
+      />
+    )}
+
     <section className="section-pad stage-body">
       <article className="stage-main">
         <h2>What happens</h2>
@@ -144,7 +152,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
           </div>
         )}
 
-        {details.length > 0 && (
+        {details.length > 0 && stage.id !== "land-vision" && (
           <div className="aside-block">
             <small>Detailed activities</small>
             <ul className="link-list">

@@ -447,6 +447,24 @@ test("property journey hero exposes exactly seven interactive architectural stag
   assert.match(html, /data-stage="asset-growth-intelligence" data-label-placement="above"/);
 });
 
+test("Land & Vision adds a jurisdiction-first public guide without changing the journey landing page", async () => {
+  const landingSource = await readFile(new URL("../app/property-journey/page.tsx", import.meta.url), "utf8");
+  assert.doesNotMatch(landingSource, /LandVisionGuide|land-guide/, "the approved landing page must remain untouched");
+
+  const html = await (await render("/property-journey/land-vision")).text();
+  assert.match(html, /From land opportunity to an evidence-backed decision/);
+  assert.match(html, /Developers, development investors, landowners and any person or company acquiring land begin here/);
+  assert.match(html, /An end customer or unit investor buying off-plan or completed property enters through Sales &amp; Transfer/);
+  assert.match(html, /data-guide-current="define-opportunity"/);
+  assert.match(html, /href="\/property-journey\/sales-transfer"/);
+  assert.doesNotMatch(html, /href="\/lifecycle\/(?:land-opportunity|land-acquisition|developer-establishment|feasibility)"/, "thin lifecycle stubs must not remain the primary Land & Vision route");
+
+  assert.match(html, /REOS explains the route; official authorities and authorized decision-makers retain registration, approval and legal authority/);
+  const guideData = await readFile(new URL("../app/data/landVisionGuide.ts", import.meta.url), "utf8");
+  assert.match(guideData, /Dubai Land Department — property status enquiry/);
+  assert.match(guideData, /ADREC — property ownership framework/);
+});
+
 test("intelligence hero exposes six coded knowledge domains over a text-free foundation", async () => {
   const html = await (await render("/intelligence")).text();
   assert.match(html, /intelligence-knowledge-foundation-v1\.jpg/);
