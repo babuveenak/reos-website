@@ -48,6 +48,23 @@ test("Dubai Landowners reference renders source-led steps and a stakeholder visu
   assert.doesNotMatch(html, /class="status status-validated"/);
 });
 
+test("all twelve stakeholder heroes use a role-specific 3D visual and no generic entry fallback", async () => {
+  const stakeholders = [
+    ["landowners-investors", "png"], ["developers", "jpg"], ["consultants-designers", "jpg"],
+    ["authorities-regulators", "jpg"], ["utility-providers", "jpg"], ["contractors", "jpg"],
+    ["suppliers-vendors", "jpg"], ["brokers-agencies", "jpg"], ["banks-financial", "jpg"],
+    ["property-owners", "jpg"], ["residents-tenants", "jpg"], ["facility-community-operators", "jpg"],
+  ];
+  for (const [slug, extension] of stakeholders) {
+    const response = await render(`/stakeholders/${slug}`);
+    assert.equal(response.status, 200, `${slug} must resolve`);
+    const html = await response.text();
+    assert.match(html, new RegExp(`stakeholder-${slug}-hero-v1\\.${extension}`), `${slug} needs its own hero asset`);
+    assert.match(html, /stakeholder-blueprint-visual/, `${slug} needs the interactive visual frame`);
+    assert.doesNotMatch(html, /Start by confirming which lifecycle stage requires|transaction-level authority research for this stakeholder is not yet complete/);
+  }
+});
+
 test("unmapped jurisdictions never fall back to Dubai transaction facts", async () => {
   const response = await render("/stakeholders/landowners-investors/abu-dhabi");
   assert.equal(response.status, 200);

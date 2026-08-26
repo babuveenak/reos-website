@@ -33,7 +33,14 @@ async function scan(page, label) {
   assert.deepEqual(serious.map(({ id, nodes }) => ({ id, targets: nodes.map(({ target }) => target) })), [], `${label} must pass WCAG A/AA`);
 }
 
-const desktop = await open("/stakeholders/developers/dubai/dm-mainland");
+const desktop = await open("/stakeholders/developers/dubai/dm-mainland", 1440, 1000, "no-preference");
+const heroVisual = desktop.page.locator(".stakeholder-blueprint-visual");
+assert.equal(await heroVisual.count(), 1, "each stakeholder page needs one interactive 3D hero visual");
+assert.match(await heroVisual.locator("img").getAttribute("src") ?? "", /stakeholder-developers-hero-v1\.jpg/);
+await heroVisual.hover({ position: { x: 100, y: 100 } });
+const heroTransform = await heroVisual.locator("img").evaluate((element) => getComputedStyle(element).transform);
+assert.notEqual(heroTransform, "none", "pointer movement should produce subtle 3D depth");
+await heroVisual.screenshot({ path: `${output}/developer-hero-light.png` });
 const map = desktop.page.locator(".stakeholder-process-map");
 assert.equal(await map.getByRole("tab").count(), 7, "the model must expose all seven lifecycle stages");
 assert.equal(await map.locator(".process-step").count(), 4, "the selected stage must show four process steps");
@@ -76,6 +83,19 @@ for (const [path, stageIndex, sourcePattern] of [
   await view.page.locator(".process-stage-tab").nth(stageIndex).click();
   assert.equal(await view.page.locator(".process-step").count(), 4, `${path} must expose the selected four-step flow`);
   assert.match(await view.page.locator(".stakeholder-process-map").innerText(), sourcePattern, `${path} must expose its official route source`);
+  await view.context.close();
+}
+
+for (const slug of [
+  "landowners-investors", "developers", "consultants-designers", "authorities-regulators",
+  "utility-providers", "contractors", "suppliers-vendors", "brokers-agencies", "banks-financial",
+  "property-owners", "residents-tenants", "facility-community-operators",
+]) {
+  const view = await open(`/stakeholders/${slug}`, 1024, 800);
+  const visual = view.page.locator(".stakeholder-blueprint-visual");
+  assert.equal(await visual.count(), 1, `${slug} needs one hero visual`);
+  assert.ok(await visual.locator("img").evaluate((image) => image.complete && image.naturalWidth >= 800), `${slug} responsive hero asset must load at a suitable desktop width`);
+  assert.doesNotMatch(await view.page.locator("main").innerText(), /Start by confirming which lifecycle stage requires|transaction-level authority research for this stakeholder is not yet complete/);
   await view.context.close();
 }
 

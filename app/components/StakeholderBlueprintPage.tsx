@@ -1,8 +1,8 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Page } from "./SiteShell";
 import { StakeholderJurisdictionSelector } from "./StakeholderJurisdictionSelector";
+import { StakeholderHeroVisual } from "./StakeholderHeroVisual";
 import { StakeholderProcessMap } from "./StakeholderProcessMap";
 import { authorityProcessMaps } from "../data/authorityProcessMaps";
 import { DUBAI_TRACKS, EMIRATES, stakeholderBlueprintById, type DubaiTrack, type EmirateId } from "../data/stakeholderBlueprints";
@@ -18,7 +18,6 @@ const COPY = {
     checked: "Sources checked 26 August 2026",
     sourceLed: "Official sources · REOS role mapping",
     where: "Where you start",
-    mappedNotice: "This is an educational process map. Official authorities retain every statutory decision, approval and registry function.",
     translation: "Official source details remain in source-language English pending human-reviewed Arabic publication.",
     unmapped: "Not yet mapped",
     noDubai: "Dubai facts are not shown in this jurisdiction view.",
@@ -34,7 +33,6 @@ const COPY = {
     checked: "تم التحقق من المصادر في 26 أغسطس 2026",
     sourceLed: "مصادر رسمية · خريطة أدوار REOS",
     where: "نقطة البداية",
-    mappedNotice: "هذه خريطة تعليمية للعملية. وتحتفظ الجهات الرسمية بجميع قراراتها النظامية وصلاحيات الموافقة والتسجيل.",
     translation: "تظل تفاصيل المصادر الرسمية باللغة الإنجليزية إلى حين نشر ترجمة عربية خضعت للمراجعة البشرية.",
     unmapped: "لم يتم التخطيط بعد",
     noDubai: "لا يتم عرض حقائق دبي في هذا النطاق.",
@@ -68,7 +66,7 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
       <b>{localizedGroup.name}</b>
     </nav>
 
-    <section className={`stakeholder-blueprint-hero${stakeholderId === "landowners-investors" ? " has-visual" : ""}`}>
+    <section className="stakeholder-blueprint-hero has-visual">
       <div className="stakeholder-blueprint-copy">
         <span className="eyebrow">{c.stakeholder} {String(fallbackGroup.number).padStart(2, "0")} / 12</span>
         <h1>{localizedGroup.name}</h1>
@@ -81,14 +79,12 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
         <StakeholderJurisdictionSelector stakeholderId={stakeholderId} emirate={emirate} track={track} locale={locale} />
         {isDubai && <p className="track-note">{selectedTrack.note}</p>}
       </div>
-      {stakeholderId === "landowners-investors"
-        ? <figure className="stakeholder-blueprint-visual"><Image src="/images/stakeholder-landowners-investors-hero-v1.png" alt="Illustrative capital-meets-land diorama with a surveyed plot, plan and investment records" fill sizes="(max-width: 900px) 100vw, 46vw" priority /><figcaption>REOS · {c.visualCaption}</figcaption></figure>
-        : <div className="stakeholder-blueprint-index" aria-label={locale === "ar" ? "سبع مراحل مترابطة" : "Seven connected stages"}><small>{locale === "ar" ? "مراحل مترابطة" : "Connected stages"}</small><b>07</b><span>/ 07</span></div>}
+      <StakeholderHeroVisual stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} caption={c.visualCaption} locale={locale} />
     </section>
 
     <section className="stakeholder-start section-pad">
       <span className="eyebrow">01 · {c.where}</span>
-      <div><h2>{profile.firstDecision}</h2><p>{c.mappedNotice}</p>{locale === "ar" && isDubai && <p className="translation-warning">{c.translation}</p>}</div>
+      <div><h2>{profile.firstDecision}</h2>{locale === "ar" && isDubai && <p className="translation-warning">{c.translation}</p>}</div>
       <aside><small>{locale === "ar" ? "تغطية دورة الحياة" : "Lifecycle coverage"}</small><b>{isDubai ? (locale === "ar" ? "7 من 7 مراحل" : "7 of 7 stages") : c.unmapped}</b></aside>
     </section>
 

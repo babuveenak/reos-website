@@ -189,11 +189,15 @@ const firstDecisionByStakeholder: Record<string, string> = {
   "facility-community-operators": "First confirm the appointed operating scope, completion evidence, asset register, service obligations and authority conditions before mobilisation.",
 };
 
+for (const group of groups) {
+  if (!firstDecisionByStakeholder[group.id]) throw new Error(`Missing stakeholder-specific entry decision: ${group.id}`);
+}
+
 const baseProfiles: StakeholderBlueprintProfile[] = groups.map((group) => ({
   stakeholderId: group.id,
   overview: group.controls,
   audience: group.members.slice(0, 4).join(", "),
-  firstDecision: firstDecisionByStakeholder[group.id] ?? `Start by confirming which lifecycle stage requires ${group.short.toLowerCase()} input and which authority or counterparty owns the next decision.`,
+  firstDecision: firstDecisionByStakeholder[group.id],
   coverage: coverage(),
   participation: participationForStakeholder(group.id).map((item) => ({
     stageId: item.stageId,
