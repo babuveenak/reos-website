@@ -79,7 +79,7 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
     </section>
 
     {isDubai
-      ? <StakeholderProcessMap stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={authorityProcessMaps[track]} locale={locale} />
+      ? <StakeholderProcessMap stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={authorityProcessMaps[track]} locale={locale} track={track} />
       : <section className="unmapped-jurisdiction section-pad">
           <span className="eyebrow">02 · {c.unmapped}</span>
           <h2>{emirateLabel}: {c.unmapped}</h2>

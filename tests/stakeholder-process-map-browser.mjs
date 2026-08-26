@@ -43,11 +43,10 @@ assert.notEqual(heroTransform, "none", "pointer movement should produce subtle 3
 await heroVisual.screenshot({ path: `${output}/developer-hero-light.png` });
 const map = desktop.page.locator(".stakeholder-process-map");
 assert.equal(await map.getByRole("tab").count(), 7, "the model must expose all seven lifecycle stages");
-assert.equal(await map.locator(".process-step").count(), 4, "the selected stage must show four process steps");
+assert.ok(await map.locator(".isometric-authority-platform").count() >= 1, "the selected intersection must expose interactive authority nodes");
 assert.equal(await map.locator(".process-branch").count(), 3, "authority, people and official-source branches must remain visible");
-assert.match(await map.innerText(), /Dubai Land Department.*plot-specific planning authority/);
-assert.match(await map.innerText(), /DLD — Property Status/);
-assert.match(await map.innerText(), /Authority service estimate|No universal time published/i);
+assert.match(await map.innerText(), /Dubai Land Department.*Property Status Enquiry/);
+assert.match(await map.innerText(), /How much|No fee published/i);
 assert.doesNotMatch(await map.innerText(), /Request a demo|Title Deed Automation|NOC Automation/);
 
 const tabs = map.getByRole("tab");
@@ -57,12 +56,12 @@ await desktop.page.waitForFunction(() => document.querySelectorAll('[role="tab"]
 assert.equal(await tabs.nth(2).getAttribute("aria-selected"), "true", "arrow keys must move the active stage");
 assert.ok(await tabs.nth(2).evaluate((element) => element.matches(":focus-visible")), "keyboard-selected stage needs visible focus");
 assert.match(await map.locator(".process-role-card").innerText(), /Authorities & Approvals/);
-assert.equal(await map.locator(".process-step").count(), 4, "interaction must preserve the complete process flow");
-assert.match(await map.innerText(), /Dubai BPS integrated authority review/);
+assert.ok(await map.locator(".isometric-authority-platform").count() >= 1, "interaction must replace the process with stage-specific authority nodes");
+assert.match(await map.innerText(), /New Building Permit|Final Building Permit/);
 
 await map.getByRole("tab", { name: /05 Sales & Transfer/ }).click();
 assert.match(await map.locator(".process-role-card").innerText(), /Registers the project and eligible sales/);
-assert.match(await map.innerText(), /Completed-sale service estimate: 25 minutes/);
+assert.match(await map.innerText(), /Property Sale Registration|Register Initial Sale/);
 
 await scan(desktop.page, "light process map");
 await map.screenshot({ path: `${output}/developer-dm-light.png` });
@@ -73,18 +72,23 @@ await map.screenshot({ path: `${output}/developer-dm-dark.png` });
 await desktop.context.close();
 
 for (const [path, stageIndex, sourcePattern] of [
-  ["/stakeholders/landowners-investors", 0, /DLD — Property Status/],
-  ["/stakeholders/consultants-designers/dubai/dda-tecom", 1, /DDA — Site Plan Issuance/],
-  ["/stakeholders/contractors/dubai/trakhees-pcfc", 1, /PCFC \/ Trakhees — Unified Services|Trakhees — Blue Code/],
-  ["/stakeholders/property-owners/dubai/financial-free-zone", 0, /DIFC — Registrar of Real Property/],
+  ["/stakeholders/landowners-investors", 0, /Property Status Enquiry/],
+  ["/stakeholders/consultants-designers/dubai/dda-tecom", 1, /Preliminary Master Plan|Preliminary Design Approval/],
+  ["/stakeholders/contractors/dubai/trakhees-pcfc", 2, /New Building Permit/],
 ]) {
   const view = await open(path, 1280, 900);
   assert.equal(await view.page.locator(".process-stage-tab").count(), 7, `${path} must map all seven stages`);
   await view.page.locator(".process-stage-tab").nth(stageIndex).click();
-  assert.equal(await view.page.locator(".process-step").count(), 4, `${path} must expose the selected four-step flow`);
+  assert.ok(await view.page.locator(".isometric-authority-platform").count() >= 1, `${path} must expose interactive evidence nodes`);
   assert.match(await view.page.locator(".stakeholder-process-map").innerText(), sourcePattern, `${path} must expose its official route source`);
   await view.context.close();
 }
+
+const difc = await open("/stakeholders/property-owners/dubai/financial-free-zone", 1280, 900);
+assert.equal(await difc.page.locator(".isometric-authority-platform").count(), 0, "DLD sources must not appear in the DIFC route without DIFC claim-level evidence");
+assert.match(await difc.page.locator(".process-context-only").innerText(), /lifecycle context only/i);
+assert.doesNotMatch(await difc.page.locator(".stakeholder-process-map").innerText(), /Dubai Land Department/);
+await difc.context.close();
 
 for (const slug of [
   "landowners-investors", "developers", "consultants-designers", "authorities-regulators",
@@ -105,7 +109,7 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
   const overflow = await view.page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   assert.ok(overflow <= 1, `${width}px viewport has ${overflow}px horizontal overflow`);
   assert.equal(await view.page.locator(".process-stage-tab").count(), 7, `${width}px must retain seven stages`);
-  assert.equal(await view.page.locator(".process-step").count(), 4, `${width}px must retain four process steps`);
+  assert.ok(await view.page.locator(".isometric-authority-platform").count() >= 1, `${width}px must retain the interactive evidence flow`);
   await view.page.locator(".process-stage-tab").nth(6).click();
   assert.match(await view.page.locator(".process-role-card").innerText(), /Asset Growth & Intelligence/);
   if (width === 390) await view.page.screenshot({ path: `${output}/bank-dda-mobile.png`, fullPage: true });
@@ -114,4 +118,4 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();
-console.log(`PASS: 84-intersection stakeholder model, five Dubai authority routes, persistent four-step interactions, keyboard tabs, light/dark WCAG A/AA, responsive overflow, console checks and screenshots (${output})`);
+console.log(`PASS: 84-intersection stakeholder model, evidence-driven isometric interactions, keyboard tabs, light/dark WCAG A/AA, responsive overflow, console checks and screenshots (${output})`);

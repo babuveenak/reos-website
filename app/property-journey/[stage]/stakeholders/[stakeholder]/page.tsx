@@ -4,21 +4,10 @@ import { notFound } from "next/navigation";
 import { Page } from "../../../../components/SiteShell";
 import { groupById } from "../../../../data/ecosystem";
 import { stageById, stages } from "../../../../data/journey";
-import {
-  approvedRelationships,
-  relationshipApprovals,
-  relationshipDocuments,
-  relationshipFor,
-  relationshipIntelligence,
-  relationshipLevelDescriptions,
-  relationshipLevelLabels,
-  relationshipProcesses,
-  relationshipReferences,
-  relationshipsByStage,
-  relationshipsByStakeholder,
-  relationshipSystems,
-} from "../../../../data/relationships";
-import { RouteGovernance } from "../../../../components/Governance";
+import { approvedRelationships, relationshipFor, relationshipLevelDescriptions, relationshipLevelLabels, relationshipsByStage, relationshipsByStakeholder } from "../../../../data/relationships";
+import { StakeholderProcessMap } from "../../../../components/StakeholderProcessMap";
+import { authorityProcessMaps } from "../../../../data/authorityProcessMaps";
+import { participationFor, participationForStakeholder } from "../../../../data/stakeholderParticipation";
 
 type Props = { params: Promise<{ stage: string; stakeholder: string }> };
 
@@ -42,24 +31,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function DetailList({ title, items }: { title: string; items: string[] }) {
-  if (items.length === 0) return null;
-  return <article><span className="eyebrow">{title}</span><ul>{items.map((item) => <li key={item}>{item}</li>)}</ul></article>;
-}
-
 export default async function RelationshipDetailPage({ params }: Props) {
   const { stage: stageId, stakeholder: stakeholderId } = await params;
   const stage = stageById[stageId];
   const stakeholder = groupById[stakeholderId];
   const relationship = relationshipFor(stageId, stakeholderId);
-  if (!stage || !stakeholder || !relationship || relationship.editorialStatus !== "approved") notFound();
+  const intersection = participationFor(stageId, stakeholderId);
+  if (!stage || !stakeholder || !relationship || !intersection || relationship.editorialStatus !== "approved") notFound();
 
-  const processes = relationshipReferences(relationship.processIds, relationshipProcesses);
-  const documents = relationshipReferences(relationship.documentIds, relationshipDocuments);
-  const approvals = relationshipReferences(relationship.approvalIds, relationshipApprovals);
-  const systems = relationshipReferences(relationship.systemIds, relationshipSystems);
-  const intelligence = relationshipReferences(relationship.intelligenceContentIds, relationshipIntelligence);
-  const dependencies = relationship.dependencyStakeholderIds.map((id) => groupById[id]).filter(Boolean);
+  const participation = participationForStakeholder(stakeholder.id).map((item) => ({
+    stageId: item.stageId,
+    state: item.involvement,
+    relationshipLevel: item.relationshipLevel,
+    summary: item.role,
+    evidence: item.evidence,
+  }));
   const stakeholderRelationships = relationshipsByStakeholder(stakeholder.id)
     .sort((a, b) => stages.findIndex((item) => item.id === a.stageId) - stages.findIndex((item) => item.id === b.stageId));
   const position = stakeholderRelationships.findIndex((item) => item.id === relationship.id);
@@ -82,24 +68,22 @@ export default async function RelationshipDetailPage({ params }: Props) {
         <b>{relationshipLevelLabels[relationship.relationshipLevel]}</b>
         <span>{relationshipLevelDescriptions[relationship.relationshipLevel]}</span>
       </div>
+      <div className="blueprint-status-row">
+        <span className={`evidence-badge ${intersection.evidence === "unverified" ? "evidence-unverified" : "evidence-conditional"}`}>{intersection.publicationState} · {intersection.evidence === "unverified" ? "role context only" : "official sources + REOS role mapping"}</span>
+        <time dateTime="2026-08-26">Sources checked 26 August 2026</time>
+      </div>
       <p>{relationship.summary}</p>
     </section>
 
-    <section className="relationship-detail-overview section-pad">
-      <article><span className="eyebrow">ROLE IN THIS STAGE</span><p>{relationship.role}</p></article>
-      <article><span className="eyebrow">WHAT HAPPENS HERE</span><ol>{relationship.activities.map((item) => <li key={item}>{item}</li>)}</ol></article>
-    </section>
-
-    <section className="relationship-detail-grid section-pad">
-      <DetailList title="RESPONSIBILITIES" items={relationship.responsibilities} />
-      <DetailList title="KEY DECISIONS" items={relationship.decisions} />
-      <DetailList title="PROCESSES" items={processes.map((item) => item.label)} />
-      <DetailList title="DOCUMENTS" items={documents.map((item) => item.label)} />
-      <DetailList title="APPROVALS" items={approvals.map((item) => item.label)} />
-      <DetailList title="SYSTEMS AND PORTALS" items={systems.map((item) => item.label)} />
-      {dependencies.length > 0 && <article><span className="eyebrow">DEPENDENT STAKEHOLDERS</span><ul>{dependencies.map((group) => <li key={group.id}><Link href={`/stakeholders/${group.id}`}>{group.name}</Link></li>)}</ul></article>}
-      {intelligence.length > 0 && <article><span className="eyebrow">RELEVANT INTELLIGENCE</span><ul>{intelligence.map((item) => <li key={item.id}><Link href={item.href!}>{item.label}</Link></li>)}</ul></article>}
-    </section>
+    <StakeholderProcessMap
+      stakeholderId={stakeholder.id}
+      stakeholderName={stakeholder.name}
+      stages={stages}
+      participation={participation}
+      processes={authorityProcessMaps["track-neutral"]}
+      locale="en"
+      initialStageId={stage.id}
+    />
 
     <section className="relationship-context-links">
       <span className="eyebrow">KEEP EXPLORING</span>
@@ -110,17 +94,6 @@ export default async function RelationshipDetailPage({ params }: Props) {
         <Link className="button ghost" href={`/ecosystem?view=stakeholder&stakeholder=${stakeholder.id}`}>All {stakeholderRelationships.length} stages for this stakeholder</Link>
       </div>
     </section>
-
-    <RouteGovernance
-      businessOutcome={`Make ${stakeholder.name}'s work in ${stage.name} visible, evidence-backed and accountable.`}
-      audience={`${stakeholder.name} and the organizations dependent on this handoff.`}
-      nextAction="Review the mapped responsibilities, documents, approvals and dependencies before progressing the workflow."
-      stageIds={[stage.id]}
-      stakeholderIds={[stakeholder.id]}
-      primaryLabel="Explore the relevant product"
-      secondaryLabel="Return to the interactive relationship"
-      secondaryHref={`/ecosystem?view=journey&stage=${stage.id}&stakeholder=${stakeholder.id}`}
-    />
 
     <nav className="stage-nav" aria-label="Adjacent stage relationships">
       {previous ? <Link href={previous.detailRoute}><small>PREVIOUS CONNECTION</small><b>← {stageById[previous.stageId].name}</b></Link> : <span />}

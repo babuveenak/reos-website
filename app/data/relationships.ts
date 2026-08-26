@@ -160,12 +160,12 @@ export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] =
       stageId: stage.id,
       stakeholderId,
       relationshipLevel,
-      summary: `${stakeholder.name} is ${relationshipNoun[relationshipLevel]} in ${stage.name}. ${stage.summary}`,
-      role: stakeholder.controls,
+      summary: participation?.role ?? `${stakeholder.name} is ${relationshipNoun[relationshipLevel]} in ${stage.name}.`,
+      role: participation?.role ?? stakeholder.controls,
       responsibilities: canPublishDetail
         ? detail.keyResponsibilities.slice(0, 5)
         : [stakeholder.controls],
-      activities: stage.whatHappens.slice(0, 4),
+      activities: participation?.processSteps ?? stage.whatHappens.slice(0, 4),
       decisions: canPublishDetail ? detail.keyDecisions.slice(0, 4) : [],
       processIds: stageProcessIds,
       documentIds: stageDocumentIds,
@@ -176,7 +176,7 @@ export const journeyStakeholderRelationships: JourneyStakeholderRelationship[] =
       flowTypes,
       direction: "bidirectional" as const,
       detailRoute: `/property-journey/${stage.id}/stakeholders/${stakeholderId}`,
-      editorialStatus: participation?.evidence === "unverified" ? "draft" as const : "approved" as const,
+      editorialStatus: participation?.publicationState === "withheld" ? "draft" as const : "approved" as const,
     };
   }),
 );

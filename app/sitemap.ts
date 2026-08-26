@@ -42,8 +42,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const localizedEntries = LOCALES.flatMap((l) =>
     base.map((e) => ({ ...e, url: `${SITE_URL}${localePath(l, new URL(e.url).pathname)}` })),
   );
-  const relationshipEntries = approvedRelationships.map((relationship) =>
-    entry(relationship.detailRoute, 0.72),
-  );
+  const relationshipEntries = LOCALES.flatMap((locale) => approvedRelationships.map((relationship) =>
+    entry(localePath(locale, relationship.detailRoute), 0.72),
+  ));
   return [...localizedEntries, ...relationshipEntries];
 }
