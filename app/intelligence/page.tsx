@@ -5,6 +5,8 @@ import { IntelligenceHeroMap, type IntelligenceDomain } from "../components/Inte
 import { IntelligenceWorkspaces } from "../components/IntelligenceWorkspaces";
 import { Page } from "../components/SiteShell";
 import { authorities } from "../data/reos";
+import { officialSourceById } from "../data/officialSources";
+import { stages } from "../data/journey";
 
 export const metadata: Metadata = {
   title: "REOS Intelligence | Guides, Regulations, Processes & Glossary",
@@ -68,6 +70,24 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   }));
   const authorityOptions = authorities.map(({ id, name, jurisdiction, role, status, sourceUrl }) => ({ id, name, jurisdiction, role, status, sourceUrl }));
   const termOptions = terms.map(({ id, term, short, jurisdictional }) => ({ id, term, short, jurisdictional: Boolean(jurisdictional) }));
+  const evidenceSource = officialSourceById["dld.property-status"];
+  const evidenceRecord = {
+    authority: evidenceSource.authority,
+    title: evidenceSource.title,
+    sourceUrl: evidenceSource.url,
+    claim: "The official DLD service publishes a property-status enquiry whose stated output includes property status and freehold classification.",
+    scopeLimit: "It does not by itself verify title-deed validity, permitted development use, buyer eligibility or transaction readiness.",
+    jurisdiction: "Dubai · Dubai Land Department registry route",
+    route: "Registry evidence before the plot-specific planning-authority branch is confirmed.",
+    stageId: "land-vision",
+    stageName: "Land & Vision",
+    stageHref: L("/property-journey/land-vision"),
+    evidenceStatus: "Official primary source",
+    checkedOn: evidenceSource.checkedOn,
+    reviewBy: evidenceSource.reviewBy,
+    guidance: "Use the enquiry as one early evidence input. Confirm registered ownership, title validity and permitted use through the applicable official routes before commitment.",
+  };
+  const lifecycleStages = stages.map((stage) => ({ id: stage.id, number: stage.number, name: stage.name, href: L(`/property-journey/${stage.id}`) }));
 
   return <Page className="inner-page" locale={locale}>
     <section className="inner-hero inner-hero-no-photo intelligence-hero">
@@ -85,6 +105,8 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       authorities={authorityOptions}
       terms={termOptions}
       glossaryHref={L("/intelligence/definitions-and-glossary")}
+      evidenceRecord={evidenceRecord}
+      lifecycleStages={lifecycleStages}
     />
 
     <section className="integrity-strip">

@@ -350,6 +350,12 @@ test("intelligence and assistant state their evidence governance contracts", asy
   assert.match(intelligence, /Official source/);
   assert.match(intelligence, /Jurisdiction/);
   assert.match(intelligence, /Review state/);
+  assert.match(intelligence, /Property Status Enquiry/);
+  assert.match(intelligence, /href="https:\/\/dubailand\.gov\.ae\/en\/eservices\/property-status-overview\/"/);
+  assert.match(intelligence, /Complete the previous checkpoint first/);
+  for (const stage of ["Land &amp; Vision", "Planning &amp; Design", "Authorities &amp; Approvals", "Construction &amp; Delivery", "Sales &amp; Transfer", "Living &amp; Operations", "Asset Growth &amp; Intelligence"]) {
+    assert.match(intelligence, new RegExp(stage), `Evidence Pathway missing canonical stage: ${stage}`);
+  }
 
   const assistant = await (await render("/assistant")).text();
   assert.match(assistant, /ASSISTANT TRUST CONTRACT/);

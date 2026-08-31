@@ -51,8 +51,20 @@ assert.equal(await workspaces.count(), 4, "the page must contain exactly four vi
 
 const evidence = main.locator(".evidence-workspace");
 assert.equal(await evidence.locator(".evidence-rail button").count(), 5, "the trust pathway must contain five checkpoints");
-await evidence.locator(".evidence-rail button").nth(4).click();
+assert.equal(await evidence.locator(".evidence-rail button").nth(1).isDisabled(), true, "future checkpoints must remain locked until the current checkpoint is reviewed");
+assert.match(await evidence.locator('.evidence-focus a[target="_blank"]').getAttribute("href"), /^https:\/\/dubailand\.gov\.ae\//, "the example must expose its official primary source");
+assert.deepEqual(await evidence.locator(".evidence-lifecycle a").evaluateAll((nodes) => nodes.map((node) => node.textContent?.replace(/\s+/g, " ").trim())), [
+  "01Land & VisionEvidence applies here", "02Planning & Design", "03Authorities & Approvals", "04Construction & Delivery", "05Sales & Transfer", "06Living & Operations", "07Asset Growth & Intelligence",
+], "the evidence record must retain the canonical seven-stage context");
+assert.equal(await evidence.locator('.evidence-lifecycle a[aria-current="step"]').getAttribute("href"), "/property-journey/land-vision");
+for (let index = 0; index < 5; index += 1) {
+  await evidence.locator(".evidence-focus-actions button").click();
+}
 assert.match(await evidence.locator(".evidence-focus").innerText(), /Guidance[\s\S]*not an authority decision/i);
+assert.match(await evidence.locator(".evidence-completion").innerText(), /Evidence pathway reviewed[\s\S]*authority remains the decision-maker/i);
+assert.equal(await evidence.locator(".evidence-rail button:disabled").count(), 0, "all checkpoints must become available after the guided review");
+await desktop.page.reload({ waitUntil: "networkidle" });
+assert.match(await desktop.page.locator(".evidence-progress").getAttribute("aria-label"), /^5 \/ 5 Reviewed$/, "completed evidence progress must persist locally after reload");
 
 const guide = main.locator(".guide-workspace");
 assert.ok(await guide.locator(".guide-role-deck button").count() >= 8, "the role selector must expose the published guide roles");
