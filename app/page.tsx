@@ -61,7 +61,17 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       </dl>
     </section>
 
-    {/* 02 — ASK. The assistant is the front door: a question before the reading. */}
+    {/* 02 — PROBLEM. One connected journey experienced through disconnected views. */}
+    <section className="section-pad problem-band" id="problem">
+      <SectionIntro
+        label={d.home.problemLabel}
+        title={<>{d.home.problemTitle}<br /><em>{d.home.problemTitleEm}</em></>}
+        copy={d.home.problemCopy}
+      />
+      <FragmentedJourney locale={locale} stakeholderStages={fragmentStakeholderStages} />
+    </section>
+
+    {/* 03 — ASK. Help visitors act on the problem they have just explored. */}
     <section className="section-pad assistant-band" id="ask">
       <SectionIntro
         label={d.assistant.eyebrow}
@@ -70,16 +80,6 @@ export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
       />
       <Assistant snapshot={snapshot} locale={locale} variant="compact" />
       <div className="band-cta"><Link className="text-link" href={L("/assistant")}>{locale === "ar" ? "افتح المساعد الكامل" : "Open the full Assistant"} <span>↗</span></Link></div>
-    </section>
-
-    {/* 03 — PROBLEM. One connected journey experienced through disconnected views. */}
-    <section className="section-pad problem-band" id="problem">
-      <SectionIntro
-        label={d.home.problemLabel}
-        title={<>{d.home.problemTitle}<br /><em>{d.home.problemTitleEm}</em></>}
-        copy={d.home.problemCopy}
-      />
-      <FragmentedJourney locale={locale} stakeholderStages={fragmentStakeholderStages} />
     </section>
 
     {/* 04 — FIVE GUIDED PATHS. Dedicated pages carry the depth. */}

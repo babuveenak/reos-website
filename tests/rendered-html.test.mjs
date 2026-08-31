@@ -240,6 +240,16 @@ test("homepage removes the requested promotional sections while Platform keeps t
   }
 });
 
+test("homepage places the property ecosystem assistant after the problem section", async () => {
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  const problemIndex = source.indexOf('id="problem"');
+  const assistantIndex = source.indexOf('id="ask"');
+
+  assert.notEqual(problemIndex, -1, "Home must render the problem section");
+  assert.notEqual(assistantIndex, -1, "Home must render the assistant section");
+  assert.ok(problemIndex < assistantIndex, "the shared English/Arabic Home view must place the assistant after the problem section");
+});
+
 test("compact footer exposes the four public website documents in both languages", async () => {
   const home = await (await render("/")).text();
   for (const [href, label] of [
