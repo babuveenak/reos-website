@@ -26,14 +26,24 @@ async function open(path, width = 1440, height = 1000, reducedMotion = "reduce")
 
 async function scan(page, label) {
   await page.addScriptTag({ content: axe.source });
-  const result = await page.evaluate(async () => window.axe.run(document.querySelector(".stakeholder-process-map"), {
+  const result = await page.evaluate(async () => window.axe.run(document.querySelector("main"), {
     runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"] },
   }));
   const serious = result.violations.filter(({ impact }) => impact === "critical" || impact === "serious");
   assert.deepEqual(serious.map(({ id, nodes }) => ({ id, targets: nodes.map(({ target }) => target) })), [], `${label} must pass WCAG A/AA`);
 }
 
+async function assertGuidedJourney(page, slug) {
+  const lifecycle = page.locator(".stakeholder-lifecycle-map");
+  assert.equal(await lifecycle.getByRole("tab").count(), 7, `${slug} lifecycle overview must retain all seven stages`);
+  assert.equal(await page.locator(".stakeholder-blueprint-hero .stakeholder-scope-selector").count(), 0, `${slug} hero must not lead with route selectors`);
+  assert.equal(await page.locator(".stakeholder-route-refinement .stakeholder-scope-selector").count(), 1, `${slug} route refinement must remain before official process facts`);
+  assert.ok(await page.locator(".stakeholder-entry-path").count() >= 1, `${slug} needs a role-specific entry path`);
+  assert.ok(await page.locator(".stakeholder-challenge-card").count() >= 4, `${slug} needs role-specific control points`);
+}
+
 const desktop = await open("/stakeholders/developers/dubai/dm-mainland", 1440, 1000, "no-preference");
+await assertGuidedJourney(desktop.page, "developers");
 const heroVisual = desktop.page.locator(".stakeholder-blueprint-visual");
 assert.equal(await heroVisual.count(), 1, "each stakeholder page needs one interactive 3D hero visual");
 assert.match(await heroVisual.locator("img").getAttribute("src") ?? "", /stakeholder-developers-hero-v1\.jpg/);
@@ -52,7 +62,7 @@ assert.doesNotMatch(await map.innerText(), /Request a demo|Title Deed Automation
 const tabs = map.getByRole("tab");
 await tabs.nth(1).focus();
 await tabs.nth(1).press("ArrowRight");
-await desktop.page.waitForFunction(() => document.querySelectorAll('[role="tab"]')[2]?.getAttribute("aria-selected") === "true");
+await desktop.page.waitForFunction(() => document.querySelectorAll('.stakeholder-process-map [role="tab"]')[2]?.getAttribute("aria-selected") === "true");
 assert.equal(await tabs.nth(2).getAttribute("aria-selected"), "true", "arrow keys must move the active stage");
 assert.ok(await tabs.nth(2).evaluate((element) => element.matches(":focus-visible")), "keyboard-selected stage needs visible focus");
 assert.match(await map.locator(".process-role-card").innerText(), /Authorities & Approvals/);
@@ -70,6 +80,25 @@ await desktop.page.waitForTimeout(350);
 await scan(desktop.page, "dark process map");
 await map.screenshot({ path: `${output}/developer-dm-dark.png` });
 await desktop.context.close();
+
+const brokers = await open("/stakeholders/brokers-agencies/dubai/dm-mainland", 1440, 1000, "no-preference");
+await assertGuidedJourney(brokers.page, "brokers-agencies");
+assert.equal(await brokers.page.locator(".stakeholder-entry-path").count(), 2, "brokers must separate the individual and company routes");
+assert.equal(await brokers.page.locator(".stakeholder-challenge-card").count(), 6, "brokers need the six researched control points");
+assert.match(await brokers.page.locator(".stakeholder-entry-guidance").innerText(), /Path A · Individual[\s\S]*Path B · Company/i);
+assert.match(await brokers.page.locator(".stakeholder-official-directory").innerText(), /Verify a broker or brokerage office/);
+assert.match(await brokers.page.locator(".stakeholder-official-directory a").getAttribute("href") ?? "", /dubailand\.gov\.ae/);
+assert.equal(await brokers.page.locator(".process-stage-tab[aria-selected='true']").getAttribute("data-stage-id"), "sales-transfer");
+await brokers.page.locator(".stakeholder-lifecycle-node").nth(6).focus();
+await brokers.page.locator(".stakeholder-lifecycle-node").nth(6).press("Home");
+assert.equal(await brokers.page.locator(".stakeholder-lifecycle-node").nth(0).getAttribute("aria-selected"), "true", "lifecycle keyboard navigation must support Home");
+await scan(brokers.page, "brokers guided journey light");
+await brokers.page.locator(".stakeholder-lifecycle-map").screenshot({ path: `${output}/brokers-lifecycle-light.png` });
+await brokers.page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
+await brokers.page.waitForTimeout(250);
+await scan(brokers.page, "brokers guided journey dark");
+await brokers.page.locator(".stakeholder-lifecycle-map").screenshot({ path: `${output}/brokers-lifecycle-dark.png` });
+await brokers.context.close();
 
 for (const [path, stageIndex, sourcePattern] of [
   ["/stakeholders/landowners-investors", 0, /Property Status Enquiry/],
@@ -100,19 +129,21 @@ for (const slug of [
   assert.equal(await visual.count(), 1, `${slug} needs one hero visual`);
   assert.ok(await visual.locator("img").evaluate((image) => image.complete && image.naturalWidth >= 800), `${slug} responsive hero asset must load at a suitable desktop width`);
   assert.equal(await view.page.locator(".stakeholder-start").count(), 0, `${slug} must not render the generic starting-point section`);
+  await assertGuidedJourney(view.page, slug);
   assert.doesNotMatch(await view.page.locator("main").innerText(), /Start by confirming which lifecycle stage requires|transaction-level authority research for this stakeholder is not yet complete/);
   await view.context.close();
 }
 
 for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]]) {
-  const view = await open("/stakeholders/banks-financial/dubai/dda-tecom", width, height);
+  const view = await open("/stakeholders/brokers-agencies/dubai/dm-mainland", width, height);
   const overflow = await view.page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   assert.ok(overflow <= 1, `${width}px viewport has ${overflow}px horizontal overflow`);
   assert.equal(await view.page.locator(".process-stage-tab").count(), 7, `${width}px must retain seven stages`);
   assert.ok(await view.page.locator(".isometric-authority-platform").count() >= 1, `${width}px must retain the interactive evidence flow`);
+  assert.equal(await view.page.locator(".stakeholder-lifecycle-node").count(), 7, `${width}px must retain the guided lifecycle overview`);
   await view.page.locator(".process-stage-tab").nth(6).click();
   assert.match(await view.page.locator(".process-role-card").innerText(), /Asset Growth & Intelligence/);
-  if (width === 390) await view.page.screenshot({ path: `${output}/bank-dda-mobile.png`, fullPage: true });
+  if (width === 390) await view.page.screenshot({ path: `${output}/brokers-dm-mobile.png`, fullPage: true });
   await view.context.close();
 }
 

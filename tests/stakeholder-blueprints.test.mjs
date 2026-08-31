@@ -27,9 +27,10 @@ test("the preserved stakeholder hero leads into a richer twelve-group directory"
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /UAE property/);
-  assert.match(html, /Choose your role/);
-  assert.equal((html.match(/stakeholder-profile-card/g) ?? []).length, 12);
-  assert.equal((html.match(/5 Dubai routes/g) ?? []).length, 12);
+  assert.match(html, /One role/);
+  assert.match(html, /One clear route/);
+  assert.equal((html.match(/stakeholder-role-platform cluster-/g) ?? []).length, 12);
+  assert.equal((html.match(/journey-visual-stage level-/g) ?? []).length, 7);
   assert.doesNotMatch(html, /From understanding to governed execution/);
   assert.doesNotMatch(html, /href="\/demo"/);
 });
@@ -39,13 +40,29 @@ test("Dubai Landowners reference renders source-led steps and a stakeholder visu
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /stakeholder-landowners-investors-hero-v1\.png/);
-  assert.match(html, /Interactive process map/);
+  assert.match(html, /Official stage walkthrough/);
+  assert.match(html, /Where this stakeholder connects to the property lifecycle/);
   assert.equal((html.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7);
-  assert.equal((html.match(/class="process-step lane-(?:you|delivery|authority|evidence)"/g) ?? []).length, 4);
+  assert.ok((html.match(/isometric-authority-platform/g) ?? []).length >= 1);
   assert.match(html, /Official sources/);
   assert.match(html, /DLD — Property Status/);
   assert.match(html, /An authority service estimate is not the total transaction duration/);
   assert.doesNotMatch(html, /class="status status-validated"/);
+});
+
+test("Brokers reference journey separates individual and agency entry paths and uses the official registry", async () => {
+  const response = await render("/stakeholders/brokers-agencies/dubai/dm-mainland");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.equal((html.match(/class="stakeholder-lifecycle-node lifecycle-(?:lead|active|supporting|informed)"/g) ?? []).length, 7);
+  assert.match(html, /Path A · Individual/);
+  assert.match(html, /Path B · Company/);
+  assert.match(html, /Licensed real-estate broker/);
+  assert.match(html, /Real-estate brokerage agency/);
+  assert.match(html, /Licensed Real Estate Brokers/);
+  assert.match(html, /Open the DLD licensed-broker registry/);
+  assert.match(html, /Authority service times start after a complete accepted submission/);
+  assert.doesNotMatch(html, /sample broker|sample brokerage|fake broker record/i);
 });
 
 test("all twelve stakeholder heroes use a role-specific 3D visual and no generic entry fallback", async () => {

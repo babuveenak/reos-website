@@ -3,12 +3,15 @@ import { notFound } from "next/navigation";
 import { Page } from "./SiteShell";
 import { StakeholderJurisdictionSelector } from "./StakeholderJurisdictionSelector";
 import { StakeholderHeroVisual } from "./StakeholderHeroVisual";
+import { StakeholderLifecycleMap } from "./StakeholderLifecycleMap";
 import { StakeholderProcessMap } from "./StakeholderProcessMap";
+import { StakeholderGuidanceSections } from "./StakeholderGuidanceSections";
 import { authorityProcessMaps } from "../data/authorityProcessMaps";
 import { DUBAI_TRACKS, EMIRATES, stakeholderBlueprintById, type DubaiTrack, type EmirateId } from "../data/stakeholderBlueprints";
 import { groupById } from "../data/ecosystem";
 import { getGroups, getStages } from "../i18n/content";
 import { localePath, type Locale } from "../i18n/config";
+import type { StakeholderId } from "../data/stakeholderParticipation";
 
 const COPY = {
   en: {
@@ -23,6 +26,9 @@ const COPY = {
     ecosystem: "Open this stakeholder in the ecosystem map",
     all: "View all stakeholder groups",
     visualCaption: "Illustrative stakeholder concept, not an official plan",
+    refine: "Refine the official route",
+    refineTitle: "Choose the jurisdiction only when you need route-specific authority facts.",
+    refineCopy: "The lifecycle role above does not change. This refinement controls which official channels, fees, service times and outputs may be shown below.",
   },
   ar: {
     back: "العودة إلى جميع أصحاب المصلحة",
@@ -36,6 +42,9 @@ const COPY = {
     ecosystem: "افتح صاحب المصلحة في خريطة المنظومة",
     all: "عرض جميع أصحاب المصلحة",
     visualCaption: "تصور توضيحي لصاحب المصلحة وليس مخططاً رسمياً",
+    refine: "حدد المسار الرسمي",
+    refineTitle: "اختر الاختصاص فقط عند الحاجة إلى حقائق جهة محددة.",
+    refineCopy: "لا يتغير دور دورة الحياة أعلاه. يحدد هذا الخيار القنوات والرسوم وأزمنة الخدمة والمخرجات الرسمية التي يمكن عرضها أدناه.",
   },
 };
 
@@ -47,12 +56,23 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
   const c = COPY[locale];
   const localizedGroup = getGroups(locale).find((group) => group.id === stakeholderId) ?? fallbackGroup;
   const localizedStages = getStages(locale);
+  const localizedGroups = getGroups(locale);
   const selectedTrack = DUBAI_TRACKS.find((item) => item.id === track) ?? DUBAI_TRACKS[0];
   const coverage = profile.coverage.find((item) => item.emirate === emirate);
   const emirateRecord = EMIRATES.find((item) => item.id === emirate);
   const emirateLabel = emirateRecord?.[locale === "ar" ? "ar" : "label"] ?? emirate;
   const L = (path: string) => localePath(locale, path);
   const isDubai = emirate === "dubai";
+  const processes = authorityProcessMaps[track];
+  const primaryStageId = ["lead", "active", "supporting", "informed"]
+    .map((level) => profile.participation.find((item) => item.relationshipLevel === level)?.stageId)
+    .find(Boolean);
+  const connections = processes.map((process) => ({
+    stageId: process.stageId,
+    groupNames: process.relatedStakeholderIds
+      .filter((id) => id !== stakeholderId)
+      .map((id) => localizedGroups.find((group) => group.id === id)?.name ?? id.replaceAll("-", " ")),
+  }));
   if (!coverage) notFound();
 
   return <Page className="inner-page stakeholder-blueprint-page" locale={locale}>
@@ -72,14 +92,29 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
           <time dateTime="2026-08-26">{c.checked}</time>
         </div>
         <div className="scope-context"><b>{c.scope}</b><span>{emirateLabel}</span>{isDubai && <span>{selectedTrack.label}</span>}</div>
-        <StakeholderJurisdictionSelector stakeholderId={stakeholderId} emirate={emirate} track={track} locale={locale} />
-        {isDubai && <p className="track-note">{selectedTrack.note}</p>}
       </div>
       <StakeholderHeroVisual stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} caption={c.visualCaption} locale={locale} />
     </section>
 
+    <StakeholderLifecycleMap stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} connections={connections} locale={locale} />
+
+    <section className="stakeholder-route-refinement" aria-labelledby="stakeholder-route-refinement-title">
+      <div>
+        <span className="eyebrow">03 · {c.refine}</span>
+        <h2 id="stakeholder-route-refinement-title">{c.refineTitle}</h2>
+        <p>{c.refineCopy}</p>
+      </div>
+      <div>
+        <StakeholderJurisdictionSelector stakeholderId={stakeholderId} emirate={emirate} track={track} locale={locale} />
+        {isDubai && <p className="track-note">{selectedTrack.note}</p>}
+      </div>
+    </section>
+
     {isDubai
-      ? <StakeholderProcessMap stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={authorityProcessMaps[track]} locale={locale} track={track} />
+      ? <>
+          <StakeholderProcessMap stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={processes} locale={locale} track={track} initialStageId={primaryStageId} />
+          <StakeholderGuidanceSections stakeholderId={stakeholderId as StakeholderId} stakeholderName={localizedGroup.name} locale={locale} />
+        </>
       : <section className="unmapped-jurisdiction section-pad">
           <span className="eyebrow">02 · {c.unmapped}</span>
           <h2>{emirateLabel}: {c.unmapped}</h2>

@@ -63,10 +63,10 @@ export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, 
   return <section className="stakeholder-process-map" aria-labelledby={`${tabId}-title`}>
     <header className="process-map-heading">
       <div>
-        <span className="eyebrow">03 · {ar ? "خريطة العملية التفاعلية" : "Interactive process map"}</span>
-        <h2 id={`${tabId}-title`}>{ar ? "اختر مرحلة واتبع مسارك." : "Choose a stage. Follow your route."}</h2>
+        <span className="eyebrow">04 · {ar ? "المسار الرسمي لكل مرحلة" : "Official stage walkthrough"}</span>
+        <h2 id={`${tabId}-title`}>{ar ? "شاهد ما يفعله هذا الطرف في كل مرحلة." : "See what this stakeholder actually does at each stage."}</h2>
       </div>
-      <p>{ar ? "المصادر الرسمية تحدد القناة والمتطلبات. ويوضح REOS أين يشارك هذا الطرف دون أن يحل محل الجهة صاحبة القرار." : "Official sources define the channel and requirements. REOS shows where this group participates without replacing the decision-making authority."}</p>
+      <p>{ar ? "تفتح الصفحة على أول مرحلة يقودها هذا الطرف. ويمكن فحص أي مرحلة أخرى دون تغيير المسار الرسمي أو سلطة اتخاذ القرار." : "The first Lead stage is open by default. Inspect another stage to see its official touchpoints without changing the authority or decision owner."}</p>
     </header>
 
     <div className="process-stage-tabs" role="tablist" aria-label={ar ? "مراحل دورة حياة العقار" : "Property lifecycle stages"}>
@@ -81,6 +81,7 @@ export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, 
           role="tab"
           aria-selected={selected}
           aria-controls={`${tabId}-panel`}
+          data-stage-id={stage.id}
           tabIndex={selected ? 0 : -1}
           className={`process-stage-tab level-${state?.relationshipLevel ?? "informed"}`}
           onClick={() => setSelectedStageId(stage.id)}

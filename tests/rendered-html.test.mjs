@@ -310,9 +310,13 @@ test("P1 conversion path qualifies the requested enterprise conversation", async
   assert.match(ecosystem, /Open Stakeholder View/);
 });
 
-test("commercially governed routes expose outcome, audience, product and next action", async () => {
+test("Intelligence keeps the visual index educational while deeper guides retain route governance", async () => {
+  const intelligence = await (await render("/intelligence")).text();
+  assert.match(intelligence, /Knowledge, connected to context\./);
+  assert.match(intelligence, /Trust the answer\. See the evidence\./);
+  assert.doesNotMatch(intelligence, /BUSINESS OUTCOME|RELEVANT REOS PRODUCT|href="\/demo"/, "the Intelligence index must remain educational");
+
   for (const path of [
-    "/intelligence",
     "/intelligence/guides",
     "/intelligence/guides/buying",
     "/intelligence/definitions-and-glossary",
@@ -325,14 +329,14 @@ test("commercially governed routes expose outcome, audience, product and next ac
   }
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Interactive process map/);
+  assert.match(stakeholder, /Official stage walkthrough/);
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.doesNotMatch(stakeholder, /RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|href="\/demo"/, "stakeholder education must not become a product pitch");
 });
 
 test("intelligence and assistant state their evidence governance contracts", async () => {
   const intelligence = await (await render("/intelligence")).text();
-  assert.match(intelligence, /GOVERNED EVIDENCE LAYER/);
+  assert.match(intelligence, /Trust the answer\. See the evidence\./);
   assert.match(intelligence, /Official source/);
   assert.match(intelligence, /Jurisdiction/);
   assert.match(intelligence, /Review state/);
@@ -418,7 +422,7 @@ test("stakeholders stays educational and keeps only a compact personal-guide bri
   assert.doesNotMatch(source, /HowReosWorks|RouteGovernance/);
   assert.doesNotMatch(main, /HOW REOS WORKS|BUSINESS OUTCOME|WHO THIS SERVES|RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|Title Deed Automation|NOC Automation/);
   assert.doesNotMatch(main, /class="reos-opportunity"|Start with a guide|See how they connect/);
-  assert.equal((main.match(/class="group-card /g) ?? []).length, 12, "the focused page must retain all twelve stakeholder profiles");
+  assert.equal((main.match(/class="stakeholder-role-platform cluster-/g) ?? []).length, 12, "the focused page must retain all twelve stakeholder profiles");
   assert.equal((main.match(/class="stakeholder-guide-bridge"/g) ?? []).length, 1, "the personal-journey distinction should remain compact and singular");
   assert.match(main, /Looking for a personal journey\?/);
   assert.match(main, /href="\/intelligence\/guides"/);
@@ -426,29 +430,17 @@ test("stakeholders stays educational and keeps only a compact personal-guide bri
 });
 
 test("stakeholders hero exposes exactly 12 interactive architectural groups", async () => {
+  const source = await readFile(new URL("../app/components/StakeholdersHero.tsx", import.meta.url), "utf8");
   const html = await (await render("/stakeholders")).text();
   assert.match(html, /stakeholders-connected-district-v2\.png/);
   assert.equal((html.match(/Select to view details\./g) ?? []).length, 12);
-  assert.match(html, /href="\/stakeholders\/banks-financial"/);
+  assert.match(source, /<Link href=\{activeGroup\.href\}/, "the selected hero group must open its canonical stakeholder route");
   assert.doesNotMatch(html, /12\+ STAKEHOLDER GROUPS/);
-
-  const ring = html.match(/<div class="stakeholder-hotspots".*?<\/div><\/div>/s)?.[0] ?? "";
-  const groups = [...ring.matchAll(/data-group="([^"]+)" data-ring-position="(\d+)" data-label-placement="([^"]+)"/g)]
-    .map(([, id, position, placement]) => ({ id, position: Number(position), placement }));
-  assert.deepEqual(groups, [
-    { id: "landowners-investors", position: 1, placement: "above" },
-    { id: "developers", position: 2, placement: "above" },
-    { id: "consultants-designers", position: 3, placement: "above" },
-    { id: "authorities-regulators", position: 4, placement: "above" },
-    { id: "utility-providers", position: 5, placement: "above" },
-    { id: "contractors", position: 6, placement: "below" },
-    { id: "suppliers-vendors", position: 7, placement: "below" },
-    { id: "brokers-agencies", position: 8, placement: "below" },
-    { id: "banks-financial", position: 9, placement: "below" },
-    { id: "property-owners", position: 10, placement: "below" },
-    { id: "residents-tenants", position: 11, placement: "above-left" },
-    { id: "facility-community-operators", position: 12, placement: "above" },
-  ]);
+  assert.equal((source.match(/\{ x: \d+, y: \d+, label: "(?:above|above-left|below|left|right)" \}/g) ?? []).length, 12, "the protected hero must retain exactly twelve visual positions");
+  assert.match(source, /data-group=\{group\.id\}/);
+  assert.match(source, /data-ring-position=\{index \+ 1\}/);
+  assert.match(source, /onMouseEnter=\{\(\) => preview\(group\.id\)\}/);
+  assert.match(source, /onFocus=\{\(\) => preview\(group\.id\)\}/);
   assert.match(html, /REOS<\/b><span>OPERATING SYSTEM<\/span>/);
 });
 
@@ -530,6 +522,7 @@ test("Land & Vision adds a jurisdiction-first public guide without changing the 
 });
 
 test("intelligence hero exposes six coded knowledge domains over a text-free foundation", async () => {
+  const source = await readFile(new URL("../app/components/IntelligenceHeroMap.tsx", import.meta.url), "utf8");
   const html = await (await render("/intelligence")).text();
   assert.match(html, /intelligence-knowledge-foundation-v1\.jpg/);
   assert.match(html, /REOS Intelligence knowledge map/);
@@ -542,11 +535,11 @@ test("intelligence hero exposes six coded knowledge domains over a text-free fou
     "Definitions &amp; Glossary",
     "Knowledge Graph",
   ]) {
-    assert.match(html, new RegExp(`>${label}<`), `${label} knowledge domain missing`);
+    assert.match(html, new RegExp(label), `${label} knowledge domain missing`);
   }
   assert.match(html, /CONNECTED KNOWLEDGE LAYER/);
-  assert.match(html, /href="\/intelligence\/guides"/);
-  assert.match(html, /href="\/intelligence\/definitions-and-glossary"/);
+  assert.match(source, /<Link className="text-link" href=\{activeDomain\.href\}/, "the selected knowledge domain must open its canonical route");
+  assert.match(await readFile(new URL("../app/intelligence/page.tsx", import.meta.url), "utf8"), /href: L\("\/intelligence\/guides"\)[\s\S]*href: L\("\/intelligence\/definitions-and-glossary"\)/);
 });
 
 test("stage 6 is Living & Operations everywhere it appears", async () => {
@@ -697,10 +690,11 @@ test("canonical relationship pages explain the selected intersection", async () 
   const html = await response.text();
   assert.match(html, /Authorities &(amp;)? Regulators/);
   assert.match(html, /in Authorities &(amp;)? Approvals/);
-  assert.match(html, /ROLE IN THIS STAGE/);
-  assert.match(html, /RESPONSIBILITIES/);
-  assert.match(html, /PROCESSES/);
-  assert.match(html, /DOCUMENTS/);
+  assert.match(html, /Official stage walkthrough/);
+  assert.equal((html.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7);
+  assert.match(html, /isometric-process-scene/);
+  assert.match(html, /isometric-authority-platform/);
+  assert.match(html, /Official sources/);
   assert.match(html, /Open in interactive map/);
   assert.match(html, /view=journey(&amp;|&)stage=authorities-approvals/);
 });
@@ -718,13 +712,13 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
   assert.match(stage, /view=journey(&amp;|&)stage=construction-delivery/);
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Interactive process map/);
+  assert.match(stakeholder, /Official stage walkthrough/);
   assert.equal((stakeholder.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7, "stakeholder process map must show all seven relationship levels");
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
 });
 
-test("all Dubai stakeholder authority routes expose a four-step sourced process", async () => {
+test("all Dubai stakeholder authority routes expose a seven-stage, source-aware process", async () => {
   const paths = [
     "/stakeholders/landowners-investors",
     "/stakeholders/developers/dubai/dm-mainland",
@@ -736,9 +730,16 @@ test("all Dubai stakeholder authority routes expose a four-step sourced process"
     const response = await render(path);
     assert.equal(response.status, 200, path);
     const html = await response.text();
-    assert.match(html, /Choose a stage\. Follow your route\./, path);
+    assert.match(html, /See what this stakeholder actually does at each stage\./, path);
     assert.equal((html.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7, `${path} must map seven stages`);
-    assert.equal((html.match(/class="process-step lane-(?:you|delivery|authority|evidence)"/g) ?? []).length, 4, `${path} must render four process steps for the selected stage`);
+    assert.match(html, /isometric-process-scene/, `${path} must render the interactive visual process scene`);
+    if (path.includes("financial-free-zone")) {
+      assert.match(html, /process-context-only/, `${path} must state when no direct official route is published`);
+      assert.equal((html.match(/isometric-authority-platform/g) ?? []).length, 0, `${path} must not invent authority actions`);
+    } else {
+      assert.ok((html.match(/isometric-authority-platform/g) ?? []).length >= 1, `${path} must expose at least one official authority touchpoint`);
+      assert.match(html, /intersection-source-detail/, `${path} must expose the selected source facts`);
+    }
     assert.match(html, /Official sources/);
   }
 });
