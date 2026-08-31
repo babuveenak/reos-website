@@ -405,7 +405,7 @@ test("Arabic routes render Arabic, right-to-left", async () => {
   // The original bug: the language control set dir/lang and nothing else, so
   // the layout reversed and every word stayed English.
   const arabic = (t) => (t.match(/[؀-ۿ]/g) || []).length;
-  for (const path of ["/ar", "/ar/property-journey", "/ar/intelligence/guides/buying", "/ar/intelligence/definitions-and-glossary"]) {
+  for (const path of ["/ar", "/ar/property-journey", "/ar/intelligence", "/ar/intelligence/guides/buying", "/ar/intelligence/definitions-and-glossary"]) {
     const html = await (await render(path)).text();
     assert.match(html, /dir="rtl"/, `${path} must be RTL`);
     assert.ok(arabic(html) > 400, `${path} should carry Arabic text, found ${arabic(html)}`);
@@ -413,6 +413,20 @@ test("Arabic routes render Arabic, right-to-left", async () => {
   // English must stay untouched at the root.
   const en = await (await render("/property-journey")).text();
   assert.doesNotMatch(en, /dir="rtl"/);
+});
+
+test("Arabic Intelligence and journey navigation use localized labels and paths", async () => {
+  const intelligence = await (await render("/ar/intelligence")).text();
+  assert.match(intelligence, /الاستعلام عن حالة عقار/);
+  assert.match(intelligence, /الأدلة الإرشادية/);
+  assert.match(intelligence, /href="\/ar\/property-journey\/land-vision"/);
+  assert.doesNotMatch(intelligence, /What knowledge supports the UAE property ecosystem/);
+
+  const stage = await (await render("/ar/property-journey/construction-delivery")).text();
+  assert.match(stage, /aria-label="مسار التنقل"/);
+  assert.match(stage, /href="\/ar\/property-journey"[^>]*>رحلة العقار</);
+  assert.match(stage, /href="\/ar\/property-journey\/sales-transfer"/);
+  assert.doesNotMatch(stage, /href="\/property-journey\/sales-transfer"/);
 });
 
 test("the review notice appears on Arabic pages only", async () => {

@@ -61,8 +61,8 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
   const L = (path: string) => localePath(locale, path);
 
   return <Page className="inner-page stage-page" locale={locale}>
-    <nav className="crumbs" aria-label="Breadcrumb">
-      <Link href={L("/property-journey")}>Property journey</Link>
+    <nav className="crumbs" aria-label={d.nav.breadcrumb}>
+      <Link href={L("/property-journey")}>{d.nav.journey}</Link>
       <span aria-hidden="true">/</span>
       <b>{stage.name}</b>
     </nav>
@@ -92,7 +92,7 @@ export async function View({ params, locale = DEFAULT_LOCALE }: Props & { locale
         <b>This stage does not wait its turn.</b>
         <p>
           It runs at the same time as {parallel.map((s, i) => (
-            <span key={s.id}>{i > 0 && (i === parallel.length - 1 ? " and " : ", ")}<Link href={`/property-journey/${s.id}`}>{s.name}</Link></span>
+            <span key={s.id}>{i > 0 && (i === parallel.length - 1 ? " and " : ", ")}<Link href={L(`/property-journey/${s.id}`)}>{s.name}</Link></span>
           ))}. Treating these as a sequence is one of the most common misunderstandings of UAE development.
         </p>
       </section>

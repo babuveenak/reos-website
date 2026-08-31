@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type CSSProperties } from "react";
+import type { Locale } from "../i18n/config";
 
 export type IntelligenceDomain = {
   id: string;
@@ -30,7 +31,45 @@ const pointStyle = (point: DomainPoint) => ({
   "--intelligence-y": `${point.y}%`,
 } as CSSProperties);
 
-export function IntelligenceHeroMap({ domains }: { domains: IntelligenceDomain[] }) {
+const copy = {
+  en: {
+    mapTitle: "REOS Intelligence knowledge map",
+    mapDescription: "Six knowledge domains connect to a central REOS Intelligence layer. Select a domain to preview its purpose and open the relevant information.",
+    selectPreview: "Select to preview intelligence domain.",
+    coreAria: "REOS Intelligence. Show all six knowledge domains.",
+    coreLabel: "INTELLIGENCE",
+    coreSub: "CONNECTED KNOWLEDGE LAYER",
+    mobileAria: "Six REOS Intelligence domains",
+    domainPrefix: "INTELLIGENCE DOMAIN",
+    explore: "Explore",
+    unpublished: "No public explorer is published yet.",
+    defaultTitle: "Knowledge, connected to context.",
+    defaultDescription: "Guides, regulations, processes, authority information, definitions and the knowledge graph form one evidence-led knowledge layer for the UAE property ecosystem.",
+    prompt: "Select a knowledge domain to explore it.",
+    opened: "preview opened.",
+    allShown: "All six intelligence domains shown.",
+  },
+  ar: {
+    mapTitle: "خريطة معرفة REOS",
+    mapDescription: "ترتبط ستة مجالات معرفية بطبقة معرفة مركزية في REOS. اختر مجالًا لمعاينة غرضه وفتح المعلومات المرتبطة به.",
+    selectPreview: "اختر لمعاينة مجال المعرفة.",
+    coreAria: "معرفة REOS. عرض مجالات المعرفة الستة.",
+    coreLabel: "المعرفة",
+    coreSub: "طبقة معرفة مترابطة",
+    mobileAria: "مجالات معرفة REOS الستة",
+    domainPrefix: "مجال المعرفة",
+    explore: "استكشف",
+    unpublished: "لم يُنشر مستكشف عام لهذا المجال بعد.",
+    defaultTitle: "معرفة مرتبطة بالسياق.",
+    defaultDescription: "تكوّن الأدلة والشروح التنظيمية والإجراءات ومعلومات الجهات المختصة والتعريفات والرسم المعرفي طبقة معرفة واحدة قائمة على الأدلة للمنظومة العقارية في دولة الإمارات.",
+    prompt: "اختر مجالًا معرفيًا لاستكشافه.",
+    opened: "تم فتح المعاينة.",
+    allShown: "تظهر مجالات المعرفة الستة جميعها.",
+  },
+} as const;
+
+export function IntelligenceHeroMap({ domains, locale }: { domains: IntelligenceDomain[]; locale: Locale }) {
+  const t = copy[locale];
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [previewId, setPreviewId] = useState<string | null>(null);
   const activeId = previewId ?? selectedId;
@@ -53,8 +92,8 @@ export function IntelligenceHeroMap({ domains }: { domains: IntelligenceDomain[]
     <div className="intelligence-hero-explorer">
       <figure className="intelligence-hero-map" aria-labelledby="intelligence-map-title intelligence-map-description">
         <figcaption className="sr-only">
-          <span id="intelligence-map-title">REOS Intelligence knowledge map</span>
-          <span id="intelligence-map-description">Six knowledge domains connect to a central REOS Intelligence layer. Select a domain to preview its purpose and open the relevant information.</span>
+          <span id="intelligence-map-title">{t.mapTitle}</span>
+          <span id="intelligence-map-description">{t.mapDescription}</span>
         </figcaption>
         <div className="intelligence-foundation" aria-hidden="true">
           <Image
@@ -93,7 +132,7 @@ export function IntelligenceHeroMap({ domains }: { domains: IntelligenceDomain[]
                 className={`intelligence-domain-node label-${point.label} ${active ? "is-active" : ""} ${activeId && !active ? "is-dimmed" : ""}`}
                 style={pointStyle(point)}
                 aria-pressed={selectedId === domain.id}
-                aria-label={`${String(domain.number).padStart(2, "0")} ${domain.name}. Select to preview intelligence domain.`}
+                aria-label={`${String(domain.number).padStart(2, "0")} ${domain.name}. ${t.selectPreview}`}
                 title={`${domain.name} — ${domain.status}`}
                 onClick={() => chooseDomain(domain.id)}
                 onPointerEnter={() => setPreviewId(domain.id)}
@@ -109,17 +148,17 @@ export function IntelligenceHeroMap({ domains }: { domains: IntelligenceDomain[]
           <button
             type="button"
             className={`intelligence-core-node ${activeId ? "has-domain" : "is-active"}`}
-            aria-label="REOS Intelligence. Show all six knowledge domains."
+            aria-label={t.coreAria}
             onClick={() => setSelectedId(null)}
           >
-            <b>REOS</b><span>INTELLIGENCE</span><small>CONNECTED KNOWLEDGE LAYER</small>
+            <b>REOS</b><span>{t.coreLabel}</span><small>{t.coreSub}</small>
           </button>
         </div>
       </figure>
 
-      <div className="intelligence-mobile-domains" aria-label="Six REOS Intelligence domains">
+      <div className="intelligence-mobile-domains" aria-label={t.mobileAria}>
         <button type="button" className="intelligence-mobile-core" onClick={() => setSelectedId(null)}>
-          <b>REOS INTELLIGENCE</b><span>Connected knowledge layer</span>
+          <b>REOS {t.coreLabel}</b><span>{t.coreSub}</span>
         </button>
         <div>
           {domains.map((domain) => (
@@ -133,23 +172,23 @@ export function IntelligenceHeroMap({ domains }: { domains: IntelligenceDomain[]
       <aside className={`intelligence-hero-preview ${activeDomain ? "has-selection" : ""}`} aria-live="polite">
         {activeDomain ? (
           <>
-            <small>INTELLIGENCE DOMAIN {String(activeDomain.number).padStart(2, "0")} · {activeDomain.status}</small>
+            <small>{t.domainPrefix} {String(activeDomain.number).padStart(2, "0")} · {activeDomain.status}</small>
             <h2>{activeDomain.name}</h2>
             <p>{activeDomain.description}</p>
             {activeDomain.href
-              ? <Link className="text-link" href={activeDomain.href}>Explore {activeDomain.short} ↗</Link>
-              : <span className="intelligence-preview-prompt">No public explorer is published yet.</span>}
+              ? <Link className="text-link" href={activeDomain.href}>{t.explore} {activeDomain.short} ↗</Link>
+              : <span className="intelligence-preview-prompt">{t.unpublished}</span>}
           </>
         ) : (
           <>
-            <small>REOS INTELLIGENCE</small>
-            <h2>Knowledge, connected to context.</h2>
-            <p>Guides, regulations, processes, authority information, definitions and the knowledge graph form one evidence-led knowledge layer for the UAE property ecosystem.</p>
-            <span className="intelligence-preview-prompt">Select a knowledge domain to explore it.</span>
+            <small>REOS {t.coreLabel}</small>
+            <h2>{t.defaultTitle}</h2>
+            <p>{t.defaultDescription}</p>
+            <span className="intelligence-preview-prompt">{t.prompt}</span>
           </>
         )}
       </aside>
-      <p className="sr-only" aria-live="polite">{activeDomain ? `${activeDomain.name} preview opened.` : "All six intelligence domains shown."}</p>
+      <p className="sr-only" aria-live="polite">{activeDomain ? `${activeDomain.name} ${t.opened}` : t.allShown}</p>
     </div>
   );
 }

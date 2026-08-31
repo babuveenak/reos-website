@@ -105,7 +105,16 @@ await desktop.context.close();
 const arabic = await open("/ar/intelligence", 1024, 900);
 assert.ok(await arabic.page.locator('[lang="ar"][dir="rtl"]').count() >= 1, "the Arabic Intelligence route must remain RTL");
 assert.equal(await arabic.page.locator(".intelligence-workspace").count(), 4, "the Arabic route must retain all four workspaces");
+assert.match(await arabic.page.locator(".intelligence-hero-copy").innerText(), /المعرفة[\s\S]*المنظومة العقارية/);
+assert.deepEqual(await arabic.page.locator(".intelligence-domain-node span").allTextContents(), [
+  "الأدلة الإرشادية", "الشروح التنظيمية", "الإجراءات", "معلومات الجهات المختصة", "التعريفات والمصطلحات", "الرسم المعرفي",
+], "the Arabic hero must localize all six knowledge domains");
+assert.match(await arabic.page.locator(".evidence-record-label").innerText(), /الاستعلام عن حالة عقار/);
+assert.match(await arabic.page.locator(".evidence-lifecycle a").first().innerText(), /الأرض والرؤية/);
+assert.equal(await arabic.page.locator('.evidence-lifecycle a[aria-current="step"]').getAttribute("href"), "/ar/property-journey/land-vision");
 assert.match(await arabic.page.locator(".guide-workspace h2").innerText(), /اختر دورك/);
+assert.match(await arabic.page.locator(".authority-workspace").innerText(), /دائرة الأراضي والأملاك في دبي/);
+assert.match(await arabic.page.locator(".integrity-strip").innerText(), /كيفية استخدام هذه الصفحة/);
 await arabic.context.close();
 
 for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]]) {

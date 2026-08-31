@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 /** Arabic route. Renders the shared view with locale="ar"; content falls
  *  back to English per-field where a translation is not yet in place. */
 export const metadata: Metadata = {
-  title: "REOS Intelligence | Guides, Regulations, Processes & Glossary",
-  description: "The knowledge layer behind the UAE property ecosystem: guides, regulation explainers, process references, authority information, definitions and the knowledge graph.",
+  title: "معرفة REOS | الأدلة والأنظمة والإجراءات والمصطلحات",
+  description: "طبقة المعرفة وراء المنظومة العقارية في دولة الإمارات: الأدلة والشروح التنظيمية والإجراءات ومعلومات الجهات المختصة والتعريفات والرسم المعرفي.",
 };
 
 export default function Page() {
