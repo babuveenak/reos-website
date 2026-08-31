@@ -40,7 +40,10 @@ async function assertGuidedJourney(page, slug) {
   assert.equal(await page.locator(".stakeholder-process-map .process-route-refinement .stakeholder-scope-selector").count(), 1, `${slug} route refinement must sit inside the direct process walkthrough`);
   assert.equal(await page.locator(".stakeholder-route-refinement").count(), 0, `${slug} must not gate lifecycle comprehension with a standalone route selector`);
   assert.ok(await page.locator(".stakeholder-entry-path").count() >= 1, `${slug} needs a role-specific entry path`);
-  assert.ok(await page.locator(".stakeholder-challenge-card").count() >= 4, `${slug} needs role-specific control points`);
+  assert.ok(await page.locator(".stakeholder-challenge-card").count() >= 6, `${slug} needs at least six role-specific control points`);
+  assert.equal(await page.locator(".stakeholder-official-directory").count(), 1, `${slug} needs one shared official-directory section`);
+  assert.equal(await page.locator(".stakeholder-official-directory input[type='search']").count(), 1, `${slug} directory needs search`);
+  assert.equal(await page.locator(".stakeholder-official-directory select").count(), 1, `${slug} directory needs an Emirate refinement`);
 }
 
 const desktop = await open("/stakeholders/developers/dubai/dm-mainland", 1440, 1000, "no-preference");
@@ -108,6 +111,13 @@ assert.equal(await brokers.page.locator(".stakeholder-challenge-card").count(), 
 assert.match(await brokers.page.locator(".stakeholder-entry-guidance").innerText(), /Path A · Individual[\s\S]*Path B · Company/i);
 assert.match(await brokers.page.locator(".stakeholder-official-directory").innerText(), /Verify a broker or brokerage office/);
 assert.match(await brokers.page.locator(".stakeholder-official-directory a").getAttribute("href") ?? "", /dubailand\.gov\.ae/);
+const brokerDirectory = brokers.page.locator(".stakeholder-official-directory");
+await brokerDirectory.locator("input[type='search']").fill("ORN");
+assert.equal(await brokerDirectory.locator(".directory-result").count(), 1, "directory search must filter official channels without inventing entity records");
+await brokerDirectory.locator("select").selectOption("Abu Dhabi");
+assert.match(await brokerDirectory.locator(".stakeholder-directory-empty").innerText(), /TODO: connect data source/i, "unconnected Emirate feeds must be disclosed instead of backfilled with Dubai data");
+await brokerDirectory.locator("select").selectOption("All UAE");
+await brokerDirectory.locator("input[type='search']").fill("");
 assert.equal(await brokers.page.locator(".process-stage-tab[aria-selected='true']").getAttribute("data-stage-id"), "sales-transfer");
 assert.deepEqual(await brokers.page.locator(".process-stage-tab").evaluateAll((nodes) => nodes.map((node) => node.getAttribute("data-stage-id"))), ["sales-transfer", "living-operations", "asset-growth-intelligence"], "only direct broker stages may receive full process maps");
 assert.equal(await brokers.page.locator(".process-stage-tab.level-informed").count(), 0, "informed stages must never expose a full process tab");
@@ -175,7 +185,14 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
   assert.equal(await view.page.locator(".stakeholder-lifecycle-node").count(), 7, `${width}px must retain the guided lifecycle overview`);
   await view.page.locator(".process-stage-tab").nth(2).click();
   assert.match(await view.page.locator(".process-role-card").innerText(), /Asset Growth & Intelligence/);
-  if (width === 390) await view.page.screenshot({ path: `${output}/brokers-dm-mobile.png`, fullPage: true });
+  if (width === 390) {
+    const nodeBoxes = await view.page.locator(".stakeholder-lifecycle-node").evaluateAll((nodes) => nodes.map((node) => {
+      const box = node.getBoundingClientRect();
+      return { x: box.x, y: box.y };
+    }));
+    assert.ok(nodeBoxes.every((box, index) => index === 0 || (Math.abs(box.x - nodeBoxes[0].x) <= 1 && box.y > nodeBoxes[index - 1].y)), "mobile lifecycle map must degrade to one vertical interactive timeline");
+    await view.page.screenshot({ path: `${output}/brokers-dm-mobile.png`, fullPage: true });
+  }
   await view.context.close();
 }
 

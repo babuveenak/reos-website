@@ -1,7 +1,8 @@
 import { officialSourceById } from "../data/officialSources";
-import { stakeholderGuidance } from "../data/stakeholderGuidance";
+import { stakeholderDirectories, stakeholderGuidance } from "../data/stakeholderGuidance";
 import type { StakeholderId } from "../data/stakeholderParticipation";
 import type { Locale } from "../i18n/config";
+import { StakeholderOfficialDirectory } from "./StakeholderOfficialDirectory";
 
 const ICONS = {
   route: <><path d="M4 18 10 6l4 6 6-8" /><circle cx="4" cy="18" r="2" /><circle cx="10" cy="6" r="2" /><circle cx="14" cy="12" r="2" /><circle cx="20" cy="4" r="2" /></>,
@@ -27,6 +28,7 @@ function SourceChips({ sourceId, locale }: { sourceId?: string; locale: Locale }
 
 export function StakeholderGuidanceSections({ stakeholderId, stakeholderName, locale }: { stakeholderId: StakeholderId; stakeholderName: string; locale: Locale }) {
   const guidance = stakeholderGuidance[stakeholderId];
+  const directory = stakeholderDirectories[stakeholderId];
   const ar = locale === "ar";
 
   return <>
@@ -77,17 +79,14 @@ export function StakeholderGuidanceSections({ stakeholderId, stakeholderName, lo
       </div>
     </section>
 
-    {guidance.directory ? <section className="stakeholder-official-directory" aria-labelledby="stakeholder-directory-title">
+    <section className="stakeholder-official-directory" aria-labelledby="stakeholder-directory-title">
       <div className="official-directory-object" aria-hidden="true"><GuidanceIcon kind="directory" /><i /><i /><i /></div>
       <div>
         <span className="eyebrow">06 · {ar ? "السجل الرسمي" : "Official registry"}</span>
-        <h2 id="stakeholder-directory-title">{guidance.directory.title}</h2>
-        <p>{guidance.directory.description}</p>
-        <div className="official-directory-filters" aria-label={ar ? "خيارات البحث المتاحة في السجل الرسمي" : "Search options available in the official registry"}>
-          {guidance.directory.filters.map((filter) => <span key={filter}>{filter}</span>)}
-        </div>
-        <a className="text-link" href={officialSourceById[guidance.directory.sourceId].url} target="_blank" rel="noreferrer">{ar ? "افتح سجل دائرة الأراضي والأملاك ↗" : "Open the DLD licensed-broker registry ↗"}</a>
+        <h2 id="stakeholder-directory-title">{directory.title}</h2>
+        <p>{directory.description}</p>
+        <StakeholderOfficialDirectory directory={directory} locale={locale} />
       </div>
-    </section> : null}
+    </section>
   </>;
 }
