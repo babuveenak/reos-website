@@ -1,6 +1,11 @@
-# Session handoff — REOS, after Phase 1A
+# Historical session handoff — REOS, after Phase 1A
 
-**Read this before touching anything.** It supersedes
+> **Superseded:** This document records the 18 August 2026 project state and
+> contains architecture that is no longer current. Do not use it to start new
+> work. The authoritative handover package is
+> [handoffs/2026-08-31-original-reos/README.md](handoffs/2026-08-31-original-reos/README.md).
+
+**Historical note only.** It superseded
 [SESSION-HANDOFF.html](SESSION-HANDOFF.html) as the current-state document;
 that file is the earlier, pre-assistant handoff and its "Gotchas" section is
 still worth skimming, but everything load-bearing from it is repeated below.
