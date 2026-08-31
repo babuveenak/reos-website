@@ -24,6 +24,7 @@ export type StakeholderGuidance = {
   entryNote: string;
   paths: GuidancePath[];
   challenges: GuidanceChallenge[];
+  supportingGuardrails?: Record<string, string>;
   directory?: {
     title: string;
     description: string;
@@ -142,6 +143,9 @@ export const stakeholderGuidance: Record<StakeholderId, StakeholderGuidance> = {
     ],
   },
   "brokers-agencies": {
+    supportingGuardrails: {
+      "land-vision": "Contributes market evidence, comparables and demand data; does not verify title or permitted use.",
+    },
     entryTitle: "Become authorised before representing property or clients.",
     entryNote: "Dubai separates the individual's professional practice card from the company's real-estate activity licence and registration. The two routes connect but are not interchangeable.",
     paths: [

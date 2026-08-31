@@ -1,12 +1,15 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useId, useRef, useState, type CSSProperties } from "react";
 import type { Stage } from "../data/journey";
 import type { AuthorityStageProcess, ProcessLane } from "../data/authorityProcessMaps";
 import type { ParticipationState } from "../data/stakeholderBlueprints";
 import type { Locale } from "../i18n/config";
 import { participationFor } from "../data/stakeholderParticipation";
-import type { SourceTrack } from "../data/officialSources";
+import { stakeholderGuidance } from "../data/stakeholderGuidance";
+import type { StakeholderId } from "../data/stakeholderParticipation";
+import type { DubaiTrack, EmirateId } from "../data/stakeholderBlueprints";
+import { StakeholderJurisdictionSelector } from "./StakeholderJurisdictionSelector";
 
 type Props = {
   stakeholderId: string;
@@ -16,7 +19,10 @@ type Props = {
   processes: AuthorityStageProcess[];
   locale: Locale;
   initialStageId?: string;
-  track?: SourceTrack;
+  track?: DubaiTrack;
+  variant?: "all-stages" | "tiered";
+  emirate?: EmirateId;
+  trackNote?: string;
 };
 
 const LANE_ICONS: Record<ProcessLane, React.ReactNode> = {
@@ -37,13 +43,19 @@ function LaneIcon({ lane }: { lane: ProcessLane }) {
   return <svg viewBox="0 0 24 24" aria-hidden="true">{LANE_ICONS[lane]}</svg>;
 }
 
-export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, participation, processes, locale, initialStageId, track = "track-neutral" }: Props) {
-  const [selectedStageId, setSelectedStageId] = useState(initialStageId ?? stages[0]?.id ?? "land-vision");
+export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, participation, processes, locale, initialStageId, track = "track-neutral", variant = "all-stages", emirate = "dubai", trackNote }: Props) {
+  const directStages = stages.filter((stage) => {
+    const level = participation.find((item) => item.stageId === stage.id)?.relationshipLevel;
+    return level === "lead" || level === "active";
+  });
+  const visibleStages = variant === "tiered" ? directStages : stages;
+  const requestedStageIsVisible = visibleStages.some((stage) => stage.id === initialStageId);
+  const [selectedStageId, setSelectedStageId] = useState(requestedStageIsVisible ? initialStageId! : (visibleStages[0]?.id ?? stages[0]?.id ?? "land-vision"));
   const [selectedSourceId, setSelectedSourceId] = useState<string | null>(null);
   const tabId = useId();
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const selectedIndex = Math.max(0, stages.findIndex((stage) => stage.id === selectedStageId));
-  const selectedStage = stages[selectedIndex];
+  const selectedIndex = Math.max(0, visibleStages.findIndex((stage) => stage.id === selectedStageId));
+  const selectedStage = visibleStages[selectedIndex];
   const selectedParticipation = participation.find((item) => item.stageId === selectedStageId);
   const selectedProcess = processes.find((item) => item.stageId === selectedStageId);
   const intersection = participationFor(selectedStageId, stakeholderId);
@@ -51,26 +63,32 @@ export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, 
   const selectedSource = routeSources.find((item) => item.id === selectedSourceId) ?? routeSources[0];
   const hasOfficialProcess = intersection?.applicability !== "not-directly-involved" && routeSources.length > 0;
   const ar = locale === "ar";
+  const supportingStages = stages.filter((stage) => participation.find((item) => item.stageId === stage.id)?.relationshipLevel === "supporting");
+  const informedStages = stages.filter((stage) => participation.find((item) => item.stageId === stage.id)?.relationshipLevel === "informed");
+  const supportingGuardrails = stakeholderGuidance[stakeholderId as StakeholderId]?.supportingGuardrails ?? {};
 
   if (!selectedStage || !selectedParticipation || !selectedProcess || !intersection) return null;
 
   const selectAt = (index: number) => {
-    const safeIndex = (index + stages.length) % stages.length;
-    setSelectedStageId(stages[safeIndex].id);
+    const safeIndex = (index + visibleStages.length) % visibleStages.length;
+    setSelectedStageId(visibleStages[safeIndex].id);
+    setSelectedSourceId(null);
     tabs.current[safeIndex]?.focus();
   };
 
-  return <section className="stakeholder-process-map" aria-labelledby={`${tabId}-title`}>
+  return <section className={`stakeholder-process-map process-map-${variant}`} aria-labelledby={`${tabId}-title`}>
     <header className="process-map-heading">
       <div>
-        <span className="eyebrow">04 · {ar ? "المسار الرسمي لكل مرحلة" : "Official stage walkthrough"}</span>
-        <h2 id={`${tabId}-title`}>{ar ? "شاهد ما يفعله هذا الطرف في كل مرحلة." : "See what this stakeholder actually does at each stage."}</h2>
+        <span className="eyebrow">03 · {variant === "tiered" ? (ar ? "نقاط الاتصال المباشرة" : "Direct stage walkthrough") : (ar ? "المسار الرسمي لكل مرحلة" : "Official stage walkthrough")}</span>
+        <h2 id={`${tabId}-title`}>{variant === "tiered" ? (ar ? "اتبع المراحل التي يقودها هذا الطرف أو يشارك فيها مباشرة." : "Follow the stages this stakeholder leads or actively works in.") : (ar ? "شاهد ما يفعله هذا الطرف في كل مرحلة." : "See what this stakeholder actually does at each stage.")}</h2>
       </div>
-      <p>{ar ? "تفتح الصفحة على أول مرحلة يقودها هذا الطرف. ويمكن فحص أي مرحلة أخرى دون تغيير المسار الرسمي أو سلطة اتخاذ القرار." : "The first Lead stage is open by default. Inspect another stage to see its official touchpoints without changing the authority or decision owner."}</p>
+      <p>{variant === "tiered"
+        ? (ar ? "تظهر هنا فقط مراحل القيادة والمشاركة النشطة. أما الدعم والإحاطة فيظهران باختصار بعد المسار المباشر." : "Only Lead and Active stages receive full process maps. Supporting and Informed stages are summarised after the direct route.")
+        : (ar ? "تفتح الصفحة على أول مرحلة يقودها هذا الطرف. ويمكن فحص أي مرحلة أخرى دون تغيير المسار الرسمي أو سلطة اتخاذ القرار." : "The first Lead stage is open by default. Inspect another stage to see its official touchpoints without changing the authority or decision owner.")}</p>
     </header>
 
-    <div className="process-stage-tabs" role="tablist" aria-label={ar ? "مراحل دورة حياة العقار" : "Property lifecycle stages"}>
-      {stages.map((stage, index) => {
+    <div className="process-stage-tabs" style={{ "--stage-count": visibleStages.length } as CSSProperties} role="tablist" aria-label={ar ? "مراحل دورة حياة العقار" : "Property lifecycle stages"}>
+      {visibleStages.map((stage, index) => {
         const state = participation.find((item) => item.stageId === stage.id);
         const selected = stage.id === selectedStageId;
         return <button
@@ -84,7 +102,7 @@ export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, 
           data-stage-id={stage.id}
           tabIndex={selected ? 0 : -1}
           className={`process-stage-tab level-${state?.relationshipLevel ?? "informed"}`}
-          onClick={() => setSelectedStageId(stage.id)}
+          onClick={() => { setSelectedStageId(stage.id); setSelectedSourceId(null); }}
           onKeyDown={(event) => {
             if (event.key === "ArrowRight") { event.preventDefault(); selectAt(index + (ar ? -1 : 1)); }
             if (event.key === "ArrowLeft") { event.preventDefault(); selectAt(index + (ar ? 1 : -1)); }
@@ -98,6 +116,15 @@ export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, 
         </button>;
       })}
     </div>
+
+    {variant === "tiered" ? <details className="process-route-refinement">
+      <summary><span>{ar ? "اختياري" : "Optional"}</span><b>{ar ? "حدد الإمارة لعرض الجهات الخاصة بالمسار" : "Refine by Emirate to see route-specific authorities"}</b><i aria-hidden="true">+</i></summary>
+      <div>
+        <p>{ar ? "لا يتغير دور دورة الحياة. يحدد هذا الخيار القنوات والرسوم وأزمنة الخدمة والمخرجات الرسمية التي يمكن عرضها." : "The lifecycle role does not change. This refinement controls which official channels, fees, service times and outputs can be shown."}</p>
+        <StakeholderJurisdictionSelector stakeholderId={stakeholderId} emirate={emirate} track={track} locale={locale} />
+        {trackNote ? <p className="track-note">{trackNote}</p> : null}
+      </div>
+    </details> : null}
 
     <div
       id={`${tabId}-panel`}
@@ -174,5 +201,24 @@ export function StakeholderProcessMap({ stakeholderId, stakeholderName, stages, 
     </div>
 
     <p className="process-trust-note">{ar ? "تاريخ التحقق: 26 أغسطس 2026. تقدير مدة الخدمة ليس مدة المعاملة الكاملة. يجب التحقق من متطلبات الأصل والمعاملة مباشرة مع الجهة الرسمية." : "Checked 26 August 2026. An authority service estimate is not the total transaction duration. Verify asset- and transaction-specific requirements directly with the official authority."}</p>
+
+    {variant === "tiered" && supportingStages.length > 0 ? <section className="stakeholder-supporting-summary" aria-labelledby={`${tabId}-supporting-title`}>
+      <header><span>{ar ? "دور داعم" : "Supporting role"}</span><h3 id={`${tabId}-supporting-title`}>{ar ? "ما يساهم به هذا الطرف دون امتلاك القرار." : "What this stakeholder contributes without owning the decision."}</h3></header>
+      <div>{supportingStages.map((stage) => {
+        const state = participation.find((item) => item.stageId === stage.id)!;
+        return <article key={stage.id} data-stage-id={stage.id}>
+          <span>{String(stage.number).padStart(2, "0")}</span>
+          <div><small>{stage.name}</small><p>{state.summary}</p><strong>{supportingGuardrails[stage.id] ?? (ar ? "دعم فقط؛ لا يملك هذا الطرف التحقق أو الموافقة أو القرار الرسمي." : "Supporting contribution only; this stakeholder does not own the official verification, approval or decision.")}</strong></div>
+        </article>;
+      })}</div>
+    </section> : null}
+
+    {variant === "tiered" && informedStages.length > 0 ? <section className="stakeholder-informed-summary" aria-labelledby={`${tabId}-informed-title`}>
+      <header><span>{ar ? "للاطلاع فقط" : "Kept informed"}</span><h3 id={`${tabId}-informed-title`}>{ar ? "مراحل يراقبها هذا الطرف دون اتخاذ إجراء." : `Stages ${stakeholderName.toLocaleLowerCase()} monitor but don't act in.`}</h3></header>
+      <div>{informedStages.map((stage) => {
+        const state = participation.find((item) => item.stageId === stage.id)!;
+        return <article key={stage.id} data-stage-id={stage.id}><span>{String(stage.number).padStart(2, "0")}</span><div><b>{stage.name}</b><p>{state.summary}</p></div></article>;
+      })}</div>
+    </section> : null}
   </section>;
 }

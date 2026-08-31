@@ -329,7 +329,7 @@ test("Intelligence keeps the visual index educational while deeper guides retain
   }
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Official stage walkthrough/);
+  assert.match(stakeholder, /Direct stage walkthrough/);
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.doesNotMatch(stakeholder, /RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|href="\/demo"/, "stakeholder education must not become a product pitch");
 });
@@ -712,26 +712,28 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
   assert.match(stage, /view=journey(&amp;|&)stage=construction-delivery/);
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Official stage walkthrough/);
-  assert.equal((stakeholder.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7, "stakeholder process map must show all seven relationship levels");
+  assert.match(stakeholder, /Direct stage walkthrough/);
+  assert.equal((stakeholder.match(/class="stakeholder-lifecycle-node lifecycle-(?:lead|active|supporting|informed) lifecycle-tier-(?:direct|supporting|informed)"/g) ?? []).length, 7, "stakeholder lifecycle map must keep all seven relationship levels");
+  assert.equal((stakeholder.match(/class="process-stage-tab level-(?:lead|active)"/g) ?? []).length, 6, "full process maps must be limited to direct developer stages");
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
 });
 
-test("all Dubai stakeholder authority routes expose a seven-stage, source-aware process", async () => {
+test("all Dubai stakeholder authority routes weight process depth by involvement", async () => {
   const paths = [
-    "/stakeholders/landowners-investors",
-    "/stakeholders/developers/dubai/dm-mainland",
-    "/stakeholders/consultants-designers/dubai/dda-tecom",
-    "/stakeholders/contractors/dubai/trakhees-pcfc",
-    "/stakeholders/property-owners/dubai/financial-free-zone",
+    ["/stakeholders/landowners-investors", 5],
+    ["/stakeholders/developers/dubai/dm-mainland", 6],
+    ["/stakeholders/consultants-designers/dubai/dda-tecom", 3],
+    ["/stakeholders/contractors/dubai/trakhees-pcfc", 2],
+    ["/stakeholders/property-owners/dubai/financial-free-zone", 3],
   ];
-  for (const path of paths) {
+  for (const [path, directCount] of paths) {
     const response = await render(path);
     assert.equal(response.status, 200, path);
     const html = await response.text();
-    assert.match(html, /See what this stakeholder actually does at each stage\./, path);
-    assert.equal((html.match(/class="process-stage-tab level-(?:lead|active|supporting|informed)"/g) ?? []).length, 7, `${path} must map seven stages`);
+    assert.match(html, /Follow the stages this stakeholder leads or actively works in\./, path);
+    assert.equal((html.match(/class="process-stage-tab level-(?:lead|active)"/g) ?? []).length, directCount, `${path} must expose only Lead and Active process tabs`);
+    assert.doesNotMatch(html, /class="process-stage-tab level-informed"/, `${path} must not render an Informed process tab`);
     assert.match(html, /isometric-process-scene/, `${path} must render the interactive visual process scene`);
     if (path.includes("financial-free-zone")) {
       assert.match(html, /process-context-only/, `${path} must state when no direct official route is published`);
@@ -739,8 +741,8 @@ test("all Dubai stakeholder authority routes expose a seven-stage, source-aware 
     } else {
       assert.ok((html.match(/isometric-authority-platform/g) ?? []).length >= 1, `${path} must expose at least one official authority touchpoint`);
       assert.match(html, /intersection-source-detail/, `${path} must expose the selected source facts`);
+      assert.match(html, /Official sources/);
     }
-    assert.match(html, /Official sources/);
   }
 });
 

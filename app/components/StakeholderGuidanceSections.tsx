@@ -33,7 +33,7 @@ export function StakeholderGuidanceSections({ stakeholderId, stakeholderName, lo
     <section className="stakeholder-entry-guidance" aria-labelledby="stakeholder-entry-title">
       <header className="guidance-section-heading">
         <div>
-          <span className="eyebrow">05 · {ar ? "دخول الدور" : "Entering this role"}</span>
+          <span className="eyebrow">04 · {ar ? "دخول الدور" : "Entering this role"}</span>
           <h2 id="stakeholder-entry-title">{guidance.entryTitle}</h2>
         </div>
         <p>{guidance.entryNote}</p>
@@ -58,7 +58,7 @@ export function StakeholderGuidanceSections({ stakeholderId, stakeholderName, lo
     <section className="stakeholder-challenges" aria-labelledby="stakeholder-challenges-title">
       <header className="guidance-section-heading">
         <div>
-          <span className="eyebrow">06 · {ar ? "نقاط التحكم العملية" : "Practical control points"}</span>
+          <span className="eyebrow">05 · {ar ? "نقاط التحكم العملية" : "Practical control points"}</span>
           <h2 id="stakeholder-challenges-title">{ar ? "تحديات شائعة وكيفية التعامل معها." : "Common challenges—and how to handle them."}</h2>
         </div>
         <p>{ar ? `إشارات عملية خاصة بدور ${stakeholderName}، وليست بديلاً عن نصيحة مهنية أو قرار رسمي.` : `Practical signals for the ${stakeholderName} role—not a substitute for professional advice or an official decision.`}</p>
@@ -80,7 +80,7 @@ export function StakeholderGuidanceSections({ stakeholderId, stakeholderName, lo
     {guidance.directory ? <section className="stakeholder-official-directory" aria-labelledby="stakeholder-directory-title">
       <div className="official-directory-object" aria-hidden="true"><GuidanceIcon kind="directory" /><i /><i /><i /></div>
       <div>
-        <span className="eyebrow">07 · {ar ? "السجل الرسمي" : "Official registry"}</span>
+        <span className="eyebrow">06 · {ar ? "السجل الرسمي" : "Official registry"}</span>
         <h2 id="stakeholder-directory-title">{guidance.directory.title}</h2>
         <p>{guidance.directory.description}</p>
         <div className="official-directory-filters" aria-label={ar ? "خيارات البحث المتاحة في السجل الرسمي" : "Search options available in the official registry"}>

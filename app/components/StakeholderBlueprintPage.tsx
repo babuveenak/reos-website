@@ -26,9 +26,6 @@ const COPY = {
     ecosystem: "Open this stakeholder in the ecosystem map",
     all: "View all stakeholder groups",
     visualCaption: "Illustrative stakeholder concept, not an official plan",
-    refine: "Refine the official route",
-    refineTitle: "Choose the jurisdiction only when you need route-specific authority facts.",
-    refineCopy: "The lifecycle role above does not change. This refinement controls which official channels, fees, service times and outputs may be shown below.",
   },
   ar: {
     back: "العودة إلى جميع أصحاب المصلحة",
@@ -42,9 +39,6 @@ const COPY = {
     ecosystem: "افتح صاحب المصلحة في خريطة المنظومة",
     all: "عرض جميع أصحاب المصلحة",
     visualCaption: "تصور توضيحي لصاحب المصلحة وليس مخططاً رسمياً",
-    refine: "حدد المسار الرسمي",
-    refineTitle: "اختر الاختصاص فقط عند الحاجة إلى حقائق جهة محددة.",
-    refineCopy: "لا يتغير دور دورة الحياة أعلاه. يحدد هذا الخيار القنوات والرسوم وأزمنة الخدمة والمخرجات الرسمية التي يمكن عرضها أدناه.",
   },
 };
 
@@ -98,27 +92,16 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
 
     <StakeholderLifecycleMap stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} connections={connections} locale={locale} />
 
-    <section className="stakeholder-route-refinement" aria-labelledby="stakeholder-route-refinement-title">
-      <div>
-        <span className="eyebrow">03 · {c.refine}</span>
-        <h2 id="stakeholder-route-refinement-title">{c.refineTitle}</h2>
-        <p>{c.refineCopy}</p>
-      </div>
-      <div>
-        <StakeholderJurisdictionSelector stakeholderId={stakeholderId} emirate={emirate} track={track} locale={locale} />
-        {isDubai && <p className="track-note">{selectedTrack.note}</p>}
-      </div>
-    </section>
-
     {isDubai
       ? <>
-          <StakeholderProcessMap stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={processes} locale={locale} track={track} initialStageId={primaryStageId} />
+          <StakeholderProcessMap stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={processes} locale={locale} track={track} initialStageId={primaryStageId} variant="tiered" emirate={emirate} trackNote={selectedTrack.note} />
           <StakeholderGuidanceSections stakeholderId={stakeholderId as StakeholderId} stakeholderName={localizedGroup.name} locale={locale} />
         </>
       : <section className="unmapped-jurisdiction section-pad">
           <span className="eyebrow">02 · {c.unmapped}</span>
           <h2>{emirateLabel}: {c.unmapped}</h2>
           <p>{c.noDubai}</p>
+          <StakeholderJurisdictionSelector stakeholderId={stakeholderId} emirate={emirate} track={track} locale={locale} />
           <h3>{c.missing}</h3>
           <ul>{coverage.missing.map((item) => <li key={item}>{item}</li>)}</ul>
         </section>}
