@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 import axe from "axe-core";
 import { chromium } from "playwright-core";
 
@@ -8,13 +8,17 @@ const output = process.env.QA_OUTPUT ?? "/tmp/reos-home-fragmentation-qa";
 await mkdir(output, { recursive: true });
 
 const expected = {
-  developers: ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations"],
-  "consultants-designers": ["land-vision", "planning-design", "authorities-approvals", "construction-delivery"],
-  "authorities-regulators": ["authorities-approvals", "sales-transfer"],
-  contractors: ["construction-delivery"],
-  "banks-financial": ["land-vision", "construction-delivery", "sales-transfer", "asset-growth-intelligence"],
-  "property-owners": ["sales-transfer", "living-operations", "asset-growth-intelligence"],
+  developers: { "land-vision": "lead", "planning-design": "lead", "authorities-approvals": "active", "construction-delivery": "lead", "sales-transfer": "lead", "living-operations": "active", "asset-growth-intelligence": "supporting" },
+  "consultants-designers": { "land-vision": "supporting", "planning-design": "lead", "authorities-approvals": "active", "construction-delivery": "active", "sales-transfer": "supporting", "living-operations": "supporting", "asset-growth-intelligence": "informed" },
+  "authorities-regulators": { "land-vision": "informed", "planning-design": "supporting", "authorities-approvals": "lead", "construction-delivery": "active", "sales-transfer": "lead", "living-operations": "supporting", "asset-growth-intelligence": "supporting" },
+  contractors: { "land-vision": "informed", "planning-design": "supporting", "authorities-approvals": "supporting", "construction-delivery": "lead", "sales-transfer": "supporting", "living-operations": "active", "asset-growth-intelligence": "supporting" },
+  "banks-financial": { "land-vision": "active", "planning-design": "informed", "authorities-approvals": "supporting", "construction-delivery": "active", "sales-transfer": "active", "living-operations": "supporting", "asset-growth-intelligence": "active" },
+  "property-owners": { "land-vision": "supporting", "planning-design": "informed", "authorities-approvals": "informed", "construction-delivery": "informed", "sales-transfer": "lead", "living-operations": "lead", "asset-growth-intelligence": "lead" },
 };
+const directStages = (relationships) => Object.entries(relationships).filter(([, level]) => level === "lead" || level === "active").map(([stageId]) => stageId);
+const homeSource = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+assert.match(homeSource, /participationForStakeholder\(stakeholderId\)/, "homepage relationships must be projected from the canonical 84-cell model");
+assert.doesNotMatch(homeSource, /authorities-regulators["']?:\s*\[/, "homepage must not restore a manually curated authority-stage list");
 
 const browser = await chromium.launch({
   executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -41,6 +45,9 @@ assert.equal(await actorButtons.count(), 6, "all six stakeholder cards must be i
 assert.equal(await actorButtons.locator("svg[data-icon]").count(), 6, "every stakeholder needs a role-specific icon");
 const icons = await actorButtons.locator("svg[data-icon]").evaluateAll((nodes) => nodes.map((node) => node.dataset.icon));
 assert.equal(new Set(icons).size, 6, "stakeholders must not reuse one generic icon");
+assert.deepEqual(await actorButtons.locator(":scope > span").allInnerTexts(), [
+  "DEVELOPERS", "CONSULTANTS & DESIGNERS", "AUTHORITIES & REGULATORS", "CONTRACTORS", "BANKS & FINANCIAL INSTITUTIONS", "PROPERTY OWNERS",
+], "homepage cards must use the approved canonical stakeholder names");
 assert.equal(await canvas.locator(".fragment-route a").count(), 7, "all seven stage nodes must be navigable");
 assert.equal(await canvas.locator(".fragment-stage-handoff").count(), 6, "the lifecycle must show all six stage-to-stage handoffs");
 assert.equal(await canvas.locator(".fragment-stage-handoff > i").count(), 12, "each handoff needs visible forward and return data movement");
@@ -53,9 +60,11 @@ const ambientGeometry = await canvas.locator(".fragment-ambient-link").evaluateA
   length: path.getTotalLength(),
 })));
 for (const connection of ambientGeometry) {
-  assert.ok(expected[connection.actorId].includes(connection.stageId), `${connection.actorId}: ambient link must land on a canonical stakeholder stage`);
+  assert.ok(directStages(expected[connection.actorId]).includes(connection.stageId), `${connection.actorId}: ambient link must land on a canonical direct stakeholder stage`);
   assert.ok(connection.length > 60, `${connection.actorId}: ambient connection must visibly reach the journey`);
 }
+assert.equal(await desktop.page.locator(".fragment-relationship-legend").count(), 1, "the relationship hierarchy needs a visible legend");
+assert.match(await desktop.page.locator(".fragment-relationship-legend").innerText(), /Direct.*Lead.*Active[\s\S]*Supporting role[\s\S]*Informed only[\s\S]*Explore all 12/i);
 assert.match(await canvas.locator(".fragment-route-heading").innerText(), /Information, evidence and decisions move between stages.*some stages overlap/i);
 assert.deepEqual((await canvas.locator(".fragment-route a > span").allInnerTexts()).map((label) => label.toLowerCase()), [
   "land & vision",
@@ -72,7 +81,9 @@ const stageNodeSizes = await canvas.locator(".fragment-route [data-stage-anchor]
 }));
 for (const size of stageNodeSizes) assert.ok(size.width >= 54 && size.height >= 54, `stage node is still too small: ${JSON.stringify(size)}`);
 
-for (const [actorId, stageIds] of Object.entries(expected)) {
+for (const [actorId, relationships] of Object.entries(expected)) {
+  const stageIds = Object.keys(relationships);
+  const direct = directStages(relationships);
   const actor = canvas.locator(`button.fragment-actor[data-actor-id="${actorId}"]`);
   await actor.click();
   await desktop.page.waitForFunction(([id, count]) => document.querySelectorAll(`.fragment-connection-field path[data-actor-id="${id}"]`).length === count, [actorId, stageIds.length]);
@@ -80,16 +91,32 @@ for (const [actorId, stageIds] of Object.entries(expected)) {
   assert.equal(await actorButtons.filter({ has: desktop.page.locator('[aria-pressed="true"]') }).count(), 0, "nested pressed controls are invalid");
   assert.equal(await actorButtons.evaluateAll((buttons) => buttons.filter((button) => button.getAttribute("aria-pressed") === "true").length), 1, "only one stakeholder may be active");
   const connected = await canvas.locator(".fragment-route li.is-connected [data-stage-anchor]").evaluateAll((nodes) => nodes.map((node) => node.dataset.stageAnchor));
-  assert.deepEqual(connected, stageIds, `${actorId}: highlighted stages must match the approved relationship model`);
+  assert.deepEqual(connected, direct, `${actorId}: highlighted stages must contain Lead/Active relationships only`);
+  const renderedLevels = await canvas.locator(".fragment-route li[data-relationship-level]").evaluateAll((nodes) => Object.fromEntries(nodes.map((node) => [node.querySelector("[data-stage-anchor]").dataset.stageAnchor, node.dataset.relationshipLevel])));
+  assert.deepEqual(renderedLevels, relationships, `${actorId}: every stage must expose its canonical relationship level`);
   assert.equal(await canvas.locator(".fragment-actor-lead").count(), 1, `${actorId}: one lead must connect the participant to its touchpoint rail`);
   assert.equal(await canvas.locator(".fragment-actor-rail").count(), 1, `${actorId}: one shared rail must replace overlapping participant curves`);
   const selectedTraceLengths = await canvas.locator(".fragment-actor-lead, .fragment-actor-rail").evaluateAll((paths) => paths.map((path) => path.getTotalLength()));
   assert.ok(selectedTraceLengths[0] > 60, `${actorId}: selected stakeholder lead must remain visibly connected`);
   assert.ok(selectedTraceLengths[1] >= 47, `${actorId}: selected touchpoint rail must remain visible, including a single-stage route`);
   const canonicalOrder = ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"];
-  const adjacentTouchpoints = canonicalOrder.slice(0, -1).filter((stageId, index) => stageIds.includes(stageId) && stageIds.includes(canonicalOrder[index + 1])).length;
+  const adjacentTouchpoints = canonicalOrder.slice(0, -1).filter((stageId, index) => direct.includes(stageId) && direct.includes(canonicalOrder[index + 1])).length;
   assert.equal(await canvas.locator(".fragment-stage-handoff.is-active-flow").count(), adjacentTouchpoints, `${actorId}: only adjacent selected-stage handoffs should be emphasized`);
-  assert.match(await canvas.locator(".fragment-actor-summary").innerText(), new RegExp(`${stageIds.length} touchpoint`, "i"), `${actorId}: the selected touchpoint count must be visible`);
+  assert.match(await canvas.locator(".fragment-actor-summary").innerText(), new RegExp(`${direct.length} direct`, "i"), `${actorId}: the direct touchpoint count must be visible`);
+  const branchStyles = await canvas.locator(`.fragment-actor-branch[data-actor-id="${actorId}"]`).evaluateAll((paths) => Object.fromEntries(paths.map((path) => {
+    const style = getComputedStyle(path);
+    return [path.dataset.stageId, { level: path.dataset.relationshipLevel, width: parseFloat(style.strokeWidth), dash: style.strokeDasharray, stroke: style.stroke }];
+  })));
+  for (const [stageId, style] of Object.entries(branchStyles)) {
+    assert.equal(style.level, relationships[stageId], `${actorId} → ${stageId}: branch must expose the canonical level`);
+    if (style.level === "lead" || style.level === "active") {
+      assert.ok(style.width >= 4, `${actorId} → ${stageId}: direct line must be visibly thick`);
+      assert.ok(style.dash === "none" || style.dash === "", `${actorId} → ${stageId}: direct line must be solid`);
+    } else {
+      assert.ok(style.width < 3, `${actorId} → ${stageId}: indirect line must be lighter than direct work`);
+      assert.notEqual(style.dash, "none", `${actorId} → ${stageId}: indirect line must be dotted or dashed`);
+    }
+  }
   const geometry = await canvas.evaluate((element, id) => {
     const bounds = element.getBoundingClientRect();
     return [...element.querySelectorAll(`.fragment-connection-field path[data-actor-id="${id}"]`)].map((path) => {
@@ -139,7 +166,8 @@ assert.deepEqual(motionPackets, [
   { name: "fragment-data-return", state: "running" },
 ], "gold and teal stage data-flow markers must keep moving in both directions");
 for (let pass = 0; pass < 2; pass += 1) {
-  for (const [actorId, stageIds] of Object.entries(expected)) {
+  for (const [actorId, relationships] of Object.entries(expected)) {
+    const stageIds = Object.keys(relationships);
     const actor = motionCanvas.locator(`button.fragment-actor[data-actor-id="${actorId}"]`);
     await actor.hover();
     await motion.page.waitForFunction(([id, count]) => document.querySelectorAll(`.fragment-connection-field path[data-actor-id="${id}"]`).length === count, [actorId, stageIds.length]);
@@ -170,8 +198,8 @@ for (let pass = 0; pass < 2; pass += 1) {
     assert.ok(trace.leadLength > 60, `${actorId}: selected trace must not collapse after hover`);
     assert.ok(trace.railLength >= 47, `${actorId}: selected rail must not collapse after hover`);
     assert.ok(trace.startDeltaX <= 1.5 && trace.startDeltaY <= 1.5, `${actorId}: selected trace must start at the stakeholder card, not another SVG path`);
-    assert.equal(trace.animationName, "fragment-current", `${actorId}: selected data trace must remain animated`);
-    assert.equal(trace.animationState, "running", `${actorId}: selected data trace animation must remain active`);
+    assert.equal(trace.animationName, "none", `${actorId}: the neutral actor-to-rail connector must not imply a relationship tier`);
+    assert.equal(trace.animationState, "running", `${actorId}: neutral connector rendering must remain stable`);
   }
 }
 await motionCanvas.screenshot({ path: `${output}/fragmentation-hover-persistence.png` });

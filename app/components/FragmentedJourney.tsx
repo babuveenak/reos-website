@@ -3,46 +3,55 @@
 import Link from "next/link";
 import { useLayoutEffect, useRef, useState } from "react";
 import type { Locale } from "../i18n/config";
+import type { RelationshipLevel, StageId } from "../data/stakeholderParticipation";
 
 type FragmentMode = "visibility" | "sequence" | "dependency" | "knowledge";
-type StakeholderId = "developers" | "consultants-designers" | "authorities-regulators" | "contractors" | "banks-financial" | "property-owners";
+export type FragmentStakeholderId = "developers" | "consultants-designers" | "authorities-regulators" | "contractors" | "banks-financial" | "property-owners";
 
-export type FragmentStakeholderStages = Record<StakeholderId, string[]>;
+export type FragmentStakeholderStages = Record<FragmentStakeholderId, Record<StageId, RelationshipLevel>>;
 
 type ConnectionPath = {
-  actorId: StakeholderId;
-  stageId: string;
+  actorId: FragmentStakeholderId;
+  stageId: StageId;
+  relationshipLevel: RelationshipLevel;
   d: string;
   endX: number;
   endY: number;
 };
 
 type AmbientConnectionPath = {
-  actorId: StakeholderId;
-  stageId: string;
+  actorId: FragmentStakeholderId;
+  stageId: StageId;
   tone: "gold" | "teal";
   d: string;
 };
 
-const stakeholders: { id: StakeholderId; en: string; ar: string }[] = [
-  { id: "developers", en: "Developer", ar: "المطوّر" },
-  { id: "consultants-designers", en: "Consultant", ar: "الاستشاري" },
-  { id: "authorities-regulators", en: "Authority", ar: "الجهة المختصة" },
-  { id: "contractors", en: "Contractor", ar: "المقاول" },
-  { id: "banks-financial", en: "Bank", ar: "البنك" },
-  { id: "property-owners", en: "Buyer / Owner", ar: "المشتري / المالك" },
+const stakeholders: { id: FragmentStakeholderId; en: string; ar: string }[] = [
+  { id: "developers", en: "Developers", ar: "المطورون" },
+  { id: "consultants-designers", en: "Consultants & Designers", ar: "الاستشاريون والمصممون" },
+  { id: "authorities-regulators", en: "Authorities & Regulators", ar: "الجهات والهيئات التنظيمية" },
+  { id: "contractors", en: "Contractors", ar: "المقاولون" },
+  { id: "banks-financial", en: "Banks & Financial Institutions", ar: "البنوك والمؤسسات المالية" },
+  { id: "property-owners", en: "Property Owners", ar: "مالكو العقارات" },
 ];
 
-const stageIds = ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"];
+const stageIds: StageId[] = ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"];
+const isDirect = (level: RelationshipLevel) => level === "lead" || level === "active";
 
 const copy = {
   en: {
     stages: ["Land & Vision", "Planning & Design", "Authorities & Approvals", "Construction & Delivery", "Sales & Transfer", "Living & Operations", "Asset Growth & Intelligence"],
     property: "One property journey",
     routeFlow: "Information, evidence and decisions move between stages — some stages overlap",
-    touchpoint: "touchpoint",
-    touchpoints: "touchpoints",
-    active: "Connected",
+    relationshipLabels: { lead: "Lead", active: "Active", supporting: "Supporting", informed: "Informed" },
+    legendLabel: "Relationship legend",
+    directLegend: "Direct — Lead / Active",
+    supportingLegend: "Supporting role",
+    informedLegend: "Informed only",
+    representative: "6 representative groups · Explore all 12",
+    direct: "direct",
+    supporting: "supporting",
+    informed: "informed",
     instruction: "Select a fracture to reveal its effect",
     actorInstruction: "Select a participant to trace every lifecycle stage in which they are involved",
     issues: [
@@ -56,9 +65,15 @@ const copy = {
     stages: ["الأرض والرؤية", "التخطيط والتصميم", "الجهات والموافقات", "البناء والتسليم", "المبيعات ونقل الملكية", "السكن والتشغيل", "نمو الأصول والذكاء"],
     property: "رحلة عقار واحدة",
     routeFlow: "تنتقل المعلومات والأدلة والقرارات بين المراحل — وقد تتداخل بعض المراحل",
-    touchpoint: "نقطة اتصال",
-    touchpoints: "نقاط اتصال",
-    active: "متصل",
+    relationshipLabels: { lead: "قيادي", active: "نشط", supporting: "داعم", informed: "مُطّلع" },
+    legendLabel: "مفتاح العلاقات",
+    directLegend: "مباشر — قيادي / نشط",
+    supportingLegend: "دور داعم",
+    informedLegend: "للعلم فقط",
+    representative: "٦ مجموعات تمثيلية · استكشف المجموعات الـ١٢",
+    direct: "مباشر",
+    supporting: "داعم",
+    informed: "مُطّلع",
     instruction: "اختر نقطة انقطاع لتكشف أثرها",
     actorInstruction: "اختر أحد المشاركين لتتبع كل مرحلة من دورة الحياة يشارك فيها",
     issues: [
@@ -70,7 +85,7 @@ const copy = {
   },
 } as const;
 
-function StakeholderIcon({ id }: { id: StakeholderId }) {
+function StakeholderIcon({ id }: { id: FragmentStakeholderId }) {
   if (id === "developers") return <svg data-icon="developer" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27h22M8 27V11h8v16m0 0V5h8v22M11 15h2m-2 4h2m-2 4h2m8-14h-2m2 5h-2m2 5h-2m2 4h-2" /></svg>;
   if (id === "consultants-designers") return <svg data-icon="consultant" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27 16 5l11 22H5Z" /><path d="m10 23 6-12 6 12H10Zm6-12v12M7 27l18-18" /></svg>;
   if (id === "authorities-regulators") return <svg data-icon="authority" viewBox="0 0 32 32" aria-hidden="true"><path d="m4 12 12-7 12 7H4Zm2 15h20M8 13v11m5-11v11m6-11v11m5-11v11" /><path d="m12.5 18 2.2 2.2 4.8-5" /></svg>;
@@ -88,7 +103,7 @@ function IssueIcon({ mode }: { mode: FragmentMode }) {
 
 export function FragmentedJourney({ locale, stakeholderStages }: { locale: Locale; stakeholderStages: FragmentStakeholderStages }) {
   const [active, setActive] = useState<FragmentMode>("visibility");
-  const [activeActor, setActiveActor] = useState<StakeholderId>("developers");
+  const [activeActor, setActiveActor] = useState<FragmentStakeholderId>("developers");
   const [connections, setConnections] = useState<ConnectionPath[]>([]);
   const [ambientConnections, setAmbientConnections] = useState<AmbientConnectionPath[]>([]);
   const [actorLeadPath, setActorLeadPath] = useState("");
@@ -98,7 +113,10 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
   const canvasRef = useRef<HTMLDivElement>(null);
   const content = copy[locale];
   const selected = content.issues.find((issue) => issue.id === active) ?? content.issues[0];
-  const activeStages = stakeholderStages[activeActor];
+  const activeRelationships = stakeholderStages[activeActor];
+  const directStageIds = stageIds.filter((stageId) => isDirect(activeRelationships[stageId]));
+  const supportingStageIds = stageIds.filter((stageId) => activeRelationships[stageId] === "supporting");
+  const informedStageIds = stageIds.filter((stageId) => activeRelationships[stageId] === "informed");
   const localized = (path: string) => locale === "en" ? path : `/ar${path}`;
 
   useLayoutEffect(() => {
@@ -119,7 +137,7 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
         if (!stakeholderButton) return [];
         const stakeholderBounds = stakeholderButton.getBoundingClientRect();
         const stakeholderX = stakeholderBounds.left - bounds.left + stakeholderBounds.width / 2;
-        const candidateStages = stakeholderStages[stakeholder.id].flatMap((stageId) => {
+        const candidateStages = stageIds.filter((stageId) => isDirect(stakeholderStages[stakeholder.id][stageId])).flatMap((stageId) => {
           const node = canvas.querySelector<HTMLElement>(`[data-stage-anchor="${stageId}"]`);
           if (!node) return [];
           const nodeBounds = node.getBoundingClientRect();
@@ -143,13 +161,13 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
       });
       setAmbientConnections(nextAmbientConnections);
 
-      const stagePoints = activeStages.flatMap((stageId) => {
+      const stagePoints = stageIds.flatMap((stageId) => {
         const node = canvas.querySelector<HTMLElement>(`[data-stage-anchor="${stageId}"]`);
         if (!node) return [];
         const nodeBounds = node.getBoundingClientRect();
         const endX = nodeBounds.left - bounds.left + nodeBounds.width / 2;
         const endY = nodeBounds.top - bounds.top + nodeBounds.height / 2;
-        return [{ stageId, endX, endY }];
+        return [{ stageId, relationshipLevel: activeRelationships[stageId], endX, endY }];
       });
 
       if (stagePoints.length > 0) {
@@ -163,9 +181,10 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
         const railStartX = minX === maxX ? Math.max(16, minX - 24) : minX;
         const railEndX = minX === maxX ? Math.min(bounds.width - 16, maxX + 24) : maxX;
         setActorRailPath(`M ${railStartX.toFixed(1)} ${busY.toFixed(1)} L ${railEndX.toFixed(1)} ${busY.toFixed(1)}`);
-        setConnections(stagePoints.map(({ stageId, endX, endY }) => ({
+        setConnections(stagePoints.map(({ stageId, relationshipLevel, endX, endY }) => ({
           actorId: activeActor,
           stageId,
+          relationshipLevel,
           d: `M ${endX.toFixed(1)} ${busY.toFixed(1)} L ${endX.toFixed(1)} ${endY.toFixed(1)}`,
           endX,
           endY,
@@ -191,11 +210,9 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
     const observer = new ResizeObserver(measure);
     observer.observe(canvas);
     return () => observer.disconnect();
-  }, [activeActor, activeStages, stakeholderStages]);
+  }, [activeActor, activeRelationships, stakeholderStages]);
 
   const selectedActor = stakeholders.find(({ id }) => id === activeActor) ?? stakeholders[0];
-  const firstActiveStage = content.stages[stageIds.indexOf(activeStages[0])];
-  const lastActiveStage = content.stages[stageIds.indexOf(activeStages[activeStages.length - 1])];
 
   return <div className={`fragmented-journey mode-${active}`}>
     <div ref={canvasRef} className="fragmented-journey-canvas" id="fragmented-journey-visual" role="group" aria-label={`${content.property}. ${selected.detail}`}>
@@ -203,7 +220,7 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
         {ambientConnections.map((connection) => <path className={`fragment-ambient-link${connection.actorId === activeActor ? " is-selected-origin" : ""}`} key={`ambient-${connection.actorId}`} data-ambient-actor-id={connection.actorId} data-stage-id={connection.stageId} data-tone={connection.tone} d={connection.d} />)}
         {actorLeadPath ? <path className="fragment-actor-lead" d={actorLeadPath} /> : null}
         {actorRailPath ? <path className="fragment-actor-rail" d={actorRailPath} /> : null}
-        {connections.map((connection) => <path className="fragment-actor-branch" key={`${connection.actorId}-${connection.stageId}`} data-actor-id={connection.actorId} data-stage-id={connection.stageId} data-end-x={connection.endX.toFixed(1)} data-end-y={connection.endY.toFixed(1)} d={connection.d} />)}
+        {connections.map((connection) => <path className={`fragment-actor-branch relationship-${isDirect(connection.relationshipLevel) ? "direct" : connection.relationshipLevel}`} key={`${connection.actorId}-${connection.stageId}`} data-actor-id={connection.actorId} data-stage-id={connection.stageId} data-relationship-level={connection.relationshipLevel} data-end-x={connection.endX.toFixed(1)} data-end-y={connection.endY.toFixed(1)} d={connection.d} />)}
         {dependencyPath ? <path className="fragment-dependency-arc" d={dependencyPath} /> : null}
       </svg>
 
@@ -211,9 +228,9 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
 
       <div className="fragment-actors" role="group" aria-label={content.actorInstruction}>
         {stakeholders.map((actor, index) => {
-          const actorStages = stakeholderStages[actor.id];
-          const stageNames = actorStages.map((id) => content.stages[stageIds.indexOf(id)]).join(", ");
-          return <button type="button" className={`fragment-actor actor-${index + 1}${activeActor === actor.id ? " is-active" : ""}`} key={actor.id} data-actor-id={actor.id} aria-pressed={activeActor === actor.id} aria-label={`${actor[locale]}: ${stageNames}`} onClick={() => setActiveActor(actor.id)} onPointerEnter={() => setActiveActor(actor.id)} onFocus={() => setActiveActor(actor.id)}>
+          const actorRelationships = stakeholderStages[actor.id];
+          const relationshipSummary = stageIds.map((stageId, stageIndex) => `${content.stages[stageIndex]} — ${content.relationshipLabels[actorRelationships[stageId]]}`).join(", ");
+          return <button type="button" className={`fragment-actor actor-${index + 1}${activeActor === actor.id ? " is-active" : ""}`} key={actor.id} data-actor-id={actor.id} aria-pressed={activeActor === actor.id} aria-label={`${actor[locale]}: ${relationshipSummary}`} onClick={() => setActiveActor(actor.id)} onPointerEnter={() => setActiveActor(actor.id)} onFocus={() => setActiveActor(actor.id)}>
             <StakeholderIcon id={actor.id} />
             <span>{actor[locale]}</span>
             <i className="fragment-view" aria-hidden="true"><b /><b /><b /></i>
@@ -226,11 +243,12 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
       <ol className="fragment-route" aria-label={content.routeFlow}>
         {content.stages.map((stage, index) => {
           const stageId = stageIds[index];
-          const isConnected = activeStages.includes(stageId);
+          const relationshipLevel = activeRelationships[stageId];
+          const relationshipTier = isDirect(relationshipLevel) ? "direct" : relationshipLevel;
           const nextStageId = stageIds[index + 1];
-          const isActiveHandoff = isConnected && Boolean(nextStageId && activeStages.includes(nextStageId));
-          return <li className={isConnected ? "is-connected" : ""} key={stageId}>
-            <Link href={localized(`/property-journey/${stageId}`)} aria-label={`${String(index + 1).padStart(2, "0")} ${stage}${isConnected ? `, ${content.active}` : ""}`}><i data-stage-anchor={stageId}>{String(index + 1).padStart(2, "0")}</i><span>{stage}</span><small>{isConnected ? content.active : ""}</small></Link>
+          const isActiveHandoff = isDirect(relationshipLevel) && Boolean(nextStageId && isDirect(activeRelationships[nextStageId]));
+          return <li className={`relationship-${relationshipTier}${relationshipTier === "direct" ? " is-connected" : ""}`} data-relationship-level={relationshipLevel} key={stageId}>
+            <Link href={localized(`/property-journey/${stageId}`)} aria-label={`${String(index + 1).padStart(2, "0")} ${stage}, ${content.relationshipLabels[relationshipLevel]}`}><i data-stage-anchor={stageId}>{String(index + 1).padStart(2, "0")}</i><span>{stage}</span><small>{content.relationshipLabels[relationshipLevel]}</small></Link>
             {index < content.stages.length - 1 ? <b className={`fragment-stage-handoff${isActiveHandoff ? " is-active-flow" : ""}`} aria-hidden="true"><i /><i /></b> : null}
           </li>;
         })}
@@ -238,12 +256,20 @@ export function FragmentedJourney({ locale, stakeholderStages }: { locale: Local
 
       <div className="fragment-actor-summary" aria-live="polite">
         <b>{selectedActor[locale]}</b>
-        <span>{activeStages.length} {activeStages.length === 1 ? content.touchpoint : content.touchpoints}</span>
-        <small>{firstActiveStage}{firstActiveStage !== lastActiveStage ? ` → ${lastActiveStage}` : ""}</small>
+        <span>{directStageIds.length} {content.direct}</span>
+        <small>{supportingStageIds.length} {content.supporting} · {informedStageIds.length} {content.informed}</small>
       </div>
 
       <div className="fragment-knowledge-fog" aria-hidden="true"><span>?</span><span>?</span><span>?</span></div>
       <div className="fragment-delay-pulse" aria-hidden="true"><span>!</span></div>
+    </div>
+
+    <div className="fragment-relationship-legend" aria-label={content.legendLabel}>
+      <b>{content.legendLabel}</b>
+      <span className="relationship-direct">{content.directLegend}</span>
+      <span className="relationship-supporting">{content.supportingLegend}</span>
+      <span className="relationship-informed">{content.informedLegend}</span>
+      <Link href={localized("/stakeholders")}>{content.representative} <i aria-hidden="true">↗</i></Link>
     </div>
 
     <div className="fragment-mode-controls" role="group" aria-label={content.instruction}>

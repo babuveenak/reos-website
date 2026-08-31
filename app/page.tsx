@@ -5,20 +5,27 @@ import Link from "next/link";
 import { JourneyFlow } from "./components/JourneyHero";
 import { Page, SectionIntro } from "./components/SiteShell";
 import { Assistant } from "./components/Assistant";
-import { FragmentedJourney, type FragmentStakeholderStages } from "./components/FragmentedJourney";
+import { FragmentedJourney, type FragmentStakeholderId, type FragmentStakeholderStages } from "./components/FragmentedJourney";
 import { buildSnapshot } from "./assistant/snapshot";
+import { participationForStakeholder, type RelationshipLevel, type StageId } from "./data/stakeholderParticipation";
 
-// The homepage visual intentionally shows each participant's primary operating
-// touchpoints, not all 84 lead/active/supporting/informed relationships. Keep
-// this curated projection stable while the complete model lives in Stakeholders.
-const fragmentStakeholderStages: FragmentStakeholderStages = {
-  developers: ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations"],
-  "consultants-designers": ["land-vision", "planning-design", "authorities-approvals", "construction-delivery"],
-  "authorities-regulators": ["authorities-approvals", "sales-transfer"],
-  contractors: ["construction-delivery"],
-  "banks-financial": ["land-vision", "construction-delivery", "sales-transfer", "asset-growth-intelligence"],
-  "property-owners": ["sales-transfer", "living-operations", "asset-growth-intelligence"],
-};
+// The homepage keeps six representative cards for visual restraint, but their
+// stage relationships are always projected from the canonical 84-cell model.
+const fragmentStakeholderIds: FragmentStakeholderId[] = [
+  "developers",
+  "consultants-designers",
+  "authorities-regulators",
+  "contractors",
+  "banks-financial",
+  "property-owners",
+];
+
+const fragmentStakeholderStages = fragmentStakeholderIds.reduce((projection, stakeholderId) => {
+  projection[stakeholderId] = Object.fromEntries(
+    participationForStakeholder(stakeholderId).map(({ stageId, relationshipLevel }) => [stageId, relationshipLevel]),
+  ) as Record<StageId, RelationshipLevel>;
+  return projection;
+}, {} as FragmentStakeholderStages);
 
 export function View({ locale = DEFAULT_LOCALE }: { locale?: Locale }) {
   const d = getDict(locale);
