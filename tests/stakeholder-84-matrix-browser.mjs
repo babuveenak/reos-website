@@ -4,6 +4,8 @@ import { chromium } from "playwright-core";
 const baseURL = process.env.BASE_URL ?? "http://127.0.0.1:3100";
 const stages = ["land-vision", "planning-design", "authorities-approvals", "construction-delivery", "sales-transfer", "living-operations", "asset-growth-intelligence"];
 const stakeholders = ["landowners-investors", "developers", "consultants-designers", "authorities-regulators", "utility-providers", "contractors", "suppliers-vendors", "brokers-agencies", "banks-financial", "property-owners", "residents-tenants", "facility-community-operators"];
+const canonicalStageNames = ["Land & Vision", "Planning & Design", "Authorities & Approvals", "Construction & Delivery", "Sales & Transfer", "Living & Operations", "Asset Growth & Intelligence"];
+const canonicalStakeholderNames = ["Landowners & Investors", "Developers", "Consultants & Designers", "Authorities & Regulators", "Utility Providers", "Contractors", "Suppliers & Vendors", "Brokers & Agencies", "Banks & Financial Institutions", "Property Owners", "Residents & Tenants", "Facility & Community Operators"];
 
 const routes = stages.flatMap((stage) => stakeholders.flatMap((stakeholder) => [
   `/property-journey/${stage}/stakeholders/${stakeholder}`,
@@ -20,10 +22,16 @@ for (const [route, status, html] of responses) {
   assert.equal((html.match(/class="process-stage-tab level-/g) ?? []).length, 7, `${route} must retain seven stages`);
   assert.doesNotMatch(html, /Title Deed Automation|NOC Automation|Request a demo/, `${route} must remain educational`);
   assert.match(html, /provisional|role context only|محتوى مؤقت|سياق الدور فقط/i, `${route} must expose publication/evidence state`);
+  if (!route.startsWith("/ar/")) {
+    const [, , stageId, , stakeholderId] = route.split("/");
+    const text = html.replaceAll("&amp;", "&");
+    assert.match(text, new RegExp(canonicalStageNames[stages.indexOf(stageId)].replace(/[&]/g, "\\&")), `${route} must use the canonical stage name`);
+    assert.match(text, new RegExp(canonicalStakeholderNames[stakeholders.indexOf(stakeholderId)].replace(/[&]/g, "\\&")), `${route} must use the canonical stakeholder name`);
+  }
 }
 
 const browser = await chromium.launch({ executablePath: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", headless: true });
-const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
 const page = await context.newPage();
 const errors = [];
 page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });

@@ -1672,6 +1672,121 @@ html[data-theme="light"] .site-header .mobile-menu nav{background:#FFFDF8}
 html[data-theme="dark"] .site-header .mobile-menu nav{background:#0A0A0F}
 
 /* ============================================================
+   STAKEHOLDER LIFECYCLE EXPLORER
+   One role at a time: twelve distinct actors mapped to the seven
+   canonical stages without repeating an 84-cell document grid.
+   ============================================================ */
+.stakeholder-lifecycle-explorer{display:flex;flex-direction:column;gap:2.6rem}
+.stakeholder-explorer-heading{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,480px);gap:3rem;align-items:end}
+.stakeholder-explorer-heading h2{margin:.75rem 0 0;font-size:clamp(3rem,5.5vw,6.2rem);line-height:.88}
+.stakeholder-explorer-heading p{margin:0 0 .45rem;color:var(--muted);font:400 clamp(1rem,1.35vw,1.25rem)/1.6 var(--serif)}
+.stakeholder-role-selector{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1.1rem;padding-block:.5rem;border-block:1px solid var(--line)}
+.stakeholder-role-platform{appearance:none;position:relative;min-width:0;min-height:174px;padding:1.05rem .75rem 1.2rem;display:grid;grid-template-rows:auto 82px auto;gap:.35rem;justify-items:center;border:0;background:transparent;color:var(--ivory);cursor:pointer;transition:background .25s,color .25s}
+.stakeholder-role-platform::after{content:"";position:absolute;inset:auto 18% 0;height:2px;transform:scaleX(0);background:var(--gold);transition:transform .25s}
+.stakeholder-role-platform:hover,.stakeholder-role-platform:focus-visible,.stakeholder-role-platform.is-selected{background:radial-gradient(circle at 50% 52%,rgba(200,164,93,.16),transparent 58%),var(--deep)}
+.stakeholder-role-platform.is-selected::after{transform:scaleX(1)}
+.stakeholder-role-platform:focus-visible{outline:2px solid var(--cyan);outline-offset:-3px;z-index:2}
+.role-platform-number{justify-self:start;color:var(--gold);font:400 .72rem var(--serif);letter-spacing:.08em}
+.stakeholder-role-platform>strong{align-self:start;max-width:16ch;font:400 .9rem/1.25 var(--serif);text-align:center}
+.role-platform-object{position:relative;width:86px;height:76px;display:block;perspective:460px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.role-platform-object>i{position:absolute;left:13px;top:31px;width:60px;height:35px;border:1px solid var(--gold-dim);transform:rotateX(62deg) rotateZ(45deg);background:linear-gradient(145deg,rgba(228,207,163,.2),rgba(118,80,28,.06));box-shadow:10px 10px 18px rgba(0,0,0,.14)}
+.role-platform-object>i:nth-child(2){top:25px;left:16px;background:linear-gradient(145deg,var(--panel),var(--deep));box-shadow:none}
+.role-platform-object>b{position:absolute;inset:0;display:grid;place-items:center;transform:translateY(-3px);color:var(--gold);transition:color .25s,transform .35s cubic-bezier(.2,.8,.2,1)}
+.role-platform-object svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+.stakeholder-role-platform:hover .role-platform-object,.stakeholder-role-platform:focus-visible .role-platform-object,.stakeholder-role-platform.is-selected .role-platform-object{transform:translateY(-7px)}
+.stakeholder-role-platform.is-selected .role-platform-object>b{color:var(--cyan);transform:translateY(-9px) scale(1.05)}
+
+.stakeholder-route-stage{position:relative;isolation:isolate;min-height:390px;padding:3.5rem clamp(1.5rem,5vw,5rem);display:grid;grid-template-columns:minmax(250px,.8fr) minmax(0,1.2fr);align-items:center;gap:clamp(2rem,6vw,7rem);overflow:hidden;border-block:1px solid var(--line);background:radial-gradient(circle at 23% 48%,rgba(200,164,93,.17),transparent 31%),linear-gradient(120deg,var(--deep),var(--void))}
+.stakeholder-route-stage::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.22;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(circle at center,#000,transparent 78%)}
+.selected-role-island{position:relative;min-height:270px;display:grid;place-items:center;perspective:800px}
+.selected-role-shadow,.selected-role-base{position:absolute;width:210px;height:210px;border-radius:36%;transform:rotateX(65deg) rotateZ(45deg);background:rgba(0,0,0,.18);filter:blur(14px)}
+.selected-role-base{width:190px;height:190px;border:1px solid var(--gold);background:linear-gradient(145deg,rgba(255,253,248,.96),rgba(200,164,93,.28));filter:none;box-shadow:18px 18px 0 rgba(118,80,28,.08),0 30px 70px rgba(0,0,0,.18)}
+.selected-role-island>span{position:relative;z-index:2;width:112px;height:112px;display:grid;place-items:center;border:1px solid var(--gold-dim);border-radius:50%;background:radial-gradient(circle at 35% 25%,#fff9e7,var(--gold-dim));color:#76501C;box-shadow:0 24px 48px rgba(118,80,28,.22);animation:roleFloat 4s ease-in-out infinite}
+.selected-role-island svg{width:66px;height:66px;fill:none;stroke:currentColor;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round}
+.selected-role-island>b{position:absolute;z-index:3;inset:auto 12% 7% auto;color:var(--gold);font:400 3.4rem var(--serif)}
+@keyframes roleFloat{50%{transform:translateY(-9px)}}
+.selected-role-guidance{max-width:720px}
+.selected-role-guidance>small{display:block;color:var(--gold);font-size:.62rem;letter-spacing:.2em}
+.selected-role-guidance h3{margin:.55rem 0 .8rem;font-size:clamp(2.7rem,4.3vw,5.2rem);line-height:.92}
+.selected-role-guidance>p{max-width:58ch;margin:0;color:var(--muted);font:400 clamp(1rem,1.3vw,1.22rem)/1.58 var(--serif)}
+.selected-role-guidance dl{margin:1.8rem 0;display:flex;gap:3rem}
+.selected-role-guidance dl>div{padding-inline-start:1rem;border-inline-start:2px solid var(--gold)}
+.selected-role-guidance dt{color:var(--muted);font-size:.56rem;letter-spacing:.14em;text-transform:uppercase}
+.selected-role-guidance dd{margin:.35rem 0 0;color:var(--ivory);font:400 1.1rem var(--serif)}
+.selected-role-guidance>a{display:inline-flex;align-items:center;gap:1rem;min-height:48px;padding:.8rem 1.15rem;background:var(--gold-dark);color:#fffdf8;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+.selected-role-guidance>a:hover,.selected-role-guidance>a:focus-visible{background:var(--gold);color:#19140d}
+
+.stakeholder-journey-visual{padding:1.2rem 0 0}
+.stakeholder-journey-visual>header{display:flex;justify-content:space-between;gap:2rem;padding:0 0 1.4rem;color:var(--gold);font-size:.58rem;letter-spacing:.14em}
+.stakeholder-journey-visual>header b{color:var(--muted);font-weight:400}
+.stakeholder-journey-visual ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.journey-visual-stage{position:relative;min-width:0;padding:2.1rem .8rem 1rem;text-align:center}
+.journey-visual-stage>span{position:relative;z-index:3;width:64px;height:64px;margin:0 auto 1rem;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:var(--void);color:var(--muted);font:400 1rem var(--serif);transition:transform .3s}
+.journey-visual-stage>b{display:block;min-height:2.7em;color:var(--ivory);font:400 clamp(.8rem,1vw,1rem)/1.3 var(--serif)}
+.journey-visual-stage>small{display:block;margin-top:.55rem;color:var(--muted);font-size:.52rem;letter-spacing:.13em;text-transform:uppercase}
+.journey-visual-stage>em{display:inline-block;margin-top:.6rem;padding:.25rem .5rem;border:1px solid var(--cyan);color:var(--cyan);font-style:normal;font-size:.48rem;letter-spacing:.12em}
+.stage-flow-segment{position:absolute;z-index:1;inset:4.05rem -50% auto 50%;height:2px;background:var(--line);overflow:hidden}
+.journey-visual-stage:last-child .stage-flow-segment{display:none}
+.stage-flow-segment>i{position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--gold);animation:stageFlow 3.1s linear infinite}
+.stage-flow-segment>i:nth-child(2){background:var(--cyan);animation-delay:-1.5s}
+@keyframes stageFlow{from{inset-inline-start:-8px}to{inset-inline-start:100%}}
+.journey-visual-stage.level-supporting>span{border-color:var(--gold-dim);color:var(--gold-soft);background:rgba(200,164,93,.06)}
+.journey-visual-stage.level-active>span{border-color:var(--cyan);color:var(--cyan);background:rgba(111,212,212,.09);box-shadow:0 0 0 8px rgba(111,212,212,.05)}
+.journey-visual-stage.level-lead>span{border-color:var(--gold);color:#fff;background:var(--gold-dark);box-shadow:0 0 0 9px rgba(200,164,93,.12)}
+.journey-visual-stage.is-entry>span{transform:translateY(-8px) scale(1.08)}
+.journey-visual-stage.level-informed .stage-flow-segment>i{opacity:.28;animation-duration:5.5s}
+.journey-visual-stage.level-supporting .stage-flow-segment>i{opacity:.55}
+.journey-visual-stage.level-active .stage-flow-segment,.journey-visual-stage.level-lead .stage-flow-segment{background:linear-gradient(90deg,var(--gold-dim),var(--cyan),var(--gold))}
+
+html[data-theme="light"] .stakeholder-role-platform{background:transparent;color:#24211f}
+html[data-theme="light"] .stakeholder-role-platform:hover,html[data-theme="light"] .stakeholder-role-platform:focus-visible,html[data-theme="light"] .stakeholder-role-platform.is-selected{background:radial-gradient(circle at 50% 52%,rgba(138,101,38,.14),transparent 58%),#f4eee3}
+html[data-theme="light"] .stakeholder-route-stage{background:radial-gradient(circle at 23% 48%,rgba(138,101,38,.16),transparent 31%),linear-gradient(120deg,#eee7da,#fffdf8)}
+html[data-theme="light"] .selected-role-guidance h3,html[data-theme="light"] .selected-role-guidance dd,html[data-theme="light"] .journey-visual-stage>b{color:#24211f}
+html[data-theme="light"] .selected-role-guidance>p,html[data-theme="light"] .selected-role-guidance dt,html[data-theme="light"] .journey-visual-stage>small{color:#5a534b}
+html[data-theme="light"] .selected-role-guidance>a{background:#76501c;color:#fffdf8}
+html[data-theme="light"] .selected-role-guidance>a:hover,html[data-theme="light"] .selected-role-guidance>a:focus-visible{background:#9a6c28;color:#fffdf8}
+html[data-theme="light"] .journey-visual-stage>span{background:#fffdf8}
+html[data-theme="light"] .journey-visual-stage.level-supporting>span{border-color:#8a6526;color:#5c3e12;background:#fffaf0}
+html[data-theme="light"] .journey-visual-stage.level-active>span{border-color:#28777a;color:#144f51;background:#f2ffff}
+html[data-theme="light"] .journey-visual-stage.level-lead>span{border-color:#76501c;color:#fff;background:#76501c}
+
+@media(max-width:1180px){
+  .stakeholder-role-selector{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stakeholder-route-stage{grid-template-columns:minmax(220px,.7fr) minmax(0,1.3fr);gap:2rem}
+  .stakeholder-journey-visual{overflow-x:auto;padding-bottom:.8rem;scroll-snap-type:x proximity}
+  .stakeholder-journey-visual>header{position:sticky;inset-inline-start:0;width:min(100%,900px)}
+  .stakeholder-journey-visual ol{width:1050px}
+  .journey-visual-stage{scroll-snap-align:start}
+}
+@media(max-width:760px){
+  .stakeholder-lifecycle-explorer{gap:1.8rem}
+  .stakeholder-explorer-heading{grid-template-columns:1fr;gap:1rem}
+  .stakeholder-explorer-heading h2{font-size:clamp(3rem,15vw,4.6rem)}
+  .stakeholder-explorer-heading p{max-width:34ch}
+  .stakeholder-role-selector{display:flex;gap:.5rem;overflow-x:auto;scroll-snap-type:x mandatory;border-block:1px solid var(--line);background:transparent}
+  .stakeholder-role-platform{flex:0 0 154px;min-height:170px;scroll-snap-align:start}
+  .stakeholder-route-stage{min-height:0;padding:2.2rem 1.2rem;grid-template-columns:1fr;gap:.6rem}
+  .selected-role-island{min-height:210px}
+  .selected-role-shadow,.selected-role-base{width:150px;height:150px}
+  .selected-role-base{width:140px;height:140px}
+  .selected-role-island>span{width:88px;height:88px}
+  .selected-role-island svg{width:52px;height:52px}
+  .selected-role-island>b{font-size:2.4rem}
+  .selected-role-guidance{text-align:center}
+  .selected-role-guidance h3{font-size:clamp(2.7rem,12vw,4rem)}
+  .selected-role-guidance>p{margin-inline:auto}
+  .selected-role-guidance dl{justify-content:center;gap:1.2rem;text-align:start}
+  .selected-role-guidance dl>div{flex:1;max-width:180px}
+  .selected-role-guidance>a{justify-content:center;width:100%;font-size:.62rem}
+  .stakeholder-journey-visual>header{min-width:790px}
+}
+@media(prefers-reduced-motion:reduce){
+  .selected-role-island>span,.stage-flow-segment>i{animation:none}
+  .stage-flow-segment>i{display:none}
+  .stakeholder-role-platform,.role-platform-object,.role-platform-object>b,.journey-visual-stage>span{transition:none}
+}
+
+/* ============================================================
    RIGHT-TO-LEFT
    Logical properties handle padding, margins and borders. These are
    the cases they cannot reach: absolute offsets, transforms and
