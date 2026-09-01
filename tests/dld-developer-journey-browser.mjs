@@ -43,6 +43,8 @@ assert.equal(await desktop.page.locator(".stakeholder-process-map").count(), 0, 
 assert.equal(await desktop.page.locator(".stakeholder-entry-guidance").count(), 0, "the generic role-entry section must not duplicate the developer checklist");
 assert.equal(await journey.locator(".dld-map-node").count(), 5, "the overview needs pre, three development nodes and post");
 assert.equal(await journey.locator(".dld-service-nodes > button").count(), 6, "pre-development must start with all six official services");
+assert.match(await journey.locator(".dld-snapshot-note").innerText(), /170 official DLD records.*not a live API feed/i);
+assert.match(await journey.locator(".dld-service-nodes > button").first().innerText(), /01[\s\S]*DET; DED in the DLD record[\s\S]*Trade Name Reservation/i, "the REOS guided route must begin with trade-name reservation and identify DET/DED");
 assert.match(await journey.locator(".dld-escrow-correction").innerText(), /Escrow opening sits in Development.*not in pre-development/i);
 
 await journey.locator(".developer-checklist-workspace > nav button").nth(5).click();
@@ -57,6 +59,10 @@ assert.match(await journey.locator(".developer-checklist-detail").innerText(), /
 await journey.locator(".dld-phase-nav button").nth(0).click();
 await journey.locator(".dld-service-nodes > button").filter({ hasText: "Trade Name Reservation" }).click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Trade Name Reservation[\s\S]*7 Minutes[\s\S]*620[\s\S]*Emirates ID/);
+assert.equal(await journey.locator(".dld-service-detail .dld-primary-action").getAttribute("href"), "https://www.investindubai.gov.ae/en/business-setup/business-setup-services/request-to-book-a-trade-name", "trade-name action must open the exact DET service route");
+await journey.locator(".dld-service-nodes > button").filter({ hasText: "Dld Approval For The Trade License" }).click();
+assert.match(await journey.locator(".dld-service-detail").innerText(), /Dubai Land Department \/ RERA[\s\S]*after licence issuance[\s\S]*1 Day[\s\S]*25000/i);
+assert.equal(await journey.locator(".dld-service-detail .dld-primary-action").getAttribute("href"), "https://trakheesi.dubailand.gov.ae", "the DLD activity approval must open Trakheesi directly");
 
 await journey.locator(".dld-phase-nav button").nth(1).click();
 assert.equal(await journey.locator(".dld-development-controls fieldset button").count(), 3, "development must expose all three DLD sub-phases");
@@ -79,11 +85,13 @@ await search.fill("escrow");
 assert.equal(await journey.locator(".dld-service-nodes > button").count(), 1, "search must isolate the escrow-opening service");
 await journey.locator(".dld-service-nodes > button").click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Opening Of An Escrow Account[\s\S]*Trustee Account System - TAS[\s\S]*1 Day[\s\S]*150000/i);
+assert.equal(await journey.locator(".dld-service-detail .dld-primary-action").getAttribute("href"), "https://backoffice.dubailand.gov.ae/en/eservices/register-project/", "project registration must open the exact official DLD service page");
 await search.focus();
 assert.equal(await search.evaluate((element) => element.matches(":focus-visible")), true, "service search needs a visible keyboard focus state");
 
 await journey.locator(".dld-phase-nav button").nth(2).click();
 assert.equal(await journey.locator(".dld-service-nodes > button").count(), 2, "post-development must expose both official closure records");
+assert.match(await journey.locator(".dld-service-nodes > button").first().innerText(), /01[\s\S]*Project Units Loading - Final Loading/i, "the practical close-out route must show final unit loading before escrow settlement");
 await journey.locator(".dld-service-nodes > button").filter({ hasText: "Final Loading" }).click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Project Units Loading - Final Loading[\s\S]*3-5 Day[\s\S]*270 UAE Dirhams per unit/);
 assert.match(await journey.locator(".dld-crosswalk").innerText(), /protected REOS lifecycle[\s\S]*Land & Vision[\s\S]*Planning & Design[\s\S]*Living & Operations/i);

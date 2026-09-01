@@ -12,7 +12,7 @@ test("preserves the three DLD Developer Book phases without replacing REOS stage
   assert.equal(postDevelopment.services.length, 2);
 });
 
-test("keeps the official pre-development sequence and post-development closure records", () => {
+test("keeps the official DLD listing records without treating card order as a mandatory sequence", () => {
   assert.deepEqual(preDevelopment.services.map(({ title }) => title), [
     "Submission Of The Initial Approval Certificate",
     "Trade Name Reservation",
@@ -25,6 +25,11 @@ test("keeps the official pre-development sequence and post-development closure r
     "Settlement Of The Escrow Account",
     "Project Units Loading - Final Loading",
   ]);
+});
+
+test("marks the source as a checked snapshot rather than a live API feed", () => {
+  assert.equal(book.source.checkedOn, "2026-09-01");
+  assert.match(book.source.warning, /checked on 1 September 2026/i);
 });
 
 test("preserves all six authority branches and every published development record", () => {

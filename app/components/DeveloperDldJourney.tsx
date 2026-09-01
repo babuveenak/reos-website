@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { dldDeveloperBook } from "../data/dldDeveloperBook";
+import { DEVELOPER_SERVICE_GUIDANCE, POST_DEVELOPMENT_GUIDED_ORDER, PRE_DEVELOPMENT_GUIDED_ORDER, inferDevelopmentServiceProvider } from "../data/developerServiceGuidance";
 import { developerJourneySteps, type DeveloperServiceReference, type LocalizedText } from "../data/developerJourneyGuide";
 import type { Stage } from "../data/journey";
 import { officialSourceById } from "../data/officialSources";
@@ -32,7 +33,11 @@ const COPY = {
     intro: "Follow one connected roadmap across the protected seven-stage REOS lifecycle and the DLD Developer Book. Each step explains the action, authority, evidence, output and next move before you open the official channel to verify or apply.",
     source: "Open the DLD Developer Book",
     status: "Official DLD listing · structured by REOS",
-    checked: "Checked 31 August 2026",
+    checked: "Checked 1 September 2026",
+    snapshot: "170 official DLD records · source-controlled snapshot · not a live API feed",
+    sequenceCautionPre: "REOS guided dependency order. DLD publishes these six service records but does not label their card order as a binding universal sequence. Confirm the live DET–DLD hand-off for the selected legal form and activity.",
+    sequenceCautionDevelopment: "DLD-published records for the selected branch. The numbers are navigation references, not a claim that every approval runs linearly; NOCs and technical reviews may be parallel or conditional.",
+    sequenceCautionPost: "REOS close-out dependency order. Final unit loading is shown before escrow settlement as a practical route; the live project status and authority decision control applicability.",
     notReplacement: "This three-phase DLD service view does not replace the canonical seven-stage REOS property lifecycle.",
     escrowCorrection: "Escrow opening sits in Development → Off-plan sales in the DLD Developer Book—not in pre-development. Pre-development establishes the entity, licence, DLD approval, developer registration and Oqood access.",
     pre: "Pre-development",
@@ -119,6 +124,15 @@ const COPY = {
     searchMatches: "matching official records",
     noRouteMatches: "No official record in this selected route matches that search.",
     inspectService: "Inspect record, listed documents, fee and time",
+    guidedStep: "REOS guided step",
+    publishedRecord: "DLD published record",
+    provider: "Service provider / authority",
+    beforeStart: "Before you start",
+    expectedOutput: "Expected output",
+    applyDirect: "Open exact application route",
+    evidenceRecord: "Open DLD evidence record",
+    noDirectApply: "No separate public application link is published in this DLD record. Use the evidence record and confirm the live channel with the authority.",
+    routeStates: { guided: "Guided sequence", "authority-check": "Authority-confirmation gate", parallel: "Parallel / conditional", closure: "Close-out gate" },
   },
   ar: {
     eyebrow: "02 · رحلة المطور ودليل الإجراءات",
@@ -126,7 +140,11 @@ const COPY = {
     intro: "اتبع خريطة طريق واحدة تربط مراحل REOS السبع المحمية بدليل المطور لدى دائرة الأراضي والأملاك. تشرح كل خطوة الإجراء والجهة والدليل والمخرج والخطوة التالية قبل فتح القناة الرسمية للتحقق أو التقديم.",
     source: "افتح دليل المطور لدى دائرة الأراضي والأملاك",
     status: "قائمة رسمية من الدائرة · تنظيم REOS",
-    checked: "تم التحقق في 31 أغسطس 2026",
+    checked: "تم التحقق في 1 سبتمبر 2026",
+    snapshot: "170 سجلاً رسمياً من الدائرة · لقطة مضبوطة المصدر · ليست تغذية API حية",
+    sequenceCautionPre: "ترتيب إرشادي للاعتماديات من REOS. تنشر الدائرة سجلات الخدمات الستة، لكنها لا تصف ترتيب البطاقات كتسلسل إلزامي موحد. أكد مسار التسليم الحي بين DET والدائرة بحسب الشكل القانوني والنشاط.",
+    sequenceCautionDevelopment: "سجلات منشورة من الدائرة للمسار المحدد. الأرقام مراجع تنقل وليست ادعاءً بأن كل الموافقات خطية؛ فقد تكون الموافقات الفنية وشهادات عدم الممانعة متوازية أو مشروطة.",
+    sequenceCautionPost: "ترتيب إرشادي للإقفال من REOS. يظهر التحميل النهائي للوحدات قبل تسوية حساب الضمان كمسار عملي، بينما تتحكم حالة المشروع الحية وقرار الجهة في الانطباق.",
     notReplacement: "لا يحل منظور مراحل الدائرة الثلاث محل دورة حياة العقار القياسية ذات المراحل السبع في REOS.",
     escrowCorrection: "يقع فتح حساب الضمان ضمن التطوير ← البيع على الخارطة في دليل الدائرة، وليس ضمن ما قبل التطوير. أما ما قبل التطوير فيغطي تأسيس الكيان والترخيص وموافقة الدائرة وتسجيل المطور والوصول إلى نظام عقود.",
     pre: "ما قبل التطوير",
@@ -213,6 +231,15 @@ const COPY = {
     searchMatches: "سجلات رسمية مطابقة",
     noRouteMatches: "لا يطابق البحث أي سجل رسمي في المسار المحدد.",
     inspectService: "افحص السجل والمستندات والرسوم والمدة المدرجة",
+    guidedStep: "خطوة إرشادية من REOS",
+    publishedRecord: "سجل منشور من الدائرة",
+    provider: "مزود الخدمة / الجهة",
+    beforeStart: "قبل البدء",
+    expectedOutput: "المخرج المتوقع",
+    applyDirect: "افتح مسار التقديم الدقيق",
+    evidenceRecord: "افتح سجل الدليل لدى الدائرة",
+    noDirectApply: "لا ينشر سجل الدائرة هذا رابط تقديم عاماً منفصلاً. استخدم سجل الدليل وأكد القناة الحية مع الجهة.",
+    routeStates: { guided: "تسلسل إرشادي", "authority-check": "بوابة تأكيد الجهة", parallel: "متوازٍ / مشروط", closure: "بوابة إقفال" },
   },
 } as const;
 
@@ -289,6 +316,11 @@ function ControlIcon({ kind }: { kind: (typeof CONTROL_KINDS)[number] }) {
 
 const localize = (value: LocalizedText, locale: Locale) => value[locale];
 
+function orderServiceRecords<T extends { id: string }>(records: T[], preferredOrder: readonly string[]) {
+  const position = new Map(preferredOrder.map((id, index) => [id, index]));
+  return [...records].sort((a, b) => (position.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (position.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+}
+
 export function DeveloperDldJourney({ locale, track, stages, participation }: Props) {
   const c = COPY[locale];
   const { preDevelopment, development, postDevelopment } = dldDeveloperBook.stages;
@@ -296,7 +328,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const [subphaseId, setSubphaseId] = useState(development.subphases[0].id);
   const initialAuthority = TRACK_AUTHORITY[track] ?? development.subphases[0].branches[0].id;
   const [authorityId, setAuthorityId] = useState(initialAuthority);
-  const [serviceId, setServiceId] = useState(preDevelopment.services[0].id);
+  const [serviceId, setServiceId] = useState<string>(PRE_DEVELOPMENT_GUIDED_ORDER[0]);
   const [query, setQuery] = useState("");
   const [guideStepId, setGuideStepId] = useState(developerJourneySteps[0].id);
   const [verificationEmirateId, setVerificationEmirateId] = useState<EmirateId>("dubai");
@@ -305,8 +337,28 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
 
   const selectedSubphase = development.subphases.find((item) => item.id === subphaseId) ?? development.subphases[0];
   const selectedBranch = selectedSubphase.branches.find((item) => item.id === authorityId) ?? selectedSubphase.branches[0];
-  const services = phaseId === "pre-development" ? preDevelopment.services : phaseId === "post-development" ? postDevelopment.services : selectedBranch.services;
+  const services = phaseId === "pre-development"
+    ? orderServiceRecords(preDevelopment.services, PRE_DEVELOPMENT_GUIDED_ORDER)
+    : phaseId === "post-development"
+      ? orderServiceRecords(postDevelopment.services, POST_DEVELOPMENT_GUIDED_ORDER)
+      : selectedBranch.services;
   const selectedService = services.find((service) => service.id === serviceId) ?? services[0];
+  const selectedServiceGuidance = selectedService ? DEVELOPER_SERVICE_GUIDANCE[selectedService.id] : undefined;
+  const selectedProvider = selectedService
+    ? selectedServiceGuidance?.provider ?? inferDevelopmentServiceProvider(selectedService.title, selectedBranch.authority)
+    : undefined;
+  const selectedRouteState = selectedServiceGuidance?.routeState ?? (phaseId === "development" ? "parallel" : "guided");
+  const selectedServicePosition = Math.max(0, services.findIndex((service) => service.id === selectedService?.id));
+  const sequenceCaution = phaseId === "pre-development" ? c.sequenceCautionPre : phaseId === "post-development" ? c.sequenceCautionPost : c.sequenceCautionDevelopment;
+  const selectedPrerequisite = selectedServiceGuidance
+    ? localize(selectedServiceGuidance.prerequisite, locale)
+    : sequenceCaution;
+  const selectedOutput = selectedServiceGuidance
+    ? localize(selectedServiceGuidance.output, locale)
+    : locale === "ar"
+      ? "مخرج الموافقة أو السجل المحدد في سجل الدائرة؛ أكد حالته الحية مع الجهة المختصة."
+      : "The approval or record named in the DLD listing; confirm its live status with the competent authority.";
+  const directApplicationUrl = selectedServiceGuidance?.applicationUrl ?? selectedService?.channelUrl ?? undefined;
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const visibleServices = normalizedQuery
     ? services.filter((service) => `${service.title} ${service.description}`.toLocaleLowerCase().includes(normalizedQuery))
@@ -346,7 +398,11 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const setPhase = (next: PhaseId) => {
     setPhaseId(next);
     setQuery("");
-    const nextServices = next === "pre-development" ? preDevelopment.services : next === "post-development" ? postDevelopment.services : selectedBranch.services;
+    const nextServices = next === "pre-development"
+      ? orderServiceRecords(preDevelopment.services, PRE_DEVELOPMENT_GUIDED_ORDER)
+      : next === "post-development"
+        ? orderServiceRecords(postDevelopment.services, POST_DEVELOPMENT_GUIDED_ORDER)
+        : selectedBranch.services;
     setServiceId(nextServices[0].id);
   };
 
@@ -380,10 +436,10 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     setQuery("");
     if (reference.phase === "pre-development") {
       setPhaseId("pre-development");
-      setServiceId(reference.serviceId ?? preDevelopment.services[0].id);
+      setServiceId(reference.serviceId ?? PRE_DEVELOPMENT_GUIDED_ORDER[0]);
     } else if (reference.phase === "post-development") {
       setPhaseId("post-development");
-      setServiceId(reference.serviceId ?? postDevelopment.services[0].id);
+      setServiceId(reference.serviceId ?? POST_DEVELOPMENT_GUIDED_ORDER[0]);
     } else {
       const nextSubphase = development.subphases.find((item) => item.id === reference.subphaseId) ?? development.subphases[0];
       const nextBranch = nextSubphase.branches.find((item) => item.id === authorityOverride) ?? nextSubphase.branches[0];
@@ -422,6 +478,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     <div className="dld-source-strip">
       <span>{c.status}</span><time dateTime={dldDeveloperBook.source.checkedOn}>{c.checked}</time><b>{dldDeveloperBook.source.authority}</b>
     </div>
+    <div className="dld-snapshot-note" role="note"><b>{c.snapshot}</b><span>{c.sourceWarning}</span></div>
 
     <section className="developer-seven-stage" aria-labelledby="developer-seven-stage-title">
       <header>
@@ -527,7 +584,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
 
     <div className="dld-stage-context">
       <div><span>{c.phaseLabel}</span><h3>{phaseLabels[phaseId]}</h3><p lang="en">{stageDescription}</p></div>
-      <strong>{stageNote}</strong>
+      <div className="dld-sequence-notes"><strong>{stageNote}</strong><p>{sequenceCaution}</p></div>
     </div>
 
     {phaseId === "development" ? <div className="dld-development-controls">
@@ -544,14 +601,26 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
         <div className="dld-service-count" aria-live="polite"><b>{visibleServices.length}</b> {c.services}</div>
         <div className="dld-service-nodes">
           {visibleServices.map((service, index) => <button key={`${selectedBranch.id}-${service.id}`} type="button" aria-pressed={selectedService?.id === service.id} onClick={() => setServiceId(service.id)}>
-            <span>{String(index + 1).padStart(2, "0")}</span><div><small>{phaseId === "development" ? selectedBranch.authority : dldDeveloperBook.source.authority}</small><b lang="en">{service.title}</b></div><i aria-hidden="true">→</i>
+            <span>{String(index + 1).padStart(2, "0")}</span><div>
+              <small>{localize(DEVELOPER_SERVICE_GUIDANCE[service.id]?.provider ?? inferDevelopmentServiceProvider(service.title, selectedBranch.authority), locale)}</small>
+              <b lang="en">{service.title}</b>
+              <em>{phaseId === "development" ? c.publishedRecord : c.guidedStep} · {c.routeStates[DEVELOPER_SERVICE_GUIDANCE[service.id]?.routeState ?? "parallel"]}</em>
+            </div><i aria-hidden="true">→</i>
           </button>)}
           {visibleServices.length === 0 ? <p className="dld-service-empty">{c.noResults}</p> : null}
         </div>
       </div>
 
       {selectedService ? <article className="dld-service-detail" aria-live="polite">
-        <header><span>{c.selectNode}</span><h4 lang="en">{selectedService.title}</h4><p lang="en">{selectedService.description}</p></header>
+        <header>
+          <span>{phaseId === "development" ? c.publishedRecord : c.guidedStep} {String(selectedServicePosition + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")} · {c.routeStates[selectedRouteState]}</span>
+          <h4 lang="en">{selectedService.title}</h4><p lang="en">{selectedService.description}</p>
+        </header>
+        <dl className="dld-guidance-fields">
+          <DetailField label={c.provider} value={selectedProvider ? localize(selectedProvider, locale) : ""} fallback={c.notListed} />
+          <DetailField label={c.beforeStart} value={selectedPrerequisite} fallback={c.notListed} />
+          <DetailField label={c.expectedOutput} value={selectedOutput} fallback={c.notListed} />
+        </dl>
         <dl lang="en">
           <DetailField label={c.channel} value={selectedService.channel} fallback={c.notListed} />
           <DetailField label={c.time} value={selectedService.time} fallback={c.notListed} />
@@ -559,9 +628,10 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
           <DetailField label={c.documents} value={selectedService.documents} fallback={c.notListed} />
         </dl>
         <div className="dld-detail-actions">
-          <a href={sourceUrl} target="_blank" rel="noreferrer">{c.officialRecord} <span aria-hidden="true">↗</span></a>
-          {selectedService.channelUrl ? <a href={selectedService.channelUrl} target="_blank" rel="noreferrer">{c.channelLink} <span aria-hidden="true">↗</span></a> : null}
+          {directApplicationUrl ? <a className="dld-primary-action" href={directApplicationUrl} target="_blank" rel="noreferrer">{selectedServiceGuidance?.applicationLabel ? localize(selectedServiceGuidance.applicationLabel, locale) : c.applyDirect} <span aria-hidden="true">↗</span></a> : null}
+          <a href={selectedServiceGuidance?.evidenceUrl ?? sourceUrl} target="_blank" rel="noreferrer">{c.evidenceRecord} <span aria-hidden="true">↗</span></a>
         </div>
+        {!directApplicationUrl ? <p className="dld-no-direct-link">{c.noDirectApply}</p> : null}
         <p className="dld-estimate-note">{c.estimate}</p>
       </article> : null}
     </div>
