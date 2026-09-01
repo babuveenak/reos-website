@@ -134,10 +134,19 @@ assert.equal(await routeSelector.locator(".developer-sale-route button").count()
 
 await routeSelector.locator(".developer-authority-finder-trigger").click();
 const authorityFinder = journey.locator(".developer-authority-finder");
-await authorityFinder.locator("input").first().fill("DIFC");
-assert.match(await authorityFinder.locator(".developer-authority-finder-result").innerText(), /DIFC \+ DDA coordination[\s\S]*route suggestion, not a jurisdiction decision/i, "the guided finder must explain the coordinated DIFC route without claiming an automatic jurisdiction decision");
+assert.equal(await authorityFinder.locator(".developer-authority-finder-methods button").count(), 4, "the finder must offer plot, municipality, Makani and location methods");
+assert.match(await authorityFinder.locator(".developer-authority-finder-steps").innerText(), /Identify your plot[\s\S]*Verify the plot[\s\S]*Identify jurisdiction[\s\S]*Use your route/i);
+await authorityFinder.locator(".developer-authority-finder-methods button").filter({ hasText: "Municipality number" }).click();
+await authorityFinder.locator(".developer-authority-finder-fields input").fill("346-112");
+assert.equal(await authorityFinder.locator(".developer-authority-finder-result").count(), 0, "an identifier alone must never fabricate an authority");
+assert.match(await authorityFinder.locator(".developer-authority-finder-empty").innerText(), /will not guess from a number alone/i);
+assert.equal(await authorityFinder.locator('a[href*="property-status-overview/property-status"]').count() > 0, true, "the identifier workflow must open the exact official DLD property enquiry");
+await authorityFinder.locator(".developer-authority-finder-evidence input").fill("DIFC");
+assert.match(await authorityFinder.locator(".developer-authority-finder-result").innerText(), /DIFC \+ DDA coordination[\s\S]*Confirm this route against the official property or site-plan record/i, "the finder must resolve only after jurisdiction evidence is supplied");
+await authorityFinder.screenshot({ path: `${output}/developer-authority-finder.png` });
 await authorityFinder.locator(".developer-authority-finder-result > button").click();
 assert.match(await routeSelector.locator(".developer-selected-route").innerText(), /DIFC \+ DDA coordination[\s\S]*DIFC NOCs may then direct the applicant to DDA/i, "DIFC must be available as a distinct coordinated route");
+assert.equal(await routeSelector.locator('[data-route-authority="difc"]').getAttribute("data-finder-match"), "true", "the resolved authority card must remain highlighted");
 
 await routeSelector.locator(".developer-route-authorities button").filter({ hasText: "Dubai South" }).click();
 assert.match(await routeSelector.locator(".developer-selected-route").innerText(), /Dubai South[\s\S]*off-plan sales intended/i);

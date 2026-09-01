@@ -12,6 +12,7 @@ import type { Locale } from "../i18n/config";
 
 type PhaseId = "pre-development" | "development" | "post-development";
 type FlowRelation = "sequence" | "flexible" | "parallel" | "conditional" | "closure";
+type AuthorityFinderMethod = "plot" | "municipality" | "makani" | "location";
 
 type Props = {
   locale: Locale;
@@ -197,17 +198,25 @@ const COPY = {
     authoritySecond: "2 · Identify the project authority",
     authorityHelp: "Use the authority named on the plot, site plan or master-developer record. If it is unclear, use the guided check instead of guessing.",
     authorityFinder: "I don’t know the authority",
-    finderTitle: "Find the authority clue—without guessing.",
-    finderIntro: "Enter the community, master development, or authority wording printed on your record. A plot number alone cannot be resolved without a live government boundary data source.",
-    finderLocation: "Community, master development or authority wording",
-    finderLocationPlaceholder: "For example: DIFC, Dubai South, DSO or PCFC",
-    finderPlot: "Plot, land or municipality number (optional)",
-    finderPlotPlaceholder: "Keep the number ready for the official enquiry",
-    finderLikely: "Likely route to verify",
+    finderTitle: "Find your project authority.",
+    finderIntro: "Your plot’s location, jurisdiction, master-development structure and official planning or property records help determine the competent development authority and the approvals required.",
+    finderSteps: ["Identify your plot", "Verify the plot", "Identify jurisdiction", "Use your route"],
+    finderMethod: "Choose one identifier",
+    finderMethods: { plot: "Plot number", municipality: "Municipality number", makani: "Makani number", location: "Location" },
+    finderPlaceholders: { plot: "Enter the plot or land number", municipality: "Enter the municipality number", makani: "Enter the Makani number", location: "Enter the community or master development" },
+    finderIdentifierHelp: "REOS does not send or store this identifier. Use it in the official enquiry to retrieve the property record.",
+    finderVerifyTitle: "Verify through the official property record",
+    finderVerifyText: "DLD’s enquiry supports property/land, municipality and Makani references. Confirm the location, master development, site/map and any named zone or authority in the result.",
+    finderLocationVerifyText: "Match the location against the official plot, site-plan or master-developer record before relying on the suggested route.",
+    finderEvidence: "Official result: location, master development, zone or authority",
+    finderEvidencePlaceholder: "For example: DIFC, Dubai South, DSO, PCFC or DDA",
+    finderEvidenceHelp: "Paste only the jurisdiction clue shown by the official result—never personal or ownership information.",
+    finderLikely: "Project authority to verify",
     finderNoMatch: "No safe match yet",
-    finderNoMatchText: "REOS will not assign an authority from an unmatched place name or plot number. Check the official property record, then return and select the authority it names.",
-    finderReason: "This is a route suggestion, not a jurisdiction decision. Confirm it against the official property or site-plan record.",
-    useRoute: "Use this route",
+    finderNoMatchText: "Open the official property enquiry with your identifier, then enter the location, master development, zone or authority shown in its result. REOS will not guess from a number alone.",
+    finderReason: "Confirm this route against the official property or site-plan record. Separate DLD, RERA, utilities, Civil Defence or environmental approvals may still apply.",
+    finderConnection: "A direct automated result requires an approved government data connection. Until that is connected, the official result is the decision evidence.",
+    useRoute: "Highlight this authority",
     officialPropertyCheck: "Open DLD Property Status Enquiry",
     closeFinder: "Close authority finder",
     routeReady: "Your verification route",
@@ -333,17 +342,25 @@ const COPY = {
     authoritySecond: "2 · حدد جهة المشروع",
     authorityHelp: "استخدم الجهة المذكورة في سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي. وإذا لم تكن واضحة فاستخدم التحقق الإرشادي بدلاً من التخمين.",
     authorityFinder: "لا أعرف الجهة",
-    finderTitle: "اعثر على دليل الجهة من دون تخمين.",
-    finderIntro: "أدخل المجتمع أو المشروع الرئيسي أو اسم الجهة المطبوع في السجل. لا يمكن حسم رقم الأرض وحده من دون مصدر حي لبيانات الحدود الحكومية.",
-    finderLocation: "المجتمع أو المشروع الرئيسي أو اسم الجهة",
-    finderLocationPlaceholder: "مثال: DIFC أو دبي الجنوب أو DSO أو PCFC",
-    finderPlot: "رقم الأرض أو البلدية (اختياري)",
-    finderPlotPlaceholder: "احتفظ بالرقم للاستعلام الرسمي",
-    finderLikely: "المسار المرجح للتحقق",
+    finderTitle: "اعثر على جهة مشروعك.",
+    finderIntro: "يساعد موقع الأرض واختصاصها وهيكل المشروع الرئيسي وسجلات التخطيط أو العقار الرسمية في تحديد جهة التطوير المختصة والموافقات المطلوبة.",
+    finderSteps: ["حدد الأرض", "تحقق من الأرض", "حدد الاختصاص", "استخدم المسار"],
+    finderMethod: "اختر معرّفاً واحداً",
+    finderMethods: { plot: "رقم الأرض", municipality: "رقم البلدية", makani: "رقم مكاني", location: "الموقع" },
+    finderPlaceholders: { plot: "أدخل رقم الأرض", municipality: "أدخل رقم البلدية", makani: "أدخل رقم مكاني", location: "أدخل المجتمع أو المشروع الرئيسي" },
+    finderIdentifierHelp: "لا يرسل REOS هذا المعرّف ولا يخزنه. استخدمه في الاستعلام الرسمي لاسترجاع سجل العقار.",
+    finderVerifyTitle: "تحقق من خلال سجل العقار الرسمي",
+    finderVerifyText: "يدعم استعلام الدائرة أرقام العقار أو الأرض والبلدية ومكاني. أكد الموقع والمشروع الرئيسي والمخطط وأي منطقة أو جهة مذكورة في النتيجة.",
+    finderLocationVerifyText: "طابق الموقع مع سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي الرسمي قبل الاعتماد على المسار المقترح.",
+    finderEvidence: "النتيجة الرسمية: الموقع أو المشروع الرئيسي أو المنطقة أو الجهة",
+    finderEvidencePlaceholder: "مثال: DIFC أو دبي الجنوب أو DSO أو PCFC أو DDA",
+    finderEvidenceHelp: "أدخل فقط دليل الاختصاص الظاهر في النتيجة الرسمية، ولا تدخل معلومات شخصية أو بيانات ملكية.",
+    finderLikely: "جهة المشروع الواجب التحقق منها",
     finderNoMatch: "لا توجد مطابقة آمنة بعد",
-    finderNoMatchText: "لن يحدد REOS جهةً من اسم مكان غير مطابق أو رقم أرض وحده. تحقق من سجل العقار الرسمي ثم عد واختر الجهة المذكورة فيه.",
-    finderReason: "هذا اقتراح لمسار التحقق وليس قراراً بالاختصاص. أكده من سجل العقار أو مخطط الموقع الرسمي.",
-    useRoute: "استخدم هذا المسار",
+    finderNoMatchText: "افتح الاستعلام الرسمي باستخدام المعرّف، ثم أدخل الموقع أو المشروع الرئيسي أو المنطقة أو الجهة الظاهرة في النتيجة. لن يخمن REOS من الرقم وحده.",
+    finderReason: "أكد هذا المسار من سجل العقار أو مخطط الموقع الرسمي. وقد تبقى موافقات منفصلة من الدائرة أو ريرا أو المرافق أو الدفاع المدني أو الجهات البيئية.",
+    finderConnection: "تتطلب النتيجة الآلية المباشرة اتصالاً معتمداً ببيانات الحكومة. وإلى حين ربطه تبقى النتيجة الرسمية هي دليل القرار.",
+    useRoute: "أبرز هذه الجهة",
     officialPropertyCheck: "افتح الاستعلام عن حالة العقار لدى الدائرة",
     closeFinder: "أغلق أداة تحديد الجهة",
     routeReady: "مسار التحقق الخاص بك",
@@ -517,8 +534,10 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const [verificationAuthorityId, setVerificationAuthorityId] = useState(initialAuthority);
   const [offPlanSelected, setOffPlanSelected] = useState(true);
   const [authorityFinderOpen, setAuthorityFinderOpen] = useState(false);
-  const [authorityClue, setAuthorityClue] = useState("");
-  const [plotReference, setPlotReference] = useState("");
+  const [authorityFinderMethod, setAuthorityFinderMethod] = useState<AuthorityFinderMethod>("location");
+  const [authorityFinderValue, setAuthorityFinderValue] = useState("");
+  const [authorityEvidence, setAuthorityEvidence] = useState("");
+  const [finderAppliedAuthorityId, setFinderAppliedAuthorityId] = useState<string>();
 
   const selectedSubphase = development.subphases.find((item) => item.id === subphaseId) ?? development.subphases[0];
   const selectedBranch = selectedSubphase.branches.find((item) => item.id === authorityId) ?? selectedSubphase.branches[0];
@@ -562,10 +581,12 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const guidance = stakeholderGuidance.developers;
   const verificationAuthorityOptions = AUTHORITY_PROFILES;
   const selectedVerificationAuthority = verificationAuthorityOptions.find((profile) => profile.id === verificationAuthorityId) ?? verificationAuthorityOptions[0];
-  const normalizedAuthorityClue = authorityClue.trim().toLocaleLowerCase();
+  const finderClue = authorityFinderMethod === "location" ? authorityFinderValue : authorityEvidence;
+  const normalizedAuthorityClue = finderClue.trim().toLocaleLowerCase();
   const authorityFinderResult = normalizedAuthorityClue
     ? verificationAuthorityOptions.find((profile) => profile.finderTerms.some((term) => matchesAuthorityTerm(normalizedAuthorityClue, term)))
     : undefined;
+  const finderHasIdentifier = authorityFinderValue.trim().length > 1;
   const verificationBranchFor = (subphaseIndex: number) => {
     const subphase = development.subphases[subphaseIndex];
     return subphase.branches.find((branch) => branch.id === selectedVerificationAuthority.dldBranchId) ?? subphase.branches[0];
@@ -633,7 +654,9 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const useFinderRoute = () => {
     if (!authorityFinderResult) return;
     chooseRouteAuthority(authorityFinderResult.id);
+    setFinderAppliedAuthorityId(authorityFinderResult.id);
     setAuthorityFinderOpen(false);
+    window.setTimeout(() => document.querySelector<HTMLButtonElement>(`[data-route-authority="${authorityFinderResult.id}"]`)?.focus(), 50);
   };
 
   const serviceForReference = (reference: DeveloperServiceReference) => {
@@ -706,7 +729,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
         <legend>{c.authoritySecond}</legend>
         <button className="developer-authority-finder-trigger" type="button" onClick={() => setAuthorityFinderOpen(true)}>{c.authorityFinder} <span aria-hidden="true">→</span></button>
         <div className="developer-route-authorities">
-          {verificationAuthorityOptions.map((profile, index) => <button key={profile.id} type="button" aria-pressed={profile.id === selectedVerificationAuthority.id} onClick={() => chooseRouteAuthority(profile.id)}>
+          {verificationAuthorityOptions.map((profile, index) => <button key={profile.id} type="button" data-route-authority={profile.id} data-finder-match={profile.id === finderAppliedAuthorityId || undefined} aria-pressed={profile.id === selectedVerificationAuthority.id} onClick={() => chooseRouteAuthority(profile.id)}>
             <span>{String(index + 1).padStart(2, "0")}</span><AuthorityMark profile={profile} /><b>{localize(profile.name, locale)}</b><small>{localize(profile.rule, locale)}</small>
           </button>)}
         </div>
@@ -737,19 +760,28 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
       <button className="developer-authority-finder-backdrop" type="button" onClick={() => setAuthorityFinderOpen(false)} aria-label={c.closeFinder} />
       <section>
         <header><span>02</span><div><h3 id="developer-authority-finder-title">{c.finderTitle}</h3><p>{c.finderIntro}</p></div><button type="button" onClick={() => setAuthorityFinderOpen(false)} aria-label={c.closeFinder}>×</button></header>
+        <ol className="developer-authority-finder-steps" aria-label={c.finderTitle}>{c.finderSteps.map((step, index) => <li key={step}><span>{index + 1}</span><b>{step}</b></li>)}</ol>
+        <fieldset className="developer-authority-finder-methods">
+          <legend>{c.finderMethod}</legend>
+          {(Object.keys(c.finderMethods) as AuthorityFinderMethod[]).map((method) => <button key={method} type="button" aria-pressed={authorityFinderMethod === method} onClick={() => { setAuthorityFinderMethod(method); setAuthorityFinderValue(""); setAuthorityEvidence(""); }}><span>{method === "plot" ? "▱" : method === "municipality" ? "⌗" : method === "makani" ? "⌖" : "◎"}</span><b>{c.finderMethods[method]}</b></button>)}
+        </fieldset>
         <div className="developer-authority-finder-fields">
-          <label><span>{c.finderLocation}</span><input value={authorityClue} onChange={(event) => setAuthorityClue(event.target.value)} placeholder={c.finderLocationPlaceholder} /></label>
-          <label><span>{c.finderPlot}</span><input value={plotReference} onChange={(event) => setPlotReference(event.target.value)} placeholder={c.finderPlotPlaceholder} /></label>
+          <label><span>{c.finderMethods[authorityFinderMethod]}</span><input value={authorityFinderValue} inputMode={authorityFinderMethod === "makani" ? "numeric" : "text"} onChange={(event) => setAuthorityFinderValue(event.target.value)} placeholder={c.finderPlaceholders[authorityFinderMethod]} /></label>
+          <small>{c.finderIdentifierHelp}</small>
         </div>
-        <div className="developer-authority-finder-suggestions" aria-label={c.finderLocation}>
-          {verificationAuthorityOptions.filter((profile) => profile.id !== "dubai-municipality").map((profile) => <button key={`${profile.id}-clue`} type="button" onClick={() => setAuthorityClue(localize(profile.name, "en"))}><AuthorityMark profile={profile} /><span>{localize(profile.name, locale)}</span></button>)}
-        </div>
+        {finderHasIdentifier ? <section className="developer-authority-verification" aria-live="polite">
+          <span>02</span><div><h4>{c.finderVerifyTitle}</h4><p>{authorityFinderMethod === "location" ? c.finderLocationVerifyText : c.finderVerifyText}</p><a href="https://dubailand.gov.ae/en/eservices/property-status-overview/property-status/" target="_blank" rel="noreferrer">{c.officialPropertyCheck} ↗</a></div>
+        </section> : null}
+        {authorityFinderMethod !== "location" && finderHasIdentifier ? <div className="developer-authority-finder-evidence">
+          <label><span>{c.finderEvidence}</span><input value={authorityEvidence} onChange={(event) => setAuthorityEvidence(event.target.value)} placeholder={c.finderEvidencePlaceholder} /></label>
+          <small>{c.finderEvidenceHelp}</small>
+        </div> : null}
         {authorityFinderResult ? <article className="developer-authority-finder-result" aria-live="polite">
           <AuthorityMark profile={authorityFinderResult} />
           <div><small>{c.finderLikely}</small><h4>{localize(authorityFinderResult.name, locale)}</h4><p>{localize(authorityFinderResult.chooseWhen, locale)}</p><em>{c.finderReason}</em></div>
           <button type="button" onClick={useFinderRoute}>{c.useRoute} →</button>
-        </article> : authorityClue || plotReference ? <article className="developer-authority-finder-empty" aria-live="polite"><h4>{c.finderNoMatch}</h4><p>{c.finderNoMatchText}</p></article> : null}
-        <footer><a href="https://dubailand.gov.ae/en/eservices/property-status-overview/property-status/" target="_blank" rel="noreferrer">{c.officialPropertyCheck} ↗</a></footer>
+        </article> : finderHasIdentifier ? <article className="developer-authority-finder-empty" aria-live="polite"><h4>{c.finderNoMatch}</h4><p>{c.finderNoMatchText}</p></article> : null}
+        <footer><p>{c.finderConnection}</p><a href="https://dubailand.gov.ae/en/eservices/property-status-overview/property-status/" target="_blank" rel="noreferrer">{c.officialPropertyCheck} ↗</a></footer>
       </section>
     </div> : null}
 
