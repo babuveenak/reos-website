@@ -50,28 +50,35 @@ test("Dubai Landowners reference renders source-led steps and a stakeholder visu
   assert.doesNotMatch(html, /class="status status-validated"/);
 });
 
-test("Brokers reference journey separates individual and agency entry paths and uses the official registry", async () => {
+test("Brokers journey consolidates the page into Emirate-first individual and agency routes", async () => {
   const response = await render("/stakeholders/brokers-agencies/dubai/dm-mainland");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.equal((html.match(/class="stakeholder-lifecycle-node lifecycle-(?:lead|active|supporting|informed) lifecycle-tier-(?:direct|supporting|informed)"/g) ?? []).length, 7);
-  assert.equal((html.match(/data-tier="direct"/g) ?? []).length, 3);
-  assert.equal((html.match(/data-tier="supporting"/g) ?? []).length, 1);
-  assert.equal((html.match(/data-tier="informed"/g) ?? []).length, 3);
-  assert.match(html, /Direct touchpoint/);
-  assert.match(html, /Supporting role/);
-  assert.match(html, /Kept informed — no action/);
-  assert.match(html, /Stages brokers &amp; agencies monitor but don&#x27;t act in/);
-  assert.match(html, /does not verify title or permitted use/);
-  assert.doesNotMatch(html, /class="process-stage-tab level-informed"/);
-  assert.match(html, /Path A · Individual/);
-  assert.match(html, /Path B · Company/);
-  assert.match(html, /Licensed real-estate broker/);
-  assert.match(html, /Real-estate brokerage agency/);
+  assert.equal((html.match(/class="broker-agency-journey"/g) ?? []).length, 1);
+  assert.equal((html.match(/class="broker-route-icon"/g) ?? []).length, 2);
+  assert.equal((html.match(/class="broker-step-wrap"/g) ?? []).length, 6, "Dubai individual route needs six sequenced steps");
+  assert.match(html, /One decision first. Then one guided path./);
+  assert.match(html, /Individual agent/);
+  assert.match(html, /Brokerage agency/);
+  assert.match(html, /Become a real-estate agent/);
+  assert.match(html, /company-linked electronic practice card/);
   assert.match(html, /Licensed Real Estate Brokers/);
-  assert.match(html, /Open the DLD licensed-broker registry/);
-  assert.match(html, /Authority service times start after a complete accepted submission/);
+  assert.match(html, /Open the live Dubai broker registry/);
+  assert.match(html, /Source-controlled guidance · not a live authority feed/);
+  assert.match(html, /Seven-stage connection/);
+  assert.match(html, /Verify before you act/);
+  assert.doesNotMatch(html, /Direct stage walkthrough|Path A · Individual|Path B · Company|Practical control points|Official registry/);
+  assert.doesNotMatch(html, /stakeholder-lifecycle-map|stakeholder-process-map|stakeholder-entry-guidance/);
   assert.doesNotMatch(html, /sample broker|sample brokerage|fake broker record/i);
+
+  const abuDhabi = await (await render("/stakeholders/brokers-agencies/abu-dhabi")).text();
+  assert.match(abuDhabi, /Choose individual broker or broker employee/);
+  assert.match(abuDhabi, /current DARI individual-broker service is for UAE nationals/);
+
+  const sharjah = await (await render("/stakeholders/brokers-agencies/sharjah")).text();
+  assert.match(sharjah, /This Emirate is not mapped yet/);
+  const unmappedMarkup = sharjah.split('<div class="broker-unmapped">')[1]?.split("</section>")[0] ?? "";
+  assert.doesNotMatch(unmappedMarkup, /Broker card: AED 500|AED 9,000|Dubai Land Department/);
 });
 
 test("all twelve stakeholder heroes use a role-specific 3D visual and no generic entry fallback", async () => {
