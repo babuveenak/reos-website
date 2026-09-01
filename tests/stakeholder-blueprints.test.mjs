@@ -56,7 +56,7 @@ test("Brokers journey consolidates the page into Emirate-first individual and ag
   const html = await response.text();
   assert.equal((html.match(/class="broker-agency-journey broker-operating-map"/g) ?? []).length, 1);
   assert.equal((html.match(/class="broker-route-icon"/g) ?? []).length, 2);
-  assert.equal((html.match(/class="broker-stage-card/g) ?? []).length, 5, "Dubai individual route needs five ordered stages");
+  assert.equal((html.match(/class="broker-map-checkpoint broker-map-checkpoint-/g) ?? []).length, 5, "Dubai individual route needs five ordered stages");
   assert.match(html, /A-01/);
   assert.match(html, /A-02/);
   assert.match(html, /Become an agent—or open an agency\?/);
@@ -68,16 +68,11 @@ test("Brokers journey consolidates the page into Emirate-first individual and ag
   assert.match(html, /Become a real-estate agent/);
   assert.match(html, /Confirm eligibility and residency route/);
   assert.match(html, /Authority \/ responsible party/);
-  assert.match(html, /Boundary — what this does not authorise/);
-  assert.match(html, /04 · Official action pack/);
-  assert.match(html, /Verify\. Then continue\./);
-  assert.match(html, /Official actions for this task/);
-  assert.doesNotMatch(html, /Four checks before you leave REOS|Source drawer/);
-  assert.match(html, /Licensed Real Estate Brokers/);
-  assert.match(html, /Verify a Dubai broker or office/);
+  assert.match(html, /Your step-by-step roadmap\./);
+  assert.match(html, /Open first task/);
+  assert.doesNotMatch(html, /Official action pack|Verify\. Then continue\.|Four checks before you leave REOS|Source drawer/);
   assert.match(html, /Guidance snapshot · not a live government feed/);
   assert.match(html, /seven-stage property lifecycle/);
-  assert.match(html, /Official action pack/);
   assert.doesNotMatch(html, /Direct stage walkthrough|Path A · Individual|Path B · Company|Practical control points|Official registry/);
   assert.doesNotMatch(html, /stakeholder-lifecycle-map|stakeholder-process-map|stakeholder-entry-guidance/);
   assert.doesNotMatch(html, /sample broker|sample brokerage|fake broker record/i);
