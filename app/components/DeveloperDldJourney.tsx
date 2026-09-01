@@ -5,10 +5,9 @@ import { dldDeveloperBook } from "../data/dldDeveloperBook";
 import { developerJourneySteps, type DeveloperServiceReference, type LocalizedText } from "../data/developerJourneyGuide";
 import type { Stage } from "../data/journey";
 import { officialSourceById } from "../data/officialSources";
-import { stakeholderDirectories, stakeholderGuidance } from "../data/stakeholderGuidance";
-import type { DubaiTrack, ParticipationState } from "../data/stakeholderBlueprints";
+import { stakeholderGuidance } from "../data/stakeholderGuidance";
+import { EMIRATES, type DubaiTrack, type EmirateId, type ParticipationState } from "../data/stakeholderBlueprints";
 import type { Locale } from "../i18n/config";
-import { StakeholderOfficialDirectory } from "./StakeholderOfficialDirectory";
 
 type PhaseId = "pre-development" | "development" | "post-development";
 
@@ -92,8 +91,34 @@ const COPY = {
     response: "Recommended control",
     controlTypes: ["Requirement", "Authority", "Compliance", "Document", "Financial control", "Recommended action"],
     registryEyebrow: "06 · Official registry and verification",
-    registryTitle: "Know what to verify before leaving REOS.",
-    registryIntro: "Project registration, real-estate activity licensing and a live developer-entity register answer different questions. REOS explains their place in the journey first; the linked authority remains the source of the official decision.",
+    registryTitle: "Choose the Emirate, confirm the authority branch, then verify in sequence.",
+    registryIntro: "Do not begin by guessing a service name. Start with the Emirate and the authority shown on the plot, site-plan or master-development record. REOS then builds the applicable verification route; the linked authority remains the source of the official decision.",
+    emirateFirst: "1 · Choose the Emirate first",
+    emirateHelp: "Dubai is mapped from the official DLD Developer Book. An unmapped Emirate never inherits Dubai services.",
+    authoritySecond: "2 · Confirm the project authority",
+    authorityHelp: "Choose only after the plot, site plan or master-developer record confirms the competent branch.",
+    routeReady: "Your verification route",
+    routeReadyText: "The sequence below combines shared DLD gates with the official service records for the selected authority branch.",
+    howToChoose: "How to choose the authority",
+    howToChooseText: "Do not infer the authority from a project name or general location. Record the authority shown by the plot/site-plan evidence and confirm it through the official channel before relying on this branch.",
+    authorityServices: "official records in this gate",
+    whyVerify: "Why verify this",
+    expectedEvidence: "Evidence / output to retain",
+    inspectGate: "Inspect this gate in the service explorer",
+    openOfficialBranch: "Open the official authority branch",
+    conditional: "Conditional · only when off-plan sales apply",
+    shared: "Shared Dubai gate",
+    branch: "Selected authority gate",
+    notMapped: "This Emirate is not yet mapped for this developer verification tool.",
+    notMappedText: "REOS will not substitute Dubai authorities, fees, timings or procedures. Open the Emirate developer page for its current coverage statement; use the relevant local authority as the official decision source.",
+    openEmiratePage: "Open this Emirate's developer page",
+    optionalSearch: "Optional final tool · search within this selected route",
+    optionalSearchHelp: "Use this only after the Emirate and authority are known. Results are limited to the shared Dubai gates and the selected authority branch.",
+    optionalSearchPlaceholder: "Search the selected route, for example escrow or building permit",
+    searchPrompt: "Enter a service name to search the selected route.",
+    searchMatches: "matching official records",
+    noRouteMatches: "No official record in this selected route matches that search.",
+    inspectService: "Inspect record, listed documents, fee and time",
   },
   ar: {
     eyebrow: "02 · رحلة المطور ودليل الإجراءات",
@@ -160,10 +185,69 @@ const COPY = {
     response: "إجراء الضبط الموصى به",
     controlTypes: ["متطلب", "جهة", "امتثال", "مستند", "ضبط مالي", "إجراء موصى به"],
     registryEyebrow: "06 · السجل الرسمي والتحقق",
-    registryTitle: "اعرف ما يجب التحقق منه قبل مغادرة REOS.",
-    registryIntro: "يجيب تسجيل المشروع وترخيص النشاط العقاري وسجل كيانات المطورين الحي عن أسئلة مختلفة. تشرح REOS موقع كل منها في الرحلة أولاً، وتظل الجهة المرتبطة مصدر القرار الرسمي.",
+    registryTitle: "اختر الإمارة، ثم أكد مسار الجهة، ثم تحقق بالتسلسل.",
+    registryIntro: "لا تبدأ بتخمين اسم الخدمة. ابدأ بالإمارة والجهة الظاهرة في سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي. يبني REOS بعد ذلك مسار التحقق المنطبق، وتظل الجهة المرتبطة مصدر القرار الرسمي.",
+    emirateFirst: "1 · اختر الإمارة أولاً",
+    emirateHelp: "تم تنظيم مسار دبي من دليل المطور الرسمي لدى الدائرة. ولا ترث أي إمارة غير مخططة خدمات دبي.",
+    authoritySecond: "2 · أكد جهة المشروع",
+    authorityHelp: "اختر فقط بعد أن يؤكد سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي الجهة المختصة.",
+    routeReady: "مسار التحقق الخاص بك",
+    routeReadyText: "يجمع التسلسل أدناه بوابات الدائرة المشتركة مع سجلات الخدمات الرسمية لمسار الجهة المحدد.",
+    howToChoose: "كيفية اختيار الجهة",
+    howToChooseText: "لا تستنتج الجهة من اسم المشروع أو الموقع العام. سجل الجهة التي تثبتها مستندات الأرض أو مخطط الموقع، وأكدها عبر القناة الرسمية قبل الاعتماد على هذا المسار.",
+    authorityServices: "سجلات رسمية في هذه البوابة",
+    whyVerify: "لماذا يجب التحقق",
+    expectedEvidence: "الدليل / المخرج الواجب الاحتفاظ به",
+    inspectGate: "افحص هذه البوابة في مستكشف الخدمات",
+    openOfficialBranch: "افتح مسار الجهة الرسمي",
+    conditional: "مشروط · فقط عند انطباق البيع على الخارطة",
+    shared: "بوابة مشتركة في دبي",
+    branch: "بوابة الجهة المحددة",
+    notMapped: "لم يتم بعد تنظيم هذه الإمارة في أداة تحقق المطور هذه.",
+    notMappedText: "لن يستبدل REOS جهات دبي أو رسومها أو مددها أو إجراءاتها. افتح صفحة المطور للإمارة للاطلاع على بيان التغطية الحالي، واستخدم الجهة المحلية المختصة كمصدر القرار الرسمي.",
+    openEmiratePage: "افتح صفحة المطور لهذه الإمارة",
+    optionalSearch: "أداة أخيرة اختيارية · ابحث داخل المسار المحدد",
+    optionalSearchHelp: "استخدم البحث فقط بعد معرفة الإمارة والجهة. تقتصر النتائج على بوابات دبي المشتركة ومسار الجهة المحدد.",
+    optionalSearchPlaceholder: "ابحث في المسار المحدد، مثل escrow أو building permit",
+    searchPrompt: "أدخل اسم خدمة للبحث داخل المسار المحدد.",
+    searchMatches: "سجلات رسمية مطابقة",
+    noRouteMatches: "لا يطابق البحث أي سجل رسمي في المسار المحدد.",
+    inspectService: "افحص السجل والمستندات والرسوم والمدة المدرجة",
   },
 } as const;
+
+const VERIFICATION_STEP_COPY = [
+  {
+    title: { en: "Establish and register the developer entity", ar: "تأسيس كيان المطور وتسجيله" },
+    why: { en: "Confirm the entity, licensed real-estate activity, DLD approval, developer-log registration and Oqood access before treating the organisation as project-ready.", ar: "أكد الكيان والنشاط العقاري المرخص وموافقة الدائرة والتسجيل في سجل المطورين والوصول إلى نظام عقود قبل اعتبار المؤسسة جاهزة للمشروع." },
+    evidence: { en: "Entity and licensing records, DLD NOC, developer-log evidence and Oqood registration evidence, as applicable.", ar: "سجلات الكيان والترخيص وعدم ممانعة الدائرة ودليل سجل المطورين ودليل التسجيل في عقود، بحسب الانطباق." },
+  },
+  {
+    title: { en: "Confirm the plot and competent authority branch", ar: "تأكيد الأرض ومسار الجهة المختصة" },
+    why: { en: "The planning, permit and completion route changes with the authority responsible for the plot. A generic Dubai search cannot make this decision.", ar: "يتغير مسار التخطيط والتصريح والإنجاز بحسب الجهة المسؤولة عن الأرض. ولا يستطيع بحث عام عن دبي اتخاذ هذا القرار." },
+    evidence: { en: "A recorded plot/site-plan reference and a confirmed competent authority branch for the project file.", ar: "مرجع مسجل للأرض أو مخطط الموقع ومسار مؤكد للجهة المختصة في ملف المشروع." },
+  },
+  {
+    title: { en: "Verify master-plan, design and NOC gates", ar: "التحقق من بوابات المخطط العام والتصميم وعدم الممانعة" },
+    why: { en: "The selected authority branch has its own published master-plan and related approval records. Required items can be sequential or parallel.", ar: "لمسار الجهة المحدد سجلاته المنشورة للمخطط العام والموافقات المرتبطة. وقد تكون المتطلبات متسلسلة أو متوازية." },
+    evidence: { en: "Applicable master-plan, design and NOC submissions, conditions and approval outputs retained in the project file.", ar: "طلبات المخطط العام والتصميم وعدم الممانعة المنطبقة وشروطها ومخرجات موافقاتها محفوظة في ملف المشروع." },
+  },
+  {
+    title: { en: "Verify permit, construction and completion gates", ar: "التحقق من بوابات التصريح والإنشاء والإنجاز" },
+    why: { en: "Construction and completion evidence must follow the selected authority branch, not a different Dubai jurisdiction's checklist.", ar: "يجب أن تتبع أدلة الإنشاء والإنجاز مسار الجهة المحدد، لا قائمة تحقق تخص نطاقاً آخر في دبي." },
+    evidence: { en: "Applicable permit, inspection, construction-control and completion records from the selected authority route.", ar: "سجلات التصاريح والتفتيش وضبط الإنشاء والإنجاز المنطبقة من مسار الجهة المحدد." },
+  },
+  {
+    title: { en: "Verify off-plan project, escrow and initial-unit gates", ar: "التحقق من بوابات المشروع على الخارطة والضمان والتحميل الأولي للوحدات" },
+    why: { en: "This parallel route applies when off-plan sales are intended; it must not be treated as a universal construction step.", ar: "ينطبق هذا المسار المتوازي عند وجود بيع على الخارطة، ولا يجب اعتباره خطوة إنشاء عامة." },
+    evidence: { en: "Applicable project-registration, escrow-account and initial-unit-loading records before relying on off-plan sales readiness.", ar: "سجلات تسجيل المشروع وحساب الضمان والتحميل الأولي للوحدات المنطبقة قبل الاعتماد على جاهزية البيع على الخارطة." },
+  },
+  {
+    title: { en: "Verify final loading, escrow settlement and handover close-out", ar: "التحقق من التحميل النهائي وتسوية الضمان وإقفال التسليم" },
+    why: { en: "Completion does not by itself prove that final unit and escrow close-out records are complete or that surviving obligations have been handed over.", ar: "لا يثبت الإنجاز وحده اكتمال سجلات الوحدات النهائية وإقفال الضمان أو تسليم الالتزامات المستمرة." },
+    evidence: { en: "Final unit-loading and escrow-settlement records, plus the applicable handover and surviving-obligation evidence.", ar: "سجلات التحميل النهائي للوحدات وتسوية الضمان، إضافة إلى أدلة التسليم والالتزامات المستمرة المنطبقة." },
+  },
+] as const;
 
 const SUBPHASE_LABELS: Record<Locale, Record<string, string>> = {
   en: {},
@@ -215,6 +299,9 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const [serviceId, setServiceId] = useState(preDevelopment.services[0].id);
   const [query, setQuery] = useState("");
   const [guideStepId, setGuideStepId] = useState(developerJourneySteps[0].id);
+  const [verificationEmirateId, setVerificationEmirateId] = useState<EmirateId>("dubai");
+  const [verificationAuthorityId, setVerificationAuthorityId] = useState(initialAuthority);
+  const [verificationQuery, setVerificationQuery] = useState("");
 
   const selectedSubphase = development.subphases.find((item) => item.id === subphaseId) ?? development.subphases[0];
   const selectedBranch = selectedSubphase.branches.find((item) => item.id === authorityId) ?? selectedSubphase.branches[0];
@@ -229,7 +316,32 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const stageNote = phaseId === "pre-development" ? preDevelopment.sequenceNote : phaseId === "post-development" ? postDevelopment.sequenceNote : development.sequenceNote;
   const selectedGuideStep = developerJourneySteps.find((step) => step.id === guideStepId) ?? developerJourneySteps[0];
   const guidance = stakeholderGuidance.developers;
-  const directory = stakeholderDirectories.developers;
+  const verificationAuthorityOptions = development.subphases[0].branches;
+  const selectedVerificationAuthority = verificationAuthorityOptions.find((branch) => branch.id === verificationAuthorityId) ?? verificationAuthorityOptions[0];
+  const verificationBranchFor = (subphaseIndex: number) => {
+    const subphase = development.subphases[subphaseIndex];
+    return subphase.branches.find((branch) => branch.id === selectedVerificationAuthority.id) ?? subphase.branches[0];
+  };
+  const verificationMasterPlan = verificationBranchFor(0);
+  const verificationConstruction = verificationBranchFor(1);
+  const verificationOffPlan = verificationBranchFor(2);
+  const verificationGates = [
+    { services: preDevelopment.services, sourceUrl: preDevelopment.sourceUrl, type: c.shared, phase: "pre-development" as PhaseId },
+    { services: [], sourceUrl: selectedVerificationAuthority.sourceUrl, type: c.branch, phase: "development" as PhaseId },
+    { services: verificationMasterPlan.services, sourceUrl: verificationMasterPlan.sourceUrl, type: c.branch, phase: "development" as PhaseId, subphaseId: development.subphases[0].id },
+    { services: verificationConstruction.services, sourceUrl: verificationConstruction.sourceUrl, type: c.branch, phase: "development" as PhaseId, subphaseId: development.subphases[1].id },
+    { services: verificationOffPlan.services, sourceUrl: verificationOffPlan.sourceUrl, type: c.conditional, phase: "development" as PhaseId, subphaseId: development.subphases[2].id },
+    { services: postDevelopment.services, sourceUrl: postDevelopment.sourceUrl, type: c.shared, phase: "post-development" as PhaseId },
+  ];
+  const verificationRecords = verificationGates.flatMap((gate, gateIndex) => gate.services.map((service) => ({
+    gateIndex,
+    service,
+    reference: { phase: gate.phase, subphaseId: gate.subphaseId, serviceId: service.id } satisfies DeveloperServiceReference,
+  })));
+  const normalizedVerificationQuery = verificationQuery.trim().toLocaleLowerCase();
+  const visibleVerificationRecords = normalizedVerificationQuery
+    ? verificationRecords.filter(({ service }) => `${service.title} ${service.description}`.toLocaleLowerCase().includes(normalizedVerificationQuery))
+    : [];
 
   const setPhase = (next: PhaseId) => {
     setPhaseId(next);
@@ -264,7 +376,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     return branch.services.find((service) => service.id === reference.serviceId);
   };
 
-  const inspectReference = (reference: DeveloperServiceReference) => {
+  const inspectReference = (reference: DeveloperServiceReference, authorityOverride = authorityId) => {
     setQuery("");
     if (reference.phase === "pre-development") {
       setPhaseId("pre-development");
@@ -274,7 +386,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
       setServiceId(reference.serviceId ?? postDevelopment.services[0].id);
     } else {
       const nextSubphase = development.subphases.find((item) => item.id === reference.subphaseId) ?? development.subphases[0];
-      const nextBranch = nextSubphase.branches.find((item) => item.id === authorityId) ?? nextSubphase.branches[0];
+      const nextBranch = nextSubphase.branches.find((item) => item.id === authorityOverride) ?? nextSubphase.branches[0];
       setPhaseId("development");
       setSubphaseId(nextSubphase.id);
       setAuthorityId(nextBranch.id);
@@ -485,7 +597,91 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
         <h3 id="developer-registry-title">{c.registryTitle}</h3>
         <p>{c.registryIntro}</p>
       </header>
-      <StakeholderOfficialDirectory directory={directory} locale={locale} />
+
+      <div className="developer-verification-controls">
+        <label>
+          <span>{c.emirateFirst}</span>
+          <select value={verificationEmirateId} onChange={(event) => {
+            setVerificationEmirateId(event.target.value as EmirateId);
+            setVerificationQuery("");
+          }}>
+            {EMIRATES.map((emirate) => <option key={emirate.id} value={emirate.id}>{locale === "ar" ? emirate.ar : emirate.label}</option>)}
+          </select>
+          <small>{c.emirateHelp}</small>
+        </label>
+
+        {verificationEmirateId === "dubai" ? <fieldset>
+          <legend>{c.authoritySecond}</legend>
+          <p>{c.authorityHelp}</p>
+          <div className="developer-authority-choices">
+            {verificationAuthorityOptions.map((branch, index) => <button key={branch.id} type="button" aria-pressed={branch.id === selectedVerificationAuthority.id} onClick={() => {
+              setVerificationAuthorityId(branch.id);
+              setVerificationQuery("");
+            }}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <b>{branch.authority}</b>
+            </button>)}
+          </div>
+        </fieldset> : null}
+      </div>
+
+      {verificationEmirateId === "dubai" ? <div className="developer-verification-route">
+        <aside className="developer-authority-condition">
+          <div><span>{c.howToChoose}</span><b>{selectedVerificationAuthority.authority}</b></div>
+          <p>{c.howToChooseText}</p>
+        </aside>
+
+        <header>
+          <div><span>{c.routeReady}</span><h4>{selectedVerificationAuthority.authority}</h4></div>
+          <p>{c.routeReadyText}</p>
+        </header>
+
+        <ol className="developer-verification-flow">
+          {VERIFICATION_STEP_COPY.map((step, index) => {
+            const gate = verificationGates[index];
+            const reference = gate.services[0] ? { phase: gate.phase, subphaseId: gate.subphaseId, serviceId: gate.services[0].id } satisfies DeveloperServiceReference : undefined;
+            return <li key={`${selectedVerificationAuthority.id}-verification-${index}`}>
+              <span className="developer-verification-number">{String(index + 1).padStart(2, "0")}</span>
+              <article>
+                <header><small>{gate.type}</small><h5>{localize(step.title, locale)}</h5></header>
+                <div>
+                  <p><b>{c.whyVerify}</b>{localize(step.why, locale)}</p>
+                  <p><b>{c.expectedEvidence}</b>{localize(step.evidence, locale)}</p>
+                </div>
+                {gate.services.length ? <div className="developer-verification-services">
+                  <span><b>{gate.services.length}</b> {c.authorityServices}</span>
+                  <ul>{gate.services.slice(0, 4).map((service) => <li key={service.id} lang="en">{service.title}</li>)}</ul>
+                  {gate.services.length > 4 ? <small>+ {gate.services.length - 4} {locale === "ar" ? "سجلات إضافية" : "more records"}</small> : null}
+                </div> : null}
+                <footer>
+                  {reference ? <button type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.id)}>{c.inspectGate} <span aria-hidden="true">↓</span></button> : null}
+                  <a href={gate.sourceUrl} target="_blank" rel="noreferrer">{c.openOfficialBranch} <span aria-hidden="true">↗</span></a>
+                </footer>
+              </article>
+            </li>;
+          })}
+        </ol>
+
+        <section className="developer-verification-search" aria-labelledby="developer-verification-search-title">
+          <header><h5 id="developer-verification-search-title">{c.optionalSearch}</h5><p>{c.optionalSearchHelp}</p></header>
+          <label><span>{c.serviceSearch}</span><input type="search" value={verificationQuery} onChange={(event) => setVerificationQuery(event.target.value)} placeholder={c.optionalSearchPlaceholder} /></label>
+          <div className="developer-verification-search-count" aria-live="polite">
+            {normalizedVerificationQuery ? <><b>{visibleVerificationRecords.length}</b> {c.searchMatches}</> : c.searchPrompt}
+          </div>
+          {normalizedVerificationQuery ? <div className="developer-verification-search-results">
+            {visibleVerificationRecords.map(({ gateIndex, service, reference }) => <button key={`${gateIndex}-${service.id}`} type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.id)}>
+              <span>{String(gateIndex + 1).padStart(2, "0")} · {verificationGates[gateIndex].type}</span>
+              <b lang="en">{service.title}</b>
+              <small>{c.inspectService}</small>
+              <i aria-hidden="true">↓</i>
+            </button>)}
+            {visibleVerificationRecords.length === 0 ? <p>{c.noRouteMatches}</p> : null}
+          </div> : null}
+        </section>
+      </div> : <div className="developer-verification-unmapped" role="status">
+        <span>{String(EMIRATES.findIndex((emirate) => emirate.id === verificationEmirateId) + 1).padStart(2, "0")}</span>
+        <div><h4>{c.notMapped}</h4><p>{c.notMappedText}</p><a href={`${locale === "ar" ? "/ar" : ""}/stakeholders/developers/${verificationEmirateId}`}>{c.openEmiratePage} <span aria-hidden="true">→</span></a></div>
+      </div>}
     </section>
 
     <footer className="dld-source-warning"><p>{c.sourceWarning}</p><small>{c.officialEnglish}</small></footer>

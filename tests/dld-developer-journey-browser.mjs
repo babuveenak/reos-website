@@ -90,8 +90,32 @@ assert.match(await journey.locator(".dld-crosswalk").innerText(), /protected REO
 assert.equal(await journey.locator(".developer-control-points details").count(), 6, "control points must be interactive and use differentiated meanings");
 await journey.locator(".developer-control-points details").nth(4).locator("summary").click();
 assert.match(await journey.locator(".developer-control-points details").nth(4).innerText(), /Financial control[\s\S]*Why it happens[\s\S]*Recommended control/i);
-assert.equal(await journey.locator(".developer-registry-guide input[type='search']").count(), 1, "the registry guide needs searchable official channels");
-assert.match(await journey.locator(".developer-registry-guide").innerText(), /Project registration.*real-estate activity licensing.*different questions/is);
+const verification = journey.locator(".developer-registry-guide");
+assert.match(await verification.locator(":scope > header").innerText(), /Choose the Emirate.*confirm the authority branch.*verify in sequence/is);
+assert.equal(await verification.locator(".developer-verification-controls > label select option").count(), 7, "verification must begin with all seven Emirates");
+assert.equal(await verification.locator(".developer-authority-choices button").count(), 6, "Dubai must expose the six official DLD authority branches");
+assert.equal(await verification.locator(".developer-verification-flow > li").count(), 6, "the selected authority route must show six numbered verification gates");
+const selectorBeforeSearch = await verification.evaluate((section) => {
+  const emirate = section.querySelector(".developer-verification-controls > label select");
+  const search = section.querySelector(".developer-verification-search input[type='search']");
+  return Boolean(emirate && search && (emirate.compareDocumentPosition(search) & Node.DOCUMENT_POSITION_FOLLOWING));
+});
+assert.equal(selectorBeforeSearch, true, "Emirate and authority selection must appear before optional search");
+
+await verification.locator(".developer-authority-choices button").filter({ hasText: "Dubai South" }).click();
+assert.match(await verification.locator(".developer-verification-route").innerText(), /Dubai South[\s\S]*16 official records in this gate[\s\S]*14 official records in this gate[\s\S]*Conditional.*2 official records in this gate/is, "Dubai South must build its own authority-specific route");
+const verificationSearch = verification.locator(".developer-verification-search input[type='search']");
+await verificationSearch.fill("escrow");
+assert.ok(await verification.locator(".developer-verification-search-results button").count() >= 1, "optional search must be limited to the selected route");
+await verification.locator(".developer-verification-search-results button").first().click();
+assert.match(await journey.locator(".dld-service-detail").innerText(), /Escrow/i, "a verification search result must open its official service record in the explorer");
+
+await verification.locator(".developer-verification-controls > label select").selectOption("abu-dhabi");
+assert.equal(await verification.locator(".developer-authority-choices").count(), 0, "an unmapped Emirate must not inherit Dubai authority choices");
+assert.equal(await verification.locator(".developer-verification-flow").count(), 0, "an unmapped Emirate must not inherit the Dubai verification sequence");
+assert.match(await verification.locator(".developer-verification-unmapped").innerText(), /not yet mapped[\s\S]*will not substitute Dubai authorities/i);
+assert.doesNotMatch(await verification.locator(".developer-verification-unmapped").innerText(), /Dubai Municipality|Dubai South/);
+await verification.locator(".developer-verification-controls > label select").selectOption("dubai");
 assert.doesNotMatch(await journey.innerText(), /Request a demo|Title Deed Automation|NOC Automation/);
 
 await scan(desktop.page, "light DLD developer navigator");

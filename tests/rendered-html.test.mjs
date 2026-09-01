@@ -770,7 +770,10 @@ test("developer routes expose the DLD three-phase navigator without leaking it t
   assert.match(developer, /How this sits inside the protected REOS lifecycle/);
   assert.match(developer, /href="https:\/\/dubailand\.gov\.ae\/en\/developer-book\/main-phases\/development-stage\/#\//);
   assert.match(developer, /Open each risk to see why it happens and how to control it/);
-  assert.match(developer, /Know what to verify before leaving REOS/);
+  assert.match(developer, /Choose the Emirate, confirm the authority branch, then verify in sequence/);
+  assert.match(developer, /Dubai South/);
+  assert.match(developer, /Your verification route/);
+  assert.match(developer, /Optional final tool · search within this selected route/);
   assert.doesNotMatch(developer, /Direct stage walkthrough/, "the developer page must not repeat the generic stage walkthrough");
 
   const broker = await (await render("/stakeholders/brokers-agencies/dubai/dm-mainland")).text();
