@@ -340,7 +340,8 @@ test("Intelligence keeps the visual index educational while deeper guides retain
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
   assert.match(stakeholder, /Developer journey &amp; process guide/);
-  assert.match(stakeholder, /Central developer checklist/);
+  assert.match(stakeholder, /Choose your development route/);
+  assert.match(stakeholder, /Verify and proceed officially/);
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.doesNotMatch(stakeholder, /RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|href="\/demo"/, "stakeholder education must not become a product pitch");
 });
@@ -745,7 +746,7 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
   const stakeholder = await (await render("/stakeholders/developers")).text();
   assert.match(stakeholder, /Developer journey &amp; process guide/);
   assert.equal((stakeholder.match(/data-level="(?:lead|active|supporting|informed)"/g) ?? []).length, 7, "the integrated developer journey must keep all seven relationship levels");
-  assert.match(stakeholder, /Ten connected steps from first decision to operating handover/);
+  assert.match(stakeholder, /Follow one guided path from setup to close-out/);
   assert.doesNotMatch(stakeholder, /Direct stage walkthrough/, "the developer page must not repeat a second lifecycle walkthrough");
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
@@ -753,10 +754,11 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
 
 test("developer routes expose the DLD three-phase navigator without leaking it to other scopes", async () => {
   const developer = await (await render("/stakeholders/developers/dubai/dm-mainland")).text();
+  assert.match(developer, /Choose your development route/);
   assert.match(developer, /Developer journey &amp; process guide/);
-  assert.match(developer, /Lifecycle connection · all seven stages/);
+  assert.match(developer, /REOS seven-stage crosswalk/);
   assert.equal((developer.match(/data-level="(?:lead|active|supporting|informed)"/g) ?? []).length, 7);
-  assert.match(developer, /Ten connected steps from first decision to operating handover/);
+  assert.match(developer, /Follow one guided path from setup to close-out/);
   assert.equal((developer.match(/class="developer-checklist-workspace"/g) ?? []).length, 1);
   assert.match(developer, /Close out and support the operating asset/);
   assert.match(developer, /Pre-development/);
@@ -769,11 +771,11 @@ test("developer routes expose the DLD three-phase navigator without leaking it t
   assert.match(developer, /Listed service time/);
   assert.match(developer, /How this sits inside the protected REOS lifecycle/);
   assert.match(developer, /href="https:\/\/dubailand\.gov\.ae\/en\/developer-book\/main-phases\/development-stage\/#\//);
-  assert.match(developer, /Open each risk to see why it happens and how to control it/);
-  assert.match(developer, /Choose the Emirate, confirm the authority branch, then verify in sequence/);
+  assert.match(developer, /Check the risks before they become delays/);
+  assert.match(developer, /Verify and proceed officially/);
   assert.match(developer, /Dubai South/);
-  assert.match(developer, /Your verification route/);
-  assert.match(developer, /Optional final tool · search within this selected route/);
+  assert.match(developer, /Five evidence gates before you proceed/);
+  assert.doesNotMatch(developer, /Optional final tool · search within this selected route/);
   assert.doesNotMatch(developer, /Direct stage walkthrough/, "the developer page must not repeat the generic stage walkthrough");
 
   const broker = await (await render("/stakeholders/brokers-agencies/dubai/dm-mainland")).text();

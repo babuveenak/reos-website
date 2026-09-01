@@ -36,9 +36,20 @@ async function scan(page, label) {
 const desktop = await open("/stakeholders/developers/dubai/dm-mainland", 1440, 1000, "no-preference");
 const journey = desktop.page.locator(".developer-dld-journey");
 assert.equal(await journey.count(), 1, "Dubai developers need one DLD journey navigator");
-assert.equal(await journey.locator(".developer-seven-stage button").count(), 7, "the connected journey must retain all seven protected REOS stages");
-assert.match(await journey.locator(".developer-seven-stage").innerText(), /Stage 7 remains included|Asset Growth & Intelligence/i);
+assert.equal(await journey.locator(".developer-lifecycle-ribbon button").count(), 7, "the connected journey must retain all seven protected REOS stages");
+assert.match(await journey.locator(".developer-lifecycle-ribbon").innerText(), /Stage 7 is a supporting role|Asset Growth & Intelligence/i);
 assert.equal(await journey.locator(".developer-checklist-workspace > nav button").count(), 10, "the primary developer checklist must contain ten connected steps");
+assert.equal(await journey.locator(".developer-route-selector").count(), 1, "the page must begin with one route selector");
+assert.equal(await journey.locator(".developer-registry-guide").count(), 1, "the page must end with one official verification section");
+assert.equal(await journey.locator(".developer-final-verification > ol > li").count(), 5, "official verification must be reduced to five visual evidence gates");
+assert.doesNotMatch(await journey.innerText(), /03 · Central developer checklist|04 · DLD phase and service explorer|05 · Practical control points|06 · Official registry/i, "the five former page sections must not remain as competing numbered experiences");
+const consolidatedSequence = await journey.evaluate((section) => {
+  const route = section.querySelector(".developer-route-selector");
+  const guide = section.querySelector("#developer-checklist");
+  const verify = section.querySelector(".developer-registry-guide");
+  return Boolean(route && guide && verify && (route.compareDocumentPosition(guide) & Node.DOCUMENT_POSITION_FOLLOWING) && (guide.compareDocumentPosition(verify) & Node.DOCUMENT_POSITION_FOLLOWING));
+});
+assert.equal(consolidatedSequence, true, "the page must flow from route choice to guided journey to official verification");
 assert.equal(await desktop.page.locator(".stakeholder-process-map").count(), 0, "the generic process map must not duplicate the developer journey");
 assert.equal(await desktop.page.locator(".stakeholder-entry-guidance").count(), 0, "the generic role-entry section must not duplicate the developer checklist");
 assert.equal(await journey.locator(".dld-map-node").count(), 5, "the overview needs pre, three development nodes and post");
@@ -60,7 +71,7 @@ assert.match(await journey.locator(".developer-checklist-detail footer").innerTe
 await journey.locator(".developer-checklist-detail footer button").click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Opening Of An Escrow Account[\s\S]*Trustee Account System - TAS/i);
 
-await journey.locator(".developer-seven-stage button").nth(6).click();
+await journey.locator(".developer-lifecycle-ribbon button").nth(6).click();
 assert.match(await journey.locator(".developer-checklist-detail").innerText(), /Close out and support the operating asset[\s\S]*supporting role/i);
 
 await journey.locator(".dld-phase-nav button").nth(0).click();
@@ -115,31 +126,25 @@ assert.equal(await journey.locator(".developer-control-points details").count(),
 await journey.locator(".developer-control-points details").nth(4).locator("summary").click();
 assert.match(await journey.locator(".developer-control-points details").nth(4).innerText(), /Financial control[\s\S]*Why it happens[\s\S]*Recommended control/i);
 const verification = journey.locator(".developer-registry-guide");
-assert.match(await verification.locator(":scope > header").innerText(), /Choose the Emirate.*confirm the authority branch.*verify in sequence/is);
-assert.equal(await verification.locator(".developer-verification-controls > label select option").count(), 7, "verification must begin with all seven Emirates");
-assert.equal(await verification.locator(".developer-authority-choices button").count(), 6, "Dubai must expose the six official DLD authority branches");
-assert.equal(await verification.locator(".developer-verification-flow > li").count(), 6, "the selected authority route must show six numbered verification gates");
-const selectorBeforeSearch = await verification.evaluate((section) => {
-  const emirate = section.querySelector(".developer-verification-controls > label select");
-  const search = section.querySelector(".developer-verification-search input[type='search']");
-  return Boolean(emirate && search && (emirate.compareDocumentPosition(search) & Node.DOCUMENT_POSITION_FOLLOWING));
-});
-assert.equal(selectorBeforeSearch, true, "Emirate and authority selection must appear before optional search");
+assert.match(await verification.locator(":scope > header").innerText(), /Verify and proceed officially[\s\S]*right evidence and official route/is);
+const routeSelector = journey.locator(".developer-route-selector");
+assert.equal(await routeSelector.locator("select option").count(), 7, "route selection must begin with all seven Emirates");
+assert.equal(await routeSelector.locator(".developer-route-authorities button").count(), 6, "Dubai must expose the six official DLD authority branches");
+assert.equal(await routeSelector.locator(".developer-sale-route button").count(), 2, "route selection must make off-plan applicability explicit");
 
-await verification.locator(".developer-authority-choices button").filter({ hasText: "Dubai South" }).click();
-assert.match(await verification.locator(".developer-verification-route").innerText(), /Dubai South[\s\S]*16 official records in this gate[\s\S]*14 official records in this gate[\s\S]*Conditional.*2 official records in this gate/is, "Dubai South must build its own authority-specific route");
-const verificationSearch = verification.locator(".developer-verification-search input[type='search']");
-await verificationSearch.fill("escrow");
-assert.ok(await verification.locator(".developer-verification-search-results button").count() >= 1, "optional search must be limited to the selected route");
-await verification.locator(".developer-verification-search-results button").first().click();
-assert.match(await journey.locator(".dld-service-detail").innerText(), /Escrow/i, "a verification search result must open its official service record in the explorer");
+await routeSelector.locator(".developer-route-authorities button").filter({ hasText: "Dubai South" }).click();
+assert.match(await routeSelector.locator(".developer-selected-route").innerText(), /Dubai South[\s\S]*Off-plan sales apply/i);
+assert.match(await verification.locator(".developer-final-verification").innerText(), /Dubai South[\s\S]*16[\s\S]*official records in this gate/is, "Dubai South must build its own authority-specific evidence cards");
+await routeSelector.locator(".developer-sale-route button").nth(1).click();
+assert.match(await verification.locator(".developer-final-verification > ol > li").nth(3).innerText(), /14[\s\S]*official records in this gate/is, "the non-off-plan route must remove the two conditional escrow records from the build gate");
+await routeSelector.locator(".developer-sale-route button").nth(0).click();
 
-await verification.locator(".developer-verification-controls > label select").selectOption("abu-dhabi");
-assert.equal(await verification.locator(".developer-authority-choices").count(), 0, "an unmapped Emirate must not inherit Dubai authority choices");
-assert.equal(await verification.locator(".developer-verification-flow").count(), 0, "an unmapped Emirate must not inherit the Dubai verification sequence");
+await routeSelector.locator("select").selectOption("abu-dhabi");
+assert.equal(await routeSelector.locator(".developer-route-choice[disabled]").count(), 2, "unmapped Emirates must disable Dubai authority and sales controls");
+assert.equal(await verification.locator(".developer-final-verification").count(), 0, "an unmapped Emirate must not inherit the Dubai verification sequence");
 assert.match(await verification.locator(".developer-verification-unmapped").innerText(), /not yet mapped[\s\S]*will not substitute Dubai authorities/i);
 assert.doesNotMatch(await verification.locator(".developer-verification-unmapped").innerText(), /Dubai Municipality|Dubai South/);
-await verification.locator(".developer-verification-controls > label select").selectOption("dubai");
+await routeSelector.locator("select").selectOption("dubai");
 assert.doesNotMatch(await journey.innerText(), /Request a demo|Title Deed Automation|NOC Automation/);
 
 await scan(desktop.page, "light DLD developer navigator");
@@ -170,7 +175,7 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
   const overflow = await view.page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   assert.ok(overflow <= 1, `${width}px viewport has ${overflow}px horizontal overflow`);
   assert.equal(await view.page.locator(".developer-dld-journey .dld-map-node").count(), 5, `${width}px must retain the graphical route`);
-  assert.equal(await view.page.locator(".developer-dld-journey .developer-seven-stage button").count(), 7, `${width}px must retain all seven lifecycle stages`);
+  assert.equal(await view.page.locator(".developer-dld-journey .developer-lifecycle-ribbon button").count(), 7, `${width}px must retain all seven lifecycle stages`);
   assert.equal(await view.page.locator(".developer-dld-journey .developer-checklist-workspace > nav button").count(), 10, `${width}px must retain all ten checklist steps`);
   await view.page.locator(".developer-dld-journey .dld-phase-nav button").nth(1).click();
   await view.page.locator(".developer-dld-journey .dld-development-controls fieldset button").nth(2).click();

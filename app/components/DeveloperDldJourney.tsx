@@ -29,9 +29,9 @@ const TRACK_AUTHORITY: Partial<Record<DubaiTrack, string>> = {
 
 const COPY = {
   en: {
-    eyebrow: "02 · Developer journey & process guide",
-    title: "From deciding to develop through handover and close-out.",
-    intro: "Follow one connected roadmap across the protected seven-stage REOS lifecycle and the DLD Developer Book. Each step explains the action, authority, evidence, output and next move before you open the official channel to verify or apply.",
+    eyebrow: "02 · Choose your development route",
+    title: "Start with the place. Then follow the right path.",
+    intro: "Choose the Emirate, the authority shown on the plot record, and whether off-plan sales apply.",
     source: "Open the DLD Developer Book",
     status: "Official DLD listing · structured by REOS",
     checked: "Checked 1 September 2026",
@@ -73,14 +73,14 @@ const COPY = {
     crosswalkDev: "Planning & Design → Authorities & Approvals → Construction & Delivery, with Sales & Transfer overlapping when off-plan",
     crosswalkPost: "Construction & Delivery → Living & Operations",
     lifecycleEyebrow: "Lifecycle connection · all seven stages",
-    lifecycleTitle: "Every stage is visible. The developer’s level of responsibility changes.",
-    lifecycleNote: "Stages 1–6 are direct developer touchpoints. Stage 7 remains included as a supporting evidence and surviving-obligations role; owners and operators lead long-term asset decisions.",
+    lifecycleTitle: "Seven stages. One connected developer route.",
+    lifecycleNote: "Stages 1–6 are direct. Stage 7 is a supporting role.",
     direct: "Direct responsibility",
     supporting: "Supporting role",
-    stageInstruction: "Choose a stage to open its first relevant checklist step.",
-    checklistEyebrow: "03 · Central developer checklist",
-    checklistTitle: "Ten connected steps from first decision to operating handover.",
-    checklistIntro: "The steps are a navigation framework, not a universal project programme. Applicability and order can change with the plot, project type, planning branch and live authority requirements.",
+    stageInstruction: "Select a lifecycle stage or a developer step.",
+    checklistEyebrow: "03 · Developer journey & process guide",
+    checklistTitle: "Follow one guided path from setup to close-out.",
+    checklistIntro: "Select a step to reveal its authority, evidence, output and official service records.",
     whatToDo: "What you need to do",
     authority: "Authority / decision route",
     stakeholders: "Connected stakeholders",
@@ -90,16 +90,16 @@ const COPY = {
     linkedRecords: "Linked official service records",
     inspectRecord: "Inspect record and listed fee, time and documents",
     branchRecord: "Inspect the applicable authority branch",
-    phaseOverview: "04 · DLD phase and service explorer",
-    phaseOverviewTitle: "Move from the roadmap into the official service-book detail.",
-    controlEyebrow: "05 · Practical control points",
-    controlTitle: "Open each risk to see why it happens and how to control it.",
+    phaseOverview: "Official service layer",
+    phaseOverviewTitle: "Explore the services behind the selected journey.",
+    controlEyebrow: "Controls inside the journey",
+    controlTitle: "Check the risks before they become delays.",
     why: "Why it happens",
     response: "Recommended control",
     controlTypes: ["Requirement", "Authority", "Compliance", "Document", "Financial control", "Recommended action"],
-    registryEyebrow: "06 · Official registry and verification",
-    registryTitle: "Choose the Emirate, confirm the authority branch, then verify in sequence.",
-    registryIntro: "Do not begin by guessing a service name. Start with the Emirate and the authority shown on the plot, site-plan or master-development record. REOS then builds the applicable verification route; the linked authority remains the source of the official decision.",
+    registryEyebrow: "04 · Verify and proceed officially",
+    registryTitle: "Leave REOS with the right evidence and official route.",
+    registryIntro: "Confirm each gate, keep its evidence, then use the exact authority link.",
     emirateFirst: "1 · Choose the Emirate first",
     emirateHelp: "Dubai is mapped from the official DLD Developer Book. An unmapped Emirate never inherits Dubai services.",
     authoritySecond: "2 · Confirm the project authority",
@@ -134,11 +134,20 @@ const COPY = {
     applyDirect: "Open exact application route",
     evidenceRecord: "Open DLD evidence record",
     noDirectApply: "No separate public application link is published in this DLD record. Use the evidence record and confirm the live channel with the authority.",
+    saleRoute: "3 · Select the sales route",
+    offPlanRoute: "Off-plan sales apply",
+    completedRoute: "No off-plan sales",
+    selectedRoute: "Selected route",
+    mappedRoute: "Mapped from the DLD Developer Book",
+    routeNext: "Your choices control the journey and verification cards below.",
+    lifecycleCompact: "REOS seven-stage crosswalk",
+    journeyWorkspace: "Guided service workspace",
+    verificationReady: "Five evidence gates before you proceed",
   },
   ar: {
-    eyebrow: "02 · رحلة المطور ودليل الإجراءات",
-    title: "من قرار التطوير إلى التسليم والإقفال.",
-    intro: "اتبع خريطة طريق واحدة تربط مراحل REOS السبع المحمية بدليل المطور لدى دائرة الأراضي والأملاك. تشرح كل خطوة الإجراء والجهة والدليل والمخرج والخطوة التالية قبل فتح القناة الرسمية للتحقق أو التقديم.",
+    eyebrow: "02 · اختر مسار التطوير",
+    title: "ابدأ بالمكان، ثم اتبع المسار الصحيح.",
+    intro: "اختر الإمارة والجهة الظاهرة في سجل الأرض وما إذا كان البيع على الخارطة ينطبق.",
     source: "افتح دليل المطور لدى دائرة الأراضي والأملاك",
     status: "قائمة رسمية من الدائرة · تنظيم REOS",
     checked: "تم التحقق في 1 سبتمبر 2026",
@@ -180,14 +189,14 @@ const COPY = {
     crosswalkDev: "التخطيط والتصميم ← الجهات والموافقات ← الإنشاء والتسليم، مع تداخل البيع والنقل عند البيع على الخارطة",
     crosswalkPost: "الإنشاء والتسليم ← السكن والتشغيل",
     lifecycleEyebrow: "صلة دورة الحياة · المراحل السبع كاملة",
-    lifecycleTitle: "جميع المراحل ظاهرة، بينما يتغير مستوى مسؤولية المطور.",
-    lifecycleNote: "المراحل من 1 إلى 6 نقاط اتصال مباشرة للمطور. وتظل المرحلة 7 مدرجة كدور داعم للأدلة والالتزامات المستمرة، بينما يقود الملاك والمشغلون قرارات الأصل طويلة الأجل.",
+    lifecycleTitle: "سبع مراحل ومسار مطور واحد مترابط.",
+    lifecycleNote: "المراحل من 1 إلى 6 مباشرة، والمرحلة 7 دور داعم.",
     direct: "مسؤولية مباشرة",
     supporting: "دور داعم",
-    stageInstruction: "اختر مرحلة لفتح أول خطوة قائمة تحقق مرتبطة بها.",
-    checklistEyebrow: "03 · قائمة تحقق المطور المركزية",
-    checklistTitle: "عشر خطوات مترابطة من القرار الأول إلى تسليم التشغيل.",
-    checklistIntro: "الخطوات إطار للتنقل وليست برنامجاً زمنياً موحداً لكل مشروع. قد يتغير الانطباق والترتيب بحسب الموقع ونوع المشروع وفرع التخطيط والمتطلبات الحية للجهة.",
+    stageInstruction: "اختر مرحلة من دورة الحياة أو خطوة للمطور.",
+    checklistEyebrow: "03 · رحلة المطور ودليل الإجراءات",
+    checklistTitle: "اتبع مساراً واحداً من التأسيس إلى الإقفال.",
+    checklistIntro: "اختر خطوة لعرض الجهة والدليل والمخرج وسجلات الخدمة الرسمية.",
     whatToDo: "ما الذي تحتاج إلى فعله",
     authority: "الجهة / مسار القرار",
     stakeholders: "أصحاب المصلحة المرتبطون",
@@ -197,16 +206,16 @@ const COPY = {
     linkedRecords: "سجلات الخدمات الرسمية المرتبطة",
     inspectRecord: "افحص السجل والرسوم والمدة والمستندات المدرجة",
     branchRecord: "افحص فرع الجهة المنطبق",
-    phaseOverview: "04 · مستكشف مراحل وخدمات الدائرة",
-    phaseOverviewTitle: "انتقل من خريطة الطريق إلى تفاصيل دليل الخدمات الرسمي.",
-    controlEyebrow: "05 · نقاط التحكم العملية",
-    controlTitle: "افتح كل مخاطرة لمعرفة سببها وكيفية ضبطها.",
+    phaseOverview: "طبقة الخدمات الرسمية",
+    phaseOverviewTitle: "استكشف الخدمات خلف الرحلة المحددة.",
+    controlEyebrow: "نقاط التحكم داخل الرحلة",
+    controlTitle: "تحقق من المخاطر قبل أن تتحول إلى تأخير.",
     why: "لماذا يحدث",
     response: "إجراء الضبط الموصى به",
     controlTypes: ["متطلب", "جهة", "امتثال", "مستند", "ضبط مالي", "إجراء موصى به"],
-    registryEyebrow: "06 · السجل الرسمي والتحقق",
-    registryTitle: "اختر الإمارة، ثم أكد مسار الجهة، ثم تحقق بالتسلسل.",
-    registryIntro: "لا تبدأ بتخمين اسم الخدمة. ابدأ بالإمارة والجهة الظاهرة في سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي. يبني REOS بعد ذلك مسار التحقق المنطبق، وتظل الجهة المرتبطة مصدر القرار الرسمي.",
+    registryEyebrow: "04 · تحقق وتابع رسمياً",
+    registryTitle: "غادر REOS ومعك الدليل الصحيح والمسار الرسمي.",
+    registryIntro: "أكد كل بوابة واحتفظ بدليلها، ثم استخدم رابط الجهة الدقيق.",
     emirateFirst: "1 · اختر الإمارة أولاً",
     emirateHelp: "تم تنظيم مسار دبي من دليل المطور الرسمي لدى الدائرة. ولا ترث أي إمارة غير مخططة خدمات دبي.",
     authoritySecond: "2 · أكد جهة المشروع",
@@ -241,6 +250,15 @@ const COPY = {
     applyDirect: "افتح مسار التقديم الدقيق",
     evidenceRecord: "افتح سجل الدليل لدى الدائرة",
     noDirectApply: "لا ينشر سجل الدائرة هذا رابط تقديم عاماً منفصلاً. استخدم سجل الدليل وأكد القناة الحية مع الجهة.",
+    saleRoute: "3 · اختر مسار المبيعات",
+    offPlanRoute: "ينطبق البيع على الخارطة",
+    completedRoute: "لا يوجد بيع على الخارطة",
+    selectedRoute: "المسار المحدد",
+    mappedRoute: "منظم من دليل المطور لدى الدائرة",
+    routeNext: "تتحكم اختياراتك في الرحلة وبطاقات التحقق أدناه.",
+    lifecycleCompact: "الربط مع مراحل REOS السبع",
+    journeyWorkspace: "مساحة الخدمات الإرشادية",
+    verificationReady: "خمس بوابات أدلة قبل المتابعة",
   },
 } as const;
 
@@ -356,7 +374,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const [guideStepId, setGuideStepId] = useState(developerJourneySteps[0].id);
   const [verificationEmirateId, setVerificationEmirateId] = useState<EmirateId>("dubai");
   const [verificationAuthorityId, setVerificationAuthorityId] = useState(initialAuthority);
-  const [verificationQuery, setVerificationQuery] = useState("");
+  const [offPlanSelected, setOffPlanSelected] = useState(true);
 
   const selectedSubphase = development.subphases.find((item) => item.id === subphaseId) ?? development.subphases[0];
   const selectedBranch = selectedSubphase.branches.find((item) => item.id === authorityId) ?? selectedSubphase.branches[0];
@@ -415,15 +433,17 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     { services: verificationOffPlan.services, sourceUrl: verificationOffPlan.sourceUrl, type: c.conditional, phase: "development" as PhaseId, subphaseId: development.subphases[2].id },
     { services: postDevelopment.services, sourceUrl: postDevelopment.sourceUrl, type: c.shared, phase: "post-development" as PhaseId },
   ];
-  const verificationRecords = verificationGates.flatMap((gate, gateIndex) => gate.services.map((service) => ({
-    gateIndex,
-    service,
-    reference: { phase: gate.phase, subphaseId: gate.subphaseId, serviceId: service.id } satisfies DeveloperServiceReference,
-  })));
-  const normalizedVerificationQuery = verificationQuery.trim().toLocaleLowerCase();
-  const visibleVerificationRecords = normalizedVerificationQuery
-    ? verificationRecords.filter(({ service }) => `${service.title} ${service.description}`.toLocaleLowerCase().includes(normalizedVerificationQuery))
-    : [];
+  const verificationCards = [
+    { copyIndex: 0, gateIndexes: [0], icon: "identity" as const },
+    { copyIndex: 1, gateIndexes: [1], icon: "plan" as const },
+    { copyIndex: 2, gateIndexes: [2], icon: "plan" as const },
+    { copyIndex: 3, gateIndexes: offPlanSelected ? [3, 4] : [3], icon: "build" as const },
+    { copyIndex: 5, gateIndexes: [5], icon: "close" as const },
+  ].map((card) => ({
+    ...card,
+    copy: VERIFICATION_STEP_COPY[card.copyIndex],
+    gates: card.gateIndexes.map((index) => verificationGates[index]),
+  }));
 
   const setPhase = (next: PhaseId) => {
     setPhaseId(next);
@@ -450,6 +470,14 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     const nextBranch = selectedSubphase.branches.find((item) => item.id === nextId) ?? selectedSubphase.branches[0];
     setAuthorityId(nextBranch.id);
     setServiceId(nextBranch.services[0].id);
+    setQuery("");
+  };
+
+  const chooseRouteAuthority = (nextId: string) => {
+    setVerificationAuthorityId(nextId);
+    const nextBranch = selectedSubphase.branches.find((item) => item.id === nextId) ?? selectedSubphase.branches[0];
+    setAuthorityId(nextBranch.id);
+    if (phaseId === "development") setServiceId(nextBranch.services[0].id);
     setQuery("");
   };
 
@@ -508,34 +536,58 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     <div className="dld-source-strip">
       <span>{c.status}</span><time dateTime={dldDeveloperBook.source.checkedOn}>{c.checked}</time><b>{dldDeveloperBook.source.authority}</b>
     </div>
-    <div className="dld-snapshot-note" role="note"><b>{c.snapshot}</b><span>{c.sourceWarning}</span></div>
+    <div className="dld-snapshot-note dld-snapshot-note-compact" role="note"><b>{c.snapshot}</b><a href={dldDeveloperBook.source.url} target="_blank" rel="noreferrer">{c.source} ↗</a></div>
 
-    <section className="developer-seven-stage" aria-labelledby="developer-seven-stage-title">
-      <header>
-        <div><span>{c.lifecycleEyebrow}</span><h3 id="developer-seven-stage-title">{c.lifecycleTitle}</h3></div>
-        <p>{c.lifecycleNote}</p>
-      </header>
-      <p className="developer-stage-instruction">{c.stageInstruction}</p>
-      <ol>
-        {stages.map((stage) => {
-          const relationship = participation.find((item) => item.stageId === stage.id)?.relationshipLevel ?? "informed";
-          const supporting = relationship === "supporting" || relationship === "informed";
-          return <li key={stage.id}>
-            <button type="button" onClick={() => selectLifecycleStage(stage.id)} data-level={relationship}>
-              <span>{String(stage.number).padStart(2, "0")}</span>
-              <b>{stage.name}</b>
-              <small>{supporting ? c.supporting : c.direct}</small>
-            </button>
-          </li>;
-        })}
-      </ol>
-    </section>
+    <div className="developer-route-selector" aria-label={locale === "ar" ? "اختيار مسار التطوير" : "Development route selection"}>
+      <label className="developer-route-choice">
+        <span>{c.emirateFirst}</span>
+        <select value={verificationEmirateId} onChange={(event) => setVerificationEmirateId(event.target.value as EmirateId)}>
+          {EMIRATES.map((emirate) => <option key={emirate.id} value={emirate.id}>{locale === "ar" ? emirate.ar : emirate.label}</option>)}
+        </select>
+        <small>{c.emirateHelp}</small>
+      </label>
+
+      <fieldset className="developer-route-choice" disabled={verificationEmirateId !== "dubai"}>
+        <legend>{c.authoritySecond}</legend>
+        <div className="developer-route-authorities">
+          {verificationAuthorityOptions.map((branch, index) => <button key={branch.id} type="button" aria-pressed={branch.id === selectedVerificationAuthority.id} onClick={() => chooseRouteAuthority(branch.id)}>
+            <span>{String(index + 1).padStart(2, "0")}</span><b>{branch.authority}</b>
+          </button>)}
+        </div>
+        <small>{c.authorityHelp}</small>
+      </fieldset>
+
+      <fieldset className="developer-route-choice developer-sale-route" disabled={verificationEmirateId !== "dubai"}>
+        <legend>{c.saleRoute}</legend>
+        <div>
+          <button type="button" aria-pressed={offPlanSelected} onClick={() => setOffPlanSelected(true)}><RouteIcon kind="sell" /><span>{c.offPlanRoute}</span></button>
+          <button type="button" aria-pressed={!offPlanSelected} onClick={() => setOffPlanSelected(false)}><RouteIcon kind="close" /><span>{c.completedRoute}</span></button>
+        </div>
+      </fieldset>
+
+      <aside className="developer-selected-route" aria-live="polite">
+        <div className="developer-route-orbit" aria-hidden="true"><i /><i /><i /><RouteIcon kind="build" /></div>
+        <span>{c.selectedRoute}</span>
+        <strong>{verificationEmirateId === "dubai" ? `${locale === "ar" ? "دبي" : "Dubai"} · ${selectedVerificationAuthority.authority}` : EMIRATES.find((emirate) => emirate.id === verificationEmirateId)?.[locale === "ar" ? "ar" : "label"]}</strong>
+        <small>{verificationEmirateId === "dubai" ? `${offPlanSelected ? c.offPlanRoute : c.completedRoute} · ${c.mappedRoute}` : c.notMapped}</small>
+        <p>{verificationEmirateId === "dubai" ? c.routeNext : c.notMappedText}</p>
+      </aside>
+    </div>
 
     <section id="developer-checklist" className="developer-checklist" aria-labelledby="developer-checklist-title">
       <header>
         <div><span className="eyebrow">{c.checklistEyebrow}</span><h3 id="developer-checklist-title">{c.checklistTitle}</h3></div>
         <p>{c.checklistIntro}</p>
       </header>
+
+      <div className="developer-lifecycle-ribbon" aria-label={c.lifecycleCompact}>
+        <span>{c.lifecycleCompact}</span>
+        <ol>{stages.map((stage) => {
+          const relationship = participation.find((item) => item.stageId === stage.id)?.relationshipLevel ?? "informed";
+          return <li key={stage.id}><button type="button" onClick={() => selectLifecycleStage(stage.id)} data-level={relationship}><span>{String(stage.number).padStart(2, "0")}</span><b>{stage.name}</b></button></li>;
+        })}</ol>
+        <small>{c.lifecycleNote}</small>
+      </div>
 
       <div className="developer-checklist-workspace">
         <nav aria-label={locale === "ar" ? "خطوات رحلة المطور" : "Developer journey steps"}>
@@ -578,7 +630,6 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
           </footer>
         </article>
       </div>
-    </section>
 
     <header className="dld-phase-explorer-heading">
       <span className="eyebrow">{c.phaseOverview}</span>
@@ -702,6 +753,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
         </details>;
       })}</div>
     </section>
+    </section>
 
     <section className="developer-registry-guide" aria-labelledby="developer-registry-title">
       <header>
@@ -709,87 +761,38 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
         <h3 id="developer-registry-title">{c.registryTitle}</h3>
         <p>{c.registryIntro}</p>
       </header>
-
-      <div className="developer-verification-controls">
-        <label>
-          <span>{c.emirateFirst}</span>
-          <select value={verificationEmirateId} onChange={(event) => {
-            setVerificationEmirateId(event.target.value as EmirateId);
-            setVerificationQuery("");
-          }}>
-            {EMIRATES.map((emirate) => <option key={emirate.id} value={emirate.id}>{locale === "ar" ? emirate.ar : emirate.label}</option>)}
-          </select>
-          <small>{c.emirateHelp}</small>
-        </label>
-
-        {verificationEmirateId === "dubai" ? <fieldset>
-          <legend>{c.authoritySecond}</legend>
-          <p>{c.authorityHelp}</p>
-          <div className="developer-authority-choices">
-            {verificationAuthorityOptions.map((branch, index) => <button key={branch.id} type="button" aria-pressed={branch.id === selectedVerificationAuthority.id} onClick={() => {
-              setVerificationAuthorityId(branch.id);
-              setVerificationQuery("");
-            }}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <b>{branch.authority}</b>
-            </button>)}
-          </div>
-        </fieldset> : null}
-      </div>
-
-      {verificationEmirateId === "dubai" ? <div className="developer-verification-route">
-        <aside className="developer-authority-condition">
-          <div><span>{c.howToChoose}</span><b>{selectedVerificationAuthority.authority}</b></div>
-          <p>{c.howToChooseText}</p>
-        </aside>
-
-        <header>
-          <div><span>{c.routeReady}</span><h4>{selectedVerificationAuthority.authority}</h4></div>
-          <p>{c.routeReadyText}</p>
-        </header>
-
-        <ol className="developer-verification-flow">
-          {VERIFICATION_STEP_COPY.map((step, index) => {
-            const gate = verificationGates[index];
-            const reference = gate.services[0] ? { phase: gate.phase, subphaseId: gate.subphaseId, serviceId: gate.services[0].id } satisfies DeveloperServiceReference : undefined;
-            return <li key={`${selectedVerificationAuthority.id}-verification-${index}`}>
-              <span className="developer-verification-number">{String(index + 1).padStart(2, "0")}</span>
+      {verificationEmirateId === "dubai" ? <div className="developer-final-verification">
+        <div className="developer-final-route">
+          <span>{c.selectedRoute}</span>
+          <b>{selectedVerificationAuthority.authority}</b>
+          <small>{offPlanSelected ? c.offPlanRoute : c.completedRoute}</small>
+        </div>
+        <p className="developer-final-count">{c.verificationReady}</p>
+        <ol>
+          {verificationCards.map((card, index) => {
+            const services = card.gates.flatMap((gate) => gate.services);
+            const firstGateWithService = card.gates.find((gate) => gate.services.length > 0);
+            const reference = firstGateWithService ? {
+              phase: firstGateWithService.phase,
+              subphaseId: firstGateWithService.subphaseId,
+              serviceId: firstGateWithService.services[0].id,
+            } satisfies DeveloperServiceReference : undefined;
+            const sourceUrl = card.gates[card.gates.length - 1].sourceUrl;
+            return <li key={`${selectedVerificationAuthority.id}-final-${index}`}>
               <article>
-                <header><small>{gate.type}</small><h5>{localize(step.title, locale)}</h5></header>
-                <div>
-                  <p><b>{c.whyVerify}</b>{localize(step.why, locale)}</p>
-                  <p><b>{c.expectedEvidence}</b>{localize(step.evidence, locale)}</p>
-                </div>
-                {gate.services.length ? <div className="developer-verification-services">
-                  <span><b>{gate.services.length}</b> {c.authorityServices}</span>
-                  <ul>{gate.services.slice(0, 4).map((service) => <li key={service.id} lang="en">{service.title}</li>)}</ul>
-                  {gate.services.length > 4 ? <small>+ {gate.services.length - 4} {locale === "ar" ? "سجلات إضافية" : "more records"}</small> : null}
-                </div> : null}
+                <span className="developer-final-number">{String(index + 1).padStart(2, "0")}</span>
+                <RouteIcon kind={card.icon} />
+                <header><small>{card.gates.map((gate) => gate.type).filter((value, gateIndex, values) => values.indexOf(value) === gateIndex).join(" · ")}</small><h5>{localize(card.copy.title, locale)}</h5></header>
+                <p>{localize(card.copy.evidence, locale)}</p>
+                <div><b>{services.length}</b><span>{c.authorityServices}</span></div>
                 <footer>
-                  {reference ? <button type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.id)}>{c.inspectGate} <span aria-hidden="true">↓</span></button> : null}
-                  <a href={gate.sourceUrl} target="_blank" rel="noreferrer">{c.openOfficialBranch} <span aria-hidden="true">↗</span></a>
+                  {reference ? <button type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.id)} aria-label={`${c.inspectGate}: ${localize(card.copy.title, locale)}`}>↓</button> : null}
+                  <a href={sourceUrl} target="_blank" rel="noreferrer">{c.openOfficialBranch} ↗</a>
                 </footer>
               </article>
             </li>;
           })}
         </ol>
-
-        <section className="developer-verification-search" aria-labelledby="developer-verification-search-title">
-          <header><h5 id="developer-verification-search-title">{c.optionalSearch}</h5><p>{c.optionalSearchHelp}</p></header>
-          <label><span>{c.serviceSearch}</span><input type="search" value={verificationQuery} onChange={(event) => setVerificationQuery(event.target.value)} placeholder={c.optionalSearchPlaceholder} /></label>
-          <div className="developer-verification-search-count" aria-live="polite">
-            {normalizedVerificationQuery ? <><b>{visibleVerificationRecords.length}</b> {c.searchMatches}</> : c.searchPrompt}
-          </div>
-          {normalizedVerificationQuery ? <div className="developer-verification-search-results">
-            {visibleVerificationRecords.map(({ gateIndex, service, reference }) => <button key={`${gateIndex}-${service.id}`} type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.id)}>
-              <span>{String(gateIndex + 1).padStart(2, "0")} · {verificationGates[gateIndex].type}</span>
-              <b lang="en">{service.title}</b>
-              <small>{c.inspectService}</small>
-              <i aria-hidden="true">↓</i>
-            </button>)}
-            {visibleVerificationRecords.length === 0 ? <p>{c.noRouteMatches}</p> : null}
-          </div> : null}
-        </section>
       </div> : <div className="developer-verification-unmapped" role="status">
         <span>{String(EMIRATES.findIndex((emirate) => emirate.id === verificationEmirateId) + 1).padStart(2, "0")}</span>
         <div><h4>{c.notMapped}</h4><p>{c.notMappedText}</p><a href={`${locale === "ar" ? "/ar" : ""}/stakeholders/developers/${verificationEmirateId}`}>{c.openEmiratePage} <span aria-hidden="true">→</span></a></div>
