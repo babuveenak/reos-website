@@ -62,7 +62,7 @@ test("Brokers journey consolidates the page into Emirate-first individual and ag
   assert.match(html, /Become an agent—or open an agency\?/);
   assert.match(html, /Become an agent/);
   assert.match(html, /Open an agency/);
-  assert.match(html, /brokers-agencies-operating-map-v1\.png/);
+  assert.match(html, /brokers-agencies-operating-map-v2\.png/);
   assert.match(html, /Show my agent path/);
   assert.match(html, /Show my agency path/);
   assert.match(html, /Become a real-estate agent/);

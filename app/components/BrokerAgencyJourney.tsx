@@ -125,7 +125,7 @@ export function BrokerAgencyJourney({ locale, initialEmirate, stages, participat
       <div className={`broker-route-visual route-${routeId}`} role="group" aria-label={c.interactiveMap} onPointerMove={tiltMap} onPointerLeave={resetMapTilt}>
         <div className="broker-visual-halo"/>
         <div className="broker-route-map-layer">
-          <Image src="/images/brokers-agencies-operating-map-v1.png" alt="" width={1536} height={1024} priority sizes="(max-width: 900px) 100vw, 58vw"/>
+          <Image src="/images/brokers-agencies-operating-map-v2.png" alt="" width={1536} height={1024} priority sizes="(max-width: 900px) 100vw, 58vw"/>
           <span className="broker-map-branch broker-map-branch-individual" aria-hidden="true"/><span className="broker-map-branch broker-map-branch-agency" aria-hidden="true"/>
           <button type="button" className={`broker-map-destination broker-map-destination-individual${routeId === "individual" ? " active" : ""}`} aria-pressed={routeId === "individual"} onClick={() => chooseRoute("individual")}><RouteIcon route="individual"/><span><b>{c.individual}</b><small>{c.selectDestination}</small></span></button>
           <button type="button" className={`broker-map-destination broker-map-destination-agency${routeId === "agency" ? " active" : ""}`} aria-pressed={routeId === "agency"} onClick={() => chooseRoute("agency")}><RouteIcon route="agency"/><span><b>{c.agency}</b><small>{c.selectDestination}</small></span></button>
