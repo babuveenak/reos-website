@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { brokerJourneyRoutes, brokerSourceById, type BrokerJourneyEmirate, type BrokerJourneyRouteId } from "../data/brokerAgencyJourney";
 import { getBrokerOperationalStages } from "../data/brokerAgencyStages";
 import { EMIRATES, type EmirateId, type ParticipationState } from "../data/stakeholderBlueprints";
@@ -13,7 +13,7 @@ type Props = { locale: Locale; initialEmirate: EmirateId; stages: Stage[]; parti
 const COPY = {
   en: {
     eyebrow: "02 · Choose your route", title: "Become an agent—or open an agency?", intro: "They are two different legal journeys. Pick the Emirate, then choose one path. REOS will show the order.",
-    emirate: "First · Where will you operate?", question: "Then · What do you want to do?", individual: "Become an agent", individualHint: "Qualify · join a licensed firm · receive your card", individualAction: "Show my agent path", agency: "Open an agency", agencyHint: "Form · license · register people · operate", agencyAction: "Show my agency path", shared: "Both routes meet at compliant listings, permitted advertising and controlled transactions.",
+    emirate: "First · Where will you operate?", question: "Then · What do you want to do?", individual: "Become an agent", individualHint: "Qualify · join a licensed firm · receive your card", individualAction: "Show my agent path", agency: "Open an agency", agencyHint: "Form · license · register people · operate", agencyAction: "Show my agency path", shared: "Both routes meet at compliant listings, permitted advertising and controlled transactions.", interactiveMap: "Interactive agent and agency route map", mapInstruction: "Select a destination or a numbered checkpoint", selectDestination: "Select this route", openStage: "Open stage",
     mapped: "Dubai + Abu Dhabi mapped", checked: "Official sources checked 1 September 2026", snapshot: "Guidance snapshot · not a live government feed", unavailable: "This Emirate is not mapped yet.", unavailableBody: "REOS will not copy Dubai or Abu Dhabi rules into an unmapped Emirate. Choose Dubai or Abu Dhabi to explore a sourced route.",
     mapEyebrow: "03 · Your guided operating path", mapTitle: "Follow the illuminated route.", mapIntro: "Select any platform to see who controls it, what you need and what unlocks the next move.", selected: "Your route", firstMove: "Start here", sequence: "Next", parallel: "Run in parallel", conditional: "Check this condition",
     stage: "Stage", tasks: "Tasks in this stage", step: "Task", authority: "Authority / responsible party", channel: "Where to apply or complete", need: "Prerequisites and evidence", output: "Approval / output", fee: "Fee", time: "Authority duration", validity: "Validity / renewal", boundary: "Boundary — what this does not authorise", next: "Next move", official: "Official", conditionalEvidence: "Route-dependent", confirmLive: "Confirm live", officialLinks: "Open exact official service", sourceNote: "REOS explains the dependency. The authority controls the live application and decision.",
@@ -22,7 +22,7 @@ const COPY = {
   },
   ar: {
     eyebrow: "02 · اختر مسارك", title: "أصبح وسيطاً—أو افتح شركة وساطة؟", intro: "هما مساران قانونيان مختلفان. اختر الإمارة ثم مساراً واحداً، وستوضح REOS الترتيب.",
-    emirate: "أولاً · أين ستعمل؟", question: "ثم · ماذا تريد أن تفعل؟", individual: "أصبح وسيطاً", individualHint: "تأهل · انضم لشركة مرخصة · استلم بطاقتك", individualAction: "اعرض مسار الوسيط", agency: "افتح شركة وساطة", agencyHint: "أسس · رخص · سجل الأشخاص · شغّل", agencyAction: "اعرض مسار الشركة", shared: "يلتقي المساران عند القوائم المتوافقة والإعلانات المصرح بها والمعاملات المنضبطة.",
+    emirate: "أولاً · أين ستعمل؟", question: "ثم · ماذا تريد أن تفعل؟", individual: "أصبح وسيطاً", individualHint: "تأهل · انضم لشركة مرخصة · استلم بطاقتك", individualAction: "اعرض مسار الوسيط", agency: "افتح شركة وساطة", agencyHint: "أسس · رخص · سجل الأشخاص · شغّل", agencyAction: "اعرض مسار الشركة", shared: "يلتقي المساران عند القوائم المتوافقة والإعلانات المصرح بها والمعاملات المنضبطة.", interactiveMap: "خريطة تفاعلية لمساري الوسيط والشركة", mapInstruction: "اختر وجهة أو نقطة مرحلة مرقمة", selectDestination: "اختر هذا المسار", openStage: "افتح المرحلة",
     mapped: "دبي + أبوظبي مخططتان", checked: "تم التحقق من المصادر الرسمية في 1 سبتمبر 2026", snapshot: "لقطة إرشادية · ليست تغذية حكومية حية", unavailable: "هذه الإمارة غير مخططة بعد.", unavailableBody: "لن تنقل REOS قواعد دبي أو أبوظبي إلى إمارة غير مخططة. اختر دبي أو أبوظبي لاستكشاف مسار موثق.",
     mapEyebrow: "03 · مسارك التشغيلي الموجه", mapTitle: "اتبع المسار المضيء.", mapIntro: "اختر أي منصة لمعرفة الجهة المسؤولة وما تحتاجه وما الذي يفتح الخطوة التالية.", selected: "مسارك", firstMove: "ابدأ هنا", sequence: "التالي", parallel: "نفذ بالتوازي", conditional: "تحقق من الشرط",
     stage: "المرحلة", tasks: "مهام هذه المرحلة", step: "المهمة", authority: "الجهة / الطرف المسؤول", channel: "أين تقدم أو تكمل", need: "المتطلبات والأدلة", output: "الموافقة / المخرج", fee: "الرسوم", time: "مدة الجهة", validity: "الصلاحية / التجديد", boundary: "الحدود — ما الذي لا تخوله هذه المهمة", next: "الحركة التالية", official: "رسمي", conditionalEvidence: "حسب المسار", confirmLive: "تحقق مباشرة", officialLinks: "افتح الخدمة الرسمية المحددة", sourceNote: "تشرح REOS الاعتمادية. وتتحكم الجهة بالطلب والقرار الحاليين.",
@@ -64,9 +64,25 @@ export function BrokerAgencyJourney({ locale, initialEmirate, stages, participat
   const T = (value: { en: string; ar: string }) => value[locale];
   const selectStage = (id: string) => setStageByRoute((current) => ({ ...current, [routeKey]: id }));
   const selectStep = (id: string) => setTaskByRoute((current) => ({ ...current, [routeKey]: id }));
-  const chooseRoute = (id: BrokerJourneyRouteId) => {
+  const chooseRoute = (id: BrokerJourneyRouteId, moveToProcess = true) => {
     setRouteId(id);
+    if (moveToProcess) requestAnimationFrame(() => document.getElementById("broker-process")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  };
+  const openMapStage = (stageId: string, taskId?: string) => {
+    setStageByRoute((current) => ({ ...current, [routeKey]: stageId }));
+    if (taskId) setTaskByRoute((current) => ({ ...current, [routeKey]: taskId }));
     requestAnimationFrame(() => document.getElementById("broker-process")?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  };
+  const tiltMap = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const horizontal = ((event.clientX - bounds.left) / bounds.width - .5) * 2;
+    const vertical = ((event.clientY - bounds.top) / bounds.height - .5) * 2;
+    event.currentTarget.style.setProperty("--map-tilt-x", `${(-vertical * 2.2).toFixed(2)}deg`);
+    event.currentTarget.style.setProperty("--map-tilt-y", `${(horizontal * 2.8).toFixed(2)}deg`);
+  };
+  const resetMapTilt = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.currentTarget.style.removeProperty("--map-tilt-x");
+    event.currentTarget.style.removeProperty("--map-tilt-y");
   };
   const relationLabel = selectedStep?.relation === "parallel" ? c.parallel : selectedStep?.relation === "conditional" ? c.conditional : c.sequence;
 
@@ -86,10 +102,17 @@ export function BrokerAgencyJourney({ locale, initialEmirate, stages, participat
         <p className="broker-shared-rail"><span aria-hidden="true"/> {c.shared}</p>
       </div>
 
-      <div className="broker-route-visual" aria-hidden="true">
+      <div className={`broker-route-visual route-${routeId}`} role="group" aria-label={c.interactiveMap} onPointerMove={tiltMap} onPointerLeave={resetMapTilt}>
         <div className="broker-visual-halo"/>
-        <Image src="/images/brokers-agencies-operating-map-v1.png" alt="" width={1536} height={1024} priority sizes="(max-width: 900px) 100vw, 58vw"/>
-        <span className="broker-map-signal broker-map-signal-one"/><span className="broker-map-signal broker-map-signal-two"/><span className="broker-map-signal broker-map-signal-three"/>
+        <div className="broker-route-map-layer">
+          <Image src="/images/brokers-agencies-operating-map-v1.png" alt="" width={1536} height={1024} priority sizes="(max-width: 900px) 100vw, 58vw"/>
+          <span className="broker-map-branch broker-map-branch-individual" aria-hidden="true"/><span className="broker-map-branch broker-map-branch-agency" aria-hidden="true"/>
+          <button type="button" className={`broker-map-destination broker-map-destination-individual${routeId === "individual" ? " active" : ""}`} aria-pressed={routeId === "individual"} onClick={() => chooseRoute("individual", false)}><RouteIcon route="individual"/><span><b>{c.individual}</b><small>{c.selectDestination}</small></span></button>
+          <button type="button" className={`broker-map-destination broker-map-destination-agency${routeId === "agency" ? " active" : ""}`} aria-pressed={routeId === "agency"} onClick={() => chooseRoute("agency", false)}><RouteIcon route="agency"/><span><b>{c.agency}</b><small>{c.selectDestination}</small></span></button>
+          {mapped && operationalStages.map((item, index) => <button key={item.id} type="button" className={`broker-map-checkpoint broker-map-checkpoint-${index + 1}${selectedStage?.id === item.id ? " active" : ""}`} aria-label={`${c.openStage} ${item.number}: ${T(item.title)}`} aria-current={selectedStage?.id === item.id ? "step" : undefined} onClick={() => openMapStage(item.id, item.tasks[0]?.id)}><span>{String(item.number).padStart(2, "0")}</span><b>{T(item.title)}</b></button>)}
+          <span className="broker-map-signal broker-map-signal-one"/><span className="broker-map-signal broker-map-signal-two"/><span className="broker-map-signal broker-map-signal-three"/>
+        </div>
+        <p className="broker-map-instruction"><span aria-hidden="true">↗</span>{c.mapInstruction}</p>
       </div>
     </div>
 

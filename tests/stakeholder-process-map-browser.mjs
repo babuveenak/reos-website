@@ -47,6 +47,8 @@ async function assertGuidedJourney(page, slug) {
     assert.equal(await page.locator(".broker-agency-journey").count(), 1, "brokers need one consolidated journey");
     assert.equal(await page.locator(".broker-route-control button").count(), 2, "brokers need individual and agency routes");
     assert.equal(await page.locator(".broker-route-visual img").count(), 1, "brokers need one visual two-route operating map");
+    assert.equal(await page.locator(".broker-map-destination").count(), 2, "the 3D map needs two selectable legal destinations");
+    assert.equal(await page.locator(".broker-map-checkpoint").count(), 5, "the active 3D branch needs five selectable stage checkpoints");
     assert.equal(await page.locator(".broker-stage-trigger").count(), 5, "Dubai individual route needs five ordered stages");
     assert.equal(await page.locator(".broker-stage-card.active .broker-stage-tasks button").count(), 2, "the first agent stage needs its two operational tasks");
     assert.equal(await page.locator(".broker-official-pack").count(), 1, "brokers need one compact official handoff");
@@ -100,9 +102,12 @@ const brokers = await open("/stakeholders/brokers-agencies/dubai/dm-mainland", 1
 await assertGuidedJourney(brokers.page, "brokers-agencies");
 const brokerJourney = brokers.page.locator(".broker-agency-journey");
 assert.equal(await brokerJourney.locator(".broker-route-control button").count(), 2, "both legal route choices must remain visible");
-await brokerJourney.locator(".broker-route-control button").nth(1).click();
+await brokerJourney.locator(".broker-map-destination-agency").click();
 assert.match(await brokerJourney.locator(".broker-route-summary h4").innerText(), /Open a real-estate brokerage agency/);
+assert.equal(await brokerJourney.locator(".broker-map-destination-agency").getAttribute("aria-pressed"), "true", "the selected image destination needs an accessible active state");
 assert.equal(await brokerJourney.locator(".broker-stage-trigger").count(), 5, "Dubai agency route needs five ordered stages");
+await brokerJourney.locator(".broker-map-checkpoint").nth(2).click();
+assert.equal(await brokerJourney.locator(".broker-stage-trigger").nth(2).getAttribute("aria-expanded"), "true", "image checkpoints must open their matching journey stage");
 await brokerJourney.locator(".broker-stage-trigger").nth(3).click();
 assert.equal(await brokerJourney.locator(".broker-stage-card.active .broker-stage-tasks button").count(), 3, "the agency control stage needs its three operational tasks");
 await brokerJourney.locator(".broker-stage-card.active .broker-stage-tasks button").first().click();
