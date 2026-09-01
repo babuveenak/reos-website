@@ -46,6 +46,7 @@ async function assertGuidedJourney(page, slug) {
   if (slug === "brokers-agencies") {
     assert.equal(await page.locator(".broker-agency-journey").count(), 1, "brokers need one consolidated journey");
     assert.equal(await page.locator(".broker-route-control button").count(), 2, "brokers need individual and agency routes");
+    assert.equal(await page.locator(".broker-route-visual img").count(), 1, "brokers need one visual two-route operating map");
     assert.equal(await page.locator(".broker-step-rail button").count(), 6, "Dubai individual route needs six steps");
     assert.equal(await page.locator(".broker-lifecycle-crosswalk li").count(), 7, "the protected lifecycle needs one compact seven-stage crosswalk");
     assert.equal(await page.locator(".stakeholder-lifecycle-map, .stakeholder-process-map, .stakeholder-entry-guidance, .stakeholder-official-directory").count(), 0, "the five generic sections must not compete with the consolidated journey");
@@ -94,9 +95,9 @@ await desktop.context.close();
 const brokers = await open("/stakeholders/brokers-agencies/dubai/dm-mainland", 1440, 1000, "no-preference");
 await assertGuidedJourney(brokers.page, "brokers-agencies");
 const brokerJourney = brokers.page.locator(".broker-agency-journey");
-assert.equal(await brokerJourney.locator(".broker-dual-lane .broker-lane").count(), 2, "both connected legal routes must remain visible");
+assert.equal(await brokerJourney.locator(".broker-route-control button").count(), 2, "both legal route choices must remain visible");
 await brokerJourney.locator(".broker-route-control button").nth(1).click();
-assert.match(await brokerJourney.locator(".broker-selected-route h4").innerText(), /Open a real-estate brokerage agency/);
+assert.match(await brokerJourney.locator(".broker-route-summary h4").innerText(), /Open a real-estate brokerage agency/);
 assert.equal(await brokerJourney.locator(".broker-step-rail button").count(), 7, "Dubai agency route needs seven steps");
 await brokerJourney.locator(".broker-step-rail button").nth(3).click();
 assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Set the federal operating controls[\s\S]*goAML[\s\S]*Federal Tax Authority/);
@@ -108,7 +109,7 @@ assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Ch
 assert.equal(await brokerJourney.locator(".broker-step-rail button").count(), 5, "Abu Dhabi individual route needs five steps");
 await brokerJourney.locator(".broker-emirate-control select").selectOption("sharjah");
 assert.match(await brokerJourney.locator(".broker-unmapped").innerText(), /not mapped yet/i);
-assert.equal(await brokerJourney.locator(".broker-process-map").count(), 0, "an unmapped Emirate must never inherit a mapped process");
+assert.equal(await brokerJourney.locator(".broker-path-section").count(), 0, "an unmapped Emirate must never inherit a mapped process");
 assert.doesNotMatch(await brokerJourney.innerText(), /AED 500|AED 9,000/);
 await brokerJourney.locator(".broker-emirate-control select").selectOption("dubai");
 await scan(brokers.page, "brokers guided journey light");
