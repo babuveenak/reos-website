@@ -339,7 +339,8 @@ test("Intelligence keeps the visual index educational while deeper guides retain
   }
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Direct stage walkthrough/);
+  assert.match(stakeholder, /Developer journey &amp; process guide/);
+  assert.match(stakeholder, /Central developer checklist/);
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.doesNotMatch(stakeholder, /RELEVANT REOS PRODUCT|PRACTICAL NEXT ACTION|href="\/demo"/, "stakeholder education must not become a product pitch");
 });
@@ -742,17 +743,45 @@ test("stage and stakeholder pages expose reciprocal relationship navigation", as
   assert.match(stage, /view=journey(&amp;|&)stage=construction-delivery/);
 
   const stakeholder = await (await render("/stakeholders/developers")).text();
-  assert.match(stakeholder, /Direct stage walkthrough/);
-  assert.equal((stakeholder.match(/class="stakeholder-lifecycle-node lifecycle-(?:lead|active|supporting|informed) lifecycle-tier-(?:direct|supporting|informed)"/g) ?? []).length, 7, "stakeholder lifecycle map must keep all seven relationship levels");
-  assert.equal((stakeholder.match(/class="process-stage-tab level-(?:lead|active)"/g) ?? []).length, 6, "full process maps must be limited to direct developer stages");
+  assert.match(stakeholder, /Developer journey &amp; process guide/);
+  assert.equal((stakeholder.match(/data-level="(?:lead|active|supporting|informed)"/g) ?? []).length, 7, "the integrated developer journey must keep all seven relationship levels");
+  assert.match(stakeholder, /Ten connected steps from first decision to operating handover/);
+  assert.doesNotMatch(stakeholder, /Direct stage walkthrough/, "the developer page must not repeat a second lifecycle walkthrough");
   assert.match(stakeholder, /Official sources · REOS role mapping/);
   assert.match(stakeholder, /view=stakeholder(&amp;|&)stakeholder=developers/);
+});
+
+test("developer routes expose the DLD three-phase navigator without leaking it to other scopes", async () => {
+  const developer = await (await render("/stakeholders/developers/dubai/dm-mainland")).text();
+  assert.match(developer, /Developer journey &amp; process guide/);
+  assert.match(developer, /Lifecycle connection · all seven stages/);
+  assert.equal((developer.match(/data-level="(?:lead|active|supporting|informed)"/g) ?? []).length, 7);
+  assert.match(developer, /Ten connected steps from first decision to operating handover/);
+  assert.equal((developer.match(/class="developer-checklist-workspace"/g) ?? []).length, 1);
+  assert.match(developer, /Close out and support the operating asset/);
+  assert.match(developer, /Pre-development/);
+  assert.match(developer, /Master plan gate/);
+  assert.match(developer, /Permit, build &(amp;)? complete/);
+  assert.match(developer, /Off-plan sales &(amp;)? escrow/);
+  assert.match(developer, /Post-development/);
+  assert.match(developer, /Escrow opening sits in Development/);
+  assert.match(developer, /Trade Name Reservation/);
+  assert.match(developer, /Listed service time/);
+  assert.match(developer, /How this sits inside the protected REOS lifecycle/);
+  assert.match(developer, /href="https:\/\/dubailand\.gov\.ae\/en\/developer-book\/main-phases\/development-stage\/#\//);
+  assert.match(developer, /Open each risk to see why it happens and how to control it/);
+  assert.match(developer, /Know what to verify before leaving REOS/);
+  assert.doesNotMatch(developer, /Direct stage walkthrough/, "the developer page must not repeat the generic stage walkthrough");
+
+  const broker = await (await render("/stakeholders/brokers-agencies/dubai/dm-mainland")).text();
+  assert.doesNotMatch(broker, /Developer journey &amp; process guide/);
+  const difcDeveloper = await (await render("/stakeholders/developers/dubai/financial-free-zone")).text();
+  assert.doesNotMatch(difcDeveloper, /Developer journey &amp; process guide/, "the DLD book must not be implied for the DIFC property route");
 });
 
 test("all Dubai stakeholder authority routes weight process depth by involvement", async () => {
   const paths = [
     ["/stakeholders/landowners-investors", 5],
-    ["/stakeholders/developers/dubai/dm-mainland", 6],
     ["/stakeholders/consultants-designers/dubai/dda-tecom", 3],
     ["/stakeholders/contractors/dubai/trakhees-pcfc", 2],
     ["/stakeholders/property-owners/dubai/financial-free-zone", 3],

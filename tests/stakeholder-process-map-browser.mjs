@@ -34,6 +34,15 @@ async function scan(page, label) {
 }
 
 async function assertGuidedJourney(page, slug) {
+  if (slug === "developers") {
+    assert.equal(await page.locator(".developer-seven-stage button").count(), 7, "developers must retain all seven lifecycle stages in one journey");
+    assert.equal(await page.locator(".developer-checklist-workspace > nav button").count(), 10, "developers need the ten-step central checklist");
+    assert.equal(await page.locator(".developer-control-points details").count(), 6, "developers need six interactive control points");
+    assert.equal(await page.locator(".developer-registry-guide").count(), 1, "developers need one integrated official-directory section");
+    assert.equal(await page.locator(".stakeholder-process-map").count(), 0, "developers must not repeat the generic process walkthrough");
+    assert.equal(await page.locator(".stakeholder-entry-guidance").count(), 0, "developers must not repeat the generic entry section");
+    return;
+  }
   const lifecycle = page.locator(".stakeholder-lifecycle-map");
   assert.equal(await lifecycle.getByRole("tab").count(), 7, `${slug} lifecycle overview must retain all seven stages`);
   assert.equal(await page.locator(".stakeholder-blueprint-hero .stakeholder-scope-selector").count(), 0, `${slug} hero must not lead with route selectors`);
@@ -56,33 +65,22 @@ const heroTransform = await heroVisual.locator("img").evaluate((element) => getC
 assert.notEqual(heroTransform, "none", "pointer movement should produce subtle 3D depth");
 await heroVisual.screenshot({ path: `${output}/developer-hero-light.png` });
 const map = desktop.page.locator(".stakeholder-process-map");
-assert.equal(await map.getByRole("tab").count(), 6, "the developer walkthrough must expose only Lead and Active stages");
-assert.ok(await map.locator(".isometric-authority-platform").count() >= 1, "the selected intersection must expose interactive authority nodes");
-assert.equal(await map.locator(".process-branch").count(), 3, "authority, people and official-source branches must remain visible");
-assert.match(await map.innerText(), /Dubai Land Department.*Property Status Enquiry/);
-assert.match(await map.innerText(), /How much|No fee published/i);
-assert.doesNotMatch(await map.innerText(), /Request a demo|Title Deed Automation|NOC Automation/);
-
-const tabs = map.getByRole("tab");
-await tabs.nth(1).focus();
-await tabs.nth(1).press("ArrowRight");
-await desktop.page.waitForFunction(() => document.querySelectorAll('.stakeholder-process-map [role="tab"]')[2]?.getAttribute("aria-selected") === "true");
-assert.equal(await tabs.nth(2).getAttribute("aria-selected"), "true", "arrow keys must move the active stage");
-assert.ok(await tabs.nth(2).evaluate((element) => element.matches(":focus-visible")), "keyboard-selected stage needs visible focus");
-assert.match(await map.locator(".process-role-card").innerText(), /Authorities & Approvals/);
-assert.ok(await map.locator(".isometric-authority-platform").count() >= 1, "interaction must replace the process with stage-specific authority nodes");
-assert.match(await map.innerText(), /New Building Permit|Final Building Permit/);
-
-await map.getByRole("tab", { name: /05 Sales & Transfer/ }).click();
-assert.match(await map.locator(".process-role-card").innerText(), /Registers the project and eligible sales/);
-assert.match(await map.innerText(), /Property Sale Registration|Register Initial Sale/);
+assert.equal(await map.count(), 0, "the developer page must use its single integrated journey instead of a second process map");
+const developerJourney = desktop.page.locator(".developer-dld-journey");
+assert.equal(await developerJourney.locator(".developer-seven-stage button").count(), 7);
+assert.equal(await developerJourney.locator(".developer-checklist-workspace > nav button").count(), 10);
+await developerJourney.locator(".developer-checklist-workspace > nav button").nth(4).focus();
+assert.ok(await developerJourney.locator(".developer-checklist-workspace > nav button").nth(4).evaluate((element) => element.matches(":focus-visible")), "keyboard-focused checklist steps need visible focus");
+await developerJourney.locator(".developer-checklist-workspace > nav button").nth(4).click();
+assert.match(await developerJourney.locator(".developer-checklist-detail").innerText(), /Coordinate the master plan, design and NOCs[\s\S]*Authority \/ decision route/i);
+assert.doesNotMatch(await developerJourney.innerText(), /Request a demo|Title Deed Automation|NOC Automation/);
 
 await scan(desktop.page, "light process map");
-await map.screenshot({ path: `${output}/developer-dm-light.png` });
+await developerJourney.screenshot({ path: `${output}/developer-dm-light.png` });
 await desktop.page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
 await desktop.page.waitForTimeout(350);
 await scan(desktop.page, "dark process map");
-await map.screenshot({ path: `${output}/developer-dm-dark.png` });
+await developerJourney.screenshot({ path: `${output}/developer-dm-dark.png` });
 await desktop.context.close();
 
 const brokers = await open("/stakeholders/brokers-agencies/dubai/dm-mainland", 1440, 1000, "no-preference");

@@ -1,0 +1,1884 @@
+{
+  "source": {
+    "authority": "Dubai Land Department",
+    "title": "Developer Book — Main Phases",
+    "url": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/#/",
+    "checkedOn": "2026-08-31",
+    "siteUpdatedOn": "2026-08-19",
+    "scope": "Dubai developer service catalogue",
+    "warning": "Service fees, processing estimates, documents and channels reproduce the DLD Developer Book listing checked on 31 August 2026. They are not a quotation or a guarantee of end-to-end project duration. Confirm the live provider page before applying."
+  },
+  "stages": {
+    "preDevelopment": {
+      "id": "pre-development",
+      "label": "Pre-development",
+      "description": "The pre-development stage of a business activity includes the issuance of a trade license by the real estate developer to practice the real estate development activity. In this step, the real estate developer needs to deal with a number of governmental authorities and complete a number of services. The process begins with submitting the application to obtain a trade license and concludes by receiving the license to practice the activity of real estate development in the Emirate of Dubai.",
+      "sequenceNote": "Entity and operating setup before project development services.",
+      "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/#preDevelopment",
+      "services": [
+        {
+          "id": "submission-of-the-initial-approval-certificate",
+          "title": "Submission Of The Initial Approval Certificate",
+          "description": "A service provided by DED granting the customer the initial approval to finalize all the requirements from the other government entities and determine the legal form and needed activity for the company.",
+          "channel": "Happiness lounge service centers DED website: http://www.dubaided.ae DED smart app: DED BUSINESS",
+          "channelUrl": null,
+          "time": "10 Minutes",
+          "fees": "120",
+          "documents": "7 1. Fill out the commercial registration and licensing form 2. ID number / passport number 3. A copy of the residence visa 4. A letter of no objection from the sponsor to residents who are not citizens of the countries of the Cooperation Council to practice the activity (not to the partner or investor) 5. No objection to the free zone 6. The decision of the parent company’s board of directors to open a branch in Dubai 7. A copy of the parent company's commercial registration certificate The required documents to submit the initial approval vary as follows: Sole proprietorship, Civil Company, Limited Liability Company, and Simple Limited Partnership: 1,2,3,4 LLC Single Owner and a joint liability company: 1,2 Public Joint Stock Company and Private Joint Stock Company: 1,2,3,4 Governmental commercial liaison office, representative office and branches of companies from another emirate: 1,2,3,4,6,7 Branches of foreign companies and branches of free zones: 1,2,3,4,6,7"
+        },
+        {
+          "id": "trade-name-reservation",
+          "title": "Trade Name Reservation",
+          "description": "A services provided to the customer which he can obtain a trade name using the available service channels.",
+          "channel": "Happiness lounge and service centers DED website www.dubaided.ae DED smart app: DED BUSINESS",
+          "channelUrl": null,
+          "time": "7 Minutes",
+          "fees": "620",
+          "documents": "1 Emirates ID"
+        },
+        {
+          "id": "issuing-trade-license-request",
+          "title": "Issuing Trade License Request",
+          "description": "A service through which the customer obtains a commercial trade license to practice commercial activity and document the lease contract. During the service of issuing a license, an establishment contract or an electronic services agent contract is issued",
+          "channel": "Happiness lounge and service centers DED website www.dubaided.ae DED smart app: DED BUSINESS",
+          "channelUrl": null,
+          "time": "10 Minutes",
+          "fees": "1. License registration fees: 600 dirhams2. Knowledge fees: 10 dirhams3. Innovation fees: 10 dirhams4. Advertisements for trade names: 350 dirhams5. Service request form: 50 dirhams6. Foreign trade name fees: from 1000 to 3000 dirhams7. 25,000 pre-approval fees (Dubai Land Department)8. Fee of establishment contracts / service agent contract a. 300 dirhams on the signature of each of the parties to the editor to ratify the signature of the editor whose value does not exceed one hundred thousand dirhams b. %0.5 of the value of the editor, with a maximum of 15,000 dirhams, to authenticate the signatures in the editor whose value exceeds one hundred thousand dirhams. c. 500 dirhams to postpone the completion of the transaction after registering it at the request of stakeholders on the following day. d. 500 dirhams for signing one of the parties to the editor at a different service center. e. 100 dirhams for each party electronically signing the document",
+          "documents": "7 Corporate branches from another emirate: a letter from the main company to open a branch / copy of the incorporation contract / a copy of the license Free Zones branches: a copy of the commercial register / a letter from the main company to open a branch / a copy of the establishment contract / a copy of the license"
+        },
+        {
+          "id": "dld-approval-for-the-trade-license-noc",
+          "title": "Dld Approval For The Trade License (noc)",
+          "description": "After issuing the license an approval from DLD is required in order to practice the real estate development activity",
+          "channel": "Trakheesi website: https://trakheesi.dubailand.gov.ae",
+          "channelUrl": "https://trakheesi.dubailand.gov.ae",
+          "time": "1 Day",
+          "fees": "25000",
+          "documents": "3"
+        },
+        {
+          "id": "registering-the-developer-in-real-estate-developers-log",
+          "title": "Registering The Developer In Real Estate Developers’ Log",
+          "description": "This service enables any real estate development company to register in the real estate developers register. All approved developers have the right to register a project that they wish to sell its units off plan.",
+          "channel": "Developers registration section in the Department of Real Estate Development Escrow Accounts",
+          "channelUrl": null,
+          "time": "1 Day",
+          "fees": "0",
+          "documents": "4 Registration application form for developer and project Form for updating contact person data Copy of the trade license Membership certificate from the Dubai Chamber"
+        },
+        {
+          "id": "registration-in-oqood-system-course",
+          "title": "Registration In Oqood System Course",
+          "description": "This service enables the real estate developer to register in the special training course to train the developer on how to use the system in preparation to provide them with the system's user name and password.",
+          "channel": "Dubai Real Estate Institute website",
+          "channelUrl": null,
+          "time": "1 Day",
+          "fees": "7,000 UAE Dirhams for 3 users 1070 UAE Dirhams per additional user",
+          "documents": "1 Enrolment in the training course"
+        }
+      ]
+    },
+    "development": {
+      "id": "development",
+      "label": "Development",
+      "description": "This stage is the most significant stage in the work of the real estate developer, as the vast majority of services needed during the development process are in this stage. Moreover, the real estate developer is required to benefit from the services provided by most of the entities participating in such a process. The stage of the real estate development is divided into several sub-phases; each of which includes a series of services to be completed by the real estate developer. These steps are summarized in three phases; the first phase is the master plan approval. This is a key stage as the real estate developer cannot begin construction works without having it completed beforehand; as such completion is an initial approval on project's master plan from the different licensing authorities. The second stage is the issuance of the building permit and the completion certificate; where the real estate developer completes the construction, building works and the infrastructure of the project to obtaining the project completion certificate. Followed by the third stage of sale/ marketing conducted in conjunction with the construction stage in case of Off-Plan Sale or after the completion of the construction works of the project.",
+      "sequenceNote": "Master-plan approval precedes construction. Off-plan sales services may run alongside construction when applicable.",
+      "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/#realEstateDevelopment",
+      "subphases": [
+        {
+          "id": "master-plan-approval",
+          "label": "Master Plan Approval",
+          "branches": [
+            {
+              "id": "dubai-municipality",
+              "authority": "Dubai Municipality",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/master-plan-approval/dubai-municipality/#/",
+              "services": [
+                {
+                  "id": "apply-for-the-approval-of-urban-projects-plans-and-plan-modifications",
+                  "title": "Apply For The Approval Of Urban Projects Plans And Plan Modifications",
+                  "description": "This service enables you to obtain an approval for the Master Plans of major urban development projects, or an approval for the master plan modification, according to the planning requirements adopted by the Urban Planning and Studies department.",
+                  "channel": "Dubai Municipality website",
+                  "channelUrl": null,
+                  "time": "",
+                  "fees": "",
+                  "documents": "3"
+                },
+                {
+                  "id": "project-name-no-objection-certificate-from-the-master-developer",
+                  "title": "Project Name No-objection Certificate From The Master Developer",
+                  "description": "Issuing no-objection certificate from the master developer to the sub-developer that there is no objection to the name of the project",
+                  "channel": "Master Developer",
+                  "channelUrl": null,
+                  "time": "2-5 Day",
+                  "fees": "Vary according to the master developer",
+                  "documents": "4 An official request from the sub-developer Land title deed Landowner documents, both companies and individuals"
+                },
+                {
+                  "id": "projects-registration-master-plan-submission-ma-lem-dubai",
+                  "title": "Projects Registration & Master Plan Submission (ma'lem Dubai)",
+                  "description": "This service enables Developers and Consultants to register their projects and submit its master plan to DEWA.",
+                  "channel": "24/7 through DEWA website (www.dewa.gov.ae)",
+                  "channelUrl": null,
+                  "time": "DEWA response on the submitted Power Supply Master Plan of Major Projects depends on the type of submission.",
+                  "fees": "0",
+                  "documents": "3 DEWA Enrolled Major Project Developers and their appointed Consultants can apply for the service. Obtain Power Supply Master Plan Approval. Depending on the project type and the Master Plan type; the submission should comply with the requirements of the Power Supply Guidelines for Major Projects; which is available in DEWA website (www.dewa.gov.ae)."
+                },
+                {
+                  "id": "accreditation-of-the-department-of-tourism-and-commerce-marketing-dtcm",
+                  "title": "Accreditation Of The Department Of Tourism And Commerce Marketing (dtcm)",
+                  "description": "This service enables the customer to make a request for the construction of a hotel to count the number of future hotel rooms in the Emirate of Dubai and in order to approve practicing the hotel activities.",
+                  "channel": "Electronic classification system",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "120",
+                  "documents": "2"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-telecommunications-corporation-etisalat",
+                  "title": "Accreditation Of The Emirates Telecommunications Corporation (etisalat)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile phone stations",
+                  "channel": "Etisalat offices",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "3 Location site map Land-usage schematic A statistical table showing the number of units and their type"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-integrated-telecommunications-company-du",
+                  "title": "Accreditation Of The Emirates Integrated Telecommunications Company (du)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile pone stations.",
+                  "channel": "No-objection certificate Office - Dubai International Academic city, block 9, ground floor",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "1 Project’s master plan"
+                },
+                {
+                  "id": "accreditation-of-the-general-directorate-of-civil-defense-dcd",
+                  "title": "Accreditation Of The General Directorate Of Civil Defense (dcd)",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "https://www.dcd.gov.ae/portal/ Directorate General of Dubai Civil Defense",
+                  "channelUrl": "https://www.dcd.gov.ae/portal/",
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-corporation-for-ambulance-services",
+                  "title": "Accreditation Of The Dubai Corporation For Ambulance Services",
+                  "description": "The developer commits to allocate a land plot and build an ambulance post according to the standards of Dubai Corporation for Ambulance Services for each ten thousand of the population",
+                  "channel": "Dubai Corporation for Ambulance Services",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "-2 Project master plan Commitment letter from the developer to provide the emergency post service"
+                },
+                {
+                  "id": "approval-of-the-roads-and-transportation-authority-rta",
+                  "title": "Approval Of The Roads And Transportation Authority (rta)",
+                  "description": "Approval of the master plan and traffic impact study for the main development project, and the signing of the cost sharing agreement (the developer should not start any work before finalizing this step and updating the master plan on the Dubai Municipality›s survey system)",
+                  "channel": "(TES)Traffic Engineering System",
+                  "channelUrl": null,
+                  "time": "Varies according to the study area and the impact on traffic solutions and surrounding areas",
+                  "fees": "Varies according to each case but it consists of the following according to the provisions of Law No. 6 of 2006: 1 - Study review fees 2 - Traffic model fees 3 -The developer’s contribution to roads and public transport projects",
+                  "documents": "1 Proposed technical study of traffic impacts In accordance to Dubai Government Decision No. 3 of 2017 regarding the formation of the Dubai’s Committee for Building Permit Procedures Development and Regulation No. 4 of 2009 regarding the organization of work on the road precinct in the Emirate of Dubai and System No. 5 of 2009 regarding the regulation of railways in the Emirate of Dubai and Executive Council Resolution No. 1 of 2014 regarding the regulation of trams in the Emirate of Dubai, Regulation No. 4 of 2009 regarding the regulation of work on the campus of the road in the Emirate of Dubai, Anyone who performs real estate development and exploits the campus must obtain The necessary approvals from the Roads and Transport Authority to ensure the preservation of the country›s resources and to ensure the ease and consistency of the ongoing construction work. press here for the law"
+                },
+                {
+                  "id": "rta-no-objection-certification-for-infrastructure-designs",
+                  "title": "Rta No-objection Certification For Infrastructure Designs",
+                  "description": "This service enables the customer to obtain the approval of infrastructure project designs, and the no-objection certificates related to it (For the design, construction, trial trenches and handing over stages) and the supervision of the construction works.",
+                  "channel": "Electronic No objection Certificate System (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx",
+                  "channelUrl": "https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx",
+                  "time": "14 Day 3 - 7 working days",
+                  "fees": "The fee of design review and construction supervision will be estimated based on the type of each case (A percentage of the project cost stipulated in the Executive Board Decision No. 1 for the year 2014)",
+                  "documents": "1 Mentioned in The website of the Electronic no-objection certificate system (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-civil-aviation-authority-dcaa",
+                  "title": "Accreditation Of The Dubai Civil Aviation Authority (dcaa)",
+                  "description": "No-objection certificate for building heights in the project master plan for projects in areas under the supervision of Dubai Civil Aviation Authority to assure no conflict in the altitudes of the project buildings and flights movements.",
+                  "channel": "Dubai Civil Aviation Authority website",
+                  "channelUrl": null,
+                  "time": "1 Day 1 Working Day",
+                  "fees": "10020 10020/- AED per transaction",
+                  "documents": "3 Affection Plan when register new project . Project Details (Excel) Project Layout (AutoCAD) Aeronautical Survey-for structures greater 90m above ground level"
+                },
+                {
+                  "id": "project-master-plan-approval-dubai-police-general-head-quarters",
+                  "title": "Project Master Plan Approval – Dubai Police General Head Quarters",
+                  "description": "The developer is obligated to allocate a plot of land based on the population density in the project, an area of not less than 25,000 square feet is required if the population density more than 20,000; and an area of not less than 12,000 square feet is required if the population density less than 20,000 people and the land ownership will be under Dubai Police General Headquarters.",
+                  "channel": "The General Department of Logistical Support at the Dubai Police General Headquarters",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "0",
+                  "documents": "5 NOC request from the project consultant Consultant assignment letter from the owner Project master plan (a list of government agencies› approvals), from Dubai Municipality or the Dubai Development Authority (specifying the type of the project: commercial / residential / and the total population density) Project outline Site map from the Planning Department at Dubai Municipality"
+                },
+                {
+                  "id": "issue-new-noc-and-revalidation-of-existing-noc-application-on-e-noc-system",
+                  "title": "Issue New Noc And Revalidation Of Existing Noc Application On E-noc System",
+                  "description": "Preparation the documents by the contractor and/or the project consultant and submitted through service delivery channels to the concerned authorities in RTA, which review the proposed works and issue the appropriate decisions after verifying the compliance with the approved regulations and technical specifications.",
+                  "channel": "Electronic No objection Certificate System (e-NOC system)",
+                  "channelUrl": null,
+                  "time": "5 Day 3/5/7 working days according to application type as per e-NOC system",
+                  "fees": "for issuance of new application 2000 AEDfor revalidation of existing NOC 1000 AED",
+                  "documents": "4 drawings of location with respect to railway protection zone site photos risk assessment report work methodology Dubai Executive Council order No. 1/2017 for Railway Legislation in Dubai"
+                },
+                {
+                  "id": "application-for-noc-to-construct-a-building-above-and-below-300-meters-in-aviation-easement-areas",
+                  "title": "Application For Noc To Construct A Building (above And Below 300) Meters In Aviation Easement Areas",
+                  "description": "This service enables the customers to obtain a No Objection Certificate for Building Heights within the Emirate of Dubai. This service ensures that none of these buildings affects the airspace safety and flights at Dubai airports, and the capacity of Dubai airspace.",
+                  "channel": "Dubai Civil Aviation Authority website https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "channelUrl": "https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "time": "1 Day 1 Working Day",
+                  "fees": "6520 6520/- AED per Building height NOC below 300 meters 9520/- AED per Building height NOC above 300 meters",
+                  "documents": "2 Affection Plan Aeronautical survey / Study"
+                },
+                {
+                  "id": "hassantuk-fire-alarm-service",
+                  "title": "Hassantuk Fire Alarm Service",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "https://www.dcd.gov.ae/portal/aa/ Directorate General of Dubai Civil Defense",
+                  "channelUrl": "https://www.dcd.gov.ae/portal/aa/",
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                }
+              ]
+            },
+            {
+              "id": "dubai-development-authority",
+              "authority": "Dubai Development Authority",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/master-plan-approval/dubai-development-authority/#/",
+              "services": [
+                {
+                  "id": "project-name-no-objection-certificate-from-the-master-developer",
+                  "title": "Project Name No-objection Certificate From The Master Developer",
+                  "description": "Issuing no-objection certificate from the master developer to the sub-developer that there is no objection to the name of the project",
+                  "channel": "Master Developer",
+                  "channelUrl": null,
+                  "time": "2-5 Day",
+                  "fees": "Vary according to the master developer",
+                  "documents": "4 An official request from the sub-developer Land title deed Land Map Landowner documents, both companies and individuals"
+                },
+                {
+                  "id": "preliminary-master-plan-aproval",
+                  "title": "Preliminary Master Plan Aproval",
+                  "description": "The Preliminary Master Plan is the first stage in a master plan review process. It is a document that describes the general vision of a project, its goals and objectives, and should include narrative and maps.",
+                  "channel": "online portal https://webzoning.dda.gov.ae",
+                  "channelUrl": "https://webzoning.dda.gov.ae",
+                  "time": "10 Day",
+                  "fees": "0",
+                  "documents": "5 Master Plan Approval Request to be submitted by the registered Consultant Preliminary Master Plan as per Master Planning Guidelines. + 1 soft copy (PDF, CAD & Excel) Consultant Appointment Letter (if applicable) Preliminary Master Plan Review Checklist"
+                },
+                {
+                  "id": "sign-off-sheet",
+                  "title": "Sign Off Sheet",
+                  "description": "This service enables customers the adoption of the controls schedule; which demonstrates the final division of the project including a map of the project, maps of the different land plots inside the project, in addition to the tables containing the details of every plot of land in terms of size, elevation and the permitted usage of those land plots.",
+                  "channel": "The customers’ happiness lounge of Dubai Authority Development",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "Initial submission: AED 45,000 Re-submission: Third submission will be charged at AED 45,000",
+                  "documents": "4 Master Plan Approval Request Subdivision Plan as per CAD Standard Template (soft copy PDF & CAD) Plot Information Excel Sheet (Land Use Budget) SOS Master Plan Review Checklist"
+                },
+                {
+                  "id": "projects-registration-master-plan-submission-ma-lem-dubai",
+                  "title": "Projects Registration & Master Plan Submission (ma'lem Dubai)",
+                  "description": "This service enables Developers and Consultants to register their projects and submit its master plan to DEWA.",
+                  "channel": "24/7 through DEWA website (www.dewa.gov.ae)",
+                  "channelUrl": null,
+                  "time": "DEWA response on the submitted Power Supply Master Plan of Major Projects depends on the type of submission.",
+                  "fees": "0",
+                  "documents": "3 DEWA Enrolled Major Project Developers and their appointed Consultants can apply for the service. Obtain Power Supply Master Plan Approval. Depending on the project type and the Master Plan type; the submission should comply with the requirements of the Power Supply Guidelines for Major Projects; which is available in DEWA website (www.dewa.gov.ae)."
+                },
+                {
+                  "id": "accreditation-of-the-department-of-tourism-and-commerce-marketing-dtcm",
+                  "title": "Accreditation Of The Department Of Tourism And Commerce Marketing (dtcm)",
+                  "description": "This service enables the customer to make a request for the construction of a hotel to count the number of future hotel rooms in the Emirate of Dubai and in order to approve practicing the hotel activities.",
+                  "channel": "Electronic classification system",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "120",
+                  "documents": "2"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-telecommunications-corporation-etisalat",
+                  "title": "Accreditation Of The Emirates Telecommunications Corporation (etisalat)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile phone stations",
+                  "channel": "Etisalat offices",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "3 Location site map Land-usage schematic A statistical table showing the number of units and their type"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-integrated-telecommunications-company-du",
+                  "title": "Accreditation Of The Emirates Integrated Telecommunications Company (du)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile pone stations.",
+                  "channel": "No-objection certificate Office - Dubai International Academic city, block 9, ground floor",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "1 Project’s master plan"
+                },
+                {
+                  "id": "accreditation-of-the-general-directorate-of-civil-defense-dcd",
+                  "title": "Accreditation Of The General Directorate Of Civil Defense (dcd)",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "RTA Single Window NOC’s portal",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-corporation-for-ambulance-services",
+                  "title": "Accreditation Of The Dubai Corporation For Ambulance Services",
+                  "description": "The developer commits to allocat a land plot and build an ambulance post according to the standards of Dubai Corporation for Ambulance Services for each ten thousand of the population",
+                  "channel": "Dubai Corporation for Ambulance Services",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Project master plan Commitment letter from the developer to provide the emergency post service"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-civil-aviation-authority-dcaa",
+                  "title": "Accreditation Of The Dubai Civil Aviation Authority (dcaa)",
+                  "description": "No-objection certificate for building heights in the project master plan for projects in areas under the supervision of Dubai Civil Aviation Authority to assure no conflict in the altitudes of the project buildings and flights movements.",
+                  "channel": "Dubai Civil Aviation Authority website",
+                  "channelUrl": null,
+                  "time": "10 Day",
+                  "fees": "10000",
+                  "documents": "3 A letter from the developer to the Director General of the Dubai Civil Aviation Authority stipulating the area name and the land number and the maximum building heights per meter Project master plan Dubai Civil Aviation survey form"
+                },
+                {
+                  "id": "project-master-plan-approval-dubai-police-general-head-quarters",
+                  "title": "Project Master Plan Approval – Dubai Police General Head Quarters",
+                  "description": "The developer is obligated to allocate a plot of land based on the population density in the project, an area of not less than 25,000 square feet is required if the population density more than 20,000; and an area of not less than 12,000 square feet is required if the population density less than 20,000 people and the land ownership will be under Dubai Police General Headquarters.",
+                  "channel": "The General Department of Logistical Support at the Dubai Police General Headquarters",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "0",
+                  "documents": "5 NOC request from the project consultant Consultant assignment letter from the owner Project master plan (a list of government agencies› approvals), from Dubai Municipality or the Dubai Development Authority (specifying the type of the project: commercial / residential / and the total population density) Project outline Site map from the Planning Department at Dubai Municipality"
+                },
+                {
+                  "id": "final-master-plan-aproval",
+                  "title": "Final Master Plan Aproval",
+                  "description": "The final stage in a Master Plan review process. The Final Master Plan is a comprehensive report providing overall strategy to develop a particular project/area. It includes all of the previous stages and provides final findings",
+                  "channel": "Online portal https://webzoning.dda.gov.ae",
+                  "channelUrl": "https://webzoning.dda.gov.ae",
+                  "time": "12 Day",
+                  "fees": "1 fils/ sq.ft of GFA (Minimum: AED 85,000 Maximum AED 500,000). Re-submission: Third submission will be charged at AED 15,000.",
+                  "documents": "4 Master Planning Approval Request to be submitted by registered Consultant Final Master Plan as per Master Planning Guidelines 1 soft copy (PDF, CAD & Excel) NOCs from relevant Authorities Final Master Plan review Checklist"
+                },
+                {
+                  "id": "rta-no-objection-certification-for-infrastructure-designs",
+                  "title": "Rta No-objection Certification For Infrastructure Designs",
+                  "description": "This service enables the customer to obtain the approval of infrastructure project designs, and the no-objection certificates related to it (For the design construction, trial trenches and handing over stages) and the supervision of the construction works.",
+                  "channel": "Electronic No objection Certificate System (ENOC)",
+                  "channelUrl": null,
+                  "time": "14 Day",
+                  "fees": "The fee of design review and construction supervision will be estimated based on the type of each case (A percentage of the project cost stipulated in the Executive Board Decision No. 1 for the year 2014)",
+                  "documents": "1 Mentioned in The website of the Electronic no-objection certificate system (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "approval-of-the-roads-and-transportation-authority-rta",
+                  "title": "Approval Of The Roads And Transportation Authority (rta)",
+                  "description": "Approval of the master plan and traffic impact study for the main development project, and the signing of the cost sharing agreement (the developer should not start any work before finalizing this step and updating the master plan on the Dubai Municipality›s survey system)",
+                  "channel": "(TES)Traffic Engineering System",
+                  "channelUrl": null,
+                  "time": "Varies according to the study area and the impact on traffic solutions and surrounding areas",
+                  "fees": "Varies according to each case but it consists of the following according to the provisions of Law No. 6 of 2006: 1 - Study review fees 2 - Traffic model fees 3 -The developer’s contribution to roads and public transport projects",
+                  "documents": "1 Proposed technical study of traffic impacts In accordance to Dubai Government Decision No. 3 of 2017 regarding the formation of the Dubai’s Committee for Building Permit Procedures Development and Regulation No. 4 of 2009 regarding the organization of work on the road precinct in the Emirate of Dubai and System No. 5 of 2009 regarding the regulation of railways in the Emirate of Dubai and Executive Council Resolution No. 1 of 2014 regarding the regulation of trams in the Emirate of Dubai, Regulation No. 4 of 2009 regarding the regulation of work on the campus of the road in the Emirate of Dubai, Anyone who performs real estate development and exploits the campus must obtain The necessary approvals from the Roads and Transport Authority to ensure the preservation of the country›s resources and to ensure the ease and consistency of the ongoing construction work. press here for the law"
+                },
+                {
+                  "id": "issue-new-noc-and-revalidation-of-existing-noc-application-on-e-noc-system",
+                  "title": "Issue New Noc And Revalidation Of Existing Noc Application On E-noc System",
+                  "description": "Preparation the documents by the contractor and/or the project consultant and submitted through service delivery channels to the concerned authorities in RTA, which review the proposed works and issue the appropriate decisions after verifying the compliance with the approved regulations and technical specifications.",
+                  "channel": "Electronic No objection Certificate System (e-NOC system)",
+                  "channelUrl": null,
+                  "time": "5 Day 3/5/7 working days according to application type as per e-NOC system",
+                  "fees": "for issuance of new application 2000 AEDfor revalidation of existing NOC 1000 AED",
+                  "documents": "4 drawings of location with respect to railway protection zone site photos risk assessment report work methodology Dubai Executive Council order No. 1/2017 for Railway Legislation in Dubai"
+                },
+                {
+                  "id": "application-for-noc-to-construct-a-building-above-and-below-300-meters-in-aviation-easement-areas",
+                  "title": "Application For Noc To Construct A Building (above And Below 300) Meters In Aviation Easement Areas",
+                  "description": "This service enables the customers to obtain a No Objection Certificate for Building Heights within the Emirate of Dubai. This service ensures that none of these buildings affects the airspace safety and flights at Dubai airports, and the capacity of Dubai airspace.",
+                  "channel": "Dubai Civil Aviation Authority website https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "channelUrl": "https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "time": "1 Day 1 Working Day",
+                  "fees": "6520 6520/- AED per Building height NOC below 300 meters 9520/- AED per Building height NOC above 300 meters",
+                  "documents": "2 Affection Plan Aeronautical survey / Study"
+                }
+              ]
+            },
+            {
+              "id": "dubai-maritime-city-authority",
+              "authority": "Dubai Maritime City Authority",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/master-plan-approval/dubai-maritime-city-authority/#/",
+              "services": [
+                {
+                  "id": "project-name-no-objection-certificate-from-the-master-developer",
+                  "title": "Project Name No-objection Certificate From The Master Developer",
+                  "description": "Issuing no-objection certificate from the master developer to the sub-developer that there is no objection to the name of the project",
+                  "channel": "Master Developer",
+                  "channelUrl": null,
+                  "time": "2-5 Day",
+                  "fees": "Vary according to the master developer",
+                  "documents": "4 An official request from the sub-developer Land title deed Land Map Landowner documents, both companies and individuals"
+                },
+                {
+                  "id": "projects-registration-master-plan-submission-ma-lem-dubai",
+                  "title": "Projects Registration & Master Plan Submission (ma'lem Dubai)",
+                  "description": "This service enables Developers and Consultants to register their projects and submit its master plan to DEWA.",
+                  "channel": "24/7 through DEWA website (www.dewa.gov.ae)",
+                  "channelUrl": null,
+                  "time": "DEWA response on the submitted Power Supply Master Plan of Major Projects depends on the type of submission.",
+                  "fees": "0",
+                  "documents": "3 DEWA Enrolled Major Project Developers and their appointed Consultants can apply for the service. Obtain Power Supply Master Plan Approval. Depending on the project type and the Master Plan type; the submission should comply with the requirements of the Power Supply Guidelines for Major Projects; which is available in DEWA website (www.dewa.gov.ae)."
+                },
+                {
+                  "id": "accreditation-of-the-department-of-tourism-and-commerce-marketing-dtcm",
+                  "title": "Accreditation Of The Department Of Tourism And Commerce Marketing (dtcm)",
+                  "description": "This service enables the customer to make a request for the construction of a hotel to count the number of future hotel rooms in the Emirate of Dubai and in order to approve practicing the hotel activities.",
+                  "channel": "Electronic classification system",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "120",
+                  "documents": "2"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-telecommunications-corporation-etisalat",
+                  "title": "Accreditation Of The Emirates Telecommunications Corporation (etisalat)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile phone stations",
+                  "channel": "Etisalat offices",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "3 Location site map Land-usage schematic A statistical table showing the number of units and their type"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-integrated-telecommunications-company-du",
+                  "title": "Accreditation Of The Emirates Integrated Telecommunications Company (du)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile pone stations.",
+                  "channel": "No-objection certificate Office - Dubai International Academic city, block 9, ground floor",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "1 Project’s master plan"
+                },
+                {
+                  "id": "accreditation-of-the-general-directorate-of-civil-defense-dcd",
+                  "title": "Accreditation Of The General Directorate Of Civil Defense (dcd)",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "RTA Single Window NOC’s portal",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-corporation-for-ambulance-services",
+                  "title": "Accreditation Of The Dubai Corporation For Ambulance Services",
+                  "description": "The developer commits to allocat a land plot and build an ambulance post according to the standards of Dubai Corporation for Ambulance Services for each ten thousand of the population",
+                  "channel": "Dubai Corporation for Ambulance Services",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Project master plan Commitment letter from the developer to provide the emergency post service"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-civil-aviation-authority-dcaa",
+                  "title": "Accreditation Of The Dubai Civil Aviation Authority (dcaa)",
+                  "description": "No-objection certificate for building heights in the project master plan for projects in areas under the supervision of Dubai Civil Aviation Authority to assure no conflict in the altitudes of the project buildings and flights movements.",
+                  "channel": "Dubai Civil Aviation Authority website",
+                  "channelUrl": null,
+                  "time": "10 Day",
+                  "fees": "10000",
+                  "documents": "3 A letter from the developer to the Director General of the Dubai Civil Aviation Authority stipulating the area name and the land number and the maximum building heights per meter Project master plan Dubai Civil Aviation survey form"
+                },
+                {
+                  "id": "project-master-plan-approval-dubai-police-general-head-quarters",
+                  "title": "Project Master Plan Approval – Dubai Police General Head Quarters",
+                  "description": "The developer is obligated to allocate a plot of land based on the population density in the project, an area of not less than 25,000 square feet is required if the population density more than 20,000; and an area of not less than 12,000 square feet is required if the population density less than 20,000 people and the land ownership will be under Dubai Police General Headquarters.",
+                  "channel": "The General Department of Logistical Support at the Dubai Police General Headquarters",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "0",
+                  "documents": "5 NOC request from the project consultant Consultant assignment letter from the owner Project master plan (a list of government agencies› approvals), from Dubai Municipality or the Dubai Development Authority (specifying the type of the project: commercial / residential / and the total population density) Project outline Site map from the Planning Department at Dubai Municipality"
+                },
+                {
+                  "id": "project-s-master-plan-approval",
+                  "title": "Project’s Master Plan Approval",
+                  "description": "This service enables the customer to obtain the approval for the project's master plan",
+                  "channel": "Dubai Maritime City Customer Service Centre https://dmcservices.custhelp.com/app/login",
+                  "channelUrl": "https://dmcservices.custhelp.com/app/login",
+                  "time": "7 Day",
+                  "fees": "20000",
+                  "documents": "8 A Letter from the project's relevant consultant A signed application by the applicant A summary report on the project and its environmental impact Strategy for the management of the real estate in terms of cooling and - electricity (A3 Paper) Engineering design of the project Project's green buildings sustainability report (A3 Paper) Project time duration Engineering design of the project's utilities"
+                },
+                {
+                  "id": "rta-no-objection-certification-for-infrastructure-designs",
+                  "title": "Rta No-objection Certification For Infrastructure Designs",
+                  "description": "This service enables the customer to obtain the approval of infrastructure project designs, and the no-objection certificates related to it (For the design construction, trial trenches and handing over stages) and the supervision of the construction works.",
+                  "channel": "Electronic No objection Certificate System (ENOC)",
+                  "channelUrl": null,
+                  "time": "14 Day",
+                  "fees": "The fee of design review and construction supervision will be estimated based on the type of each case (A percentage of the project cost stipulated in the Executive Board Decision No. 1 for the year 2014)",
+                  "documents": "1 Mentioned in The website of the Electronic no-objection certificate system (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "approval-of-the-roads-and-transportation-authority-rta",
+                  "title": "Approval Of The Roads And Transportation Authority (rta)",
+                  "description": "Approval of the master plan and traffic impact study for the main development project, and the signing of the cost sharing agreement (the developer should not start any work before finalizing this step and updating the master plan on the Dubai Municipality›s survey system)",
+                  "channel": "(TES)Traffic Engineering System",
+                  "channelUrl": null,
+                  "time": "Varies according to the study area and the impact on traffic solutions and surrounding areas",
+                  "fees": "Varies according to each case but it consists of the following according to the provisions of Law No. 6 of 2006: 1 - Study review fees 2 - Traffic model fees 3 -The developer’s contribution to roads and public transport projects",
+                  "documents": "1 Proposed technical study of traffic impacts In accordance to Dubai Government Decision No. 3 of 2017 regarding the formation of the Dubai’s Committee for Building Permit Procedures Development and Regulation No. 4 of 2009 regarding the organization of work on the road precinct in the Emirate of Dubai and System No. 5 of 2009 regarding the regulation of railways in the Emirate of Dubai and Executive Council Resolution No. 1 of 2014 regarding the regulation of trams in the Emirate of Dubai, Regulation No. 4 of 2009 regarding the regulation of work on the campus of the road in the Emirate of Dubai, Anyone who performs real estate development and exploits the campus must obtain The necessary approvals from the Roads and Transport Authority to ensure the preservation of the country›s resources and to ensure the ease and consistency of the ongoing construction work. press here for the law"
+                },
+                {
+                  "id": "issue-new-noc-and-revalidation-of-existing-noc-application-on-e-noc-system",
+                  "title": "Issue New Noc And Revalidation Of Existing Noc Application On E-noc System",
+                  "description": "Preparation the documents by the contractor and/or the project consultant and submitted through service delivery channels to the concerned authorities in RTA, which review the proposed works and issue the appropriate decisions after verifying the compliance with the approved regulations and technical specifications.",
+                  "channel": "Electronic No objection Certificate System (e-NOC system)",
+                  "channelUrl": null,
+                  "time": "5 Day 3/5/7 working days according to application type as per e-NOC system",
+                  "fees": "for issuance of new application 2000 AEDfor revalidation of existing NOC 1000 AED",
+                  "documents": "4 drawings of location with respect to railway protection zone site photos risk assessment report work methodology Dubai Executive Council order No. 1/2017 for Railway Legislation in Dubai"
+                },
+                {
+                  "id": "application-for-noc-to-construct-a-building-above-and-below-300-meters-in-aviation-easement-areas",
+                  "title": "Application For Noc To Construct A Building (above And Below 300) Meters In Aviation Easement Areas",
+                  "description": "This service enables the customers to obtain a No Objection Certificate for Building Heights within the Emirate of Dubai. This service ensures that none of these buildings affects the airspace safety and flights at Dubai airports, and the capacity of Dubai airspace.",
+                  "channel": "Dubai Civil Aviation Authority website https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "channelUrl": "https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "time": "1 Day 1 Working Day",
+                  "fees": "6520 6520/- AED per Building height NOC below 300 meters 9520/- AED per Building height NOC above 300 meters",
+                  "documents": "2 Affection Plan Aeronautical survey / Study"
+                }
+              ]
+            },
+            {
+              "id": "dubai-integrated-economic-zone-diez",
+              "authority": "Dubai Integrated Economic zone – DIEZ",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/master-plan-approval/dubai-integrated-economic-zone-diez/#/",
+              "services": [
+                {
+                  "id": "project-name-no-objection-certificate-from-the-master-developer",
+                  "title": "Project Name No-objection Certificate From The Master Developer",
+                  "description": "Issuing no-objection certificate from the master developer to the sub-developer that there is no objection to the name of the project",
+                  "channel": "Master Developer",
+                  "channelUrl": null,
+                  "time": "2-5 Day",
+                  "fees": "Vary according to the master developer",
+                  "documents": "4 An official request from the sub-developer Land title deed Land Map Landowner documents, both companies and individuals"
+                },
+                {
+                  "id": "request-of-approval-of-initial-design",
+                  "title": "Request Of Approval Of Initial Design",
+                  "description": "Reviewing Plans and documents",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "7 Day",
+                  "fees": "3.25 Dirhams per each square meter, with a minimm of AED 50000",
+                  "documents": "9 Civil Defense approval Customer's name, phone number and e-mail address Name of the owner's representative, their telephone number, address, fax and e-mail Letter of appointment of the consultant Copy of the consultant's professional license A copy of the site plan A complete digital copy of plans in DWG and DGN format, including in 3D Model Certificate of no-objection from other pertinent authorities Three sets of initial designs plan signed by the owner"
+                },
+                {
+                  "id": "projects-registration-master-plan-submission-ma-lem-dubai",
+                  "title": "Projects Registration & Master Plan Submission (ma'lem Dubai)",
+                  "description": "This service enables Developers and Consultants to register their projects and submit its master plan to DEWA.",
+                  "channel": "24/7 through DEWA website (www.dewa.gov.ae)",
+                  "channelUrl": null,
+                  "time": "DEWA response on the submitted Power Supply Master Plan of Major Projects depends on the type of submission.",
+                  "fees": "0",
+                  "documents": "3 DEWA Enrolled Major Project Developers and their appointed Consultants can apply for the service. Obtain Power Supply Master Plan Approval. Depending on the project type and the Master Plan type; the submission should comply with the requirements of the Power Supply Guidelines for Major Projects; which is available in DEWA website (www.dewa.gov.ae)."
+                },
+                {
+                  "id": "accreditation-of-the-department-of-tourism-and-commerce-marketing-dtcm",
+                  "title": "Accreditation Of The Department Of Tourism And Commerce Marketing (dtcm)",
+                  "description": "This service enables the customer to make a request for the construction of a hotel to count the number of future hotel rooms in the Emirate of Dubai and in order to approve practicing the hotel activities.",
+                  "channel": "Electronic classification system",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "120",
+                  "documents": "2"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-telecommunications-corporation-etisalat",
+                  "title": "Accreditation Of The Emirates Telecommunications Corporation (etisalat)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile phone stations",
+                  "channel": "Etisalat offices",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "3 Location site map Land-usage schematic A statistical table showing the number of units and their type"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-integrated-telecommunications-company-du",
+                  "title": "Accreditation Of The Emirates Integrated Telecommunications Company (du)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile pone stations.",
+                  "channel": "No-objection certificate Office - Dubai International Academic city, block 9, ground floor",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "1 Project’s master plan"
+                },
+                {
+                  "id": "accreditation-of-the-general-directorate-of-civil-defense-dcd",
+                  "title": "Accreditation Of The General Directorate Of Civil Defense (dcd)",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "RTA Single Window NOC’s portal",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-corporation-for-ambulance-services",
+                  "title": "Accreditation Of The Dubai Corporation For Ambulance Services",
+                  "description": "The developer commits to allocat a land plot and build an ambulance post according to the standards of Dubai Corporation for Ambulance Services for each ten thousand of the population",
+                  "channel": "Dubai Corporation for Ambulance Services",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Project master plan Commitment letter from the developer to provide the emergency post service"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-civil-aviation-authority-dcaa",
+                  "title": "Accreditation Of The Dubai Civil Aviation Authority (dcaa)",
+                  "description": "No-objection certificate for building heights in the project master plan for projects in areas under the supervision of Dubai Civil Aviation Authority to assure no conflict in the altitudes of the project buildings and flights movements.",
+                  "channel": "Dubai Civil Aviation Authority website",
+                  "channelUrl": null,
+                  "time": "10 Day",
+                  "fees": "10000",
+                  "documents": "3 A letter from the developer to the Director General of the Dubai Civil Aviation Authority stipulating the area name and the land number and the maximum building heights per meter Project master plan Dubai Civil Aviation survey form"
+                },
+                {
+                  "id": "project-master-plan-approval-dubai-police-general-head-quarters",
+                  "title": "Project Master Plan Approval – Dubai Police General Head Quarters",
+                  "description": "The developer is obligated to allocate a plot of land based on the population density in the project, an area of not less than 25,000 square feet is required if the population density more than 20,000; and an area of not less than 12,000 square feet is required if the population density less than 20,000 people and the land ownership will be under Dubai Police General Headquarters.",
+                  "channel": "The General Department of Logistical Support at the Dubai Police General Headquarters",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "0",
+                  "documents": "5 NOC request from the project consultant Consultant assignment letter from the owner Project master plan (a list of government agencies› approvals), from Dubai Municipality or the Dubai Development Authority (specifying the type of the project: commercial / residential / and the total population density) Project outline Site map from the Planning Department at Dubai Municipality"
+                },
+                {
+                  "id": "approval-of-submission-of-final-design",
+                  "title": "ِِapproval Of Submission Of Final Design",
+                  "description": "Reviewing and approvig the required plans and documents",
+                  "channel": "Dubai Integrated Economic Zones Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "21 Day",
+                  "fees": "500",
+                  "documents": "8 3 sets of final design schematics (Electromechanical architecture, construction) Civil Defense approval Copy of the initial design approval letter A digital copy of the schematics in power point presentation Environment Department approval for the usage of the swimming pool Final design schematicsCertificate of no-objection from other pertinent authorities Project details updated copy"
+                },
+                {
+                  "id": "rta-no-objection-certification-for-infrastructure-designs",
+                  "title": "Rta No-objection Certification For Infrastructure Designs",
+                  "description": "This service enables the customer to obtain the approval of infrastructure project designs, and the no-objection certificates related to it (For the design construction, trial trenches and handing over stages) and the supervision of the construction works.",
+                  "channel": "Electronic No objection Certificate System (ENOC)",
+                  "channelUrl": null,
+                  "time": "14 Day",
+                  "fees": "The fee of design review and construction supervision will be estimated based on the type of each case (A percentage of the project cost stipulated in the Executive Board Decision No. 1 for the year 2014)",
+                  "documents": "1 Mentioned in The website of the Electronic no-objection certificate system (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "approval-of-the-roads-and-transportation-authority-rta",
+                  "title": "Approval Of The Roads And Transportation Authority (rta)",
+                  "description": "Approval of the master plan and traffic impact study for the main development project, and the signing of the cost sharing agreement (the developer should not start any work before finalizing this step and updating the master plan on the Dubai Municipality›s survey system)",
+                  "channel": "(TES)Traffic Engineering System",
+                  "channelUrl": null,
+                  "time": "Varies according to the study area and the impact on traffic solutions and surrounding areas",
+                  "fees": "Varies according to each case but it consists of the following according to the provisions of Law No. 6 of 2006: 1 - Study review fees 2 - Traffic model fees 3 -The developer’s contribution to roads and public transport projects",
+                  "documents": "1 Proposed technical study of traffic impacts In accordance to Dubai Government Decision No. 3 of 2017 regarding the formation of the Dubai’s Committee for Building Permit Procedures Development and Regulation No. 4 of 2009 regarding the organization of work on the road precinct in the Emirate of Dubai and System No. 5 of 2009 regarding the regulation of railways in the Emirate of Dubai and Executive Council Resolution No. 1 of 2014 regarding the regulation of trams in the Emirate of Dubai, Regulation No. 4 of 2009 regarding the regulation of work on the campus of the road in the Emirate of Dubai, Anyone who performs real estate development and exploits the campus must obtain The necessary approvals from the Roads and Transport Authority to ensure the preservation of the country›s resources and to ensure the ease and consistency of the ongoing construction work. press here for the law"
+                },
+                {
+                  "id": "issue-new-noc-and-revalidation-of-existing-noc-application-on-e-noc-system",
+                  "title": "Issue New Noc And Revalidation Of Existing Noc Application On E-noc System",
+                  "description": "Preparation the documents by the contractor and/or the project consultant and submitted through service delivery channels to the concerned authorities in RTA, which review the proposed works and issue the appropriate decisions after verifying the compliance with the approved regulations and technical specifications.",
+                  "channel": "Electronic No objection Certificate System (e-NOC system)",
+                  "channelUrl": null,
+                  "time": "5 Day 3/5/7 working days according to application type as per e-NOC system",
+                  "fees": "for issuance of new application 2000 AEDfor revalidation of existing NOC 1000 AED",
+                  "documents": "4 drawings of location with respect to railway protection zone site photos risk assessment report work methodology Dubai Executive Council order No. 1/2017 for Railway Legislation in Dubai"
+                },
+                {
+                  "id": "application-for-noc-to-construct-a-building-above-and-below-300-meters-in-aviation-easement-areas",
+                  "title": "Application For Noc To Construct A Building (above And Below 300) Meters In Aviation Easement Areas",
+                  "description": "This service enables the customers to obtain a No Objection Certificate for Building Heights within the Emirate of Dubai. This service ensures that none of these buildings affects the airspace safety and flights at Dubai airports, and the capacity of Dubai airspace.",
+                  "channel": "Dubai Civil Aviation Authority website https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "channelUrl": "https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "time": "1 Day 1 Working Day",
+                  "fees": "6520 6520/- AED per Building height NOC below 300 meters 9520/- AED per Building height NOC above 300 meters",
+                  "documents": "2 Affection Plan Aeronautical survey / Study"
+                }
+              ]
+            },
+            {
+              "id": "trakhees",
+              "authority": "Trakhees",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/master-plan-approval/trakhees/#/",
+              "services": [
+                {
+                  "id": "project-name-no-objection-certificate-from-the-master-developer",
+                  "title": "Project Name No-objection Certificate From The Master Developer",
+                  "description": "Issuing no-objection certificate from the master developer to the sub-developer that there is no objection to the name of the project",
+                  "channel": "Master Developer",
+                  "channelUrl": null,
+                  "time": "2-5 Day",
+                  "fees": "Vary according to the master developer",
+                  "documents": "4 An official request from the sub-developer Land title deed Land Map Landowner documents, both companies and individuals"
+                },
+                {
+                  "id": "no-objection-certificate-for-master-plan-initial-approval",
+                  "title": "No Objection Certificate For Master Plan Initial Approval",
+                  "description": "The purpose of this process is to ensure that the minimum planning standards are met for all requirements of the master plan and support land use and development policies, in accordance with the licenses - urban guidelines. Licensing (Planning Department) has the role of reviewing and approving the master plan from the initial stage to the final stage (also to review if necessary the final approval of the stage); DCR is the final representation of the development that includes all NOCs for the service / service / along with the design of the data Control and regulation.",
+                  "channel": "Trakhees website",
+                  "channelUrl": null,
+                  "time": "30 Day",
+                  "fees": "10 fils for each square meter, minimum ِAED 50000",
+                  "documents": "1 Request form and check list"
+                },
+                {
+                  "id": "projects-registration-master-plan-submission-ma-lem-dubai",
+                  "title": "Projects Registration & Master Plan Submission (ma'lem Dubai)",
+                  "description": "This service enables Developers and Consultants to register their projects and submit its master plan to DEWA.",
+                  "channel": "24/7 through DEWA website (www.dewa.gov.ae)",
+                  "channelUrl": null,
+                  "time": "DEWA response on the submitted Power Supply Master Plan of Major Projects depends on the type of submission.",
+                  "fees": "0",
+                  "documents": "3 DEWA Enrolled Major Project Developers and their appointed Consultants can apply for the service. Obtain Power Supply Master Plan Approval. Depending on the project type and the Master Plan type; the submission should comply with the requirements of the Power Supply Guidelines for Major Projects; which is available in DEWA website (www.dewa.gov.ae)."
+                },
+                {
+                  "id": "accreditation-of-the-department-of-tourism-and-commerce-marketing-dtcm",
+                  "title": "Accreditation Of The Department Of Tourism And Commerce Marketing (dtcm)",
+                  "description": "This service enables the customer to make a request for the construction of a hotel to count the number of future hotel rooms in the Emirate of Dubai and in order to approve practicing the hotel activities.",
+                  "channel": "Electronic classification system",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "120",
+                  "documents": "2"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-telecommunications-corporation-etisalat",
+                  "title": "Accreditation Of The Emirates Telecommunications Corporation (etisalat)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile phone stations",
+                  "channel": "Etisalat offices",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "3 Location site map Land-usage schematic A statistical table showing the number of units and their type"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-integrated-telecommunications-company-du",
+                  "title": "Accreditation Of The Emirates Integrated Telecommunications Company (du)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile pone stations.",
+                  "channel": "No-objection certificate Office - Dubai International Academic city, block 9, ground floor",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "1 Project’s master plan"
+                },
+                {
+                  "id": "accreditation-of-the-general-directorate-of-civil-defense-dcd",
+                  "title": "Accreditation Of The General Directorate Of Civil Defense (dcd)",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "RTA Single Window NOC’s portal",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-corporation-for-ambulance-services",
+                  "title": "Accreditation Of The Dubai Corporation For Ambulance Services",
+                  "description": "The developer commits to allocat a land plot and build an ambulance post according to the standards of Dubai Corporation for Ambulance Services for each ten thousand of the population",
+                  "channel": "Dubai Corporation for Ambulance Services",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Project master plan Commitment letter from the developer to provide the emergency post service"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-civil-aviation-authority-dcaa",
+                  "title": "Accreditation Of The Dubai Civil Aviation Authority (dcaa)",
+                  "description": "No-objection certificate for building heights in the project master plan for projects in areas under the supervision of Dubai Civil Aviation Authority to assure no conflict in the altitudes of the project buildings and flights movements.",
+                  "channel": "Dubai Civil Aviation Authority website",
+                  "channelUrl": null,
+                  "time": "10 Day",
+                  "fees": "10000",
+                  "documents": "3 A letter from the developer to the Director General of the Dubai Civil Aviation Authority stipulating the area name and the land number and the maximum building heights per meter Project master plan Dubai Civil Aviation survey form"
+                },
+                {
+                  "id": "project-master-plan-approval-dubai-police-general-head-quarters",
+                  "title": "Project Master Plan Approval – Dubai Police General Head Quarters",
+                  "description": "The developer is obligated to allocate a plot of land based on the population density in the project, an area of not less than 25,000 square feet is required if the population density more than 20,000; and an area of not less than 12,000 square feet is required if the population density less than 20,000 people and the land ownership will be under Dubai Police General Headquarters.",
+                  "channel": "The General Department of Logistical Support at the Dubai Police General Headquarters",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "0",
+                  "documents": "5 NOC request from the project consultant Consultant assignment letter from the owner Project master plan (a list of government agencies› approvals), from Dubai Municipality or the Dubai Development Authority (specifying the type of the project: commercial / residential / and the total population density) Project outline Site map from the Planning Department at Dubai Municipality"
+                },
+                {
+                  "id": "no-objection-certificate-for-master-plan-dcr-approval",
+                  "title": "No Objection Certificate For Master Plan & Dcr Approval",
+                  "description": "The purpose of this process is to ensure that the minimum planning standards are met for all requirements of the master plan and support land use and development policies, in accordance with the licenses - urban guidelines. Licensing (Planning Department) has the role of reviewing and approving the master plan from the initial stage to the final stage (also to review if necessary the final approval of the stage); DCR is the final representation of the development that includes all NOCs for the service / service / along with the design of the data Control and regulation.",
+                  "channel": "Trakhees website",
+                  "channelUrl": null,
+                  "time": "30 Day",
+                  "fees": "3 fils for each square meter, minimum AED 50000",
+                  "documents": "1 Request form and check list"
+                },
+                {
+                  "id": "rta-no-objection-certification-for-infrastructure-designs",
+                  "title": "Rta No-objection Certification For Infrastructure Designs",
+                  "description": "This service enables the customer to obtain the approval of infrastructure project designs, and no-objection certificates related to it (For the design construction, trial trenches and handing over stages) and the supervision of the construction works.",
+                  "channel": "Electronic No objection Certificate System (ENOC)",
+                  "channelUrl": null,
+                  "time": "14 Day",
+                  "fees": "The fee of design review and construction supervision will be estimated based on the type of each case (A percentage of the project cost stipulated in the Executive Board Decision No. 1 for the year 2014)",
+                  "documents": "1 Mentioned in The website of the Electronic no-objection certificate system (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "approval-of-the-roads-and-transportation-authority-rta",
+                  "title": "Approval Of The Roads And Transportation Authority (rta)",
+                  "description": "Approval of the master plan and traffic impact study for the main development project, and the signing of the cost sharing agreement (the developer should not start any work before finalizing this step and updating the master plan on the Dubai Municipality›s survey system)",
+                  "channel": "(TES)Traffic Engineering System",
+                  "channelUrl": null,
+                  "time": "Varies according to the study area and the impact on traffic solutions and surrounding areas",
+                  "fees": "Varies according to each case but it consists of the following according to the provisions of Law No. 6 of 2006: 1 - Study review fees 2 - Traffic model fees 3 -The developer’s contribution to roads and public transport projects",
+                  "documents": "1 Proposed technical study of traffic impacts In accordance to Dubai Government Decision No. 3 of 2017 regarding the formation of the Dubai’s Committee for Building Permit Procedures Development and Regulation No. 4 of 2009 regarding the organization of work on the road precinct in the Emirate of Dubai and System No. 5 of 2009 regarding the regulation of railways in the Emirate of Dubai and Executive Council Resolution No. 1 of 2014 regarding the regulation of trams in the Emirate of Dubai, Regulation No. 4 of 2009 regarding the regulation of work on the campus of the road in the Emirate of Dubai, Anyone who performs real estate development and exploits the campus must obtain The necessary approvals from the Roads and Transport Authority to ensure the preservation of the country›s resources and to ensure the ease and consistency of the ongoing construction work. press here for the law"
+                },
+                {
+                  "id": "issue-new-noc-and-revalidation-of-existing-noc-application-within-railway-protection-zone-on-e-noc-system",
+                  "title": "Issue New Noc And Revalidation Of Existing Noc Application Within Railway Protection Zone On E-noc System",
+                  "description": "Preparation the documents by the contractor and/or the project consultant and submitted through service delivery channels to the concerned authorities in RTA, which review the proposed works and issue the appropriate decisions after verifying the compliance with the approved regulations and technical specifications.",
+                  "channel": "Electronic No objection Certificate System (e-NOC system)",
+                  "channelUrl": null,
+                  "time": "5 Day 3/5/7 working days according to application type as per e-NOC system",
+                  "fees": "for issuance of new application 2000 AEDfor revalidation of existing NOC 1000 AED",
+                  "documents": "4 drawings of location with respect to railway protection zone site photos risk assessment report work methodology Dubai Executive Council order No. 1/2017 for Railway Legislation in Dubai"
+                },
+                {
+                  "id": "application-for-noc-to-construct-a-building-above-and-below-300-meters-in-aviation-easement-areas",
+                  "title": "Application For Noc To Construct A Building (above And Below 300) Meters In Aviation Easement Areas",
+                  "description": "This service enables the customers to obtain a No Objection Certificate for Building Heights within the Emirate of Dubai. This service ensures that none of these buildings affects the airspace safety and flights at Dubai airports, and the capacity of Dubai airspace.",
+                  "channel": "Dubai Civil Aviation Authority website https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "channelUrl": "https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "time": "1 Day 1 Working Day",
+                  "fees": "6520 6520/- AED per Building height NOC below 300 meters 9520/- AED per Building height NOC above 300 meters",
+                  "documents": "2 Affection Plan Aeronautical survey / Study"
+                }
+              ]
+            },
+            {
+              "id": "dubai-south",
+              "authority": "Dubai South",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/master-plan-approval/dubai-south/#/",
+              "services": [
+                {
+                  "id": "affection-plan",
+                  "title": "Affection Plan",
+                  "description": "For plot owners to obtain officially stamped affection plan for any plot within DUBAI SOUTH",
+                  "channel": "CUSTOMER’S HAPPINESS CENTRE EMAIL (LPD@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "1000 AED 1000 / PLOT",
+                  "documents": "4 Copy of valid Passport for individual owners Copy of valid trade license for companies Copy of sales or lease agreement Copy of attorney of owner’s representative (if required)"
+                },
+                {
+                  "id": "site-services-information",
+                  "title": "Site Services Information",
+                  "description": "To obtain information about all the services around any plot within Dubai South",
+                  "channel": "EMAIL (LPD@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Copy of stamped Affection plan Proof of appointment of consultant by the owner"
+                },
+                {
+                  "id": "preliminary-design-approval",
+                  "title": "Preliminary Design Approval",
+                  "description": "To obtain initial design approval mainly focusing on architectural & planning functions.",
+                  "channel": "CUSTOMER’S HAPPINESS CENTRE EMAIL (LPD@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "AED 1 PER m2 OF TOTAL BUILT-UP AREA",
+                  "documents": "4"
+                },
+                {
+                  "id": "project-name-no-objection-certificate-from-the-master-developer",
+                  "title": "Project Name No-objection Certificate From The Master Developer",
+                  "description": "Issuing no-objection certificate from the master developer to the sub-developer that there is no objection to the name of the project",
+                  "channel": "Master Developer",
+                  "channelUrl": null,
+                  "time": "2-5 Day",
+                  "fees": "Vary according to the master developer",
+                  "documents": "4 An official request from the sub-developer Land title deed Land Map Landowner documents, both companies and individuals"
+                },
+                {
+                  "id": "projects-registration-master-plan-submission-ma-lem-dubai",
+                  "title": "Projects Registration & Master Plan Submission (ma'lem Dubai)",
+                  "description": "This service enables Developers and Consultants to register their projects and submit its master plan to DEWA.",
+                  "channel": "24/7 through DEWA website (www.dewa.gov.ae)",
+                  "channelUrl": null,
+                  "time": "DEWA response on the submitted Power Supply Master Plan of Major Projects depends on the type of submission.",
+                  "fees": "0",
+                  "documents": "3 DEWA Enrolled Major Project Developers and their appointed Consultants can apply for the service. Obtain Power Supply Master Plan Approval. Depending on the project type and the Master Plan type; the submission should comply with the requirements of the Power Supply Guidelines for Major Projects; which is available in DEWA website (www.dewa.gov.ae)."
+                },
+                {
+                  "id": "accreditation-of-the-department-of-tourism-and-commerce-marketing-dtcm",
+                  "title": "Accreditation Of The Department Of Tourism And Commerce Marketing (dtcm)",
+                  "description": "This service enables the customer to make a request for the construction of a hotel to count the number of future hotel rooms in the Emirate of Dubai and in order to approve practicing the hotel activities.",
+                  "channel": "Electronic classification system",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "120",
+                  "documents": "2"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-telecommunications-corporation-etisalat",
+                  "title": "Accreditation Of The Emirates Telecommunications Corporation (etisalat)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile phone stations",
+                  "channel": "Etisalat offices",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "3 Location site map Land-usage schematic A statistical table showing the number of units and their type"
+                },
+                {
+                  "id": "accreditation-of-the-emirates-integrated-telecommunications-company-du",
+                  "title": "Accreditation Of The Emirates Integrated Telecommunications Company (du)",
+                  "description": "Land audits assigned to the Private Branch Exchange (Sub-PBX) and mobile pone stations.",
+                  "channel": "No-objection certificate Office - Dubai International Academic city, block 9, ground floor",
+                  "channelUrl": null,
+                  "time": "15 Day",
+                  "fees": "0",
+                  "documents": "1 Project’s master plan"
+                },
+                {
+                  "id": "accreditation-of-the-general-directorate-of-civil-defense-dcd",
+                  "title": "Accreditation Of The General Directorate Of Civil Defense (dcd)",
+                  "description": "Adoption of engineering plans for new buildings and installations, or upon alteration of space, or addition of construction works or change of type of works after safety requirements are met under the United Arab Emirates handbook for fire and life protection.",
+                  "channel": "RTA Single Window NOC’s portal",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "AED 1 per square meter of build up area + 1000 administrative fees",
+                  "documents": "1 Master plan"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-corporation-for-ambulance-services",
+                  "title": "Accreditation Of The Dubai Corporation For Ambulance Services",
+                  "description": "The developer commits to allocat a land plot and build an ambulance post according to the standards of Dubai Corporation for Ambulance Services for each ten thousand of the population",
+                  "channel": "Dubai Corporation for Ambulance Services",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Project master plan Commitment letter from the developer to provide the emergency post service"
+                },
+                {
+                  "id": "accreditation-of-the-dubai-civil-aviation-authority-dcaa",
+                  "title": "Accreditation Of The Dubai Civil Aviation Authority (dcaa)",
+                  "description": "No-objection certificate for building heights in the project master plan for projects in areas under the supervision of Dubai Civil Aviation Authority to assure no conflict in the altitudes of the project buildings and flights movements.",
+                  "channel": "Dubai Civil Aviation Authority website",
+                  "channelUrl": null,
+                  "time": "10 Day",
+                  "fees": "10000",
+                  "documents": "3 A letter from the developer to the Director General of the Dubai Civil Aviation Authority stipulating the area name and the land number and the maximum building heights per meter Project master plan Dubai Civil Aviation survey form"
+                },
+                {
+                  "id": "project-master-plan-approval-dubai-police-general-head-quarters",
+                  "title": "Project Master Plan Approval – Dubai Police General Head Quarters",
+                  "description": "The developer is obligated to allocate a plot of land based on the population density in the project, an area of not less than 25,000 square feet is required if the population density more than 20,000; and an area of not less than 12,000 square feet is required if the population density less than 20,000 people and the land ownership will be under Dubai Police General Headquarters.",
+                  "channel": "The General Department of Logistical Support at the Dubai Police General Headquarters",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "0",
+                  "documents": "5 NOC request from the project consultant Consultant assignment letter from the owner Project master plan (a list of government agencies› approvals), from Dubai Municipality or the Dubai Development Authority (specifying the type of the project: commercial / residential / and the total population density) Project outline Site map from the Planning Department at Dubai Municipality"
+                },
+                {
+                  "id": "final-design-approval",
+                  "title": "Final Design Approval",
+                  "description": "To obtain final design approval mainly focusing on conformity with Structural & Architectural standards, Master Planning Guidelines and Regulation.",
+                  "channel": "CUSTOMER’S HAPPINESS CENTRE EMAIL (LPD@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "8 Day",
+                  "fees": "AED 3 PER m2 OF TOTAL BUILT-UP AREA FOR WAREHOUSESAED 4 PER m 2 OF TOTAL BUILT-UP AREA FOR RESIDENTIAL",
+                  "documents": "15"
+                },
+                {
+                  "id": "rta-no-objection-certification-for-infrastructure-designs",
+                  "title": "Rta No-objection Certification For Infrastructure Designs",
+                  "description": "This service enables the customer to obtain the approval of infrastructure project designs, and the no-objection certificates related to it (For the design construction, trial trenches and handing over stages) and the supervision of the construction works.",
+                  "channel": "Electronic No objection Certificate System (ENOC)",
+                  "channelUrl": null,
+                  "time": "14 Day",
+                  "fees": "The fee of design review and construction supervision will be estimated based on the type of each case (A percentage of the project cost stipulated in the Executive Board Decision No. 1 for the year 2014)",
+                  "documents": "1 Mentioned in The website of the Electronic no-objection certificate system (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "issue-new-noc-and-revalidation-of-existing-noc-application-on-e-noc-system",
+                  "title": "Issue New Noc And Revalidation Of Existing Noc Application On E-noc System",
+                  "description": "Preparation the documents by the contractor and/or the project consultant and submitted through service delivery channels to the concerned authorities in RTA, which review the proposed works and issue the appropriate decisions after verifying the compliance with the approved regulations and technical specifications.",
+                  "channel": "Electronic No objection Certificate System (e-NOC system)",
+                  "channelUrl": null,
+                  "time": "5 Day 3/5/7 working days according to application type as per e-NOC system",
+                  "fees": "for issuance of new application 2000 AEDfor revalidation of existing NOC 1000 AED",
+                  "documents": "4 drawings of location with respect to railway protection zone site photos risk assessment report work methodology Dubai Executive Council order No. 1/2017 for Railway Legislation in Dubai"
+                },
+                {
+                  "id": "application-for-noc-to-construct-a-building-above-and-below-300-meters-in-aviation-easement-areas",
+                  "title": "Application For Noc To Construct A Building (above And Below 300) Meters In Aviation Easement Areas",
+                  "description": "This service enables the customers to obtain a No Objection Certificate for Building Heights within the Emirate of Dubai. This service ensures that none of these buildings affects the airspace safety and flights at Dubai airports, and the capacity of Dubai airspace.",
+                  "channel": "Dubai Civil Aviation Authority website https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "channelUrl": "https://www.dcaa.gov.ae/services/building-constructions/construct-building",
+                  "time": "1 Day 1 Working Day",
+                  "fees": "6520 6520/- AED per Building height NOC below 300 meters 9520/- AED per Building height NOC above 300 meters",
+                  "documents": "2 Affection Plan Aeronautical survey / Study"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "construction-permit-and-completion-certificate-phase",
+          "label": "Construction Permit and Completion Certificate Phase",
+          "branches": [
+            {
+              "id": "dubai-municipality",
+              "authority": "Dubai Municipality",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-municipality/#/",
+              "services": [
+                {
+                  "id": "new-building-permit",
+                  "title": "New Building Permit",
+                  "description": "This service enables you to obtain a building permit for a new project and, inclusively, a building demarcation certificate before starting any onsite works.",
+                  "channel": "Dubai Municipality website - Dubai Building Permit System (Dubai BPS): https://dubaibps.dm.gov.ae",
+                  "channelUrl": "https://dubaibps.dm.gov.ae",
+                  "time": "3 Day",
+                  "fees": "New Building Permit: Free for first time applications, then for every new submission as follows: Private villas: AED 100 Investment villas: AED 200 Industrial and public facilities: AED 250 Multi-storey buildings up to 7 floors: AED 200 Multi-storey buildings exceeding 7 floors: AED 250 Floor Area Ratio: AED 250. Minimum fees for all types of buildings: AED 500. And the permit fees are calculated as follows: Total internal floor area: 30 fils/sqft External concrete walls: 10 fils/linear ft Outdoor concrete slab: 10 fils/sqft Outdoor Pergola areas: 15 fils/sqft Swimming pool areas and other external services: 30 fils/sqft Building Demarcation Certificate: AED 100 for printed certificate.",
+                  "documents": "7"
+                },
+                {
+                  "id": "apply-for-structural-inspection",
+                  "title": "Apply For Structural Inspection",
+                  "description": "This service enables you to obtain the approval of Dubai Municipality Building Control Department to cast concrete foundations and slabs, or obtain approval for shoring works, and re-demarcation of the building from Dubai Municipality Survey Department (for projects that require that).",
+                  "channel": "Dubai Municipality website - Dubai Building Permit System (Dubai BPS): https://dubaibps.dm.gov.ae",
+                  "channelUrl": "https://dubaibps.dm.gov.ae",
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2 Please review Dubai Building Permit System - Dubai BPS for the required documents"
+                },
+                {
+                  "id": "completion-and-services-connection",
+                  "title": "Completion And Services Connection",
+                  "description": "This service enables you to obtain a Completion Certificate for all types of building permits and service connection for new buildings after completion of all construction works according to the technical and engineering specifications.",
+                  "channel": "Dubai Municipality website - Dubai Building Permit System (Dubai BPS): https://dubaibps.dm.gov.ae https://www.dcd.gov.ae/portal/aa/ Directorate General of Dubai Civil Defense",
+                  "channelUrl": "https://dubaibps.dm.gov.ae",
+                  "time": "3 Day",
+                  "fees": "Completion Certificate Issuance: AED 100 per inspectionDirectorate General of Dubai Civil Defence: AED 0.5/sqm for the first applicationReturned application: AED 500 (For Civil Defence only)",
+                  "documents": "6"
+                }
+              ]
+            },
+            {
+              "id": "trakhees",
+              "authority": "Trakhees",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/trakhees/#/",
+              "services": [
+                {
+                  "id": "request-for-concept-design",
+                  "title": "Request For Concept Design",
+                  "description": "Concept Design service is allowing the client to obtain the approval on the proposed concept design of the project according to the buildings Regulations and Guidelines as per relevant Trakhees-CED Codes.",
+                  "channel": "Website",
+                  "channelUrl": null,
+                  "time": "10 Day",
+                  "fees": "AED 0.5 per square meter of total area with a minimum of AED 250 and maximum of 25000 for the new applications",
+                  "documents": "4 Application form and check list for Concept services All mentioned documents in the application form. The proposed Architectural drawings for concept design. Approved drawings and NOC from the main developer."
+                },
+                {
+                  "id": "no-objection-certificates-for-permanent-infrastructure-works-for-building-projects",
+                  "title": "No-objection Certificates For Permanent Infrastructure Works For Building Projects",
+                  "description": "This service enables the customer to Issue certificates of no-objection for permanent infrastructure works for construction projects (External paving, permanent entrances and exits - excavation side reinforcement works - soil investigation) (for the design and implementation stages, exploratory drilling and final receipt).",
+                  "channel": "Electronic certificates of no-objection system (ENOC)",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "No fees required (Additional fees will be imposed for situations that require adjustment in the assets of the concerned parties or perform any commercial usage of them)",
+                  "documents": "1 The website of the electronic system of certificates of no-objection (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "request-for-soil-investigation",
+                  "title": "Request For Soil Investigation",
+                  "description": "This service is allowing the client to ensure that the proposed soil investigation is in line with the minimum requirements stipulated in the buildings Regulations and Guidelines as per relevant Trakhees-CED Codes",
+                  "channel": "Trakhees Website",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "250 AED per borehole – Min 500AED",
+                  "documents": "3 Application form for Soil Investigation services All mentioned documents in the application form. Boreholes locations and depths marked with reference to building layout."
+                },
+                {
+                  "id": "request-for-no-objection-for-mobilization-signboard",
+                  "title": "Request For No Objection For Mobilization & Signboard",
+                  "description": "This service is allowing the client to to obtain the approval to prepare the site prior construction with the proposed fencing and signboard details.",
+                  "channel": "Trakhees Website",
+                  "channelUrl": null,
+                  "time": "8 Day",
+                  "fees": "CED - Permit - Site Mobilization & Sign board NOC – Buildings / per plot 1500 AED CED Permit - Site Mobilization & Sign board NOC – Villas / per plot 500 AED CED - Permit - Site Mobilization & Sign Board NOC - Group of Villas / 500 AED per villa CED - Permit - Infrastructures Works - Site Mobilization & Sign board NOC 0.10 per Area SQM Min. 750.00",
+                  "documents": "3 Application form and for Mobilization services All mentioned documents in the application form. The relevant drawings and calculations for this service."
+                },
+                {
+                  "id": "request-for-structural-inspection-within-working-hours",
+                  "title": "Request For Structural Inspection Within Working Hours",
+                  "description": "This service to inspection & approve the structural elements in order to proceed with concrete work once conform the compliance with Trakhees’ CED approved Drawings & Inspection checklist.",
+                  "channel": "Trakhees Website Trakhees smart app",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "0",
+                  "documents": "2 Application for Structural Inspection Inspection Element Check list"
+                },
+                {
+                  "id": "request-for-a-partial-final-completion-certificate",
+                  "title": "Request For A Partial / Final Completion Certificate",
+                  "description": "This service is to ensure that the New projects are constructed in compliance with the Trakhees Approved Drawings & ‘Building Regulations & Design Guidelines’ including issues concerning safety, environment and health which will lead to the issue of the Completion Certificate that confirms the fitness of the project suitable for occupation or Partial Completion Certificate.",
+                  "channel": "Trakhees Website Trakhees smart app",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "1000 SQM: AED 500.1001 SQM to 4999 SQM: AED 1000.5000 SQM to 9999 SQM: AED 1500.10,000 SQM to 49,999 SQM: AED 2500.50,000 SQM to 99,999 SQM: AED 3500.100,000 SQM: AED 5000.Exceptional charges for missing mandatory document: AED 2500 each missing document.Re-Inspection charges (Per Hour) (Only applicable if site visit is required or re-submission delayed more than one-month: AED 1000.Health & Safety Inspection Fee for BCC 1000 sq. (Total BU Area): AED 1200.Between 1001 and 5000 sq. (Total BU Area): AED 1800.Between 10,000-5001 sq. (Total BU Area): AED 2400.Between 50,000-10,001 sq. (Total BU Area): AED 4000.Between 100,000-50,001 sq. (Total BU Area): AED 5600.Re-inspection charges on failure of BCC inspection (Per Hour) (Only applicable if the first inspection fails): AED1000.",
+                  "documents": "12 CED Building Permit / NOC copy Affection plan Trakhees final demarcation certificate DUDC (white code)- accessibility path drawings, way finding drawings & check list stamped from consultant & approved from Trakhees CED (applicable to Building permit issued from 1st June 2017) Structural inspection record Developer NOC Dubai Civil Defence (DCD) completion certificate Architectural as-built drawings in CAD & PDF format with DLTM coordinates showing Building Foot-print, Floor layout and Facility numbering. (P-Line), and Facility numbering in Excel Format Approved green building project plan (GBPP) Green building approval (building permit phase) Green Building Project Report (GBPR) with Supporting Documents Security Industry Regulatory Agency “SIRA” No Objection Certificate for Completion Certificate."
+                },
+                {
+                  "id": "traffic-impact-studies-approvals",
+                  "title": "Traffic Impact Studies Approvals",
+                  "description": "This service enables the customer to obtain the traffic impact studies approvals",
+                  "channel": "(TSE) Traffic Engineering system",
+                  "channelUrl": null,
+                  "time": "10 working days from the date of submission of the study (In the case of the submission of the report and all the required plans and drawings) + 8 working days after the payment of the value cost sharing (For the traffic study that generate the number of trips between (150 – 500)",
+                  "fees": "Up to 350 trips: AED 1600 From 351 up to 1000 trips: AED 2600 An amount of AED 5000 is charged for each trip for cost sharing.",
+                  "documents": "4 Letter of appointment of the consultant from the owner Site location map Land usages, number of trips and gross floor area A map showing the location and boundaries of the land"
+                }
+              ]
+            },
+            {
+              "id": "dubai-integrated-economic-zone-diez",
+              "authority": "Dubai Integrated Economic zone – DIEZ",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-integrated-economic-zone-diez/#/",
+              "services": [
+                {
+                  "id": "request-for-an-issuance-of-a-site-map",
+                  "title": "Request For An Issuance Of A Site Map",
+                  "description": "This service enables the customer to submit an application request for the issuance of a site map,number of future hotel rooms in the Emirate of Dubai.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "3 Day",
+                  "fees": "150",
+                  "documents": "4 Land ownership The sales contract The map of the land Passport/ trade license copies in the case of companies"
+                },
+                {
+                  "id": "request-for-land-demarcation-certification",
+                  "title": "Request For Land Demarcation Certification",
+                  "description": "This service enables the customer to submit an application request for coordinates points.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "7 Day",
+                  "fees": "2400",
+                  "documents": "0 No documents required"
+                },
+                {
+                  "id": "no-objection-certificates-for-permanent-infrastructure-works-for-building-projects",
+                  "title": "No-objection Certificates For Permanent Infrastructure Works For Building Projects",
+                  "description": "This service enables the customer to Issue certificates of no-objection for permanent infrastructure works for construction projects (External paving, permanent entrances and exits - excavation side reinforcement works - soil investigation) (for the design and implementation stages, exploratory drilling and final receipt).",
+                  "channel": "Electronic certificates of no-objection system (ENOC)",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "No fees required (Additional fees will be imposed for situations that require adjustment in the assets of the concerned parties or perform any commercial usage of them)",
+                  "documents": "1 The website of the electronic system of certificates of no-objection (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "request-for-soil-examination",
+                  "title": "Request For Soil Examination",
+                  "description": "This service enables the customer to submit an application request for schematics and documents review.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "3 Day",
+                  "fees": "250",
+                  "documents": "5 Copy of approval Copy of the lab selection letter A copy of the landmarks demarcation certificate Work permit in the Oasis A letter from the lab to the Dubai Silicon Oasis authority"
+                },
+                {
+                  "id": "request-for-sewerage-networks-connection",
+                  "title": "Request For Sewerage Networks Connection",
+                  "description": "This service enables the customer to submit an application request for review of the required documents and schematics.number of future hotel rooms in the Emirate of Dubai.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "12-16 weeks",
+                  "fees": "AED12 per each square metre",
+                  "documents": "3 Dubai Silicon Oasis Authority approval of the spaces calculation Dubai Silicon Oasis Authority approval of delivery schematics Sanitation flow account approved by the consultant"
+                },
+                {
+                  "id": "request-for-an-initial-design-approval",
+                  "title": "Request For An Initial Design Approval",
+                  "description": "This service enables the customer to submit an application request for review and approval of the required documents and schematics.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "7 Day",
+                  "fees": "3.25 UAE Dirhams per square metre",
+                  "documents": "9 Civil Defense approval Customers name, phone and e-mail address Name of the owner's representative, their telephone address, fax and e-mail Letter of appointment of the consultant Copy of the consultant's professional license A copy of the site drowings A complete digital copy of the schematics in DWG (Drawings) and DGN (Design) file formats including 3D (3 Dimensional) Model Certificate of no-objection from other pertinent authorities"
+                },
+                {
+                  "id": "request-for-support-reservation-of-soil",
+                  "title": "Request For Support (reservation Of Soil)",
+                  "description": "This service enables the customer to submit an application request for review of the required documents and schematics.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "7 Day",
+                  "fees": "3500",
+                  "documents": "2 Copy of site location map The landmarks demarcation certificate"
+                },
+                {
+                  "id": "request-for-approval-of-site-works-preparations",
+                  "title": "Request For Approval Of Site Works Preparations",
+                  "description": "This service enables the customer to submit an application request for review of the required documents and schematics.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "7 Day",
+                  "fees": "1500",
+                  "documents": "5 All-risk comprehensive insurance policy Letter of appointment of the contractor by the owner A copy of a valid professional license for the contractor Work permit within the authority Structural calculations with signed schematics"
+                },
+                {
+                  "id": "request-for-an-inspection-clearance",
+                  "title": "Request For An Inspection Clearance",
+                  "description": "This service enables the customer to submit an application request for an inspection clearance letter.",
+                  "channel": "Dubai Silicon Oasis Authority Customer Portal: https://eservices.dso.ae/",
+                  "channelUrl": "https://eservices.dso.ae/",
+                  "time": "3 Day",
+                  "fees": "500",
+                  "documents": "1 Copy of the building permit"
+                },
+                {
+                  "id": "traffic-impact-studies-approvals",
+                  "title": "Traffic Impact Studies Approvals",
+                  "description": "This service enables the customer to obtain the traffic impact studies approvals",
+                  "channel": "(TSE) Traffic Engineering system",
+                  "channelUrl": null,
+                  "time": "10 working days from the date of submission of the study (In the case of the submission of the report and all the required plans and drawings) + 8 working days after the payment of the value cost sharing (For the traffic study that generate the number of trips between (150 – 500)",
+                  "fees": "Up to 350 trips: AED 1600 From 351 up to 1000 trips: AED 2600 An amount of AED 5000 is charged for each trip for cost sharing.",
+                  "documents": "4 Letter of appointment of the consultant from the owner Site location map Land usages, number of trips and gross floor area A map showing the location and boundaries of the land"
+                }
+              ]
+            },
+            {
+              "id": "dubai-maritime-city-authority",
+              "authority": "Dubai Maritime City Authority",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-maritime-city-authority/#/",
+              "services": [
+                {
+                  "id": "concept-design-noc",
+                  "title": "Concept Design Noc",
+                  "description": "Approval on concept design of project",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "7 Day",
+                  "fees": "20000",
+                  "documents": "8"
+                },
+                {
+                  "id": "detailed-design-noc",
+                  "title": "Detailed Design Noc",
+                  "description": "Approval on detailed design of project.",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "14 Day",
+                  "fees": "30000",
+                  "documents": "9"
+                },
+                {
+                  "id": "no-objection-certificates-for-permanent-infrastructure-works-for-building-projects",
+                  "title": "No-objection Certificates For Permanent Infrastructure Works For Building Projects",
+                  "description": "This service enables the customer to Issue certificates of no-objection for permanent infrastructure works for construction projects (External paving, permanent entrances and exits - excavation side reinforcement works - soil investigation) (for the design and implementation stages, exploratory drilling and final receipt).",
+                  "channel": "Electronic certificates of no-objection system (ENOC)",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "No fees required (Additional fees will be imposed for situations that require adjustment in the assets of the concerned parties or perform any commercial usage of them)",
+                  "documents": "1 The website of the electronic system of certificates of no-objection (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "mobilization-noc",
+                  "title": "Mobilization Noc",
+                  "description": "To mobilize materials prior to start of works on site.",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "2000",
+                  "documents": "9 Client Request Letter Consultant Trade License Contractor Trade License Site plan Setting out plan Interlock detailed drawings (plan, section & elevation) Method of statement Undertaking letter MEP drawing (if applicable)"
+                },
+                {
+                  "id": "soil-investigation-noc",
+                  "title": "Soil Investigation Noc",
+                  "description": "To carry out soil investigation of site prior to start of works on site",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "525",
+                  "documents": "5 Client Request Letter Appointment letter of soil investigation agency Copy of valid trade license of soil investigation agency Key plan/Location plan Boreholes locations and depths marked with reference"
+                },
+                {
+                  "id": "dewa-noc",
+                  "title": "Dewa Noc",
+                  "description": "To confirm if the electrical load required by project has been included in DMC master plan.",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "525",
+                  "documents": "7 Letter of request Consultant Trade License Contractor Trade License Substation and LV Room Details Single Line Diagram Setting Out Plan Electrical Water Requirements"
+                },
+                {
+                  "id": "noc-for-sewerage-connection-to-nearest-dmc-manhole",
+                  "title": "Noc For Sewerage Connection To Nearest Dmc Manhole",
+                  "description": "To connect drainage of project with nearest manhole of DMC",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "525",
+                  "documents": "3 Tenant Request Letter EHS Approved Drawing Setting Out Plan"
+                },
+                {
+                  "id": "construction-completion-noc",
+                  "title": "Construction Completion Noc",
+                  "description": "To apply for Trakhees completion certificate",
+                  "channel": "Manual/Hard Copy Submission",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "525",
+                  "documents": "2 Copy of all authority approvals As built drawings (CAD+PDF)"
+                },
+                {
+                  "id": "traffic-impact-studies-approvals",
+                  "title": "Traffic Impact Studies Approvals",
+                  "description": "This service enables the customer to obtain the traffic impact studies approvals",
+                  "channel": "(TSE) Traffic Engineering system",
+                  "channelUrl": null,
+                  "time": "10 working days from the date of submission of the study (In the case of the submission of the report and all the required plans and drawings) + 8 working days after the payment of the value cost sharing (For the traffic study that generate the number of trips between (150 – 500)",
+                  "fees": "Up to 350 trips: AED 1600 From 351 up to 1000 trips: AED 2600 An amount of AED 5000 is charged for each trip for cost sharing.",
+                  "documents": "4 Letter of appointment of the consultant from the owner Site location map Land usages, number of trips and gross floor area A map showing the location and boundaries of the land"
+                }
+              ]
+            },
+            {
+              "id": "dubai-development-authority",
+              "authority": "Dubai Development Authority",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-development-authority/#/",
+              "services": [
+                {
+                  "id": "land-demarcation",
+                  "title": "Land Demarcation",
+                  "description": "This service enables the customer to fix the plot boundary and corners on the ground prior commencing construction and obtain approved Land Demarcation Certificate.",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "5 Day",
+                  "fees": "AED 400 per plot",
+                  "documents": "2"
+                },
+                {
+                  "id": "traffic-impact-studies-approvals",
+                  "title": "Traffic Impact Studies Approvals",
+                  "description": "This service enables the customer to obtain the traffic impact studies approvals",
+                  "channel": "(TSE) Traffic Engineering system",
+                  "channelUrl": null,
+                  "time": "10 working days from the date of submission of the study (In the case of the submission of the report and all the required plans and drawings) + 8 working days after the payment of the value cost sharing (For the traffic study that generate the number of trips between (150 – 500)",
+                  "fees": "Up to 350 trips: AED 1600 From 351 up to 1000 trips: AED 2600 An amount of AED 5000 is charged for each trip for cost sharing.",
+                  "documents": "4 Letter of appointment of the consultant from the owner Site location map Land usages, number of trips and gross floor area A map showing the location and boundaries of the land"
+                },
+                {
+                  "id": "no-objection-certificates-for-permanent-infrastructure-works-for-building-projects",
+                  "title": "No-objection Certificates For Permanent Infrastructure Works For Building Projects",
+                  "description": "This service enables the customer to Issue certificates of no-objection for permanent infrastructure works for construction projects (External paving, permanent entrances and exits - excavation side reinforcement works - soil investigation) (for the design and implementation stages, exploratory drilling and final receipt).",
+                  "channel": "Electronic certificates of no-objection system (ENOC)",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "No fees required (Additional fees will be imposed for situations that require adjustment in the assets of the concerned parties or perform any commercial usage of them)",
+                  "documents": "1 The website of the electronic system of certificates of no-objection (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "soil-report-review",
+                  "title": "Soil Report Review",
+                  "description": "This service is carried out after out the geotechnical investigation and lab tests, where the lab should prepare a report summarizing all the findings, recommendation and data to obtain approval from DDA.",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "2 Day",
+                  "fees": "0",
+                  "documents": "4"
+                },
+                {
+                  "id": "preliminary-design-approval",
+                  "title": "Preliminary Design Approval",
+                  "description": "This service allows the customer to obtain approval on the preliminary design of the project",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "4 Day",
+                  "fees": "Normal Submission: No fees requiredRenewal Fees: AED 2,000",
+                  "documents": "8"
+                },
+                {
+                  "id": "final-design-approval",
+                  "title": "Final Design Approval",
+                  "description": "This service allows the customer to obtain approval on the final architectural, structure and mechanical design of the project prior to obtaining the building permit",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "10 Day",
+                  "fees": "Normal Submission: No fees requiredRenewal Fees: AED 2,000",
+                  "documents": "20"
+                },
+                {
+                  "id": "building-permit",
+                  "title": "Building Permit",
+                  "description": "THIS SERVICE ENABLES THE CUSTOMER TO OBTAIN a building permit to start the building process, number of future hotel rooms in the Emirate of Dubai.",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "",
+                  "fees": "Normal Submission: AED 1.00 per ft2 on Total Built-Up-Area (minimum AED 200) . The final Building permit fees will be calculated after deducing the fees which were paid previously for the Interim & Preliminary Permit except for Mobilization and Excavation Permits.For Industrial use: the above fees not to exceed AED 250,000",
+                  "documents": "2"
+                },
+                {
+                  "id": "hse-officer-approval",
+                  "title": "Hse Officer Approval",
+                  "description": "This service enables the customer to register new HSE officer, renew the permit of HSE officer, employer change, linking or delinking plots, upgrade position, and HSE officer App username change",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "For New Registration: 20 Working DaysFor Renewal: 20 Working DaysFor Employer change: 20 Working DaysFor Linking/Delinking plots: 20 Working DayFor upgrade position: 20 Working DaysFor App Username Change: 1 Working Day",
+                  "fees": "0",
+                  "documents": "7"
+                },
+                {
+                  "id": "shoring-inspection",
+                  "title": "Shoring Inspection",
+                  "description": "This service enables the customer to apply for inspection at the starting stage of shoring works.",
+                  "channel": "Online Customer Service Center",
+                  "channelUrl": null,
+                  "time": "2 Day",
+                  "fees": "0",
+                  "documents": "3"
+                },
+                {
+                  "id": "piling-inspection",
+                  "title": "Piling Inspection",
+                  "description": "This service enables the customer to apply for inspection prior starting piling works at site.",
+                  "channel": "https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "2 Day",
+                  "fees": "0",
+                  "documents": "3"
+                },
+                {
+                  "id": "shoring-completion-certificate",
+                  "title": "Shoring Completion Certificate",
+                  "description": "This service enables the customer to apply for a completion certificate for the shoring work.",
+                  "channel": "Online Customer Service Center",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "0",
+                  "documents": "7"
+                },
+                {
+                  "id": "piling-completion-certificate",
+                  "title": "Piling Completion Certificate",
+                  "description": "This service enables the customer to apply for a piling completion certificate.",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "5 Day",
+                  "fees": "0",
+                  "documents": "6"
+                },
+                {
+                  "id": "structural-inspection",
+                  "title": "Structural Inspection",
+                  "description": "This service enables the customer to obtain approval prior to all concrete casting of foundations, tie beams, slabs, and critical structural elements (as per DDA structural guidelines)",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "Standard structural inspection request Inspection request received during the working days, between 12am – 7am: Conducted on the same day. Inspection request received during the working days, between7am – 12am: Conducted on the next working day. Inspection request received on weekends or public holidays: Conducted on the next working day.",
+                  "fees": "Standard structural inspection request : No fees requiredLate/Holiday inspections request: AED 2,000 per request",
+                  "documents": "9"
+                },
+                {
+                  "id": "structural-inspection-completion",
+                  "title": "Structural Inspection Completion",
+                  "description": "This service enables the customer to obtain a Structural Inspection Completion certificate",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "5 Day",
+                  "fees": "0",
+                  "documents": "6"
+                },
+                {
+                  "id": "third-party-building-survey-review",
+                  "title": "Third Party Building Survey Review",
+                  "description": "This service enables DDA to verify as built building information through registered Surveyor by Dubai Land Department (this service is mandatory prior obtaining completion certificate except for villas)",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "10 Day",
+                  "fees": "0",
+                  "documents": "4"
+                },
+                {
+                  "id": "building-completion-certificate",
+                  "title": "Building Completion Certificate",
+                  "description": "Building Completion Certificate Request (In case of applying through customer service center)",
+                  "channel": "DDA website https://dda.gov.ae/dda-services/zoning-services/development-control/ Customer Service Center",
+                  "channelUrl": "https://dda.gov.ae/dda-services/zoning-services/development-control/",
+                  "time": "3 Day",
+                  "fees": "Pre-inspection for Completion Certificate: AED 7,5001st, 2nd and 3rd request of Completion Certificate: None4th request of Completion Certificate onwards: AED 10,000",
+                  "documents": "12"
+                }
+              ]
+            },
+            {
+              "id": "dubai-south",
+              "authority": "Dubai South",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-south/#/",
+              "services": [
+                {
+                  "id": "affection-plan",
+                  "title": "Affection Plan",
+                  "description": "For plot owners to obtain officially stamped affection plan for any plot within DUBAI SOUTH",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "1000",
+                  "documents": "4"
+                },
+                {
+                  "id": "site-information",
+                  "title": "Site Information",
+                  "description": "To obtain information about all the services around any plot within Dubai South.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "2"
+                },
+                {
+                  "id": "no-objection-certificates-for-permanent-infrastructure-works-for-building-projects",
+                  "title": "No-objection Certificates For Permanent Infrastructure Works For Building Projects",
+                  "description": "This service enables the customer to Issue certificates of no-objection for permanent infrastructure works for construction projects (External paving, permanent entrances and exits - excavation side reinforcement works - soil investigation) (for the design and implementation stages, exploratory drilling and final receipt).",
+                  "channel": "Electronic certificates of no-objection system (ENOC)",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "No fees required (Additional fees will be imposed for situations that require adjustment in the assets of the concerned parties or perform any commercial usage of them)",
+                  "documents": "1 The website of the electronic system of certificates of no-objection (ENOC) https://noc.rta.ae/RTAeNOC/Webpages/common/login/login.aspx"
+                },
+                {
+                  "id": "soil-investigation-request",
+                  "title": "Soil Investigation Request",
+                  "description": "To obtain permission for soil test laboratories to start soil investigation works on any plot within Dubai South.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "0",
+                  "documents": "6"
+                },
+                {
+                  "id": "preliminary-design-approval",
+                  "title": "Preliminary Design Approval",
+                  "description": "To obtain initial design approval mainly focusing on architectural & planning functions",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "8 Day",
+                  "fees": "AED 1 PER m2 Fees of total built up area",
+                  "documents": "4"
+                },
+                {
+                  "id": "final-design-approval",
+                  "title": "Final Design Approval",
+                  "description": "To obtain final design approval mainly focusing on conformity with Structural & Architectural standards, Master Planning Guidelines and Regulation.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "8 Day",
+                  "fees": "AED 3 PER m2 OF TOTAL BUILT-UP AREA FOR WAREHOUSES,AED 4 PER m2 OF TOTAL BUILT-UP AREA FOR RESIDENTIAL",
+                  "documents": "15"
+                },
+                {
+                  "id": "building-permit",
+                  "title": "Building Permit",
+                  "description": "To obtain authority approval for starting construction works.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "6 Day",
+                  "fees": "AED 1 PER m2 OF TOTAL BUILT-UP AREA",
+                  "documents": "6"
+                },
+                {
+                  "id": "enabling-works-permit",
+                  "title": "Enabling Works Permit",
+                  "description": "To obtain authority approval for starting excavation, shoring, piling works if final design is not yet fully approved and building permit not issued.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "6 Day",
+                  "fees": "5000",
+                  "documents": "8"
+                },
+                {
+                  "id": "land-demarcation-certificate",
+                  "title": "Land Demarcation Certificate",
+                  "description": "To obtain land boundary demarcation certificate prior & post construction works.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "3 Day",
+                  "fees": "1000",
+                  "documents": "2"
+                },
+                {
+                  "id": "mobilization-permit-request",
+                  "title": "Mobilization Permit Request",
+                  "description": "To obtain authority approval for site establishment including site offices, signboard, temporary access & hoarding.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "6 Day",
+                  "fees": "1000",
+                  "documents": "8"
+                },
+                {
+                  "id": "structural-inspection-request",
+                  "title": "Structural Inspection Request",
+                  "description": "To submit request for structural inspection.",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "2 Day",
+                  "fees": "375",
+                  "documents": "3"
+                },
+                {
+                  "id": "building-completion-certificate",
+                  "title": "Building Completion Certificate",
+                  "description": "To obtain authority approval for completion of building as per approved Design and the Authority Regulation.",
+                  "channel": "CUSTOMER’S HAPPINESS CENTRE EMAIL (LPD@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "8 Day",
+                  "fees": "5000",
+                  "documents": "10"
+                },
+                {
+                  "id": "operation-fitness-certificate",
+                  "title": "Operation Fitness Certificate",
+                  "description": "To obtain yearly fitness certificates for operational facilities within Dubai South",
+                  "channel": "Customer’s happiness center Email (lpd@dacc.ae)",
+                  "channelUrl": null,
+                  "time": "5 Day",
+                  "fees": "Free for first year followed by AED 1000 yearly renewal fee",
+                  "documents": "6"
+                },
+                {
+                  "id": "traffic-impact-studies-approvals",
+                  "title": "Traffic Impact Studies Approvals",
+                  "description": "This service enables the customer to obtain the traffic impact studies approvals",
+                  "channel": "(TSE) Traffic Engineering system",
+                  "channelUrl": null,
+                  "time": "10 working days from the date of submission of the study (In the case of the submission of the report and all the required plans and drawings) + 8 working days after the payment of the value cost sharing (For the traffic study that generate the number of trips between (150 – 500)",
+                  "fees": "Up to 350 trips: AED 1600 From 351 up to 1000 trips: AED 2600 An amount of AED 5000 is charged for each trip for cost sharing.",
+                  "documents": "4 Letter of appointment of the consultant from the owner Site location map Land usages, number of trips and gross floor area A map showing the location and boundaries of the land"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sales-stage-during-project-completion-off-plan-property-sale",
+          "label": "Sales Stage During Project Completion (Off-Plan Property Sale)",
+          "branches": [
+            {
+              "id": "dubai-municipality",
+              "authority": "Dubai Municipality",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-municipality/#/",
+              "services": [
+                {
+                  "id": "request-for-registration-of-a-real-estate-project-and-opening-of-an-escrow-account",
+                  "title": "Request For Registration Of A Real Estate Project And Opening Of An Escrow Account",
+                  "description": "This service enables the real estate developers to register their projects; which their units that will be sold off-plan in areas of freehold and open a project escrow account; in which the received money amounts from the investors will be deposited.All real estate developers and owners of real estate projects in the freehold areas have the right to apply to receive this service; which requires the obtaining of trade license / profession (Which states the type of the real estate activity and the membership in Dubai Chamber).",
+                  "channel": "Trustee Account System - TAS",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "150000",
+                  "documents": "10"
+                },
+                {
+                  "id": "loading-project-units-initial-loading",
+                  "title": "Loading Project Units – Initial Loading",
+                  "description": "This service enables the surveying companies to load the areas and details of developers ‹and individuals› project units prior to construction so that they can sell the project units off plan (During the completion period) and add them to the contract system.",
+                  "channel": "Property survey system",
+                  "channelUrl": null,
+                  "time": "3-5 Day",
+                  "fees": "540 UAE Dirhams per each unit",
+                  "documents": "2"
+                }
+              ]
+            },
+            {
+              "id": "trakhees",
+              "authority": "Trakhees",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/trakhees/#/",
+              "services": [
+                {
+                  "id": "request-for-registration-of-a-real-estate-project-and-opening-of-an-escrow-account",
+                  "title": "Request For Registration Of A Real Estate Project And Opening Of An Escrow Account",
+                  "description": "This service enables the real estate developers to register their projects; which their units that will be sold off-plan in areas of freehold and open a project escrow account; in which the received money amounts from the investors will be deposited.All real estate developers and owners of real estate projects in the freehold areas have the right to apply to receive this service; which requires the obtaining of trade license / profession (Which states the type of the real estate activity and the membership in Dubai Chamber).",
+                  "channel": "Trustee Account System - TAS",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "150000",
+                  "documents": "10"
+                },
+                {
+                  "id": "loading-project-units-initial-loading",
+                  "title": "Loading Project Units – Initial Loading",
+                  "description": "This service enables the surveying companies to load the areas and details of developers ‹and individuals› project units prior to construction so that they can sell the project units off plan (During the completion period) and add them to the contract system.",
+                  "channel": "Property survey system",
+                  "channelUrl": null,
+                  "time": "3-5 Day",
+                  "fees": "540 UAE Dirhams per each unit",
+                  "documents": "2"
+                }
+              ]
+            },
+            {
+              "id": "dubai-integrated-economic-zone-diez",
+              "authority": "Dubai Integrated Economic zone – DIEZ",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-integrated-economic-zone-diez/#/",
+              "services": [
+                {
+                  "id": "request-for-registration-of-a-real-estate-project-and-opening-of-an-escrow-account",
+                  "title": "Request For Registration Of A Real Estate Project And Opening Of An Escrow Account",
+                  "description": "This service enables the real estate developers to register their projects; which their units that will be sold off-plan in areas of freehold and open a project escrow account; in which the received money amounts from the investors will be deposited.All real estate developers and owners of real estate projects in the freehold areas have the right to apply to receive this service; which requires the obtaining of trade license / profession (Which states the type of the real estate activity and the membership in Dubai Chamber).",
+                  "channel": "Trustee Account System - TAS",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "150000",
+                  "documents": "10"
+                },
+                {
+                  "id": "loading-project-units-initial-loading",
+                  "title": "Loading Project Units – Initial Loading",
+                  "description": "This service enables the surveying companies to load the areas and details of developers ‹and individuals› project units prior to construction so that they can sell the project units off plan (During the completion period) and add them to the contract system.",
+                  "channel": "Property survey system",
+                  "channelUrl": null,
+                  "time": "3-5 Day",
+                  "fees": "540 UAE Dirhams per each unit",
+                  "documents": "2"
+                }
+              ]
+            },
+            {
+              "id": "dubai-maritime-city-authority",
+              "authority": "Dubai Maritime City Authority",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-maritime-city-authority/#/",
+              "services": [
+                {
+                  "id": "request-for-registration-of-a-real-estate-project-and-opening-of-an-escrow-account",
+                  "title": "Request For Registration Of A Real Estate Project And Opening Of An Escrow Account",
+                  "description": "This service enables the real estate developers to register their projects; which their units that will be sold off-plan in areas of freehold and open a project escrow account; in which the received money amounts from the investors will be deposited.All real estate developers and owners of real estate projects in the freehold areas have the right to apply to receive this service; which requires the obtaining of trade license / profession (Which states the type of the real estate activity and the membership in Dubai Chamber).",
+                  "channel": "Trustee Account System - TAS",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "150000",
+                  "documents": "10"
+                },
+                {
+                  "id": "loading-project-units-initial-loading",
+                  "title": "Loading Project Units – Initial Loading",
+                  "description": "This service enables the surveying companies to load the areas and details of developers ‹and individuals› project units prior to construction so that they can sell the project units off plan (During the completion period) and add them to the contract system.",
+                  "channel": "Property survey system",
+                  "channelUrl": null,
+                  "time": "3-5 Day",
+                  "fees": "540 UAE Dirhams per each unit",
+                  "documents": "2"
+                }
+              ]
+            },
+            {
+              "id": "dubai-development-authority",
+              "authority": "Dubai Development Authority",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-development-authority/#/",
+              "services": [
+                {
+                  "id": "request-for-registration-of-a-real-estate-project-and-opening-of-an-escrow-account",
+                  "title": "Request For Registration Of A Real Estate Project And Opening Of An Escrow Account",
+                  "description": "This service enables the real estate developers to register their projects; which their units that will be sold off-plan in areas of freehold and open a project escrow account; in which the received money amounts from the investors will be deposited.All real estate developers and owners of real estate projects in the freehold areas have the right to apply to receive this service; which requires the obtaining of trade license / profession (Which states the type of the real estate activity and the membership in Dubai Chamber).",
+                  "channel": "Trustee Account System - TAS",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "150000",
+                  "documents": "10"
+                },
+                {
+                  "id": "loading-project-units-initial-loading",
+                  "title": "Loading Project Units – Initial Loading",
+                  "description": "This service enables the surveying companies to load the areas and details of developers ‹and individuals› project units prior to construction so that they can sell the project units off plan (During the completion period) and add them to the contract system.",
+                  "channel": "Property survey system",
+                  "channelUrl": null,
+                  "time": "3-5 Day",
+                  "fees": "540 UAE Dirhams per each unit",
+                  "documents": "2"
+                }
+              ]
+            },
+            {
+              "id": "dubai-south",
+              "authority": "Dubai South",
+              "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/construction-permit-and-completion-certificate-phase/dubai-south/#/",
+              "services": [
+                {
+                  "id": "request-for-registration-of-a-real-estate-project-and-opening-of-an-escrow-account",
+                  "title": "Request For Registration Of A Real Estate Project And Opening Of An Escrow Account",
+                  "description": "This service enables the real estate developers to register their projects; which their units that will be sold off-plan in areas of freehold and open a project escrow account; in which the received money amounts from the investors will be deposited.All real estate developers and owners of real estate projects in the freehold areas have the right to apply to receive this service; which requires the obtaining of trade license / profession (Which states the type of the real estate activity and the membership in Dubai Chamber).",
+                  "channel": "Trustee Account System - TAS",
+                  "channelUrl": null,
+                  "time": "1 Day",
+                  "fees": "150000",
+                  "documents": "10"
+                },
+                {
+                  "id": "loading-project-units-initial-loading",
+                  "title": "Loading Project Units – Initial Loading",
+                  "description": "This service enables the surveying companies to load the areas and details of developers ‹and individuals› project units prior to construction so that they can sell the project units off plan (During the completion period) and add them to the contract system.",
+                  "channel": "Property survey system",
+                  "channelUrl": null,
+                  "time": "3-5 Day",
+                  "fees": "540 UAE Dirhams per each unit",
+                  "documents": "2"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "postDevelopment": {
+      "id": "post-development",
+      "label": "Post-development",
+      "description": "This stage is concerned with services that may be required by the real estate developer after finishing the project and obtaining the project’s completion certificate from the licensing authority. It also includes the services required by the real estate developer after the completion of the development process and the settlement of the project›s trust account (In case units are sold off-plan).",
+      "sequenceNote": "Project-closeout services after completion certification; applicability and order depend on project status.",
+      "sourceUrl": "https://dubailand.gov.ae/en/developer-book/main-phases/development-stage/#postRealEstateDevelopment",
+      "services": [
+        {
+          "id": "settlement-of-the-escrow-account",
+          "title": "Settlement Of The Escrow Account",
+          "description": "This service allow the developer to settle the escrow account and receive the rest of the deposits in the account",
+          "channel": "Dubai Land Department",
+          "channelUrl": null,
+          "time": "1 Day",
+          "fees": "0",
+          "documents": "1 Clearance letter from the owner association Clearance letter from the owner association"
+        },
+        {
+          "id": "project-units-loading-final-loading",
+          "title": "Project Units Loading - Final Loading",
+          "description": "This service enables surveying companies to upload the spaces and details of developers and individuals project units after construction work, so that they can be able to extract property ownership deeds in relation to their real estate units.",
+          "channel": "Property Survey System",
+          "channelUrl": null,
+          "time": "3-5 Day",
+          "fees": "270 UAE Dirhams per unit",
+          "documents": "2"
+        }
+      ]
+    }
+  }
+}

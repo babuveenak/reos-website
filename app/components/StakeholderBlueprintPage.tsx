@@ -5,6 +5,7 @@ import { StakeholderJurisdictionSelector } from "./StakeholderJurisdictionSelect
 import { StakeholderHeroVisual } from "./StakeholderHeroVisual";
 import { StakeholderLifecycleMap } from "./StakeholderLifecycleMap";
 import { StakeholderProcessMap } from "./StakeholderProcessMap";
+import { DeveloperDldJourney } from "./DeveloperDldJourney";
 import { StakeholderGuidanceSections } from "./StakeholderGuidanceSections";
 import { authorityProcessMaps } from "../data/authorityProcessMaps";
 import { DUBAI_TRACKS, EMIRATES, stakeholderBlueprintById, type DubaiTrack, type EmirateId } from "../data/stakeholderBlueprints";
@@ -26,6 +27,7 @@ const COPY = {
     ecosystem: "Open this stakeholder in the ecosystem map",
     all: "View all stakeholder groups",
     visualCaption: "Illustrative stakeholder concept, not an official plan",
+    developerOverview: "A real estate developer takes a project from entity licensing and land control through planning, approvals, escrow, construction, regulated sales, completion, handover and post-development close-out. The developer coordinates DLD, licensing and planning authorities, consultants, banks, contractors, buyers and operators while retaining accountability for the project route.",
   },
   ar: {
     back: "العودة إلى جميع أصحاب المصلحة",
@@ -39,6 +41,7 @@ const COPY = {
     ecosystem: "افتح صاحب المصلحة في خريطة المنظومة",
     all: "عرض جميع أصحاب المصلحة",
     visualCaption: "تصور توضيحي لصاحب المصلحة وليس مخططاً رسمياً",
+    developerOverview: "ينقل المطور العقاري المشروع من ترخيص الكيان والسيطرة على الأرض عبر التخطيط والموافقات والضمان والإنشاء والمبيعات المنظمة والإنجاز والتسليم وإقفال ما بعد التطوير. وينسق المطور مع دائرة الأراضي وجهات الترخيص والتخطيط والاستشاريين والبنوك والمقاولين والمشترين والمشغلين مع بقاء مسؤوليته عن مسار المشروع.",
   },
 };
 
@@ -67,6 +70,7 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
       .filter((id) => id !== stakeholderId)
       .map((id) => localizedGroups.find((group) => group.id === id)?.name ?? id.replaceAll("-", " ")),
   }));
+  const showDeveloperJourney = isDubai && stakeholderId === "developers" && track !== "financial-free-zone";
   if (!coverage) notFound();
 
   return <Page className="inner-page stakeholder-blueprint-page" locale={locale}>
@@ -80,7 +84,7 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
       <div className="stakeholder-blueprint-copy">
         <span className="eyebrow">{c.stakeholder} {String(fallbackGroup.number).padStart(2, "0")} / 12</span>
         <h1>{localizedGroup.name}</h1>
-        <p>{profile.overview}</p>
+        <p>{stakeholderId === "developers" ? c.developerOverview : profile.overview}</p>
         <div className="blueprint-status-row">
           <span className={`evidence-badge ${isDubai ? "evidence-conditional" : "evidence-unverified"}`}>{isDubai ? c.sourceLed : c.unmapped}</span>
           <time dateTime="2026-08-26">{c.checked}</time>
@@ -90,10 +94,12 @@ export function StakeholderBlueprintPage({ stakeholderId, emirate, track, locale
       <StakeholderHeroVisual stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} caption={c.visualCaption} locale={locale} />
     </section>
 
-    <StakeholderLifecycleMap stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} connections={connections} locale={locale} />
+    {showDeveloperJourney
+      ? <DeveloperDldJourney locale={locale} track={track} stages={localizedStages} participation={profile.participation} />
+      : <StakeholderLifecycleMap stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} connections={connections} locale={locale} />}
 
     {isDubai
-      ? <>
+      ? showDeveloperJourney ? null : <>
           <StakeholderProcessMap stakeholderId={stakeholderId} stakeholderName={localizedGroup.name} stages={localizedStages} participation={profile.participation} processes={processes} locale={locale} track={track} initialStageId={primaryStageId} variant="tiered" emirate={emirate} trackNote={selectedTrack.note} />
           <StakeholderGuidanceSections stakeholderId={stakeholderId as StakeholderId} stakeholderName={localizedGroup.name} locale={locale} />
         </>
