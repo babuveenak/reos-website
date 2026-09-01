@@ -64,10 +64,7 @@ export function BrokerAgencyJourney({ locale, initialEmirate, stages, participat
   const T = (value: { en: string; ar: string }) => value[locale];
   const selectStage = (id: string) => setStageByRoute((current) => ({ ...current, [routeKey]: id }));
   const selectStep = (id: string) => setTaskByRoute((current) => ({ ...current, [routeKey]: id }));
-  const chooseRoute = (id: BrokerJourneyRouteId, moveToProcess = true) => {
-    setRouteId(id);
-    if (moveToProcess) requestAnimationFrame(() => document.getElementById("broker-process")?.scrollIntoView({ behavior: "smooth", block: "start" }));
-  };
+  const chooseRoute = (id: BrokerJourneyRouteId) => setRouteId(id);
   const openMapStage = (stageId: string, taskId?: string) => {
     setStageByRoute((current) => ({ ...current, [routeKey]: stageId }));
     if (taskId) setTaskByRoute((current) => ({ ...current, [routeKey]: taskId }));
@@ -107,8 +104,8 @@ export function BrokerAgencyJourney({ locale, initialEmirate, stages, participat
         <div className="broker-route-map-layer">
           <Image src="/images/brokers-agencies-operating-map-v1.png" alt="" width={1536} height={1024} priority sizes="(max-width: 900px) 100vw, 58vw"/>
           <span className="broker-map-branch broker-map-branch-individual" aria-hidden="true"/><span className="broker-map-branch broker-map-branch-agency" aria-hidden="true"/>
-          <button type="button" className={`broker-map-destination broker-map-destination-individual${routeId === "individual" ? " active" : ""}`} aria-pressed={routeId === "individual"} onClick={() => chooseRoute("individual", false)}><RouteIcon route="individual"/><span><b>{c.individual}</b><small>{c.selectDestination}</small></span></button>
-          <button type="button" className={`broker-map-destination broker-map-destination-agency${routeId === "agency" ? " active" : ""}`} aria-pressed={routeId === "agency"} onClick={() => chooseRoute("agency", false)}><RouteIcon route="agency"/><span><b>{c.agency}</b><small>{c.selectDestination}</small></span></button>
+          <button type="button" className={`broker-map-destination broker-map-destination-individual${routeId === "individual" ? " active" : ""}`} aria-pressed={routeId === "individual"} onClick={() => chooseRoute("individual")}><RouteIcon route="individual"/><span><b>{c.individual}</b><small>{c.selectDestination}</small></span></button>
+          <button type="button" className={`broker-map-destination broker-map-destination-agency${routeId === "agency" ? " active" : ""}`} aria-pressed={routeId === "agency"} onClick={() => chooseRoute("agency")}><RouteIcon route="agency"/><span><b>{c.agency}</b><small>{c.selectDestination}</small></span></button>
           {mapped && operationalStages.map((item, index) => <button key={item.id} type="button" className={`broker-map-checkpoint broker-map-checkpoint-${index + 1}${selectedStage?.id === item.id ? " active" : ""}`} aria-label={`${c.openStage} ${item.number}: ${T(item.title)}`} aria-current={selectedStage?.id === item.id ? "step" : undefined} onClick={() => openMapStage(item.id, item.tasks[0]?.id)}><span>{String(item.number).padStart(2, "0")}</span><b>{T(item.title)}</b></button>)}
           <span className="broker-map-signal broker-map-signal-one"/><span className="broker-map-signal broker-map-signal-two"/><span className="broker-map-signal broker-map-signal-three"/>
         </div>

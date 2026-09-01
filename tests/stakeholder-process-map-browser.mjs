@@ -102,9 +102,20 @@ const brokers = await open("/stakeholders/brokers-agencies/dubai/dm-mainland", 1
 await assertGuidedJourney(brokers.page, "brokers-agencies");
 const brokerJourney = brokers.page.locator(".broker-agency-journey");
 assert.equal(await brokerJourney.locator(".broker-route-control button").count(), 2, "both legal route choices must remain visible");
+await brokerJourney.locator(".broker-route-studio").scrollIntoViewIfNeeded();
+const routeToggleScroll = await brokers.page.evaluate(() => window.scrollY);
 await brokerJourney.locator(".broker-map-destination-agency").click();
+await brokers.page.waitForTimeout(120);
+assert.ok(Math.abs((await brokers.page.evaluate(() => window.scrollY)) - routeToggleScroll) <= 2, "switching Agent and Agency must not jump to the next section");
 assert.match(await brokerJourney.locator(".broker-route-summary h4").innerText(), /Open a real-estate brokerage agency/);
 assert.equal(await brokerJourney.locator(".broker-map-destination-agency").getAttribute("aria-pressed"), "true", "the selected image destination needs an accessible active state");
+for (const index of [0, 1]) {
+  const box = await brokerJourney.locator(".broker-map-checkpoint").nth(index).boundingBox();
+  const visualBox = await brokerJourney.locator(".broker-route-visual").boundingBox();
+  assert.ok(box && visualBox && box.y >= visualBox.y && box.y + box.height <= visualBox.y + visualBox.height, `image checkpoint ${index + 1} must be fully visible`);
+  assert.ok(box && box.width >= 30 && box.height >= 30, `image checkpoint ${index + 1} must render as a complete control`);
+}
+await brokerJourney.locator(".broker-route-studio").screenshot({ path: `${output}/brokers-agency-map.png` });
 assert.equal(await brokerJourney.locator(".broker-stage-trigger").count(), 5, "Dubai agency route needs five ordered stages");
 await brokerJourney.locator(".broker-map-checkpoint").nth(2).click();
 assert.equal(await brokerJourney.locator(".broker-stage-trigger").nth(2).getAttribute("aria-expanded"), "true", "image checkpoints must open their matching journey stage");
