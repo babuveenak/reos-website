@@ -42,9 +42,16 @@ assert.equal(await journey.locator(".developer-checklist-workspace > nav button"
 assert.equal(await desktop.page.locator(".stakeholder-process-map").count(), 0, "the generic process map must not duplicate the developer journey");
 assert.equal(await desktop.page.locator(".stakeholder-entry-guidance").count(), 0, "the generic role-entry section must not duplicate the developer checklist");
 assert.equal(await journey.locator(".dld-map-node").count(), 5, "the overview needs pre, three development nodes and post");
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 6, "pre-development must start with all six official services");
+assert.equal(await journey.locator(".dld-service-node").count(), 6, "pre-development must start with all six official services");
 assert.match(await journey.locator(".dld-snapshot-note").innerText(), /170 official DLD records.*not a live API feed/i);
-assert.match(await journey.locator(".dld-service-nodes > button").first().innerText(), /01[\s\S]*DET; DED in the DLD record[\s\S]*Trade Name Reservation/i, "the REOS guided route must begin with trade-name reservation and identify DET/DED");
+assert.equal(await journey.locator('.dld-flow-group[data-relation="flexible"] .dld-service-node').count(), 2, "initial approval and trade-name reservation must be shown as a flexible early pair");
+assert.match(await journey.locator(".dld-service-node").first().innerText(), /01A[\s\S]*Submission Of The Initial Approval Certificate[\s\S]*DET; DED in the DLD record/i);
+const firstNodeHierarchy = await journey.locator(".dld-service-node").first().evaluate((node) => {
+  const title = node.querySelector("div > b");
+  const authority = node.querySelector("div > small");
+  return Boolean(title && authority && (title.compareDocumentPosition(authority) & Node.DOCUMENT_POSITION_FOLLOWING));
+});
+assert.equal(firstNodeHierarchy, true, "the action title must appear before the secondary authority label");
 assert.match(await journey.locator(".dld-escrow-correction").innerText(), /Escrow opening sits in Development.*not in pre-development/i);
 
 await journey.locator(".developer-checklist-workspace > nav button").nth(5).click();
@@ -57,10 +64,15 @@ await journey.locator(".developer-seven-stage button").nth(6).click();
 assert.match(await journey.locator(".developer-checklist-detail").innerText(), /Close out and support the operating asset[\s\S]*supporting role/i);
 
 await journey.locator(".dld-phase-nav button").nth(0).click();
-await journey.locator(".dld-service-nodes > button").filter({ hasText: "Trade Name Reservation" }).click();
+const tradeNameNode = journey.locator(".dld-service-node").filter({ hasText: "Trade Name Reservation" });
+assert.equal(await tradeNameNode.locator("p").evaluate((element) => getComputedStyle(element).opacity), "0", "an unselected node preview must begin collapsed");
+await tradeNameNode.hover();
+await desktop.page.waitForTimeout(250);
+assert.equal(await tradeNameNode.locator("p").evaluate((element) => getComputedStyle(element).opacity), "1", "hover must reveal provider process metadata");
+await tradeNameNode.click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Trade Name Reservation[\s\S]*7 Minutes[\s\S]*620[\s\S]*Emirates ID/);
 assert.equal(await journey.locator(".dld-service-detail .dld-primary-action").getAttribute("href"), "https://www.investindubai.gov.ae/en/business-setup/business-setup-services/request-to-book-a-trade-name", "trade-name action must open the exact DET service route");
-await journey.locator(".dld-service-nodes > button").filter({ hasText: "Dld Approval For The Trade License" }).click();
+await journey.locator(".dld-service-node").filter({ hasText: "Dld Approval For The Trade License" }).click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Dubai Land Department \/ RERA[\s\S]*after licence issuance[\s\S]*1 Day[\s\S]*25000/i);
 assert.equal(await journey.locator(".dld-service-detail .dld-primary-action").getAttribute("href"), "https://trakheesi.dubailand.gov.ae", "the DLD activity approval must open Trakheesi directly");
 
@@ -69,30 +81,34 @@ assert.equal(await journey.locator(".dld-development-controls fieldset button").
 assert.equal(await journey.locator(".dld-development-controls select option").count(), 6, "each development sub-phase must expose six authority branches");
 await journey.locator(".dld-development-controls fieldset button").nth(0).click();
 assert.equal(await journey.locator(".dld-development-controls select").inputValue(), "dubai-municipality", "DM route should default to the Dubai Municipality branch");
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 15, "DM master-plan branch must expose all 15 published records");
+assert.equal(await journey.locator(".dld-service-node").count(), 15, "DM master-plan branch must expose all 15 published records");
+assert.equal(await journey.locator('.dld-flow-group[data-relation="sequence"] .dld-service-node').count(), 3, "DM master-plan route must expose its backbone separately");
+assert.equal(await journey.locator('.dld-flow-group[data-relation="parallel"] .dld-service-node').count(), 12, "DM master-plan authority clearances must be presented as parallel records");
 
 await journey.locator(".dld-development-controls select").selectOption("dubai-development-authority");
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 16, "DDA master-plan branch must expose all 16 published records");
+assert.equal(await journey.locator(".dld-service-node").count(), 16, "DDA master-plan branch must expose all 16 published records");
 await journey.locator(".dld-development-controls fieldset button").nth(1).click();
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 16, "DDA construction branch must expose all 16 published records");
-await journey.locator(".dld-service-nodes > button").filter({ hasText: "Building Permit" }).click();
+assert.equal(await journey.locator(".dld-service-node").count(), 16, "DDA construction branch must expose all 16 published records");
+await journey.locator(".dld-service-node").filter({ hasText: "Building Permit" }).click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Building Permit[\s\S]*DDA/i);
 
 await journey.locator(".dld-development-controls fieldset button").nth(2).click();
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 2, "off-plan stage must expose project escrow registration and initial unit loading");
+assert.equal(await journey.locator(".dld-service-node").count(), 2, "off-plan stage must expose project escrow registration and initial unit loading");
+assert.equal(await journey.locator('.dld-flow-group[data-relation="conditional"] .dld-service-node').count(), 2, "off-plan services must be visibly conditional");
 const search = journey.locator(".dld-service-search input");
 await search.fill("escrow");
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 1, "search must isolate the escrow-opening service");
-await journey.locator(".dld-service-nodes > button").click();
+assert.equal(await journey.locator(".dld-service-node").count(), 1, "search must isolate the escrow-opening service");
+await journey.locator(".dld-service-node").click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Opening Of An Escrow Account[\s\S]*Trustee Account System - TAS[\s\S]*1 Day[\s\S]*150000/i);
 assert.equal(await journey.locator(".dld-service-detail .dld-primary-action").getAttribute("href"), "https://backoffice.dubailand.gov.ae/en/eservices/register-project/", "project registration must open the exact official DLD service page");
 await search.focus();
 assert.equal(await search.evaluate((element) => element.matches(":focus-visible")), true, "service search needs a visible keyboard focus state");
 
 await journey.locator(".dld-phase-nav button").nth(2).click();
-assert.equal(await journey.locator(".dld-service-nodes > button").count(), 2, "post-development must expose both official closure records");
-assert.match(await journey.locator(".dld-service-nodes > button").first().innerText(), /01[\s\S]*Project Units Loading - Final Loading/i, "the practical close-out route must show final unit loading before escrow settlement");
-await journey.locator(".dld-service-nodes > button").filter({ hasText: "Final Loading" }).click();
+assert.equal(await journey.locator(".dld-service-node").count(), 2, "post-development must expose both official closure records");
+assert.match(await journey.locator(".dld-service-node").first().innerText(), /03A[\s\S]*Project Units Loading - Final Loading/i, "unit/title close-out must be presented as the first branch");
+assert.equal(await journey.locator('.dld-flow-group[data-relation="conditional"] .dld-service-node').count(), 1, "escrow settlement must be shown as a conditional off-plan close-out branch");
+await journey.locator(".dld-service-node").filter({ hasText: "Final Loading" }).click();
 assert.match(await journey.locator(".dld-service-detail").innerText(), /Project Units Loading - Final Loading[\s\S]*3-5 Day[\s\S]*270 UAE Dirhams per unit/);
 assert.match(await journey.locator(".dld-crosswalk").innerText(), /protected REOS lifecycle[\s\S]*Land & Vision[\s\S]*Planning & Design[\s\S]*Living & Operations/i);
 assert.equal(await journey.locator(".developer-control-points details").count(), 6, "control points must be interactive and use differentiated meanings");
@@ -158,7 +174,7 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
   assert.equal(await view.page.locator(".developer-dld-journey .developer-checklist-workspace > nav button").count(), 10, `${width}px must retain all ten checklist steps`);
   await view.page.locator(".developer-dld-journey .dld-phase-nav button").nth(1).click();
   await view.page.locator(".developer-dld-journey .dld-development-controls fieldset button").nth(2).click();
-  assert.equal(await view.page.locator(".developer-dld-journey .dld-service-nodes > button").count(), 2, `${width}px must retain off-plan services`);
+  assert.equal(await view.page.locator(".developer-dld-journey .dld-service-node").count(), 2, `${width}px must retain off-plan services`);
   if (width === 390) await view.page.locator(".developer-dld-journey").screenshot({ path: `${output}/developer-dld-mobile.png` });
   await view.context.close();
 }

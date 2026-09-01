@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { dldDeveloperBook } from "../data/dldDeveloperBook";
-import { DEVELOPER_SERVICE_GUIDANCE, POST_DEVELOPMENT_GUIDED_ORDER, PRE_DEVELOPMENT_GUIDED_ORDER, inferDevelopmentServiceProvider } from "../data/developerServiceGuidance";
+import { DEVELOPER_SERVICE_GUIDANCE, POST_DEVELOPMENT_ROUTE_ORDER, PRE_DEVELOPMENT_ROUTE_ORDER, inferDevelopmentServiceProvider } from "../data/developerServiceGuidance";
 import { developerJourneySteps, type DeveloperServiceReference, type LocalizedText } from "../data/developerJourneyGuide";
 import type { Stage } from "../data/journey";
 import { officialSourceById } from "../data/officialSources";
@@ -11,6 +11,7 @@ import { EMIRATES, type DubaiTrack, type EmirateId, type ParticipationState } fr
 import type { Locale } from "../i18n/config";
 
 type PhaseId = "pre-development" | "development" | "post-development";
+type FlowRelation = "sequence" | "flexible" | "parallel" | "conditional" | "closure";
 
 type Props = {
   locale: Locale;
@@ -35,9 +36,9 @@ const COPY = {
     status: "Official DLD listing · structured by REOS",
     checked: "Checked 1 September 2026",
     snapshot: "170 official DLD records · source-controlled snapshot · not a live API feed",
-    sequenceCautionPre: "REOS guided dependency order. DLD publishes these six service records but does not label their card order as a binding universal sequence. Confirm the live DET–DLD hand-off for the selected legal form and activity.",
+    sequenceCautionPre: "Current Dubai guidance places initial approval before trade-name registration but expressly allows the name to be reserved first. REOS therefore shows them as a flexible pair, followed by licence issuance and the DLD onboarding gates. Confirm the live DET–DLD hand-off for the selected legal form and activity.",
     sequenceCautionDevelopment: "DLD-published records for the selected branch. The numbers are navigation references, not a claim that every approval runs linearly; NOCs and technical reviews may be parallel or conditional.",
-    sequenceCautionPost: "REOS close-out dependency order. Final unit loading is shown before escrow settlement as a practical route; the live project status and authority decision control applicability.",
+    sequenceCautionPost: "Both records require completion evidence, but they are separate close-out branches: final unit loading supports title issuance and handover; escrow settlement applies only where an off-plan project escrow account exists.",
     notReplacement: "This three-phase DLD service view does not replace the canonical seven-stage REOS property lifecycle.",
     escrowCorrection: "Escrow opening sits in Development → Off-plan sales in the DLD Developer Book—not in pre-development. Pre-development establishes the entity, licence, DLD approval, developer registration and Oqood access.",
     pre: "Pre-development",
@@ -54,15 +55,16 @@ const COPY = {
     serviceSearch: "Find a service in this branch",
     serviceSearchPlaceholder: "Search service name or description",
     services: "service nodes",
+    processMap: "Interactive process map",
+    processMapHelp: "Hover or focus to preview the provider and published timing. Select a node to open the full structured record.",
+    flowGroups: { sequence: "Required backbone", flexible: "Flexible early pair", parallel: "Parallel authority clearances", conditional: "Conditional route", closure: "Completion close-out" },
+    flowLegend: { sequence: "Follow the backbone", flexible: "Either may start first", parallel: "May proceed together", conditional: "Only when applicable", closure: "Requires completion evidence" },
     noResults: "No service matches this search in the selected branch.",
-    selectNode: "Select a node to inspect the official listing",
     channel: "Service channel",
     time: "Listed service time",
     fees: "Listed fees",
     documents: "Listed documents",
     notListed: "Not listed in this DLD record",
-    officialRecord: "Open this branch on DLD",
-    channelLink: "Open service channel",
     estimate: "A service estimate is not the end-to-end project duration.",
     sourceWarning: dldDeveloperBook.source.warning,
     officialEnglish: "DLD’s English service titles and record text are preserved exactly enough for source comparison; confirm the live authority page before applying.",
@@ -132,7 +134,6 @@ const COPY = {
     applyDirect: "Open exact application route",
     evidenceRecord: "Open DLD evidence record",
     noDirectApply: "No separate public application link is published in this DLD record. Use the evidence record and confirm the live channel with the authority.",
-    routeStates: { guided: "Guided sequence", "authority-check": "Authority-confirmation gate", parallel: "Parallel / conditional", closure: "Close-out gate" },
   },
   ar: {
     eyebrow: "02 · رحلة المطور ودليل الإجراءات",
@@ -142,9 +143,9 @@ const COPY = {
     status: "قائمة رسمية من الدائرة · تنظيم REOS",
     checked: "تم التحقق في 1 سبتمبر 2026",
     snapshot: "170 سجلاً رسمياً من الدائرة · لقطة مضبوطة المصدر · ليست تغذية API حية",
-    sequenceCautionPre: "ترتيب إرشادي للاعتماديات من REOS. تنشر الدائرة سجلات الخدمات الستة، لكنها لا تصف ترتيب البطاقات كتسلسل إلزامي موحد. أكد مسار التسليم الحي بين DET والدائرة بحسب الشكل القانوني والنشاط.",
+    sequenceCautionPre: "تضع إرشادات دبي الحالية الموافقة المبدئية قبل تسجيل الاسم التجاري، لكنها تجيز صراحة حجز الاسم أولاً. لذلك يعرضهما REOS كزوج مرن، ثم إصدار الرخصة وبوابات التسجيل لدى الدائرة. أكد مسار التسليم الحي بين DET والدائرة بحسب الشكل القانوني والنشاط.",
     sequenceCautionDevelopment: "سجلات منشورة من الدائرة للمسار المحدد. الأرقام مراجع تنقل وليست ادعاءً بأن كل الموافقات خطية؛ فقد تكون الموافقات الفنية وشهادات عدم الممانعة متوازية أو مشروطة.",
-    sequenceCautionPost: "ترتيب إرشادي للإقفال من REOS. يظهر التحميل النهائي للوحدات قبل تسوية حساب الضمان كمسار عملي، بينما تتحكم حالة المشروع الحية وقرار الجهة في الانطباق.",
+    sequenceCautionPost: "يتطلب السجلان دليل الإنجاز، لكنهما فرعا إقفال منفصلان: يدعم التحميل النهائي إصدار سندات الملكية والتسليم، بينما تنطبق تسوية الضمان فقط عند وجود حساب ضمان لمشروع بيع على الخارطة.",
     notReplacement: "لا يحل منظور مراحل الدائرة الثلاث محل دورة حياة العقار القياسية ذات المراحل السبع في REOS.",
     escrowCorrection: "يقع فتح حساب الضمان ضمن التطوير ← البيع على الخارطة في دليل الدائرة، وليس ضمن ما قبل التطوير. أما ما قبل التطوير فيغطي تأسيس الكيان والترخيص وموافقة الدائرة وتسجيل المطور والوصول إلى نظام عقود.",
     pre: "ما قبل التطوير",
@@ -161,15 +162,16 @@ const COPY = {
     serviceSearch: "ابحث عن خدمة في هذا المسار",
     serviceSearchPlaceholder: "ابحث باسم الخدمة أو وصفها",
     services: "عقد خدمات",
+    processMap: "خريطة إجراءات تفاعلية",
+    processMapHelp: "مرر المؤشر أو انقل التركيز لمعاينة الجهة والمدة المنشورة. اختر عقدة لفتح السجل المنظم الكامل.",
+    flowGroups: { sequence: "المسار الأساسي المطلوب", flexible: "زوج مبكر مرن", parallel: "موافقات جهات متوازية", conditional: "مسار مشروط", closure: "إقفال بعد الإنجاز" },
+    flowLegend: { sequence: "اتبع المسار الأساسي", flexible: "يمكن بدء أي منهما أولاً", parallel: "قد تسير معاً", conditional: "فقط عند الانطباق", closure: "يتطلب دليل الإنجاز" },
     noResults: "لا توجد خدمة مطابقة للبحث في المسار المحدد.",
-    selectNode: "اختر عقدة لفحص السجل الرسمي",
     channel: "قناة الخدمة",
     time: "المدة المدرجة للخدمة",
     fees: "الرسوم المدرجة",
     documents: "المستندات المدرجة",
     notListed: "غير مدرج في سجل الدائرة هذا",
-    officialRecord: "افتح هذا المسار لدى الدائرة",
-    channelLink: "افتح قناة الخدمة",
     estimate: "تقدير مدة الخدمة ليس مدة المشروع من بدايته إلى نهايته.",
     sourceWarning: "تعكس الرسوم والمدد والمستندات والقنوات ما كان منشوراً في دليل المطور لدى الدائرة عند التحقق في 31 أغسطس 2026. وهي ليست عرض سعر أو ضماناً لمدة المشروع. تحقق من صفحة الجهة الحية قبل التقديم.",
     officialEnglish: "تُعرض عناوين الخدمات ونصوص السجلات الرسمية باللغة الإنجليزية كما نشرها المصدر للمقارنة. الترجمة العربية التحريرية قيد المراجعة.",
@@ -239,7 +241,6 @@ const COPY = {
     applyDirect: "افتح مسار التقديم الدقيق",
     evidenceRecord: "افتح سجل الدليل لدى الدائرة",
     noDirectApply: "لا ينشر سجل الدائرة هذا رابط تقديم عاماً منفصلاً. استخدم سجل الدليل وأكد القناة الحية مع الجهة.",
-    routeStates: { guided: "تسلسل إرشادي", "authority-check": "بوابة تأكيد الجهة", parallel: "متوازٍ / مشروط", closure: "بوابة إقفال" },
   },
 } as const;
 
@@ -321,6 +322,28 @@ function orderServiceRecords<T extends { id: string }>(records: T[], preferredOr
   return [...records].sort((a, b) => (position.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (position.get(b.id) ?? Number.MAX_SAFE_INTEGER));
 }
 
+const FLOW_ORDER: FlowRelation[] = ["flexible", "sequence", "parallel", "conditional", "closure"];
+
+function inferFlowRelation(phaseId: PhaseId, subphaseId: string, title: string, serviceId: string): FlowRelation {
+  const guided = DEVELOPER_SERVICE_GUIDANCE[serviceId]?.flowRelation;
+  if (guided) return guided;
+  if (phaseId !== "development") return phaseId === "post-development" ? "closure" : "sequence";
+  if (subphaseId.includes("off-plan")) return "conditional";
+  const value = title.toLocaleLowerCase();
+  if (value.includes("master developer") || value.includes("master plan submission") || value.startsWith("apply for the approval of urban")) return "sequence";
+  if (subphaseId === "master-plan-approval") return "parallel";
+  if (value.includes("building permit") || value.includes("final design") || value.includes("inspection") || value.includes("completion") || value.includes("services connection")) return "sequence";
+  return "parallel";
+}
+
+function flowCode(phaseId: PhaseId, relation: FlowRelation, relationIndex: number) {
+  const prefix: Record<FlowRelation, string> = { flexible: "01", sequence: phaseId === "pre-development" ? "0" : "G", parallel: "P", conditional: "C", closure: "X" };
+  if (phaseId === "pre-development" && relation === "flexible") return `01${String.fromCharCode(65 + relationIndex)}`;
+  if (phaseId === "pre-development" && relation === "sequence") return String(relationIndex + 2).padStart(2, "0");
+  if (phaseId === "post-development") return `03${String.fromCharCode(65 + relationIndex)}`;
+  return `${prefix[relation]}${String(relationIndex + 1).padStart(2, "0")}`;
+}
+
 export function DeveloperDldJourney({ locale, track, stages, participation }: Props) {
   const c = COPY[locale];
   const { preDevelopment, development, postDevelopment } = dldDeveloperBook.stages;
@@ -328,7 +351,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const [subphaseId, setSubphaseId] = useState(development.subphases[0].id);
   const initialAuthority = TRACK_AUTHORITY[track] ?? development.subphases[0].branches[0].id;
   const [authorityId, setAuthorityId] = useState(initialAuthority);
-  const [serviceId, setServiceId] = useState<string>(PRE_DEVELOPMENT_GUIDED_ORDER[0]);
+  const [serviceId, setServiceId] = useState<string>(PRE_DEVELOPMENT_ROUTE_ORDER[0]);
   const [query, setQuery] = useState("");
   const [guideStepId, setGuideStepId] = useState(developerJourneySteps[0].id);
   const [verificationEmirateId, setVerificationEmirateId] = useState<EmirateId>("dubai");
@@ -338,17 +361,19 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const selectedSubphase = development.subphases.find((item) => item.id === subphaseId) ?? development.subphases[0];
   const selectedBranch = selectedSubphase.branches.find((item) => item.id === authorityId) ?? selectedSubphase.branches[0];
   const services = phaseId === "pre-development"
-    ? orderServiceRecords(preDevelopment.services, PRE_DEVELOPMENT_GUIDED_ORDER)
+    ? orderServiceRecords(preDevelopment.services, PRE_DEVELOPMENT_ROUTE_ORDER)
     : phaseId === "post-development"
-      ? orderServiceRecords(postDevelopment.services, POST_DEVELOPMENT_GUIDED_ORDER)
+      ? orderServiceRecords(postDevelopment.services, POST_DEVELOPMENT_ROUTE_ORDER)
       : selectedBranch.services;
   const selectedService = services.find((service) => service.id === serviceId) ?? services[0];
   const selectedServiceGuidance = selectedService ? DEVELOPER_SERVICE_GUIDANCE[selectedService.id] : undefined;
   const selectedProvider = selectedService
     ? selectedServiceGuidance?.provider ?? inferDevelopmentServiceProvider(selectedService.title, selectedBranch.authority)
     : undefined;
-  const selectedRouteState = selectedServiceGuidance?.routeState ?? (phaseId === "development" ? "parallel" : "guided");
-  const selectedServicePosition = Math.max(0, services.findIndex((service) => service.id === selectedService?.id));
+  const relationFor = (service: (typeof services)[number]) => inferFlowRelation(phaseId, selectedSubphase.id, service.title, service.id);
+  const selectedFlowRelation = selectedService ? relationFor(selectedService) : "sequence";
+  const selectedRelationRecords = services.filter((service) => relationFor(service) === selectedFlowRelation);
+  const selectedFlowCode = flowCode(phaseId, selectedFlowRelation, Math.max(0, selectedRelationRecords.findIndex((service) => service.id === selectedService?.id)));
   const sequenceCaution = phaseId === "pre-development" ? c.sequenceCautionPre : phaseId === "post-development" ? c.sequenceCautionPost : c.sequenceCautionDevelopment;
   const selectedPrerequisite = selectedServiceGuidance
     ? localize(selectedServiceGuidance.prerequisite, locale)
@@ -363,6 +388,11 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const visibleServices = normalizedQuery
     ? services.filter((service) => `${service.title} ${service.description}`.toLocaleLowerCase().includes(normalizedQuery))
     : services;
+  const phaseFlowOrder = phaseId === "post-development" ? (["closure", "conditional"] satisfies FlowRelation[]) : FLOW_ORDER;
+  const visibleFlowGroups = phaseFlowOrder.map((relation) => ({
+    relation,
+    services: visibleServices.filter((service) => relationFor(service) === relation),
+  })).filter((group) => group.services.length > 0);
   const sourceUrl = phaseId === "pre-development" ? preDevelopment.sourceUrl : phaseId === "post-development" ? postDevelopment.sourceUrl : selectedBranch.sourceUrl;
   const stageDescription = phaseId === "pre-development" ? preDevelopment.description : phaseId === "post-development" ? postDevelopment.description : development.description;
   const stageNote = phaseId === "pre-development" ? preDevelopment.sequenceNote : phaseId === "post-development" ? postDevelopment.sequenceNote : development.sequenceNote;
@@ -399,9 +429,9 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     setPhaseId(next);
     setQuery("");
     const nextServices = next === "pre-development"
-      ? orderServiceRecords(preDevelopment.services, PRE_DEVELOPMENT_GUIDED_ORDER)
+      ? orderServiceRecords(preDevelopment.services, PRE_DEVELOPMENT_ROUTE_ORDER)
       : next === "post-development"
-        ? orderServiceRecords(postDevelopment.services, POST_DEVELOPMENT_GUIDED_ORDER)
+        ? orderServiceRecords(postDevelopment.services, POST_DEVELOPMENT_ROUTE_ORDER)
         : selectedBranch.services;
     setServiceId(nextServices[0].id);
   };
@@ -436,10 +466,10 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     setQuery("");
     if (reference.phase === "pre-development") {
       setPhaseId("pre-development");
-      setServiceId(reference.serviceId ?? PRE_DEVELOPMENT_GUIDED_ORDER[0]);
+      setServiceId(reference.serviceId ?? PRE_DEVELOPMENT_ROUTE_ORDER[0]);
     } else if (reference.phase === "post-development") {
       setPhaseId("post-development");
-      setServiceId(reference.serviceId ?? POST_DEVELOPMENT_GUIDED_ORDER[0]);
+      setServiceId(reference.serviceId ?? POST_DEVELOPMENT_ROUTE_ORDER[0]);
     } else {
       const nextSubphase = development.subphases.find((item) => item.id === reference.subphaseId) ?? development.subphases[0];
       const nextBranch = nextSubphase.branches.find((item) => item.id === authorityOverride) ?? nextSubphase.branches[0];
@@ -598,22 +628,34 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
     <div id="dld-service-book" className="dld-service-workspace">
       <div className="dld-service-list">
         <label className="dld-service-search"><span>{c.serviceSearch}</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={c.serviceSearchPlaceholder} /></label>
-        <div className="dld-service-count" aria-live="polite"><b>{visibleServices.length}</b> {c.services}</div>
+        <div className="dld-service-count" aria-live="polite"><span><b>{visibleServices.length}</b> {c.services}</span><span>{c.processMap}</span></div>
+        <p className="dld-process-map-help">{c.processMapHelp}</p>
+        <ul className="dld-flow-legend" aria-label={locale === "ar" ? "مفتاح علاقات الإجراءات" : "Process relationship legend"}>
+          {phaseFlowOrder.map((relation) => <li key={relation} data-relation={relation}><i aria-hidden="true" /><span><b>{c.flowGroups[relation]}</b><small>{c.flowLegend[relation]}</small></span></li>)}
+        </ul>
         <div className="dld-service-nodes">
-          {visibleServices.map((service, index) => <button key={`${selectedBranch.id}-${service.id}`} type="button" aria-pressed={selectedService?.id === service.id} onClick={() => setServiceId(service.id)}>
-            <span>{String(index + 1).padStart(2, "0")}</span><div>
-              <small>{localize(DEVELOPER_SERVICE_GUIDANCE[service.id]?.provider ?? inferDevelopmentServiceProvider(service.title, selectedBranch.authority), locale)}</small>
-              <b lang="en">{service.title}</b>
-              <em>{phaseId === "development" ? c.publishedRecord : c.guidedStep} · {c.routeStates[DEVELOPER_SERVICE_GUIDANCE[service.id]?.routeState ?? "parallel"]}</em>
-            </div><i aria-hidden="true">→</i>
-          </button>)}
+          {visibleFlowGroups.map((group) => <section key={group.relation} className="dld-flow-group" data-relation={group.relation} aria-labelledby={`dld-flow-${phaseId}-${selectedSubphase.id}-${group.relation}`}>
+            <header><i aria-hidden="true" /><span><b id={`dld-flow-${phaseId}-${selectedSubphase.id}-${group.relation}`}>{c.flowGroups[group.relation]}</b><small>{c.flowLegend[group.relation]}</small></span></header>
+            <div>{group.services.map((service, relationIndex) => {
+              const provider = DEVELOPER_SERVICE_GUIDANCE[service.id]?.provider ?? inferDevelopmentServiceProvider(service.title, selectedBranch.authority);
+              return <button className="dld-service-node" key={`${selectedBranch.id}-${service.id}`} type="button" aria-pressed={selectedService?.id === service.id} onClick={() => setServiceId(service.id)}>
+                <span>{flowCode(phaseId, group.relation, relationIndex)}</span>
+                <div>
+                  <b lang="en">{service.title}</b>
+                  <small>{localize(provider, locale)}</small>
+                  <em>{phaseId === "development" ? c.publishedRecord : c.guidedStep}</em>
+                  <p><strong>{c.channel}</strong>{service.channel || c.notListed}<strong>{c.time}</strong>{service.time || c.notListed}</p>
+                </div><i aria-hidden="true">→</i>
+              </button>;
+            })}</div>
+          </section>)}
           {visibleServices.length === 0 ? <p className="dld-service-empty">{c.noResults}</p> : null}
         </div>
       </div>
 
       {selectedService ? <article className="dld-service-detail" aria-live="polite">
         <header>
-          <span>{phaseId === "development" ? c.publishedRecord : c.guidedStep} {String(selectedServicePosition + 1).padStart(2, "0")} / {String(services.length).padStart(2, "0")} · {c.routeStates[selectedRouteState]}</span>
+          <span>{selectedFlowCode} · {c.flowGroups[selectedFlowRelation]} · {c.flowLegend[selectedFlowRelation]}</span>
           <h4 lang="en">{selectedService.title}</h4><p lang="en">{selectedService.description}</p>
         </header>
         <dl className="dld-guidance-fields">
