@@ -27,11 +27,103 @@ const TRACK_AUTHORITY: Partial<Record<DubaiTrack, string>> = {
   "trakhees-pcfc": "trakhees",
 };
 
+type AuthorityProfile = {
+  id: string;
+  dldBranchId: string;
+  name: LocalizedText;
+  mark: string;
+  purpose: LocalizedText;
+  chooseWhen: LocalizedText;
+  rule: LocalizedText;
+  officialUrl: string;
+  finderTerms: readonly string[];
+};
+
+const AUTHORITY_PROFILES: readonly AuthorityProfile[] = [
+  {
+    id: "dubai-municipality",
+    dldBranchId: "dubai-municipality",
+    name: { en: "Dubai Municipality", ar: "بلدية دبي" },
+    mark: "DM",
+    purpose: { en: "The municipal planning, building-permit, inspection and completion route for plots under Dubai Municipality jurisdiction.", ar: "مسار التخطيط البلدي وتصاريح البناء والتفتيش والإنجاز للأراضي الخاضعة لاختصاص بلدية دبي." },
+    chooseWhen: { en: "Choose when the official plot or site-plan record names Dubai Municipality and no special development jurisdiction applies.", ar: "اخترها عندما يذكر سجل الأرض أو مخطط الموقع الرسمي بلدية دبي ولا ينطبق نطاق تطوير خاص." },
+    rule: { en: "Municipality plot record → Dubai Municipality", ar: "سجل أرض تابع للبلدية ← بلدية دبي" },
+    officialUrl: "https://www.dm.gov.ae/municipality-business/building-permit-steps/",
+    finderTerms: ["dubai municipality", "municipality", "mainland", "dm"],
+  },
+  {
+    id: "dubai-development-authority",
+    dldBranchId: "dubai-development-authority",
+    name: { en: "Dubai Development Authority", ar: "سلطة دبي للتطوير" },
+    mark: "DDA",
+    purpose: { en: "Regulates master planning, design, permits, inspections and completion across the designated areas within its remit.", ar: "تنظم المخططات العامة والتصميم والتصاريح والتفتيش والإنجاز في المناطق المحددة الخاضعة لاختصاصها." },
+    chooseWhen: { en: "Choose when the official site plan or development record identifies DDA as the planning and development authority.", ar: "اخترها عندما يحدد مخطط الموقع أو سجل التطوير الرسمي سلطة دبي للتطوير جهةً للتخطيط والتطوير." },
+    rule: { en: "DDA-designated plot → DDA", ar: "أرض ضمن نطاق DDA ← سلطة دبي للتطوير" },
+    officialUrl: "https://dda.gov.ae/en/planning-development/master-planning",
+    finderTerms: ["dubai development authority", "dda", "tecom", "internet city", "media city", "knowledge park", "studio city", "production city", "d3"],
+  },
+  {
+    id: "dubai-maritime-city-authority",
+    dldBranchId: "dubai-maritime-city-authority",
+    name: { en: "Dubai Maritime Authority / Trakhees", ar: "سلطة دبي البحرية / تراخيص" },
+    mark: "DMA",
+    purpose: { en: "A coordinated maritime-area route: the maritime jurisdiction remains relevant, while current civil-engineering and EHS permits are delivered through Trakhees.", ar: "مسار منسق للمناطق البحرية: يبقى الاختصاص البحري قائماً، بينما تقدم تراخيص حالياً تصاريح الهندسة المدنية والبيئة والصحة والسلامة." },
+    chooseWhen: { en: "Choose when the official record places the plot in a Dubai Maritime Authority area; confirm the current Trakhees permit hand-off.", ar: "اختره عندما يضع السجل الرسمي الأرض ضمن نطاق سلطة دبي البحرية، مع تأكيد مسار التصاريح الحالي عبر تراخيص." },
+    rule: { en: "Maritime-authority plot → DMA + Trakhees coordination", ar: "أرض ضمن السلطة البحرية ← تنسيق السلطة البحرية وتراخيص" },
+    officialUrl: "https://pcfc.ae/en/Pages/aboutus-trakhees.aspx",
+    finderTerms: ["dubai maritime authority", "dubai maritime city", "maritime", "marine", "dma", "dmca"],
+  },
+  {
+    id: "dubai-integrated-economic-zone-diez",
+    dldBranchId: "dubai-integrated-economic-zone-diez",
+    name: { en: "Dubai Integrated Economic Zones — DIEZ", ar: "سلطة دبي للمناطق الاقتصادية المتكاملة — دييز" },
+    mark: "DIEZ",
+    purpose: { en: "The zone framework for Dubai Airport Freezone, Dubai Silicon Oasis and Dubai CommerCity, including the applicable development and business controls.", ar: "إطار المناطق الخاص بمطار دبي والمنطقة الحرة وواحة دبي للسيليكون ودبي كوميرسيتي، بما يشمل ضوابط التطوير والأعمال المنطبقة." },
+    chooseWhen: { en: "Choose when the plot record places the site inside a DIEZ-supervised economic zone.", ar: "اخترها عندما يضع سجل الأرض الموقع داخل منطقة اقتصادية تشرف عليها دييز." },
+    rule: { en: "DAFZ, DSO or Dubai CommerCity plot → DIEZ", ar: "أرض في DAFZ أو DSO أو دبي كوميرسيتي ← دييز" },
+    officialUrl: "https://www.diez.ae/",
+    finderTerms: ["diez", "dubai silicon oasis", "dso", "dubai airport freezone", "dafz", "dubai commercity", "commercity"],
+  },
+  {
+    id: "trakhees",
+    dldBranchId: "trakhees",
+    name: { en: "Trakhees / PCFC", ar: "تراخيص / مؤسسة الموانئ والجمارك والمنطقة الحرة" },
+    mark: "TRK",
+    purpose: { en: "Provides planning, building, environmental, health and safety controls within PCFC and designated special-development zones.", ar: "توفر ضوابط التخطيط والبناء والبيئة والصحة والسلامة ضمن مؤسسة الموانئ والجمارك والمناطق التطويرية الخاصة المحددة." },
+    chooseWhen: { en: "Choose when the plot, master developer or site plan confirms a PCFC/Trakhees-controlled area.", ar: "اخترها عندما تؤكد الأرض أو المطور الرئيسي أو مخطط الموقع أن المنطقة خاضعة لمؤسسة الموانئ والجمارك أو تراخيص." },
+    rule: { en: "PCFC or Trakhees plot → Trakhees", ar: "أرض ضمن PCFC أو تراخيص ← تراخيص" },
+    officialUrl: "https://pcfc.ae/en/Pages/aboutus-trakhees.aspx",
+    finderTerms: ["trakhees", "pcfc", "ports customs", "jebel ali", "nakheel", "palm jumeirah", "limitless"],
+  },
+  {
+    id: "dubai-south",
+    dldBranchId: "dubai-south",
+    name: { en: "Dubai South / DACC", ar: "دبي الجنوب / مؤسسة دبي للطيران" },
+    mark: "DS",
+    purpose: { en: "The development-control route for planning, permits, inspections and completion within Dubai South zones.", ar: "مسار ضبط التطوير للتخطيط والتصاريح والتفتيش والإنجاز داخل مناطق دبي الجنوب." },
+    chooseWhen: { en: "Choose when the plot or master-development record confirms Dubai South or Dubai Aviation City Corporation jurisdiction.", ar: "اختره عندما يؤكد سجل الأرض أو المشروع الرئيسي اختصاص دبي الجنوب أو مؤسسة دبي للطيران." },
+    rule: { en: "Dubai South plot → Dubai South Development Control", ar: "أرض في دبي الجنوب ← إدارة ضبط التطوير في دبي الجنوب" },
+    officialUrl: "https://www.dubaisouth.ae/",
+    finderTerms: ["dubai south", "dubai aviation city", "dacc", "dwc", "madinat al matar"],
+  },
+  {
+    id: "difc",
+    dldBranchId: "dubai-development-authority",
+    name: { en: "DIFC + DDA coordination", ar: "مركز دبي المالي العالمي + تنسيق DDA" },
+    mark: "DIFC",
+    purpose: { en: "DIFC applies its own real-property and property-development controls; DIFC NOCs may then direct the applicant to DDA for the applicable building approval.", ar: "يطبق مركز دبي المالي العالمي ضوابطه الخاصة بالعقار والتطوير، وقد توجه موافقات عدم الممانعة من المركز مقدم الطلب بعد ذلك إلى سلطة دبي للتطوير للموافقة الإنشائية المنطبقة." },
+    chooseWhen: { en: "Choose when the plot is inside the DIFC jurisdiction. Start with DIFC Property Development requirements, then follow any stated DDA hand-off.", ar: "اختره عندما تقع الأرض داخل نطاق مركز دبي المالي العالمي. ابدأ بمتطلبات إدارة التطوير العقاري في المركز ثم اتبع أي إحالة محددة إلى سلطة دبي للتطوير." },
+    rule: { en: "DIFC plot → DIFC PDD first, then DDA when directed", ar: "أرض داخل DIFC ← إدارة التطوير في المركز أولاً ثم DDA عند التوجيه" },
+    officialUrl: "https://www.difc.com/business/submittals-requests-and-external-works-noc",
+    finderTerms: ["difc", "dubai international financial centre", "gate district", "difc zabeel"],
+  },
+] as const;
+
 const COPY = {
   en: {
     eyebrow: "02 · Choose your development route",
     title: "Start with the place. Then follow the right path.",
-    intro: "Choose the Emirate, the authority shown on the plot record, and whether off-plan sales apply.",
+    intro: "Choose the Emirate, identify the authority from the plot evidence, then add the off-plan branch only when it applies.",
     source: "Open the DLD Developer Book",
     status: "Official DLD listing · structured by REOS",
     checked: "Checked 1 September 2026",
@@ -102,8 +194,22 @@ const COPY = {
     registryIntro: "Confirm each gate, keep its evidence, then use the exact authority link.",
     emirateFirst: "1 · Choose the Emirate first",
     emirateHelp: "Dubai is mapped from the official DLD Developer Book. An unmapped Emirate never inherits Dubai services.",
-    authoritySecond: "2 · Confirm the project authority",
-    authorityHelp: "Choose only after the plot, site plan or master-developer record confirms the competent branch.",
+    authoritySecond: "2 · Identify the project authority",
+    authorityHelp: "Use the authority named on the plot, site plan or master-developer record. If it is unclear, use the guided check instead of guessing.",
+    authorityFinder: "I don’t know the authority",
+    finderTitle: "Find the authority clue—without guessing.",
+    finderIntro: "Enter the community, master development, or authority wording printed on your record. A plot number alone cannot be resolved without a live government boundary data source.",
+    finderLocation: "Community, master development or authority wording",
+    finderLocationPlaceholder: "For example: DIFC, Dubai South, DSO or PCFC",
+    finderPlot: "Plot, land or municipality number (optional)",
+    finderPlotPlaceholder: "Keep the number ready for the official enquiry",
+    finderLikely: "Likely route to verify",
+    finderNoMatch: "No safe match yet",
+    finderNoMatchText: "REOS will not assign an authority from an unmatched place name or plot number. Check the official property record, then return and select the authority it names.",
+    finderReason: "This is a route suggestion, not a jurisdiction decision. Confirm it against the official property or site-plan record.",
+    useRoute: "Use this route",
+    officialPropertyCheck: "Open DLD Property Status Enquiry",
+    closeFinder: "Close authority finder",
     routeReady: "Your verification route",
     routeReadyText: "The sequence below combines shared DLD gates with the official service records for the selected authority branch.",
     howToChoose: "How to choose the authority",
@@ -134,12 +240,18 @@ const COPY = {
     applyDirect: "Open exact application route",
     evidenceRecord: "Open DLD evidence record",
     noDirectApply: "No separate public application link is published in this DLD record. Use the evidence record and confirm the live channel with the authority.",
-    saleRoute: "3 · Select the sales route",
-    offPlanRoute: "Off-plan sales apply",
-    completedRoute: "No off-plan sales",
+    saleRoute: "3 · Will units be sold before completion?",
+    saleRouteHelp: "This choice only adds or removes the DLD off-plan, escrow and initial-unit-registration branch. It does not change the planning or building authority.",
+    offPlanRoute: "Yes — off-plan sales intended",
+    completedRoute: "No — no off-plan unit sales",
     selectedRoute: "Selected route",
-    mappedRoute: "Mapped from the DLD Developer Book",
-    routeNext: "Your choices control the journey and verification cards below.",
+    authorityRule: "When to use this route",
+    openAuthority: "Open official authority guidance",
+    difcBridgeTitle: "DIFC is a coordinated route—not a seventh DLD branch.",
+    difcBridgeText: "Start with DIFC Property Development. The DDA service records shown later are a secondary approval layer only when DIFC directs you there.",
+    openDifcRoute: "Open the dedicated DIFC developer route",
+    mappedRoute: "Conditional sales branch",
+    routeNext: "This authority route now controls the service explorer and verification cards below.",
     lifecycleCompact: "REOS seven-stage crosswalk",
     journeyWorkspace: "Guided service workspace",
     verificationReady: "Five evidence gates before you proceed",
@@ -147,7 +259,7 @@ const COPY = {
   ar: {
     eyebrow: "02 · اختر مسار التطوير",
     title: "ابدأ بالمكان، ثم اتبع المسار الصحيح.",
-    intro: "اختر الإمارة والجهة الظاهرة في سجل الأرض وما إذا كان البيع على الخارطة ينطبق.",
+    intro: "اختر الإمارة وحدد الجهة من دليل الأرض، ثم أضف مسار البيع على الخارطة فقط عند انطباقه.",
     source: "افتح دليل المطور لدى دائرة الأراضي والأملاك",
     status: "قائمة رسمية من الدائرة · تنظيم REOS",
     checked: "تم التحقق في 1 سبتمبر 2026",
@@ -218,8 +330,22 @@ const COPY = {
     registryIntro: "أكد كل بوابة واحتفظ بدليلها، ثم استخدم رابط الجهة الدقيق.",
     emirateFirst: "1 · اختر الإمارة أولاً",
     emirateHelp: "تم تنظيم مسار دبي من دليل المطور الرسمي لدى الدائرة. ولا ترث أي إمارة غير مخططة خدمات دبي.",
-    authoritySecond: "2 · أكد جهة المشروع",
-    authorityHelp: "اختر فقط بعد أن يؤكد سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي الجهة المختصة.",
+    authoritySecond: "2 · حدد جهة المشروع",
+    authorityHelp: "استخدم الجهة المذكورة في سجل الأرض أو مخطط الموقع أو سجل المطور الرئيسي. وإذا لم تكن واضحة فاستخدم التحقق الإرشادي بدلاً من التخمين.",
+    authorityFinder: "لا أعرف الجهة",
+    finderTitle: "اعثر على دليل الجهة من دون تخمين.",
+    finderIntro: "أدخل المجتمع أو المشروع الرئيسي أو اسم الجهة المطبوع في السجل. لا يمكن حسم رقم الأرض وحده من دون مصدر حي لبيانات الحدود الحكومية.",
+    finderLocation: "المجتمع أو المشروع الرئيسي أو اسم الجهة",
+    finderLocationPlaceholder: "مثال: DIFC أو دبي الجنوب أو DSO أو PCFC",
+    finderPlot: "رقم الأرض أو البلدية (اختياري)",
+    finderPlotPlaceholder: "احتفظ بالرقم للاستعلام الرسمي",
+    finderLikely: "المسار المرجح للتحقق",
+    finderNoMatch: "لا توجد مطابقة آمنة بعد",
+    finderNoMatchText: "لن يحدد REOS جهةً من اسم مكان غير مطابق أو رقم أرض وحده. تحقق من سجل العقار الرسمي ثم عد واختر الجهة المذكورة فيه.",
+    finderReason: "هذا اقتراح لمسار التحقق وليس قراراً بالاختصاص. أكده من سجل العقار أو مخطط الموقع الرسمي.",
+    useRoute: "استخدم هذا المسار",
+    officialPropertyCheck: "افتح الاستعلام عن حالة العقار لدى الدائرة",
+    closeFinder: "أغلق أداة تحديد الجهة",
     routeReady: "مسار التحقق الخاص بك",
     routeReadyText: "يجمع التسلسل أدناه بوابات الدائرة المشتركة مع سجلات الخدمات الرسمية لمسار الجهة المحدد.",
     howToChoose: "كيفية اختيار الجهة",
@@ -250,12 +376,18 @@ const COPY = {
     applyDirect: "افتح مسار التقديم الدقيق",
     evidenceRecord: "افتح سجل الدليل لدى الدائرة",
     noDirectApply: "لا ينشر سجل الدائرة هذا رابط تقديم عاماً منفصلاً. استخدم سجل الدليل وأكد القناة الحية مع الجهة.",
-    saleRoute: "3 · اختر مسار المبيعات",
-    offPlanRoute: "ينطبق البيع على الخارطة",
-    completedRoute: "لا يوجد بيع على الخارطة",
+    saleRoute: "3 · هل ستباع وحدات قبل الإنجاز؟",
+    saleRouteHelp: "يضيف هذا الاختيار أو يزيل فقط مسار البيع على الخارطة والضمان والتسجيل الأولي للوحدات لدى الدائرة. ولا يغير جهة التخطيط أو البناء.",
+    offPlanRoute: "نعم — يوجد بيع على الخارطة",
+    completedRoute: "لا — لا يوجد بيع وحدات على الخارطة",
     selectedRoute: "المسار المحدد",
-    mappedRoute: "منظم من دليل المطور لدى الدائرة",
-    routeNext: "تتحكم اختياراتك في الرحلة وبطاقات التحقق أدناه.",
+    authorityRule: "متى تستخدم هذا المسار",
+    openAuthority: "افتح إرشادات الجهة الرسمية",
+    difcBridgeTitle: "مسار DIFC منسق، وليس فرعاً سابعاً في دليل الدائرة.",
+    difcBridgeText: "ابدأ بإدارة التطوير العقاري في DIFC. أما سجلات خدمات DDA المعروضة لاحقاً فهي طبقة موافقات ثانوية فقط عندما يوجهك المركز إليها.",
+    openDifcRoute: "افتح مسار المطور المخصص لـ DIFC",
+    mappedRoute: "مسار مبيعات مشروط",
+    routeNext: "يتحكم مسار الجهة هذا الآن في مستكشف الخدمات وبطاقات التحقق أدناه.",
     lifecycleCompact: "الربط مع مراحل REOS السبع",
     journeyWorkspace: "مساحة الخدمات الإرشادية",
     verificationReady: "خمس بوابات أدلة قبل المتابعة",
@@ -315,6 +447,10 @@ function RouteIcon({ kind }: { kind: "identity" | "plan" | "build" | "sell" | "c
   return <svg viewBox="0 0 24 24" aria-hidden="true">{paths[kind]}</svg>;
 }
 
+function AuthorityMark({ profile }: { profile: AuthorityProfile }) {
+  return <span className="developer-authority-mark" aria-hidden="true"><i />{profile.mark}</span>;
+}
+
 function DetailField({ label, value, fallback }: { label: string; value: string; fallback: string }) {
   return <div><dt>{label}</dt><dd>{value || fallback}</dd></div>;
 }
@@ -341,6 +477,11 @@ function orderServiceRecords<T extends { id: string }>(records: T[], preferredOr
 }
 
 const FLOW_ORDER: FlowRelation[] = ["flexible", "sequence", "parallel", "conditional", "closure"];
+
+function matchesAuthorityTerm(value: string, term: string) {
+  if (term.length > 3) return value.includes(term);
+  return value.split(/[^a-z0-9]+/).includes(term);
+}
 
 function inferFlowRelation(phaseId: PhaseId, subphaseId: string, title: string, serviceId: string): FlowRelation {
   const guided = DEVELOPER_SERVICE_GUIDANCE[serviceId]?.flowRelation;
@@ -375,6 +516,9 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const [verificationEmirateId, setVerificationEmirateId] = useState<EmirateId>("dubai");
   const [verificationAuthorityId, setVerificationAuthorityId] = useState(initialAuthority);
   const [offPlanSelected, setOffPlanSelected] = useState(true);
+  const [authorityFinderOpen, setAuthorityFinderOpen] = useState(false);
+  const [authorityClue, setAuthorityClue] = useState("");
+  const [plotReference, setPlotReference] = useState("");
 
   const selectedSubphase = development.subphases.find((item) => item.id === subphaseId) ?? development.subphases[0];
   const selectedBranch = selectedSubphase.branches.find((item) => item.id === authorityId) ?? selectedSubphase.branches[0];
@@ -416,18 +560,22 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   const stageNote = phaseId === "pre-development" ? preDevelopment.sequenceNote : phaseId === "post-development" ? postDevelopment.sequenceNote : development.sequenceNote;
   const selectedGuideStep = developerJourneySteps.find((step) => step.id === guideStepId) ?? developerJourneySteps[0];
   const guidance = stakeholderGuidance.developers;
-  const verificationAuthorityOptions = development.subphases[0].branches;
-  const selectedVerificationAuthority = verificationAuthorityOptions.find((branch) => branch.id === verificationAuthorityId) ?? verificationAuthorityOptions[0];
+  const verificationAuthorityOptions = AUTHORITY_PROFILES;
+  const selectedVerificationAuthority = verificationAuthorityOptions.find((profile) => profile.id === verificationAuthorityId) ?? verificationAuthorityOptions[0];
+  const normalizedAuthorityClue = authorityClue.trim().toLocaleLowerCase();
+  const authorityFinderResult = normalizedAuthorityClue
+    ? verificationAuthorityOptions.find((profile) => profile.finderTerms.some((term) => matchesAuthorityTerm(normalizedAuthorityClue, term)))
+    : undefined;
   const verificationBranchFor = (subphaseIndex: number) => {
     const subphase = development.subphases[subphaseIndex];
-    return subphase.branches.find((branch) => branch.id === selectedVerificationAuthority.id) ?? subphase.branches[0];
+    return subphase.branches.find((branch) => branch.id === selectedVerificationAuthority.dldBranchId) ?? subphase.branches[0];
   };
   const verificationMasterPlan = verificationBranchFor(0);
   const verificationConstruction = verificationBranchFor(1);
   const verificationOffPlan = verificationBranchFor(2);
   const verificationGates = [
     { services: preDevelopment.services, sourceUrl: preDevelopment.sourceUrl, type: c.shared, phase: "pre-development" as PhaseId },
-    { services: [], sourceUrl: selectedVerificationAuthority.sourceUrl, type: c.branch, phase: "development" as PhaseId },
+    { services: [], sourceUrl: selectedVerificationAuthority.officialUrl, type: c.branch, phase: "development" as PhaseId },
     { services: verificationMasterPlan.services, sourceUrl: verificationMasterPlan.sourceUrl, type: c.branch, phase: "development" as PhaseId, subphaseId: development.subphases[0].id },
     { services: verificationConstruction.services, sourceUrl: verificationConstruction.sourceUrl, type: c.branch, phase: "development" as PhaseId, subphaseId: development.subphases[1].id },
     { services: verificationOffPlan.services, sourceUrl: verificationOffPlan.sourceUrl, type: c.conditional, phase: "development" as PhaseId, subphaseId: development.subphases[2].id },
@@ -474,11 +622,18 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
   };
 
   const chooseRouteAuthority = (nextId: string) => {
-    setVerificationAuthorityId(nextId);
-    const nextBranch = selectedSubphase.branches.find((item) => item.id === nextId) ?? selectedSubphase.branches[0];
+    const nextProfile = verificationAuthorityOptions.find((profile) => profile.id === nextId) ?? verificationAuthorityOptions[0];
+    setVerificationAuthorityId(nextProfile.id);
+    const nextBranch = selectedSubphase.branches.find((item) => item.id === nextProfile.dldBranchId) ?? selectedSubphase.branches[0];
     setAuthorityId(nextBranch.id);
     if (phaseId === "development") setServiceId(nextBranch.services[0].id);
     setQuery("");
+  };
+
+  const useFinderRoute = () => {
+    if (!authorityFinderResult) return;
+    chooseRouteAuthority(authorityFinderResult.id);
+    setAuthorityFinderOpen(false);
   };
 
   const serviceForReference = (reference: DeveloperServiceReference) => {
@@ -549,9 +704,10 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
 
       <fieldset className="developer-route-choice" disabled={verificationEmirateId !== "dubai"}>
         <legend>{c.authoritySecond}</legend>
+        <button className="developer-authority-finder-trigger" type="button" onClick={() => setAuthorityFinderOpen(true)}>{c.authorityFinder} <span aria-hidden="true">→</span></button>
         <div className="developer-route-authorities">
-          {verificationAuthorityOptions.map((branch, index) => <button key={branch.id} type="button" aria-pressed={branch.id === selectedVerificationAuthority.id} onClick={() => chooseRouteAuthority(branch.id)}>
-            <span>{String(index + 1).padStart(2, "0")}</span><b>{branch.authority}</b>
+          {verificationAuthorityOptions.map((profile, index) => <button key={profile.id} type="button" aria-pressed={profile.id === selectedVerificationAuthority.id} onClick={() => chooseRouteAuthority(profile.id)}>
+            <span>{String(index + 1).padStart(2, "0")}</span><AuthorityMark profile={profile} /><b>{localize(profile.name, locale)}</b><small>{localize(profile.rule, locale)}</small>
           </button>)}
         </div>
         <small>{c.authorityHelp}</small>
@@ -563,22 +719,51 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
           <button type="button" aria-pressed={offPlanSelected} onClick={() => setOffPlanSelected(true)}><RouteIcon kind="sell" /><span>{c.offPlanRoute}</span></button>
           <button type="button" aria-pressed={!offPlanSelected} onClick={() => setOffPlanSelected(false)}><RouteIcon kind="close" /><span>{c.completedRoute}</span></button>
         </div>
+        <small>{c.saleRouteHelp}</small>
       </fieldset>
 
       <aside className="developer-selected-route" aria-live="polite">
-        <div className="developer-route-orbit" aria-hidden="true"><i /><i /><i /><RouteIcon kind="build" /></div>
+        <div className="developer-route-orbit" aria-hidden="true"><i /><i /><i /><AuthorityMark profile={selectedVerificationAuthority} /></div>
         <span>{c.selectedRoute}</span>
-        <strong>{verificationEmirateId === "dubai" ? `${locale === "ar" ? "دبي" : "Dubai"} · ${selectedVerificationAuthority.authority}` : EMIRATES.find((emirate) => emirate.id === verificationEmirateId)?.[locale === "ar" ? "ar" : "label"]}</strong>
-        <small>{verificationEmirateId === "dubai" ? `${offPlanSelected ? c.offPlanRoute : c.completedRoute} · ${c.mappedRoute}` : c.notMapped}</small>
-        <p>{verificationEmirateId === "dubai" ? c.routeNext : c.notMappedText}</p>
+        <strong>{verificationEmirateId === "dubai" ? `${locale === "ar" ? "دبي" : "Dubai"} · ${localize(selectedVerificationAuthority.name, locale)}` : EMIRATES.find((emirate) => emirate.id === verificationEmirateId)?.[locale === "ar" ? "ar" : "label"]}</strong>
+        <small>{verificationEmirateId === "dubai" ? offPlanSelected ? c.offPlanRoute : c.completedRoute : c.notMapped}</small>
+        <p>{verificationEmirateId === "dubai" ? localize(selectedVerificationAuthority.purpose, locale) : c.notMappedText}</p>
+        {verificationEmirateId === "dubai" ? <div className="developer-authority-rule"><b>{c.authorityRule}</b><span>{localize(selectedVerificationAuthority.chooseWhen, locale)}</span></div> : null}
+        {verificationEmirateId === "dubai" ? <a href={selectedVerificationAuthority.officialUrl} target="_blank" rel="noreferrer">{c.openAuthority} ↗</a> : null}
       </aside>
     </div>
+
+    {authorityFinderOpen ? <div className="developer-authority-finder" role="dialog" aria-modal="true" aria-labelledby="developer-authority-finder-title">
+      <button className="developer-authority-finder-backdrop" type="button" onClick={() => setAuthorityFinderOpen(false)} aria-label={c.closeFinder} />
+      <section>
+        <header><span>02</span><div><h3 id="developer-authority-finder-title">{c.finderTitle}</h3><p>{c.finderIntro}</p></div><button type="button" onClick={() => setAuthorityFinderOpen(false)} aria-label={c.closeFinder}>×</button></header>
+        <div className="developer-authority-finder-fields">
+          <label><span>{c.finderLocation}</span><input value={authorityClue} onChange={(event) => setAuthorityClue(event.target.value)} placeholder={c.finderLocationPlaceholder} /></label>
+          <label><span>{c.finderPlot}</span><input value={plotReference} onChange={(event) => setPlotReference(event.target.value)} placeholder={c.finderPlotPlaceholder} /></label>
+        </div>
+        <div className="developer-authority-finder-suggestions" aria-label={c.finderLocation}>
+          {verificationAuthorityOptions.filter((profile) => profile.id !== "dubai-municipality").map((profile) => <button key={`${profile.id}-clue`} type="button" onClick={() => setAuthorityClue(localize(profile.name, "en"))}><AuthorityMark profile={profile} /><span>{localize(profile.name, locale)}</span></button>)}
+        </div>
+        {authorityFinderResult ? <article className="developer-authority-finder-result" aria-live="polite">
+          <AuthorityMark profile={authorityFinderResult} />
+          <div><small>{c.finderLikely}</small><h4>{localize(authorityFinderResult.name, locale)}</h4><p>{localize(authorityFinderResult.chooseWhen, locale)}</p><em>{c.finderReason}</em></div>
+          <button type="button" onClick={useFinderRoute}>{c.useRoute} →</button>
+        </article> : authorityClue || plotReference ? <article className="developer-authority-finder-empty" aria-live="polite"><h4>{c.finderNoMatch}</h4><p>{c.finderNoMatchText}</p></article> : null}
+        <footer><a href="https://dubailand.gov.ae/en/eservices/property-status-overview/property-status/" target="_blank" rel="noreferrer">{c.officialPropertyCheck} ↗</a></footer>
+      </section>
+    </div> : null}
 
     <section id="developer-checklist" className="developer-checklist" aria-labelledby="developer-checklist-title">
       <header>
         <div><span className="eyebrow">{c.checklistEyebrow}</span><h3 id="developer-checklist-title">{c.checklistTitle}</h3></div>
         <p>{c.checklistIntro}</p>
       </header>
+
+      {selectedVerificationAuthority.id === "difc" ? <aside className="developer-difc-bridge" role="note">
+        <AuthorityMark profile={selectedVerificationAuthority} />
+        <div><b>{c.difcBridgeTitle}</b><p>{c.difcBridgeText}</p></div>
+        <a href={`${locale === "ar" ? "/ar" : ""}/stakeholders/developers/dubai/financial-free-zone`}>{c.openDifcRoute} →</a>
+      </aside> : null}
 
       <div className="developer-lifecycle-ribbon" aria-label={c.lifecycleCompact}>
         <span>{c.lifecycleCompact}</span>
@@ -764,7 +949,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
       {verificationEmirateId === "dubai" ? <div className="developer-final-verification">
         <div className="developer-final-route">
           <span>{c.selectedRoute}</span>
-          <b>{selectedVerificationAuthority.authority}</b>
+          <b>{localize(selectedVerificationAuthority.name, locale)}</b>
           <small>{offPlanSelected ? c.offPlanRoute : c.completedRoute}</small>
         </div>
         <p className="developer-final-count">{c.verificationReady}</p>
@@ -786,7 +971,7 @@ export function DeveloperDldJourney({ locale, track, stages, participation }: Pr
                 <p>{localize(card.copy.evidence, locale)}</p>
                 <div><b>{services.length}</b><span>{c.authorityServices}</span></div>
                 <footer>
-                  {reference ? <button type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.id)} aria-label={`${c.inspectGate}: ${localize(card.copy.title, locale)}`}>↓</button> : null}
+                  {reference ? <button type="button" onClick={() => inspectReference(reference, selectedVerificationAuthority.dldBranchId)} aria-label={`${c.inspectGate}: ${localize(card.copy.title, locale)}`}>↓</button> : null}
                   <a href={sourceUrl} target="_blank" rel="noreferrer">{c.openOfficialBranch} ↗</a>
                 </footer>
               </article>

@@ -774,6 +774,9 @@ test("developer routes expose the DLD three-phase navigator without leaking it t
   assert.match(developer, /Check the risks before they become delays/);
   assert.match(developer, /Verify and proceed officially/);
   assert.match(developer, /Dubai South/);
+  assert.match(developer, /DIFC \+ DDA coordination/);
+  assert.match(developer, /I don’t know the authority/);
+  assert.match(developer, /Will units be sold before completion/);
   assert.match(developer, /Five evidence gates before you proceed/);
   assert.doesNotMatch(developer, /Optional final tool · search within this selected route/);
   assert.doesNotMatch(developer, /Direct stage walkthrough/, "the developer page must not repeat the generic stage walkthrough");

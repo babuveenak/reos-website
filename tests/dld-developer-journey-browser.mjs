@@ -129,11 +129,18 @@ const verification = journey.locator(".developer-registry-guide");
 assert.match(await verification.locator(":scope > header").innerText(), /Verify and proceed officially[\s\S]*right evidence and official route/is);
 const routeSelector = journey.locator(".developer-route-selector");
 assert.equal(await routeSelector.locator("select option").count(), 7, "route selection must begin with all seven Emirates");
-assert.equal(await routeSelector.locator(".developer-route-authorities button").count(), 6, "Dubai must expose the six official DLD authority branches");
+assert.equal(await routeSelector.locator(".developer-route-authorities button").count(), 7, "Dubai must expose six DLD branches plus the coordinated DIFC route");
 assert.equal(await routeSelector.locator(".developer-sale-route button").count(), 2, "route selection must make off-plan applicability explicit");
 
+await routeSelector.locator(".developer-authority-finder-trigger").click();
+const authorityFinder = journey.locator(".developer-authority-finder");
+await authorityFinder.locator("input").first().fill("DIFC");
+assert.match(await authorityFinder.locator(".developer-authority-finder-result").innerText(), /DIFC \+ DDA coordination[\s\S]*route suggestion, not a jurisdiction decision/i, "the guided finder must explain the coordinated DIFC route without claiming an automatic jurisdiction decision");
+await authorityFinder.locator(".developer-authority-finder-result > button").click();
+assert.match(await routeSelector.locator(".developer-selected-route").innerText(), /DIFC \+ DDA coordination[\s\S]*DIFC NOCs may then direct the applicant to DDA/i, "DIFC must be available as a distinct coordinated route");
+
 await routeSelector.locator(".developer-route-authorities button").filter({ hasText: "Dubai South" }).click();
-assert.match(await routeSelector.locator(".developer-selected-route").innerText(), /Dubai South[\s\S]*Off-plan sales apply/i);
+assert.match(await routeSelector.locator(".developer-selected-route").innerText(), /Dubai South[\s\S]*off-plan sales intended/i);
 assert.match(await verification.locator(".developer-final-verification").innerText(), /Dubai South[\s\S]*16[\s\S]*official records in this gate/is, "Dubai South must build its own authority-specific evidence cards");
 await routeSelector.locator(".developer-sale-route button").nth(1).click();
 assert.match(await verification.locator(".developer-final-verification > ol > li").nth(3).innerText(), /14[\s\S]*official records in this gate/is, "the non-off-plan route must remove the two conditional escrow records from the build gate");
@@ -186,4 +193,4 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
 
 assert.deepEqual(errors, [], errors.join("\n"));
 await browser.close();
-console.log(`PASS: complete DLD developer flow, three phases, six authority branches, escrow correction, details, search, RTL, WCAG A/AA, responsive overflow and console checks (${output})`);
+console.log(`PASS: complete DLD developer flow, three phases, seven authority routes, guided DIFC identification, escrow correction, details, search, RTL, WCAG A/AA, responsive overflow and console checks (${output})`);
