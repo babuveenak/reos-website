@@ -49,6 +49,9 @@ async function assertGuidedJourney(page, slug) {
     assert.equal(await page.locator(".broker-route-visual img").count(), 1, "brokers need one visual two-route operating map");
     assert.equal(await page.locator(".broker-stage-trigger").count(), 5, "Dubai individual route needs five ordered stages");
     assert.equal(await page.locator(".broker-stage-card.active .broker-stage-tasks button").count(), 2, "the first agent stage needs its two operational tasks");
+    assert.equal(await page.locator(".broker-official-pack").count(), 1, "brokers need one compact official handoff");
+    assert.match(await page.locator(".broker-pack-task").innerText(), /A-01[\s\S]*Confirm eligibility and residency route/);
+    assert.doesNotMatch(await page.locator(".broker-verification").innerText(), /Four checks before you leave REOS|Source drawer/);
     assert.equal(await page.locator(".broker-lifecycle-crosswalk li").count(), 7, "the protected lifecycle needs one compact seven-stage crosswalk");
     assert.equal(await page.locator(".stakeholder-lifecycle-map, .stakeholder-process-map, .stakeholder-entry-guidance, .stakeholder-official-directory").count(), 0, "the five generic sections must not compete with the consolidated journey");
     return;
@@ -105,6 +108,8 @@ assert.equal(await brokerJourney.locator(".broker-stage-card.active .broker-stag
 await brokerJourney.locator(".broker-stage-card.active .broker-stage-tasks button").first().click();
 assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /AML\/CFT[\s\S]*goAML[\s\S]*Ministry of Economy/);
 assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Prerequisites and evidence[\s\S]*Fee[\s\S]*Authority duration[\s\S]*Boundary/i);
+assert.match(await brokerJourney.locator(".broker-pack-task").innerText(), /B-09[\s\S]*AML\/CFT/);
+assert.ok(await brokerJourney.locator(".broker-pack-actions>div>a").count() >= 1, "the selected task needs visible official actions");
 await brokerJourney.locator(".broker-emirate-control select").selectOption("abu-dhabi");
 assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Choose Abu Dhabi company or branch/);
 assert.equal(await brokerJourney.locator(".broker-directory-note").count(), 1, "Abu Dhabi must not pretend the coming-soon directory is a live broker search");

@@ -69,11 +69,15 @@ test("Brokers journey consolidates the page into Emirate-first individual and ag
   assert.match(html, /Confirm eligibility and residency route/);
   assert.match(html, /Authority \/ responsible party/);
   assert.match(html, /Boundary — what this does not authorise/);
+  assert.match(html, /04 · Official action pack/);
+  assert.match(html, /Verify\. Then continue\./);
+  assert.match(html, /Official actions for this task/);
+  assert.doesNotMatch(html, /Four checks before you leave REOS|Source drawer/);
   assert.match(html, /Licensed Real Estate Brokers/);
   assert.match(html, /Verify a Dubai broker or office/);
   assert.match(html, /Guidance snapshot · not a live government feed/);
   assert.match(html, /seven-stage property lifecycle/);
-  assert.match(html, /Ready-to-act check/);
+  assert.match(html, /Official action pack/);
   assert.doesNotMatch(html, /Direct stage walkthrough|Path A · Individual|Path B · Company|Practical control points|Official registry/);
   assert.doesNotMatch(html, /stakeholder-lifecycle-map|stakeholder-process-map|stakeholder-entry-guidance/);
   assert.doesNotMatch(html, /sample broker|sample brokerage|fake broker record/i);
