@@ -56,7 +56,9 @@ test("Brokers journey consolidates the page into Emirate-first individual and ag
   const html = await response.text();
   assert.equal((html.match(/class="broker-agency-journey broker-operating-map"/g) ?? []).length, 1);
   assert.equal((html.match(/class="broker-route-icon"/g) ?? []).length, 2);
-  assert.equal((html.match(/class="broker-step-wrap"/g) ?? []).length, 6, "Dubai individual route needs six sequenced steps");
+  assert.equal((html.match(/class="broker-stage-card/g) ?? []).length, 5, "Dubai individual route needs five ordered stages");
+  assert.match(html, /A-01/);
+  assert.match(html, /A-02/);
   assert.match(html, /Become an agent—or open an agency\?/);
   assert.match(html, /Become an agent/);
   assert.match(html, /Open an agency/);
@@ -64,7 +66,9 @@ test("Brokers journey consolidates the page into Emirate-first individual and ag
   assert.match(html, /Show my agent path/);
   assert.match(html, /Show my agency path/);
   assert.match(html, /Become a real-estate agent/);
-  assert.match(html, /Obtain the electronic practice card/);
+  assert.match(html, /Confirm eligibility and residency route/);
+  assert.match(html, /Authority \/ responsible party/);
+  assert.match(html, /Boundary — what this does not authorise/);
   assert.match(html, /Licensed Real Estate Brokers/);
   assert.match(html, /Verify a Dubai broker or office/);
   assert.match(html, /Guidance snapshot · not a live government feed/);
