@@ -49,8 +49,9 @@ async function assertGuidedJourney(page, slug) {
     assert.equal(await page.locator(".broker-route-visual img").count(), 1, "brokers need one visual two-route operating map");
     assert.equal(await page.locator(".broker-map-destination").count(), 2, "the 3D map needs two selectable legal destinations");
     assert.equal(await page.locator(".broker-map-checkpoint").count(), 5, "the active 3D branch needs five selectable stage checkpoints");
-    assert.equal(await page.locator(".broker-stage-trigger").count(), 5, "Dubai individual route needs five ordered stages");
-    assert.equal(await page.locator(".broker-stage-card.active .broker-stage-tasks button").count(), 2, "the first agent stage needs its two operational tasks");
+    assert.equal(await page.locator(".broker-stage-path button").count(), 5, "Dubai individual route needs five ordered stages");
+    assert.equal(await page.locator(".broker-task-route > div > button").count(), 2, "the first agent stage needs its two connected tasks");
+    assert.equal(await page.locator(".broker-detail-tabs button").count(), 4, "task facts must be grouped into four focused views");
     assert.equal(await page.locator(".broker-official-pack").count(), 1, "brokers need one compact official handoff");
     assert.match(await page.locator(".broker-pack-task").innerText(), /A-01[\s\S]*Confirm eligibility and residency route/);
     assert.doesNotMatch(await page.locator(".broker-verification").innerText(), /Four checks before you leave REOS|Source drawer/);
@@ -116,14 +117,21 @@ for (const index of [0, 1]) {
   assert.ok(box && box.width >= 30 && box.height >= 30, `image checkpoint ${index + 1} must render as a complete control`);
 }
 await brokerJourney.locator(".broker-route-studio").screenshot({ path: `${output}/brokers-agency-map.png` });
-assert.equal(await brokerJourney.locator(".broker-stage-trigger").count(), 5, "Dubai agency route needs five ordered stages");
+assert.equal(await brokerJourney.locator(".broker-stage-path button").count(), 5, "Dubai agency route needs five ordered stages");
+assert.match(await brokerJourney.locator(".broker-route-summary aside").innerText(), /B-00[\s\S]*Define the exact brokerage activities/, "the fixed journey beginning must not change with the selected task");
 await brokerJourney.locator(".broker-map-checkpoint").nth(2).click();
-assert.equal(await brokerJourney.locator(".broker-stage-trigger").nth(2).getAttribute("aria-expanded"), "true", "image checkpoints must open their matching journey stage");
-await brokerJourney.locator(".broker-stage-trigger").nth(3).click();
-assert.equal(await brokerJourney.locator(".broker-stage-card.active .broker-stage-tasks button").count(), 3, "the agency control stage needs its three operational tasks");
-await brokerJourney.locator(".broker-stage-card.active .broker-stage-tasks button").first().click();
+assert.equal(await brokerJourney.locator(".broker-stage-path button").nth(2).getAttribute("aria-current"), "step", "image checkpoints must open their matching journey stage");
+await brokerJourney.locator(".broker-stage-path button").nth(3).click();
+assert.equal(await brokerJourney.locator(".broker-task-route > div > button").count(), 3, "the agency control stage needs its three connected operational tasks");
+await brokerJourney.locator(".broker-task-route > div > button").first().click();
 assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /AML\/CFT[\s\S]*goAML[\s\S]*Ministry of Economy/);
-assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Prerequisites and evidence[\s\S]*Fee[\s\S]*Authority duration[\s\S]*Boundary/i);
+assert.match(await brokerJourney.locator(".broker-current-task-label").innerText(), /Currently viewing[\s\S]*B-09/i);
+await brokerJourney.locator(".broker-detail-tabs button").nth(1).click();
+assert.match(await brokerJourney.locator(".broker-detail-panel").innerText(), /Prerequisites and evidence[\s\S]*Boundary/i);
+await brokerJourney.locator(".broker-detail-tabs button").nth(2).click();
+assert.match(await brokerJourney.locator(".broker-detail-panel").innerText(), /Fee[\s\S]*Authority duration[\s\S]*Validity/i);
+await brokerJourney.locator(".broker-detail-tabs button").nth(3).click();
+assert.ok(await brokerJourney.locator(".broker-detail-actions-focused a").count() >= 1, "the selected task needs an exact official action inside its focused view");
 assert.match(await brokerJourney.locator(".broker-pack-task").innerText(), /B-09[\s\S]*AML\/CFT/);
 assert.ok(await brokerJourney.locator(".broker-pack-actions>div>a").count() >= 1, "the selected task needs visible official actions");
 await brokerJourney.locator(".broker-emirate-control select").selectOption("abu-dhabi");
@@ -131,7 +139,7 @@ assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Ch
 assert.equal(await brokerJourney.locator(".broker-directory-note").count(), 1, "Abu Dhabi must not pretend the coming-soon directory is a live broker search");
 await brokerJourney.locator(".broker-route-control button").nth(0).click();
 assert.match(await brokerJourney.locator(".broker-step-detail").innerText(), /Choose individual broker or broker employee/);
-assert.equal(await brokerJourney.locator(".broker-stage-trigger").count(), 5, "Abu Dhabi individual route needs five stages");
+assert.equal(await brokerJourney.locator(".broker-stage-path button").count(), 5, "Abu Dhabi individual route needs five stages");
 await brokerJourney.locator(".broker-emirate-control select").selectOption("sharjah");
 assert.match(await brokerJourney.locator(".broker-unmapped").innerText(), /not mapped yet/i);
 assert.equal(await brokerJourney.locator(".broker-path-section").count(), 0, "an unmapped Emirate must never inherit a mapped process");
@@ -184,10 +192,10 @@ for (const [width, height] of [[320, 844], [390, 844], [768, 900], [1024, 900]])
   const overflow = await view.page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   assert.ok(overflow <= 1, `${width}px viewport has ${overflow}px horizontal overflow`);
   assert.equal(await view.page.locator(".broker-route-control button").count(), 2, `${width}px must retain both legal routes`);
-  assert.equal(await view.page.locator(".broker-stage-trigger").count(), 5, `${width}px must retain the five-stage Dubai individual journey`);
+  assert.equal(await view.page.locator(".broker-stage-path button").count(), 5, `${width}px must retain the five-stage Dubai individual journey`);
   assert.equal(await view.page.locator(".broker-lifecycle-crosswalk li").count(), 7, `${width}px must retain the lifecycle crosswalk`);
-  await view.page.locator(".broker-stage-trigger").nth(2).click();
-  await view.page.locator(".broker-stage-card.active .broker-stage-tasks button").first().click();
+  await view.page.locator(".broker-stage-path button").nth(2).click();
+  await view.page.locator(".broker-task-route > div > button").first().click();
   assert.match(await view.page.locator(".broker-step-detail").innerText(), /electronic practice card/i);
   if (width === 390) {
     await view.page.screenshot({ path: `${output}/brokers-dm-mobile.png`, fullPage: true });
